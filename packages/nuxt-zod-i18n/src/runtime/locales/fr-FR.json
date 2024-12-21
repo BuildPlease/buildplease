@@ -1,0 +1,115 @@
+{
+  "zodi18n": {
+    "errors": {
+      "custom": "Erreur",
+      "invalid_arguments": "Arguments de fonction non valides",
+      "invalid_date": "Date non valide",
+      "invalid_enum_value": "La valeur doit être l'une des suivantes : {options}. Reçu : '{received}'.",
+      "invalid_intersection_types": "Les résultats d'intersection ne peuvent pas être combinés",
+      "invalid_literal": "Valeur littérale non valide, attendu : {expected}",
+      "invalid_return_type": "Type de retour non valide",
+      "invalid_string": {
+        "cuid": "Identifiant non valide",
+        "datetime": "Date et heure non valides",
+        "email": "E-mail non valide",
+        "endsWith": "Doit se terminer par \"{endsWith}\"",
+        "regex": "Format non valide",
+        "startsWith": "Doit commencer par \"{startsWith}\"",
+        "url": "URL non valide",
+        "uuid": "UUID non valide"
+      },
+      "invalid_type": "Attendu {expected}, reçu {received}",
+      "invalid_type_received_undefined": "Champ obligatoire",
+      "invalid_union": "Entrée non valide",
+      "invalid_union_discriminator": "Valeur de discriminateur non valide. Options attendues : {options}",
+      "not_finite": "Le nombre doit être fini",
+      "not_multiple_of": "Le nombre doit être un multiple de {multipleOf}",
+      "required": "Champ obligatoire",
+      "too_big": {
+        "array": {
+          "exact": "Doit contenir exactement {maximum} élément | Doit contenir exactement {maximum} éléments",
+          "inclusive": "Peut contenir au maximum {maximum} élément | Peut contenir au maximum {maximum} éléments",
+          "not_inclusive": "Doit contenir moins de {maximum} élément | Doit contenir moins de {maximum} éléments"
+        },
+        "date": {
+          "exact": "La date doit être exactement {maximum}",
+          "inclusive": "La date doit être au plus {maximum}",
+          "not_inclusive": "La date doit être avant {maximum}"
+        },
+        "number": {
+          "exact": "Le nombre doit être exactement {maximum}",
+          "inclusive": "Le nombre ne peut pas être supérieur à {maximum}.",
+          "not_inclusive": "Le nombre doit être inférieur à {maximum}"
+        },
+        "set": {
+          "exact": "Entrée non valide",
+          "inclusive": "Entrée non valide",
+          "not_inclusive": "Entrée non valide"
+        },
+        "string": {
+          "exact": "Doit contenir exactement {maximum} caractère | Doit contenir exactement {maximum} caractères",
+          "inclusive": "Peut contenir au maximum {maximum} caractère | Peut contenir au maximum {maximum} caractères",
+          "not_inclusive": "Doit contenir moins de {maximum} caractère | Doit contenir moins de {maximum} caractères"
+        }
+      },
+      "too_small": {
+        "array": {
+          "exact": "Doit contenir exactement {minimum} élément | Doit contenir exactement {minimum} éléments",
+          "inclusive": "Doit contenir au moins {minimum} élément | Doit contenir au moins {minimum} éléments",
+          "not_inclusive": "Doit contenir plus de {minimum} élément | Doit contenir plus de {minimum} éléments"
+        },
+        "date": {
+          "exact": "La date doit être exactement {minimum}",
+          "inclusive": "La date doit être au moins {minimum}",
+          "not_inclusive": "La date doit être après {minimum}"
+        },
+        "number": {
+          "exact": "Le nombre doit être exactement {minimum}",
+          "inclusive": "Le nombre ne peut pas être inférieur à {minimum}.",
+          "not_inclusive": "Le nombre doit être supérieur à {minimum}"
+        },
+        "set": {
+          "exact": "Entrée non valide",
+          "inclusive": "Entrée non valide",
+          "not_inclusive": "Entrée non valide"
+        },
+        "string": {
+          "exact": "Doit contenir exactement {minimum} caractère | Doit contenir exactement {minimum} caractères",
+          "inclusive": "Doit contenir au moins {minimum} caractère | Doit contenir au moins {minimum} caractères",
+          "not_inclusive": "Doit contenir plus de {minimum} caractère | Doit contenir plus de {minimum} caractères"
+        }
+      },
+      "unrecognized_keys": "Clés non reconnues : {keys}"
+    },
+    "types": {
+      "array": "tableau",
+      "bigint": "grand entier",
+      "boolean": "booléen",
+      "date": "date",
+      "float": "flottant",
+      "function": "fonction",
+      "integer": "entier",
+      "map": "carte",
+      "nan": "NaN",
+      "never": "jamais",
+      "null": "nul",
+      "number": "nombre",
+      "object": "objet",
+      "promise": "promesse",
+      "set": "ensemble",
+      "string": "chaîne",
+      "symbol": "symbole",
+      "undefined": "indéfini",
+      "unknown": "inconnu",
+      "void": "vide"
+    },
+    "validations": {
+      "cuid": "cuid",
+      "datetime": "date et heure",
+      "email": "e-mail",
+      "regex": "expression régulière",
+      "url": "URL",
+      "uuid": "UUID"
+    }
+  }
+}

@@ -1,0 +1,115 @@
+{
+  "zodi18n": {
+    "errors": {
+      "custom": "Errore",
+      "invalid_arguments": "Argomenti della funzione non validi",
+      "invalid_date": "Data non valida",
+      "invalid_enum_value": "Il valore deve essere uno dei seguenti: {options}. Ricevuto: '{received}'.",
+      "invalid_intersection_types": "I risultati dell'intersezione non possono essere combinati",
+      "invalid_literal": "Valore letterale non valido, previsto: {expected}",
+      "invalid_return_type": "Tipo di ritorno non valido",
+      "invalid_string": {
+        "cuid": "Identificatore non valido",
+        "datetime": "Data e ora non valide",
+        "email": "Email non valida",
+        "endsWith": "Deve terminare con \"{endsWith}\"",
+        "regex": "Formato non valido",
+        "startsWith": "Deve iniziare con \"{startsWith}\"",
+        "url": "URL non valido",
+        "uuid": "UUID non valido"
+      },
+      "invalid_type": "Previsto {expected}, ricevuto {received}",
+      "invalid_type_received_undefined": "Campo obbligatorio",
+      "invalid_union": "Input non valido",
+      "invalid_union_discriminator": "Valore discriminatore non valido. Opzioni previste: {options}",
+      "not_finite": "Il numero deve essere finito",
+      "not_multiple_of": "Il numero deve essere un multiplo di {multipleOf}",
+      "required": "Campo obbligatorio",
+      "too_big": {
+        "array": {
+          "exact": "Deve contenere esattamente {maximum} elemento | Deve contenere esattamente {maximum} elementi",
+          "inclusive": "Può contenere al massimo {maximum} elemento | Può contenere al massimo {maximum} elementi",
+          "not_inclusive": "Deve contenere meno di {maximum} elemento | Deve contenere meno di {maximum} elementi"
+        },
+        "date": {
+          "exact": "La data deve essere esattamente {maximum}",
+          "inclusive": "La data non può essere successiva a {maximum}",
+          "not_inclusive": "La data deve essere precedente a {maximum}"
+        },
+        "number": {
+          "exact": "Il numero deve essere esattamente {maximum}",
+          "inclusive": "Il numero non può essere maggiore di {maximum}",
+          "not_inclusive": "Il numero deve essere minore di {maximum}"
+        },
+        "set": {
+          "exact": "Input non valido",
+          "inclusive": "Input non valido",
+          "not_inclusive": "Input non valido"
+        },
+        "string": {
+          "exact": "Deve contenere esattamente {maximum} carattere | Deve contenere esattamente {maximum} caratteri",
+          "inclusive": "Può contenere al massimo {maximum} carattere | Può contenere al massimo {maximum} caratteri",
+          "not_inclusive": "Deve contenere meno di {maximum} carattere | Deve contenere meno di {maximum} caratteri"
+        }
+      },
+      "too_small": {
+        "array": {
+          "exact": "Deve contenere esattamente {minimum} elemento | Deve contenere esattamente {minimum} elementi",
+          "inclusive": "Deve contenere almeno {minimum} elemento | Deve contenere almeno {minimum} elementi",
+          "not_inclusive": "Deve contenere più di {minimum} elemento | Deve contenere più di {minimum} elementi"
+        },
+        "date": {
+          "exact": "La data deve essere esattamente {minimum}",
+          "inclusive": "La data non può essere precedente a {minimum}",
+          "not_inclusive": "La data deve essere successiva a {minimum}"
+        },
+        "number": {
+          "exact": "Il numero deve essere esattamente {minimum}",
+          "inclusive": "Il numero non può essere minore di {minimum}",
+          "not_inclusive": "Il numero deve essere maggiore di {minimum}"
+        },
+        "set": {
+          "exact": "Input non valido",
+          "inclusive": "Input non valido",
+          "not_inclusive": "Input non valido"
+        },
+        "string": {
+          "exact": "Deve contenere esattamente {minimum} carattere | Deve contenere esattamente {minimum} caratteri",
+          "inclusive": "Deve contenere almeno {minimum} carattere | Deve contenere almeno {minimum} caratteri",
+          "not_inclusive": "Deve contenere più di {minimum} carattere | Deve contenere più di {minimum} caratteri"
+        }
+      },
+      "unrecognized_keys": "Chiavi non riconosciute: {keys}"
+    },
+    "types": {
+      "array": "array",
+      "bigint": "intero grande",
+      "boolean": "booleano",
+      "date": "data",
+      "float": "virgola mobile",
+      "function": "funzione",
+      "integer": "intero",
+      "map": "mappa",
+      "nan": "NaN",
+      "never": "mai",
+      "null": "null",
+      "number": "numero",
+      "object": "oggetto",
+      "promise": "promessa",
+      "set": "insieme",
+      "string": "stringa",
+      "symbol": "simbolo",
+      "undefined": "non definito",
+      "unknown": "sconosciuto",
+      "void": "vuoto"
+    },
+    "validations": {
+      "cuid": "cuid",
+      "datetime": "data e ora",
+      "email": "email",
+      "regex": "espressione regolare",
+      "url": "URL",
+      "uuid": "UUID"
+    }
+  }
+}

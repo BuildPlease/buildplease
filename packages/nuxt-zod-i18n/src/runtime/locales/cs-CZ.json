@@ -1,0 +1,115 @@
+{
+  "zodi18n": {
+    "errors": {
+      "custom": "Chyba",
+      "invalid_arguments": "Neplatné argumenty funkce",
+      "invalid_date": "Neplatné datum",
+      "invalid_enum_value": "Hodnota musí být jedna z: {options}. Zadané: '{received}'.",
+      "invalid_intersection_types": "Výsledky průniku nelze sloučit",
+      "invalid_literal": "Neplatná literální hodnota, očekávané: {expected}",
+      "invalid_return_type": "Neplatný návratový typ funkce",
+      "invalid_string": {
+        "cuid": "Neplatný identifikátor",
+        "datetime": "Neplatné datum a čas",
+        "email": "Neplatný email",
+        "endsWith": "Musí končit na \"{endsWith}\"",
+        "regex": "Neplatný formát",
+        "startsWith": "Musí začínat na \"{startsWith}\"",
+        "url": "Neplatná URL",
+        "uuid": "Neplatné UUID"
+      },
+      "invalid_type": "Očekávané {expected}, přijato {received}",
+      "invalid_type_received_undefined": "Povinné pole",
+      "invalid_union": "Neplatný vstup",
+      "invalid_union_discriminator": "Neplatná diskriminační hodnota. Očekávané možnosti: {options}",
+      "not_finite": "Číslo musí být konečné",
+      "not_multiple_of": "Číslo musí být násobkem {multipleOf}",
+      "required": "Povinné pole",
+      "too_big": {
+        "array": {
+          "exact": "Musí obsahovat přesně {maximum} prvek | Musí obsahovat přesně {maximum} prvky | Musí obsahovat přesně {maximum} prvků",
+          "inclusive": "Může obsahovat nejvíce {maximum} prvek | Může obsahovat nejvíce {maximum} prvky | Může obsahovat nejvíce {maximum} prvků",
+          "not_inclusive": "Musí obsahovat méně než {maximum} prvek | Musí obsahovat méně než {maximum} prvky | Musí obsahovat méně než {maximum} prvků"
+        },
+        "date": {
+          "exact": "Datum musí být přesně {maximum}",
+          "inclusive": "Datum musí být nejpozději {maximum}",
+          "not_inclusive": "Datum musí být před {maximum}"
+        },
+        "number": {
+          "exact": "Číslo musí být přesně {maximum}",
+          "inclusive": "Číslo nemůže být větší než {maximum}.",
+          "not_inclusive": "Číslo musí být menší než {maximum}"
+        },
+        "set": {
+          "exact": "Neplatný vstup",
+          "inclusive": "Neplatný vstup",
+          "not_inclusive": "Neplatný vstup"
+        },
+        "string": {
+          "exact": "Musí obsahovat přesně {maximum} znak | Musí obsahovat přesně {maximum} znaky | Musí obsahovat přesně {maximum} znaků",
+          "inclusive": "Může obsahovat nejvíce {maximum} znak | Může obsahovat nejvíce {maximum} znaky | Může obsahovat nejvíce {maximum} znaků",
+          "not_inclusive": "Musí obsahovat méně než {maximum} znak | Musí obsahovat méně než {maximum} znaky | Musí obsahovat méně než {maximum} znaků"
+        }
+      },
+      "too_small": {
+        "array": {
+          "exact": "Musí obsahovat přesně {minimum} prvek | Musí obsahovat přesně {minimum} prvky | Musí obsahovat přesně {minimum} prvků",
+          "inclusive": "Musí obsahovat alespoň {minimum} prvek | Musí obsahovat alespoň {minimum} prvky | Musí obsahovat alespoň {minimum} prvků",
+          "not_inclusive": "Musí obsahovat více než {minimum} prvek | Musí obsahovat více než {minimum} prvky | Musí obsahovat více než {minimum} prvků"
+        },
+        "date": {
+          "exact": "Datum musí být přesně {minimum}",
+          "inclusive": "Datum musí být nejdříve {minimum}",
+          "not_inclusive": "Datum musí být po {minimum}"
+        },
+        "number": {
+          "exact": "Číslo musí být přesně {minimum}",
+          "inclusive": "Číslo nemůže být menší než {minimum}.",
+          "not_inclusive": "Číslo musí být větší než {minimum}"
+        },
+        "set": {
+          "exact": "Neplatný vstup",
+          "inclusive": "Neplatný vstup",
+          "not_inclusive": "Neplatný vstup"
+        },
+        "string": {
+          "exact": "Musí obsahovat přesně {minimum} znak | Musí obsahovat přesně {minimum} znaky | Musí obsahovat přesně {minimum} znaků",
+          "inclusive": "Musí obsahovat alespoň {minimum} znak | Musí obsahovat alespoň {minimum} znaky | Musí obsahovat alespoň {minimum} znaků",
+          "not_inclusive": "Musí obsahovat více než {minimum} znak | Musí obsahovat více než {minimum} znaky | Musí obsahovat více než {minimum} znaků"
+        }
+      },
+      "unrecognized_keys": "Neznámé klíče: {keys}"
+    },
+    "types": {
+      "array": "pole",
+      "bigint": "bigint",
+      "boolean": "boolean",
+      "date": "datum",
+      "float": "float",
+      "function": "funkce",
+      "integer": "integer",
+      "map": "mapa",
+      "nan": "NaN",
+      "never": "nikdy",
+      "null": "null",
+      "number": "číslo",
+      "object": "objekt",
+      "promise": "příslib",
+      "set": "množina",
+      "string": "řetězec",
+      "symbol": "symbol",
+      "undefined": "nedefinováno",
+      "unknown": "neznámé",
+      "void": "prázdné"
+    },
+    "validations": {
+      "cuid": "cuid",
+      "datetime": "datum a čas",
+      "email": "email",
+      "regex": "regulární výraz",
+      "url": "URL",
+      "uuid": "UUID"
+    }
+  }
+}

@@ -1,0 +1,115 @@
+{
+  "zodi18n": {
+    "errors": {
+      "custom": "错误",
+      "invalid_arguments": "函数参数无效",
+      "invalid_date": "无效的日期",
+      "invalid_enum_value": "值必须是以下选项之一: {options}。收到: '{received}'。",
+      "invalid_intersection_types": "无法合并交集结果",
+      "invalid_literal": "无效的文字值，期望值: {expected}",
+      "invalid_return_type": "无效的返回类型",
+      "invalid_string": {
+        "cuid": "无效标识符",
+        "datetime": "无效的日期和时间",
+        "email": "无效的电子邮件",
+        "endsWith": "必须以 \"{endsWith}\" 结尾",
+        "regex": "格式无效",
+        "startsWith": "必须以 \"{startsWith}\" 开头",
+        "url": "无效的URL",
+        "uuid": "无效的UUID"
+      },
+      "invalid_type": "期望 {expected}，收到 {received}",
+      "invalid_type_received_undefined": "必填字段",
+      "invalid_union": "无效输入",
+      "invalid_union_discriminator": "无效的区分值。期望选项: {options}",
+      "not_finite": "数字必须是有限的",
+      "not_multiple_of": "数字必须是 {multipleOf} 的倍数",
+      "required": "必填字段",
+      "too_big": {
+        "array": {
+          "exact": "必须包含正好 {maximum} 个元素",
+          "inclusive": "最多包含 {maximum} 个元素",
+          "not_inclusive": "必须少于 {maximum} 个元素"
+        },
+        "date": {
+          "exact": "日期必须是 {maximum}",
+          "inclusive": "日期不能晚于 {maximum}",
+          "not_inclusive": "日期必须早于 {maximum}"
+        },
+        "number": {
+          "exact": "数字必须是 {maximum}",
+          "inclusive": "数字不能大于 {maximum}",
+          "not_inclusive": "数字必须小于 {maximum}"
+        },
+        "set": {
+          "exact": "无效输入",
+          "inclusive": "无效输入",
+          "not_inclusive": "无效输入"
+        },
+        "string": {
+          "exact": "必须包含正好 {maximum} 个字符",
+          "inclusive": "最多包含 {maximum} 个字符",
+          "not_inclusive": "必须少于 {maximum} 个字符"
+        }
+      },
+      "too_small": {
+        "array": {
+          "exact": "必须包含正好 {minimum} 个元素",
+          "inclusive": "必须至少包含 {minimum} 个元素",
+          "not_inclusive": "必须多于 {minimum} 个元素"
+        },
+        "date": {
+          "exact": "日期必须是 {minimum}",
+          "inclusive": "日期不能早于 {minimum}",
+          "not_inclusive": "日期必须晚于 {minimum}"
+        },
+        "number": {
+          "exact": "数字必须是 {minimum}",
+          "inclusive": "数字不能小于 {minimum}",
+          "not_inclusive": "数字必须大于 {minimum}"
+        },
+        "set": {
+          "exact": "无效输入",
+          "inclusive": "无效输入",
+          "not_inclusive": "无效输入"
+        },
+        "string": {
+          "exact": "必须包含正好 {minimum} 个字符",
+          "inclusive": "必须至少包含 {minimum} 个字符",
+          "not_inclusive": "必须多于 {minimum} 个字符"
+        }
+      },
+      "unrecognized_keys": "未知的键: {keys}"
+    },
+    "types": {
+      "array": "数组",
+      "bigint": "大整数",
+      "boolean": "布尔值",
+      "date": "日期",
+      "float": "浮点数",
+      "function": "函数",
+      "integer": "整数",
+      "map": "映射",
+      "nan": "NaN",
+      "never": "永不",
+      "null": "空值",
+      "number": "数字",
+      "object": "对象",
+      "promise": "Promise",
+      "set": "集合",
+      "string": "字符串",
+      "symbol": "符号",
+      "undefined": "未定义",
+      "unknown": "未知",
+      "void": "空"
+    },
+    "validations": {
+      "cuid": "cuid",
+      "datetime": "日期和时间",
+      "email": "电子邮件",
+      "regex": "正则表达式",
+      "url": "URL",
+      "uuid": "UUID"
+    }
+  }
+}

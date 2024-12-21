@@ -1,0 +1,51 @@
+{
+  "name": "@nidavellirx/meowv-nuxt-zod-i18n",
+  "version": "1.0.0",
+  "description": "A Nuxt Module for localizing zod error messages.",
+  "repository": "git@github.com/Nidavellirx/meowv.git",
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/module.mjs",
+      "require": "./dist/module.cjs",
+      "types": "./dist/types.d.ts"
+    }
+  },
+  "main": "./dist/module.cjs",
+  "types": "./dist/types.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "npm run dev:prepare && npm run prepack",
+    "prepack": "nuxt-module-build build",
+    "dev": "nuxi dev playground",
+    "dev:build": "nuxi build playground",
+    "dev:prepare": "nuxt-module-build build --stub && nuxt-module-build prepare && nuxi prepare playground",
+    "release": "npm run lint && npm run test && npm run prepack && changelogen --release && npm publish && git push --follow-tags",
+    "test": "vitest run",
+    "test:watch": "vitest watch",
+    "test:types": "vue-tsc --noEmit && cd playground && vue-tsc --noEmit"
+  },
+  "dependencies": {
+    "@intlify/shared": "10.0.5",
+    "@nuxt/kit": "3.15.0",
+    "vue-i18n": "11.0.1",
+    "dedupe": "4.0.3",
+    "defu": "6.1.4",
+    "zod": "3.24.1"
+  },
+  "devDependencies": {
+    "@nuxt/devtools": "1.6.4",
+    "@nuxt/module-builder": "0.8.4",
+    "@nuxt/schema": "3.15.0",
+    "@nuxtjs/i18n": "9.1.1",
+    "@types/node": "latest",
+    "changelogen": "0.5.7",
+    "nuxt": "3.15.0",
+    "typescript": "5.6.2",
+    "vitest": "2.1.8",
+    "vue-tsc": "2.1.6"
+  }
+}

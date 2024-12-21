@@ -1,0 +1,115 @@
+{
+  "zodi18n": {
+    "errors": {
+      "custom": "خطا",
+      "invalid_arguments": "پارامترهای نامعتبر تابع",
+      "invalid_date": "تاریخ نامعتبر",
+      "invalid_enum_value": "مقدار باید یکی از: {options} باشد. مقدار داده شده: '{received}'.",
+      "invalid_intersection_types": "نتایج تقاطع قابل ادغام نیستند",
+      "invalid_literal": "مقدار ثابت نامعتبر، مورد انتظار: {expected}",
+      "invalid_return_type": "نوع بازگشتی نامعتبر",
+      "invalid_string": {
+        "cuid": "شناسه نامعتبر",
+        "datetime": "تاریخ و زمان نامعتبر",
+        "email": "ایمیل نامعتبر",
+        "endsWith": "باید به \"{endsWith}\" ختم شود",
+        "regex": "قالب نامعتبر",
+        "startsWith": "باید با \"{startsWith}\" شروع شود",
+        "url": "آدرس اینترنتی نامعتبر",
+        "uuid": "UUID نامعتبر"
+      },
+      "invalid_type": "انتظار {expected}، دریافت {received}",
+      "invalid_type_received_undefined": "فیلد الزامی",
+      "invalid_union": "ورودی نامعتبر",
+      "invalid_union_discriminator": "مقدار تمایزدهنده نامعتبر. گزینه‌های مورد انتظار: {options}",
+      "not_finite": "عدد باید متناهی باشد",
+      "not_multiple_of": "عدد باید مضرب {multipleOf} باشد",
+      "required": "فیلد الزامی",
+      "too_big": {
+        "array": {
+          "exact": "باید دقیقاً {maximum} آیتم داشته باشد",
+          "inclusive": "می‌تواند حداکثر {maximum} آیتم داشته باشد",
+          "not_inclusive": "باید کمتر از {maximum} آیتم داشته باشد"
+        },
+        "date": {
+          "exact": "تاریخ باید دقیقاً {maximum} باشد",
+          "inclusive": "تاریخ باید حداکثر {maximum} باشد",
+          "not_inclusive": "تاریخ باید قبل از {maximum} باشد"
+        },
+        "number": {
+          "exact": "عدد باید دقیقاً {maximum} باشد",
+          "inclusive": "عدد نمی‌تواند بزرگ‌تر از {maximum} باشد",
+          "not_inclusive": "عدد باید کوچکتر از {maximum} باشد"
+        },
+        "set": {
+          "exact": "ورودی نامعتبر",
+          "inclusive": "ورودی نامعتبر",
+          "not_inclusive": "ورودی نامعتبر"
+        },
+        "string": {
+          "exact": "باید دقیقاً {maximum} حرف داشته باشد",
+          "inclusive": "می‌تواند حداکثر {maximum} حرف داشته باشد",
+          "not_inclusive": "باید کمتر از {maximum} حرف داشته باشد"
+        }
+      },
+      "too_small": {
+        "array": {
+          "exact": "باید دقیقاً {minimum} آیتم داشته باشد",
+          "inclusive": "باید حداقل {minimum} آیتم داشته باشد",
+          "not_inclusive": "باید بیشتر از {minimum} آیتم داشته باشد"
+        },
+        "date": {
+          "exact": "تاریخ باید دقیقاً {minimum} باشد",
+          "inclusive": "تاریخ باید حداقل {minimum} باشد",
+          "not_inclusive": "تاریخ باید بعد از {minimum} باشد"
+        },
+        "number": {
+          "exact": "عدد باید دقیقاً {minimum} باشد",
+          "inclusive": "عدد نمی‌تواند کوچکتر از {minimum} باشد",
+          "not_inclusive": "عدد باید بزرگتر از {minimum} باشد"
+        },
+        "set": {
+          "exact": "ورودی نامعتبر",
+          "inclusive": "ورودی نامعتبر",
+          "not_inclusive": "ورودی نامعتبر"
+        },
+        "string": {
+          "exact": "باید دقیقاً {minimum} حرف داشته باشد",
+          "inclusive": "باید حداقل {minimum} حرف داشته باشد",
+          "not_inclusive": "باید بیشتر از {minimum} حرف داشته باشد"
+        }
+      },
+      "unrecognized_keys": "کلیدهای ناشناخته: {keys}"
+    },
+    "types": {
+      "array": "آرایه",
+      "bigint": "عدد بزرگ",
+      "boolean": "بولی",
+      "date": "تاریخ",
+      "float": "شناور",
+      "function": "تابع",
+      "integer": "عدد صحیح",
+      "map": "نقشه",
+      "nan": "NaN",
+      "never": "هرگز",
+      "null": "تهی",
+      "number": "عدد",
+      "object": "شیء",
+      "promise": "وعده",
+      "set": "مجموعه",
+      "string": "رشته",
+      "symbol": "نماد",
+      "undefined": "تعریف نشده",
+      "unknown": "ناشناخته",
+      "void": "خالی"
+    },
+    "validations": {
+      "cuid": "cuid",
+      "datetime": "تاریخ و زمان",
+      "email": "ایمیل",
+      "regex": "عبارت باقاعده",
+      "url": "URL",
+      "uuid": "UUID"
+    }
+  }
+}

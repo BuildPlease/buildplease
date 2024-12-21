@@ -1,0 +1,49 @@
+{
+  "colors": {
+    "green": "green",
+    "red": "red"
+  },
+  "dictionary": {
+    "email": "Email",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "name": "Name",
+    "birthDate": "Birthday",
+    "save": "Save",
+    "url": "Url",
+    "yourPlaceholder": " Your {input}"
+  },
+  "myCustomError": "Custom error",
+  "myCustomErrorWithInterpolation": "My preferred colors are {first} and {second}",
+  "pages": {
+    "complex": {
+      "alert": {
+        "description": "This example show translated zod error with a complex schema and interpolated value in error.",
+        "title": "@:pages.index.alert.title"
+      },
+      "preferredColor": "Preferred color",
+      "title": "@:pages.index.title"
+    },
+    "index": {
+      "alert": {
+        "description": "This example show translated zod error with a simple schema.",
+        "title": "Heads up!"
+      },
+      "title": "Account"
+    },
+    "overload": {
+      "alert": {
+        "description": "This example show  zod error translated  with translation overloaded by your global translations.",
+        "title": "@:pages.index.alert.title"
+      },
+      "title": "Website info"
+    }
+  },
+  "zodI18n": {
+    "errors": {
+      "invalid_string": {
+        "url": "Overload by your global translation, original translation: Invalid url"
+      }
+    }
+  }
+}

@@ -1,0 +1,40 @@
+{
+   "name": "@nidavellirx/meowv-core",
+   "version": "1.0.0",
+   "description": "",
+   "keywords": [],
+   "author": "Simon Kovačič",
+   "license": "ISC",
+   "exports": {
+      ".": {
+         "types": "./dist/index.d.ts",
+         "import": "./dist/index.mjs",
+         "require": "./dist/index.js"
+      }
+   },
+   "directories": {
+      "src": "src"
+   },
+   "files": [
+      "dist"
+   ],
+   "repository": "git@github.com/Nidavellirx/meowv.git",
+   "publishConfig": {
+      "registry": "https://npm.pkg.github.com/"
+   },
+   "scripts": {
+      "build": "tsup"
+   },
+   "dependencies": {
+      "date-fns": "4.1.0",
+      "inversify": "6.2.1",
+      "ms": "2.1.3",
+      "reflect-metadata": "0.2.2"
+   },
+   "devDependencies": {
+      "@swc/core": "1.10.2",
+      "@types/ms": "0.7.34",
+      "tsup": "8.3.5",
+      "typescript": "5.7.2"
+   }
+}
