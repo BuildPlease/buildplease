@@ -1,0 +1,42 @@
+{
+   "compilerOptions":{
+      "moduleResolution":"Node",
+      "target":"ESNext",
+      "module":"ESNext",
+      "strict":true,
+      "declaration":true,
+      "declarationMap":true,
+      "emitDeclarationOnly":true,
+      "esModuleInterop":true,
+      "skipLibCheck":true,
+      "allowSyntheticDefaultImports":true,
+      "experimentalDecorators":true,
+      "emitDecoratorMetadata": true,
+      "rootDir":"./",
+      "outDir":"dist",
+      "baseUrl":"./",
+      "paths":{
+         "@/*":[
+            "src/*"
+         ],
+         "@":[
+            "src/index.ts"
+         ],
+         "@configuration/*":[
+            "configuration/*"
+         ],
+         "@configuration":[
+            "configuration/index.ts"
+         ]
+      }
+   },
+   "include":[
+      "index.ts",
+      "src/**/*",
+      "configuration"
+   ],
+   "exclude":[
+      "node_modules",
+      "dist"
+   ]
+}
