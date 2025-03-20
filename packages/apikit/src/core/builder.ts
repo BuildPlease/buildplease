@@ -8,59 +8,56 @@ import { ApiKitConfig } from './defineConfig';
  */
 export async function build(config: ApiKitConfig): Promise<void> {
   const outputPath = prepareBuildDirectory(config.outDir);
-
-  makeEnvironments(config, outputPath);
+  generateEnvironmentFiles(config, outputPath);
 }
 
 /**
- * Prepares the build output directory by clearing existing files.
+ * Prepares the build output directory.
  */
 function prepareBuildDirectory(outDir: string): string {
   const outputPath = path.resolve(process.cwd(), outDir);
-
   if (fs.existsSync(outputPath))
     fs.rmSync(outputPath, { recursive: true, force: true });
   fs.mkdirSync(outputPath, { recursive: true });
-
   return outputPath;
 }
 
 /**
- * Generates environment-related files: Environment.ts and environment.ts.
+ * Generates environment-related files.
  */
-function makeEnvironments(config: ApiKitConfig, outputPath: string) {
+function generateEnvironmentFiles(config: ApiKitConfig, outputPath: string) {
   const { environments } = config;
 
-  // Generate Environment.ts
-  const environmentEnum = `
-    export const Environment = {
-      ${environments
-        .map(
-          (env) => `  ${env.name}: { 
-          name: "${env.name}", 
-          file: "${env.file}", 
-          fileDir: "${env.fileDir || ''}" 
-        }`,
-        )
-        .join(',\n')}
-      } as const;
+  const environmentEnum = `export enum Environment {
+${environments.map((env) => `  ${env.name} = "${env.name}"`).join(',\n')}
+}
 
-      export type EnvironmentType = keyof typeof Environment;
-  `;
+export const Environments = {
+${environments
+  .map(
+    (env) =>
+      `  ${env.name}: { name: Environment.${env.name}, file: "${env.file}", fileDir: "${env.fileDir || ''}" }`,
+  )
+  .join(',\n')}
+} as const;
+
+export type EnvironmentType = keyof typeof Environments;
+`;
+
+  const environmentRuntime = `import { Environment, Environments } from "./Environment";
+
+const envName = process.env.APP_ENV as keyof typeof Environments;
+
+if (!envName || !(envName in Environments)) {
+  throw new Error(\`❌ Invalid or missing environment. Allowed: \${Object.keys(Environments).join(', ')}\`);
+}
+
+export const environment = { 
+  ...Environments[envName], 
+  filePath: \`\${process.cwd()}/\${Environments[envName].file}\`
+};
+`;
 
   fs.writeFileSync(path.join(outputPath, 'Environment.ts'), environmentEnum);
-
-  // Generate environment.ts (runtime detection)
-  const environmentFile = `
-    import { Environment, EnvironmentType } from "./Environment";
-
-    const currentEnv = (process.env.APP_ENV as EnvironmentType) || "development";
-
-    export const environment = { 
-      ...Environment[currentEnv], 
-      filePath: \`\${process.cwd()}/\${Environment[currentEnv].file}\`
-    };
-  `;
-
-  fs.writeFileSync(path.join(outputPath, 'environment.ts'), environmentFile);
+  fs.writeFileSync(path.join(outputPath, 'environment.ts'), environmentRuntime);
 }
