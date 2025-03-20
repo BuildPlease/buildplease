@@ -2,7 +2,7 @@ import { defineCommand } from 'citty';
 
 import { loadConfig, log } from './utils';
 
-import { build } from '@/core/builder';
+import { generate } from '@/generator';
 
 export const buildCommand = defineCommand({
   meta: {
@@ -30,7 +30,8 @@ export const buildCommand = defineCommand({
   run: async ({ args }) => {
     try {
       const config = await loadConfig(args.dir, args.config);
-      await build(config);
+
+      await generate(config);
 
       log.success('✅ Build complete!');
     } catch (error) {

@@ -1,4 +1,4 @@
-export interface Environment {
+export interface EnvironmentConfig {
   /**
    * Name of the environment (e.g., 'production', 'development').
    */

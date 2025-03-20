@@ -1,10 +1,10 @@
-import { Environment } from '@/core/environment';
+import { EnvironmentConfig } from '@/core/environmentConfig';
 
 export interface ApiKitConfig {
   /**
    * Defines all available environments in the application.
    */
-  environments: Environment[];
+  environments: EnvironmentConfig[];
 
   /**
    * Output directory for the built files.

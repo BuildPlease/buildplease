@@ -1,3 +1,2 @@
-export * from './environment';
+export * from './environmentConfig';
 export * from './defineConfig';
-export * from './builder';
