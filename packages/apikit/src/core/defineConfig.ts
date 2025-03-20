@@ -1,22 +1,32 @@
-import { EnvironmentConfig } from '@/core/environment';
+import { Environment } from '@/core/environment';
 
 export interface ApiKitConfig {
   /**
    * Defines all available environments in the application.
    */
-  environments: EnvironmentConfig[];
+  environments: Environment[];
 
   /**
    * Output directory for the built files.
-   * Default: 'dist'
+   * Default: 'runtime'
    */
-  outDir?: string;
+  outDir: string;
 }
 
 /**
- * Validates and defines the ApiKit configuration.
+ * Defines the ApiKit configuration.
  */
 export function defineApikitConfig(config: ApiKitConfig): ApiKitConfig {
+  validateApikitConfig(config);
+
+  return config;
+}
+
+function validateApikitConfig(config: ApiKitConfig) {
+  if (!config.environments || config.environments.length === 0) {
+    throw new Error(`At least one environment must be defined.`);
+  }
+
   config.environments.forEach((env) => {
     if (!env.file) {
       throw new Error(
@@ -24,5 +34,4 @@ export function defineApikitConfig(config: ApiKitConfig): ApiKitConfig {
       );
     }
   });
-  return config;
 }

@@ -47,6 +47,9 @@ importers:
       inversify:
         specifier: 6.2.1
         version: 6.2.1(reflect-metadata@0.2.2)
+      jiti:
+        specifier: ^2.4.2
+        version: 2.4.2
       reflect-metadata:
         specifier: 0.2.2
         version: 0.2.2
@@ -60,12 +63,6 @@ importers:
         specifier: 3.24.1
         version: 3.24.1
     devDependencies:
-      '@swc/core':
-        specifier: 1.10.2
-        version: 1.10.2(@swc/helpers@0.5.15)
-      tsup:
-        specifier: 8.3.5
-        version: 8.3.5(@swc/core@1.10.2(@swc/helpers@0.5.15))(jiti@2.4.2)(postcss@8.5.3)(typescript@5.7.2)(yaml@2.7.0)
       typescript:
         specifier: 5.7.2
         version: 5.7.2

@@ -1,3 +1,2 @@
-export * from './main';
-export * from './build';
-export * from './run';
+export { main } from './main';
+export { runMain } from './run';
