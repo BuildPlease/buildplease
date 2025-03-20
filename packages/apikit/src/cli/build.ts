@@ -24,6 +24,7 @@ export const buildCommand = defineCommand({
         'By default, apikit tries to read `apikit.config` from the build `DIR` by default.',
         '',
       ].join('\n'),
+      required: false,
     },
   },
   run: async ({ args }) => {

@@ -33,8 +33,6 @@ export async function loadConfig(
     process.exit(1);
   }
 
-  log.info(`📂 Configuration path: ${configFile}`);
-
   try {
     const jiti = createJiti(rootDir, { interopDefault: true });
     const config = await jiti.import(configFile);
