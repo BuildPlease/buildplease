@@ -29,11 +29,13 @@ export const buildCommand = defineCommand({
   },
   run: async ({ args }) => {
     try {
+      log.success('🚀 Building...');
+
       const config = await loadConfig(args.dir, args.config);
 
       await generate(config);
 
-      log.success('✅ Build complete!');
+      log.success('🎉 Build complete!');
     } catch (error) {
       log.error((error as Error).message);
       process.exit(1);
