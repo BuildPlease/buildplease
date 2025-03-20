@@ -29,7 +29,7 @@ export const buildCommand = defineCommand({
   },
   run: async ({ args }) => {
     try {
-      log.success('🚀 Building...');
+      log.info('🚀 Building...');
 
       const config = await loadConfig(args.dir, args.config);
 

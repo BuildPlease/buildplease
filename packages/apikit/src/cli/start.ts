@@ -1,3 +1,7 @@
+import fs from 'fs';
+import path from 'path';
+
+import dotenvx from '@dotenvx/dotenvx';
 import { defineCommand } from 'citty';
 
 import { loadConfig, log } from './utils';
@@ -30,20 +34,30 @@ export const startCommand = defineCommand({
   },
   run: async ({ args }) => {
     try {
+      log.info(`Starting application in ${args.environment} mode...`);
       const config = await loadConfig(args.dir, args.config);
 
-      const validEnvironment = config.environments.find(
+      const environment = config.environments.find(
         (env) => env.name === args.environment,
       );
 
-      if (!validEnvironment) {
+      if (!environment) {
         const message = `Environment "${args.environment}" is not defined in config.`;
         throw new Error(message);
       }
 
-      process.env.APP_ENV = args.environment;
+      const environmentFilePath = path.resolve(
+        args.dir || process.cwd(),
+        `.env.${environment.name}`,
+      );
 
-      log.info(`Starting application in ${args.environment} mode...`);
+      if (!fs.existsSync(environmentFilePath)) {
+        const message = `Environment file "${environmentFilePath}" does not exist.`;
+        throw new Error(message);
+      }
+
+      dotenvx.config({ path: environmentFilePath });
+      process.env.APP_ENV = environment.name;
     } catch (error) {
       log.error((error as Error).message);
       process.exit(1);

@@ -29,6 +29,7 @@
       "build": "unbuild"
    },
    "dependencies": {
+      "@dotenvx/dotenvx": "^1.39.0",
       "@nidavellirx/meowv-core": "workspace:^",
       "axios": "1.7.9",
       "citty": "0.1.6",
