@@ -1,2 +1,2 @@
-export * from './environmentConfig';
-export * from './defineConfig';
+export * from './configuration/environmentConfig';
+export * from './configuration/defineConfig';

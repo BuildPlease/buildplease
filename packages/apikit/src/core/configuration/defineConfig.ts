@@ -1,4 +1,4 @@
-import { EnvironmentConfig } from '@/core/environmentConfig';
+import { EnvironmentConfig } from '@/core/configuration/environmentConfig';
 
 export interface ApiKitConfig {
   /**
