@@ -34,7 +34,7 @@
    "include":[
       "index.ts",
       "src/**/*",
-      "configuration"
+      "src/types/global.d.ts"
    ],
    "exclude":[
       "node_modules",

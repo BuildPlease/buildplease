@@ -1,16 +1,18 @@
-import { EnvironmentConfig } from '@/core/configuration/environmentConfig';
+import { EnvironmentConfig } from '#/configuration';
 
 export interface ApiKitConfig {
-  /**
-   * Defines all available environments in the application.
-   */
-  environments: EnvironmentConfig[];
-
   /**
    * Output directory for the built files.
    * Default: 'runtime'
    */
   outDir: string;
+
+  /**
+   * Defines all available environments in the application.
+   * Apikit will load all variables from the environment file into process.env.
+   * If NODE_ENV is defined in the file, it can cause issue.
+   */
+  environments: EnvironmentConfig[];
 }
 
 /**
@@ -18,7 +20,6 @@ export interface ApiKitConfig {
  */
 export function defineApikitConfig(config: ApiKitConfig): ApiKitConfig {
   validateApikitConfig(config);
-
   return config;
 }
 

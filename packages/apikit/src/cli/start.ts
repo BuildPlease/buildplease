@@ -34,7 +34,6 @@ export const startCommand = defineCommand({
   },
   run: async ({ args }) => {
     try {
-      log.info(`Starting application in ${args.environment} mode...`);
       const config = await loadConfig(args.dir, args.config);
 
       const environment = config.environments.find(
@@ -52,12 +51,22 @@ export const startCommand = defineCommand({
       );
 
       if (!fs.existsSync(environmentFilePath)) {
-        const message = `Environment file "${environmentFilePath}" does not exist.`;
+        const message = `Inevalid environment: "${environmentFilePath}", does not exist in configuration.`;
         throw new Error(message);
       }
 
+      process.env.NODE_ENV = environment.name;
       dotenvx.config({ path: environmentFilePath });
-      process.env.APP_ENV = environment.name;
+
+      // MARK: - Check if NODE_ENV matches environment.name after loading, prevent overloading from .env file
+      if (process.env.NODE_ENV !== environment.name) {
+        const errorMessage = `NODE_ENV was set to "${process.env.NODE_ENV}", but the environment is "${environment.name}"`;
+        throw new Error(errorMessage);
+      }
+
+      log.success(
+        `\n🚀 ApiKit successfully started in '${process.env.NODE_ENV.toUpperCase()}' environment`,
+      );
     } catch (error) {
       log.error((error as Error).message);
       process.exit(1);

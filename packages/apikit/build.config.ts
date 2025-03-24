@@ -4,7 +4,7 @@ import { defineBuildConfig } from 'unbuild';
 
 export default defineBuildConfig({
   entries: ['src/cli/index', 'src/core/index'],
-  declaration: 'compatible',
+  declaration: true,
   clean: true,
   // MARK: - External Dependencies (to prevent bundling)
   externals: [
