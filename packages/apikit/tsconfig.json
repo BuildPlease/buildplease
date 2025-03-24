@@ -23,11 +23,11 @@
          "@":[
             "src/index.ts"
          ],
-         "@configuration/*":[
-            "configuration/*"
+         "#/*":[
+            "src/core/*"
          ],
-         "@configuration":[
-            "configuration/index.ts"
+         "#":[
+            "src/core/index.ts"
          ]
       }
    },

@@ -1,4 +1,3 @@
-// build.config.ts
 import path from 'node:path';
 
 import { defineBuildConfig } from 'unbuild';
@@ -7,18 +6,19 @@ export default defineBuildConfig({
   entries: ['src/cli/index', 'src/core/index'],
   declaration: 'compatible',
   clean: true,
+  // MARK: - External Dependencies (to prevent bundling)
   externals: [
     'node:module',
     'node:path',
     'node:process',
     'consola',
     'citty',
-    'unconfig',
+    'jiti',
+    '@dotenvx/dotenvx',
   ],
   alias: {
     '@': path.resolve(__dirname, 'src'),
-    '@/core': path.resolve(__dirname, 'src/core/index.ts'),
-    '@/cli': path.resolve(__dirname, 'src/cli/index.ts'),
+    '#': path.resolve(__dirname, 'src/core'),
   },
   rollup: {
     emitCJS: false,

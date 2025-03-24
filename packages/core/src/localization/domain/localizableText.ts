@@ -1,4 +1,6 @@
-export class LocalizableText {
+import { JSONSerializable } from '@/utils';
+
+export class LocalizableText implements JSONSerializable {
   public values: { [lang: string]: string };
 
   constructor(LocalizableTexts: { [lang: string]: string }) {
@@ -7,5 +9,9 @@ export class LocalizableText {
 
   public getLocalized(lang: string): string | null {
     return this.values[lang] || null;
+  }
+
+  public toJSON(): any {
+    return this.values;
   }
 }
