@@ -12,18 +12,13 @@ export interface ApiKitConfig {
    * Apikit will load all variables from the environment file into process.env.
    * If NODE_ENV is defined in the file, it can cause issue.
    */
-  environments: EnvironmentConfig[];
+  environments: Array<EnvironmentConfig>;
 }
 
 /**
  * Defines the ApiKit configuration.
  */
 export function defineApikitConfig(config: ApiKitConfig): ApiKitConfig {
-  validateApikitConfig(config);
-  return config;
-}
-
-function validateApikitConfig(config: ApiKitConfig) {
   if (!config.environments || config.environments.length === 0) {
     throw new Error(`At least one environment must be defined.`);
   }
@@ -35,4 +30,6 @@ function validateApikitConfig(config: ApiKitConfig) {
       );
     }
   });
+
+  return config;
 }

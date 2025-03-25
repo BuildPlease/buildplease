@@ -9,10 +9,11 @@ export default [
   {
     files: ['**/*.{js,mjs,cjs,ts,jsx,tsx}'],
     ignores: [
-      '**/dist/**/*',
       '**/node_modules',
-      '**/.nuxt/**/*',
+      '**/dist/**/*',
+      '**/runtime/**/*',
       '**/.output/**/*',
+      '**/.nuxt/**/*',
     ],
     languageOptions: {
       parser: typescriptParser,

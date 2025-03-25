@@ -31,8 +31,6 @@ export const buildCommand = defineCommand({
     try {
       log.info('🚀 Building...');
 
-      console.log('DEBUG: args =', args);
-
       const config = await loadConfig(args.dir, args.config);
 
       await generate(config);
