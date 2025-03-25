@@ -26,7 +26,7 @@
       "registry": "https://npm.pkg.github.com/"
    },
    "scripts": {
-      "build": "unbuild"
+      "build": "tsup"
    },
    "dependencies": {
       "@dotenvx/dotenvx": "1.39.0",
@@ -36,6 +36,7 @@
       "citty": "0.1.6",
       "inversify": "6.2.1",
       "libphonenumber-js": "1.12.6",
+      "pino": "^9.6.0",
       "reflect-metadata": "0.2.2",
       "validator": "13.12.0",
       "zod": "3.24.1"
@@ -43,8 +44,8 @@
    "devDependencies": {
       "@types/bcrypt": "5.0.2",
       "@types/validator": "13.12.2",
+      "jiti": "2.4.2",
       "typescript": "5.8.2",
-      "unbuild": "3.5.0",
-      "jiti": "2.4.2"
+      "tsup": "8.3.5"
    }
 }

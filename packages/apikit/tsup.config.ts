@@ -1,0 +1,33 @@
+import { defineConfig } from 'tsup';
+
+export default defineConfig({
+  entry: ['index.ts'],
+  minify: false,
+  bundle: true,
+  shims: true,
+  splitting: true,
+  sourcemap: true,
+  treeshake: true,
+  clean: true,
+  dts: true,
+  format: ['cjs', 'esm'],
+  target: 'esnext',
+  outDir: 'dist',
+  platform: 'neutral',
+  tsconfig: 'tsconfig.json',
+  external: [
+    'fs',
+    'path',
+    'node:module',
+    'node:path',
+    'node:process',
+    'consola',
+    'citty',
+    'jiti',
+    'pino',
+    'zod',
+    'inversify',
+    '@nidavellirx/meowv-core',
+    '@dotenvx/dotenvx',
+  ],
+});

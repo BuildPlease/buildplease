@@ -21,25 +21,23 @@
       "resolveJsonModule": true,
       "rootDir":"./",
       "outDir":"dist",
-      "baseUrl":"./",
+      "baseUrl":".",
       "paths":{
          "@/*":[
             "src/*"
          ],
-         "@":[
-            "src/index.ts"
-         ],
          "#/*":[
             "src/core/*"
          ],
-         "#":[
-            "src/core/index.ts"
-         ]
+         "$/*":[
+            "src/core/modules/*"
+         ],
       }
    },
    "include":[
       "index.ts",
       "src/**/*",
+      "test/**/*"
    ],
    "exclude":[
       "node_modules",

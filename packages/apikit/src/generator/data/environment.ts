@@ -1,6 +1,6 @@
 import { writeGeneratedFile } from './utils';
 
-import { ApiKitConfig } from '#/configuration/defineConfig';
+import type { ApiKitConfig } from '$/configuration/defineConfig';
 
 export async function generateEnvironment(
   config: ApiKitConfig,

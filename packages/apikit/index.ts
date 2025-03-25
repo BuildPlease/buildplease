@@ -2,6 +2,8 @@ import 'reflect-metadata';
 import { Assembly } from '@nidavellirx/meowv-core';
 
 import {
+  ConfigurationAssembly,
+  LoggerAssembly,
   ValidationAssembly,
   SchemaAssembly,
   NormalizationAssembly,
@@ -12,6 +14,8 @@ export * from './src';
 
 function makeAssemblies(): Assembly[] {
   return [
+    new ConfigurationAssembly(),
+    new LoggerAssembly(),
     new ValidationAssembly(),
     new SchemaAssembly(),
     new NormalizationAssembly(),

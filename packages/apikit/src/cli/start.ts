@@ -64,6 +64,9 @@ export const startCommand = defineCommand({
         throw new Error(errorMessage);
       }
 
+      global.apikit.config = config;
+      global.apikit.currentEnvironment = environment;
+
       log.success(
         `\n🚀 ApiKit successfully started in '${process.env.NODE_ENV.toUpperCase()}' environment`,
       );

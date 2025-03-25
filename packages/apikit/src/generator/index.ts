@@ -3,7 +3,7 @@ import path from 'path';
 
 import { generateEnvironment, writeGeneratedFile } from './data';
 
-import { ApiKitConfig } from '#/configuration/defineConfig';
+import type { ApiKitConfig } from '$/configuration/defineConfig';
 
 /**
  * Generate the application core.
