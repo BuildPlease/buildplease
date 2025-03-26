@@ -47,6 +47,7 @@ export default [
       'no-multiple-empty-lines': ['error', { max: 1 }],
 
       // TypeScript-specific rules
+      '@typescript-eslint/consistent-type-imports': 'error',
       '@typescript-eslint/no-empty-object-type': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-unused-vars': [

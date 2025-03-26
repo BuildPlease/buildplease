@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { Assembly } from '@nidavellirx/meowv-core';
+import type { Assembly } from '@nidavellirx/meowv-core';
 
 import {
   ConfigurationAssembly,

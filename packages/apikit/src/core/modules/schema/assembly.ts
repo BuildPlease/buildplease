@@ -1,4 +1,4 @@
-import { Container } from 'inversify';
+import type { Container } from 'inversify';
 import type { Assembly } from '@nidavellirx/meowv-core';
 
 import { ApikitSymbols } from '#/di';

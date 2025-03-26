@@ -1,4 +1,4 @@
-import { JSONSerializable } from '@nidavellirx/meowv-core';
+import type { JSONSerializable } from '@nidavellirx/meowv-core';
 
 export interface ApiErrorProperties {
   identifier: string;

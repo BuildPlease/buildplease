@@ -1,6 +1,6 @@
 import type { Container, interfaces } from 'inversify';
 
-import { AsyncOperation } from '@nidavellirx/meowv-core';
+import type { AsyncOperation } from '@nidavellirx/meowv-core';
 
 import type { RemoteEndpoint } from '@/networking';
 

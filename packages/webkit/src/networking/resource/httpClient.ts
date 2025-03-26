@@ -1,5 +1,6 @@
 import { injectable } from 'inversify';
-import axios, { AxiosInstance, AxiosResponse, AxiosRequestConfig } from 'axios';
+import type { AxiosInstance, AxiosResponse, AxiosRequestConfig } from 'axios';
+import axios from 'axios';
 
 @injectable()
 export class HttpClient {

@@ -2,18 +2,19 @@ import path from 'path';
 import fs from 'fs';
 
 import { injectable, inject } from 'inversify';
-import pino, { Bindings, Logger } from 'pino';
+import type { Bindings, Logger } from 'pino';
+import pino from 'pino';
 
 import { filterObject } from '@nidavellirx/meowv-core';
 
 import { ApikitSymbols } from '#/di';
 
-import {
-  type ConfigurationController,
+import type {
   TransportOptions,
   ConsoleTransportOptions,
   FileTransportOptions,
 } from '$/configuration';
+import { type ConfigurationController } from '$/configuration';
 import type { LogOptions } from '$/logger';
 import type { HttpMetadata } from '$/http';
 

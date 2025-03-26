@@ -1,7 +1,9 @@
 import { injectable } from 'inversify';
-import { ZodError, ZodSchema } from 'zod';
+import type { ZodSchema } from 'zod';
+import { ZodError } from 'zod';
 
-import { ApiError, ApiErrorCodes } from '$/error';
+import type { ApiError } from '$/error';
+import { ApiErrorCodes } from '$/error';
 import { DtoValidationError } from '$/validation';
 
 export interface DtoValidationController {

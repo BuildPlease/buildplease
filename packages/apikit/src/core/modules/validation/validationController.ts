@@ -1,6 +1,7 @@
 import validator from 'validator';
 import { injectable } from 'inversify';
-import { CountryCode, parsePhoneNumberFromString } from 'libphonenumber-js';
+import type { CountryCode } from 'libphonenumber-js';
+import { parsePhoneNumberFromString } from 'libphonenumber-js';
 
 import { ApiErrorCodes } from '$/error';
 

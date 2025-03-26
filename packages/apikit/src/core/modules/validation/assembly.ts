@@ -1,12 +1,12 @@
-import { Container } from 'inversify';
-import { Assembly } from '@nidavellirx/meowv-core';
+import type { Container } from 'inversify';
+import type { Assembly } from '@nidavellirx/meowv-core';
 
 import { ApikitSymbols } from '#/di';
 
 import {
-  ValidationController,
+  type ValidationController,
   ValidationControllerImpl,
-  DtoValidationController,
+  type DtoValidationController,
   DtoValidationControllerImpl,
 } from '$/validation';
 

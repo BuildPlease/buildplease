@@ -1,4 +1,5 @@
-import { ApiError, ApiErrorProperties } from '$/error';
+import type { ApiErrorProperties } from '$/error';
+import { ApiError } from '$/error';
 
 function makeError(properties: ApiErrorProperties) {
   return (message?: string) =>

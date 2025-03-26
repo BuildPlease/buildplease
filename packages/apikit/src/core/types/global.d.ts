@@ -1,4 +1,4 @@
-import { ApiKitConfig, EnvironmentConfig } from '#/configuration';
+import type { ApiKitConfig, EnvironmentConfig } from '#/configuration';
 
 declare global {
   var apikit: {

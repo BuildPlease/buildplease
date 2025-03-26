@@ -1,5 +1,6 @@
 import validator from 'validator';
-import { parsePhoneNumberWithError, NumberFormat } from 'libphonenumber-js';
+import type { NumberFormat } from 'libphonenumber-js';
+import { parsePhoneNumberWithError } from 'libphonenumber-js';
 import { injectable } from 'inversify';
 
 import { ApiErrorCodes } from '$/error';

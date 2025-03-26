@@ -1,4 +1,4 @@
-import { JSONSerializable } from '@/utils';
+import type { JSONSerializable } from '@/utils';
 
 export class LocalizableText implements JSONSerializable {
   public values: { [lang: string]: string };
