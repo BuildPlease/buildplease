@@ -1,3 +1,5 @@
+import { injectable } from 'inversify';
+
 import type { EnvironmentConfig } from './environmentConfig';
 import type { LoggerConfig } from './loggerConfig';
 import type { ServerConfig } from './serverConfig';
@@ -9,24 +11,9 @@ export interface ApiKitConfig {
   logger: Record<string, LoggerConfig>;
 }
 
-type EnvironmentNames<T extends readonly EnvironmentConfig[]> =
-  T extends readonly (infer U)[]
-    ? U extends EnvironmentConfig
-      ? U['name']
-      : never
-    : never;
-
-interface ApiKitConfigInput<Environments extends readonly EnvironmentConfig[]> {
-  outDir: string;
-  environments: Environments;
-  server: { [K in EnvironmentNames<Environments>]: ServerConfig };
-  logger: { [K in EnvironmentNames<Environments>]: LoggerConfig };
-}
-
 export function defineApikitConfig<
   const Environments extends readonly EnvironmentConfig[],
 >(config: ApiKitConfigInput<Environments>): ApiKitConfig {
-  // Validation logic remains the same
   if (!config.environments?.length) {
     throw new Error(`At least one environment must be defined.`);
   }
@@ -40,4 +27,82 @@ export function defineApikitConfig<
   });
 
   return config;
+}
+
+export interface ApiKitConfigurationController {
+  get environment(): EnvironmentConfig;
+  get logger(): LoggerConfig;
+  get server(): ServerConfig;
+}
+
+@injectable()
+export class ApiKitConfigurationControllerImpl
+  implements ApiKitConfigurationController
+{
+  private _environment: EnvironmentConfig;
+  private _logger: LoggerConfig;
+  private _server: ServerConfig;
+
+  constructor() {
+    this._environment = this.makeEnvironment();
+    this._logger = this.makeLogger();
+    this._server = this.makeServer();
+  }
+
+  public get environment(): EnvironmentConfig {
+    return this._environment;
+  }
+
+  public get logger(): LoggerConfig {
+    return this._logger;
+  }
+
+  public get server(): ServerConfig {
+    return this._server;
+  }
+
+  private makeEnvironment(): EnvironmentConfig {
+    const environment = global.apikit.environmentConfig;
+
+    if (!environment) {
+      throw new Error('Current environment is not defined.');
+    }
+
+    return environment;
+  }
+
+  private makeLogger(): LoggerConfig {
+    const loggerConfig = global.apikit.loggerConfig;
+
+    if (!loggerConfig) {
+      throw new Error('Logger configuration is not defined.');
+    }
+
+    return loggerConfig;
+  }
+
+  private makeServer(): ServerConfig {
+    const serverConfig = global.apikit.serverConfig;
+
+    if (!serverConfig) {
+      throw new Error('Server configuration is not defined.');
+    }
+
+    return serverConfig;
+  }
+}
+
+// MARK: Private
+type EnvironmentNames<T extends readonly EnvironmentConfig[]> =
+  T extends readonly (infer U)[]
+    ? U extends EnvironmentConfig
+      ? U['name']
+      : never
+    : never;
+
+interface ApiKitConfigInput<Environments extends readonly EnvironmentConfig[]> {
+  outDir: string;
+  environments: Environments;
+  server: { [K in EnvironmentNames<Environments>]: ServerConfig };
+  logger: { [K in EnvironmentNames<Environments>]: LoggerConfig };
 }
