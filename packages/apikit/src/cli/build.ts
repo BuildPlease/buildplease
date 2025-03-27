@@ -7,7 +7,17 @@ import { generate } from '@/generator';
 export const buildCommand = defineCommand({
   meta: {
     name: 'build',
-    description: 'Build application',
+    description: [
+      'Build application',
+      '',
+      'Usage:',
+      '  apikit build [--dir <directory>] [--config <config-name>]',
+      '',
+      'Examples:',
+      '  apikit build',
+      '  apikit build --dir ./src',
+      '  apikit build -c custom.config -d ./configs',
+    ].join('\n'),
   },
   args: {
     dir: {
@@ -31,9 +41,10 @@ export const buildCommand = defineCommand({
     try {
       log.info('🚀 Building...');
 
-      const config = await loadConfig(args.dir, args.config);
+      const { dir: argDirPath, config: argConfigName } = args;
+      const apikitConfig = await loadConfig(argDirPath, argConfigName);
 
-      await generate(config);
+      await generate(apikitConfig);
 
       log.success('🎉 Build complete!');
     } catch (error) {

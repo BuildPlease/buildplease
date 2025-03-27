@@ -1,7 +1,10 @@
 import { defineConfig } from 'tsup';
 
 export default defineConfig({
-  entry: ['index.ts'],
+  entry: {
+    'cli/index': 'src/cli/index.ts',
+    index: 'index.ts',
+  },
   minify: false,
   bundle: true,
   shims: true,

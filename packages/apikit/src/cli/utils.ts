@@ -16,34 +16,42 @@ export const log = {
  * Loads the APIKit configuration file.
  *
  * @param dir - (Optional) The base directory to look for the config.
- * @param configPath - (Optional) A specific config file path.
+ * @param configName - (Optional) A name of config file path.
  * @returns Parsed ApiKitConfig
  */
 export async function loadConfig(
   dir?: string,
-  configPath?: string,
+  configName?: string,
 ): Promise<ApiKitConfig> {
-  const rootDir = resolve(process.cwd(), dir || '.');
-  const configFile = configPath
-    ? resolve(process.cwd(), configPath)
-    : resolve(rootDir, 'apikit.config');
+  // Resolve root directory first
+  const rootDir = dir ? resolve(process.cwd(), dir) : process.cwd();
 
   if (!existsSync(rootDir)) {
-    log.error(`Directory ${rootDir} does not exist.`);
-    process.exit(1);
+    throw new Error(`Directory ${rootDir} does not exist`);
   }
 
+  // Determine config file path
+  const configFile = configName
+    ? resolve(rootDir, configName)
+    : resolve(rootDir, 'apikit.config');
+
   try {
-    const jiti = createJiti(rootDir, { interopDefault: true });
-    const config = await jiti.import(configFile);
+    const jiti = createJiti(rootDir, {
+      interopDefault: true,
+      extensions: ['.js', '.cjs', '.mjs', '.ts', '.cts', '.mts', '.json'],
+    });
+
+    const config = await jiti.import(configFile, {
+      try: true,
+      default: true,
+    });
 
     if (!config) {
-      throw new Error('Invalid or missing configuration.');
+      throw new Error(`No configuration found at ${configFile}`);
     }
 
     return config as ApiKitConfig;
   } catch (error) {
-    log.error(`Loading config: ${(error as Error).message}`);
-    process.exit(1);
+    throw new Error(`Failed to load config: ${(error as Error).message}`);
   }
 }

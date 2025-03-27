@@ -6,10 +6,27 @@ import { defineCommand } from 'citty';
 
 import { loadConfig, log } from './utils';
 
+import type {
+  ApiKitConfig,
+  EnvironmentConfig,
+  LoggerConfig,
+  ServerConfig,
+} from '$/configuration';
+
 export const startCommand = defineCommand({
   meta: {
     name: 'start',
-    description: 'Start application in the specified environment',
+    description: [
+      'Start application in the specified environment',
+      '',
+      'Usage:',
+      '  apikit start <environment> [--dir <directory>] [--config <config-name>]',
+      '',
+      'Examples:',
+      '  apikit start development',
+      '  apikit start production --dir ./deploy',
+      '  apikit start staging -c custom.config -d ./configs',
+    ].join('\n'),
   },
   args: {
     environment: {
@@ -34,41 +51,36 @@ export const startCommand = defineCommand({
   },
   run: async ({ args }) => {
     try {
-      const config = await loadConfig(args.dir, args.config);
+      const {
+        environment: argEnvironmentName,
+        dir: argDirPath,
+        config: argConfigName,
+      } = args;
 
-      const environment = config.environments.find(
-        (env) => env.name === args.environment,
+      const apikitConfig = await loadConfig(argDirPath, argConfigName);
+
+      const environmentConfig = await initializeEnvironment(
+        apikitConfig,
+        argEnvironmentName,
+      );
+      const loggerConfig = await initializeLogger(
+        apikitConfig,
+        environmentConfig,
+      );
+      const serverConfig = await initializeServer(
+        apikitConfig,
+        environmentConfig,
       );
 
-      if (!environment) {
-        const message = `Environment "${args.environment}" is not defined in config.`;
-        throw new Error(message);
-      }
-
-      const environmentFilePath = path.resolve(
-        args.dir || process.cwd(),
-        `.env.${environment.name}`,
-      );
-
-      if (!fs.existsSync(environmentFilePath)) {
-        const message = `Inevalid environment: "${environmentFilePath}", does not exist in configuration.`;
-        throw new Error(message);
-      }
-
-      process.env.NODE_ENV = environment.name;
-      dotenvx.config({ path: environmentFilePath });
-
-      // MARK: - Check if NODE_ENV matches environment.name after loading, prevent overloading from .env file
-      if (process.env.NODE_ENV !== environment.name) {
-        const errorMessage = `NODE_ENV was set to "${process.env.NODE_ENV}", but the environment is "${environment.name}"`;
-        throw new Error(errorMessage);
-      }
-
-      global.apikit.config = config;
-      global.apikit.currentEnvironment = environment;
+      global.apikit = {
+        config: apikitConfig,
+        environmentConfig: environmentConfig,
+        loggerConfig: loggerConfig,
+        serverConfig: serverConfig,
+      };
 
       log.success(
-        `\n🚀 ApiKit successfully started in '${process.env.NODE_ENV.toUpperCase()}' environment`,
+        `\n🚀 ApiKit successfully started in '${process.env.NODE_ENV}' environment`,
       );
     } catch (error) {
       log.error((error as Error).message);
@@ -76,3 +88,65 @@ export const startCommand = defineCommand({
     }
   },
 });
+
+// MARK: - Environment Initialization
+async function initializeEnvironment(
+  config: ApiKitConfig,
+  envName: string,
+): Promise<EnvironmentConfig> {
+  const environment = config.environments.find((env) => env.name === envName);
+
+  if (!environment) {
+    throw new Error(`Environment "${envName}" is not defined in config.`);
+  }
+
+  const environmentFilePath = path.resolve(
+    environment.fileDir || process.cwd(),
+    `.env.${environment.name}`,
+  );
+
+  if (!fs.existsSync(environmentFilePath)) {
+    throw new Error(
+      `Environment file "${environmentFilePath}" does not exist.`,
+    );
+  }
+
+  process.env.NODE_ENV = environment.name;
+  dotenvx.config({ path: environmentFilePath });
+
+  if (process.env.NODE_ENV !== environment.name) {
+    throw new Error(
+      `NODE_ENV mismatch: Expected "${environment.name}", got "${process.env.NODE_ENV}"`,
+    );
+  }
+
+  return environment;
+}
+
+// MARK: - Logger Initialization
+async function initializeLogger(
+  config: ApiKitConfig,
+  env: EnvironmentConfig,
+): Promise<LoggerConfig> {
+  const environmentName = env.name;
+  const loggerConfig = config.logger[environmentName];
+
+  if (!loggerConfig) {
+    throw new Error(`Missing logger configuration for "${environmentName}"`);
+  }
+  return loggerConfig;
+}
+
+// MARK: - Server Initialization
+async function initializeServer(
+  config: ApiKitConfig,
+  env: EnvironmentConfig,
+): Promise<ServerConfig> {
+  const environmentName = env.name;
+  const serverConfig = config.server[environmentName];
+
+  if (!serverConfig) {
+    throw new Error(`Missing server configuration for "${environmentName}"`);
+  }
+  return serverConfig;
+}

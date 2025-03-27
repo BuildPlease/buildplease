@@ -1,20 +1,27 @@
 import { injectable } from 'inversify';
 
-import type { EnvironmentConfig, LoggerConfig } from '$/configuration';
+import type {
+  EnvironmentConfig,
+  LoggerConfig,
+  ServerConfig,
+} from '$/configuration';
 
 export interface ConfigurationController {
   get environment(): EnvironmentConfig;
   get logger(): LoggerConfig;
+  get server(): ServerConfig;
 }
 
 @injectable()
 export class ConfigurationControllerImpl implements ConfigurationController {
   private _environment: EnvironmentConfig;
   private _logger: LoggerConfig;
+  private _server: ServerConfig;
 
   constructor() {
     this._environment = this.makeEnvironment();
     this._logger = this.makeLogger();
+    this._server = this.makeServer();
   }
 
   public get environment(): EnvironmentConfig {
@@ -25,8 +32,12 @@ export class ConfigurationControllerImpl implements ConfigurationController {
     return this._logger;
   }
 
+  public get server(): ServerConfig {
+    return this._server;
+  }
+
   private makeEnvironment(): EnvironmentConfig {
-    const environment = global.apikit.currentEnvironment;
+    const environment = global.apikit.environmentConfig;
 
     if (!environment) {
       throw new Error('Current environment is not defined.');
@@ -36,8 +47,22 @@ export class ConfigurationControllerImpl implements ConfigurationController {
   }
 
   private makeLogger(): LoggerConfig {
-    const loggerConfig = this._environment.logger;
+    const loggerConfig = global.apikit.loggerConfig;
+
+    if (!loggerConfig) {
+      throw new Error('Logger configuration is not defined.');
+    }
 
     return loggerConfig;
+  }
+
+  private makeServer(): ServerConfig {
+    const serverConfig = global.apikit.serverConfig;
+
+    if (!serverConfig) {
+      throw new Error('Server configuration is not defined.');
+    }
+
+    return serverConfig;
   }
 }

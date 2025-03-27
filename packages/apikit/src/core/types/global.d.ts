@@ -1,9 +1,16 @@
-import type { ApiKitConfig, EnvironmentConfig } from '#/configuration';
+import type {
+  ApiKitConfig,
+  EnvironmentConfig,
+  LoggerConfig,
+  ServerConfig,
+} from '#/configuration';
 
 declare global {
   var apikit: {
     config: ApiKitConfig;
-    currentEnvironment: EnvironmentConfig;
+    environmentConfig: EnvironmentConfig;
+    loggerConfig: LoggerConfig;
+    serverConfig: ServerConfig;
   };
 }
 
