@@ -45,7 +45,7 @@ importers:
         specifier: 11.0.2
         version: 11.0.2
       '@fastify/static':
-        specifier: ^8.1.1
+        specifier: 8.1.1
         version: 8.1.1
       '@fastify/view':
         specifier: 11.0.0
@@ -97,7 +97,7 @@ importers:
         specifier: 5.0.2
         version: 5.0.2
       '@types/ejs':
-        specifier: ^3.1.5
+        specifier: 3.1.5
         version: 3.1.5
       '@types/validator':
         specifier: 13.12.2
@@ -3498,8 +3498,8 @@ packages:
     engines: {node: '>=0.10.0'}
     hasBin: true
 
-  electron-to-chromium@1.5.126:
-    resolution: {integrity: sha512-AtH1uLcTC72LA4vfYcEJJkrMk/MY/X0ub8Hv7QGAePW2JkeUFHEL/QfS4J77R6M87Sss8O0OcqReSaN1bpyA+Q==}
+  electron-to-chromium@1.5.127:
+    resolution: {integrity: sha512-Ke5OggqOtEqzCzcUyV+9jgO6L6sv1gQVKGtSExXHjD/FK0p4qzPZbrDsrCdy0DptcQprD0V80RCBYSWLMhTTgQ==}
 
   embla-carousel-auto-height@8.5.2:
     resolution: {integrity: sha512-cWO35ThnVVr8kSS5zni/Ywf6gNSpROV8PgFTd/jfiQZ73Wd6SltugitVQ74kHfchLXMWXGQgHxmUg4Ya+r4axg==}
@@ -10848,7 +10848,7 @@ snapshots:
   browserslist@4.24.4:
     dependencies:
       caniuse-lite: 1.0.30001707
-      electron-to-chromium: 1.5.126
+      electron-to-chromium: 1.5.127
       node-releases: 2.0.19
       update-browserslist-db: 1.1.3(browserslist@4.24.4)
 
@@ -11543,7 +11543,7 @@ snapshots:
     dependencies:
       jake: 10.9.2
 
-  electron-to-chromium@1.5.126: {}
+  electron-to-chromium@1.5.127: {}
 
   embla-carousel-auto-height@8.5.2(embla-carousel@8.5.2):
     dependencies:
@@ -13260,7 +13260,7 @@ snapshots:
 
   log-symbols@4.1.0:
     dependencies:
-      chalk: 4.1.2
+      chalk: 4.1.0
       is-unicode-supported: 0.1.0
 
   loupe@3.1.3: {}
@@ -16077,7 +16077,7 @@ snapshots:
 
   unplugin@2.0.0-beta.1:
     dependencies:
-      acorn: 8.14.0
+      acorn: 8.14.1
       webpack-virtual-modules: 0.6.2
 
   unplugin@2.2.2:
