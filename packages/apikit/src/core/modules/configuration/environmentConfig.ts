@@ -1,5 +1,3 @@
-import type { LoggerConfig } from './loggerConfig';
-
 export interface EnvironmentConfig {
   /**
    * Name of the environment (e.g., 'production', 'development').
@@ -17,9 +15,4 @@ export interface EnvironmentConfig {
    * Defaults to the project root if not specified.
    */
   fileDir?: string;
-
-  /**
-   * Logger configuration
-   */
-  logger: Required<LoggerConfig>;
 }

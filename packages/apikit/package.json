@@ -36,7 +36,7 @@
       "citty": "0.1.6",
       "inversify": "6.2.1",
       "libphonenumber-js": "1.12.6",
-      "pino": "^9.6.0",
+      "pino": "9.6.0",
       "reflect-metadata": "0.2.2",
       "validator": "13.12.0",
       "zod": "3.24.1"
