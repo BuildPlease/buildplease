@@ -1,5 +1,11 @@
 const prefix = 'ApiKit.DI';
 
+const Server = {
+  Controller: Symbol.for(`${prefix}.Server.Controller`),
+  RequestController: Symbol.for(`${prefix}.Server.RequestController`),
+  ResponseController: Symbol.for(`${prefix}.Server.ResponseController`),
+};
+
 const Configuration = {
   Controller: Symbol.for(`${prefix}.Configuration.Controller`),
 };
@@ -33,5 +39,6 @@ export const ApikitSymbols = {
     Normalization,
     Formatter,
     Logger,
+    Server,
   },
 };

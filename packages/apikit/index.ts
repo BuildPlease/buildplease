@@ -2,6 +2,7 @@ import 'reflect-metadata';
 import type { Assembly } from '@nidavellirx/meowv-core';
 
 import {
+  ServerAssembly,
   ConfigurationAssembly,
   LoggerAssembly,
   ValidationAssembly,
@@ -14,6 +15,7 @@ export * from './src';
 
 function makeAssemblies(): Assembly[] {
   return [
+    new ServerAssembly(),
     new ConfigurationAssembly(),
     new LoggerAssembly(),
     new ValidationAssembly(),
