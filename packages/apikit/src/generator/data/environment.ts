@@ -25,25 +25,7 @@ export async function generateEnvironment(
   
   export type EnvironmentType = keyof typeof Environments;`;
 
-  // Add the getCurrentEnvironment function to check for invalid environments
-  const getCurrentEnvironmentFunction = `
-/**
- * Get the current environment.
- * This will stop the application execution if the environment is invalid.
- */
-export function getCurrentEnvironment(): Environment {
-  const currentEnv = process.env.APP_ENV
-
-  if (!currentEnv || !Environments[currentEnv]) {
-    console.error(\`Invalid environment: \${currentEnv}\`);
-    process.exit(1);
-  }
-
-  return Environment[currentEnv as keyof typeof Environment];
-}
-  `;
-
-  const environmentFileContent = `${environmentEnum}\n\n${environmentObject}\n\n${getCurrentEnvironmentFunction}`;
+  const environmentFileContent = `${environmentEnum}\n\n${environmentObject}\n`;
 
   await writeGeneratedFile(
     outputPath,

@@ -24,11 +24,28 @@ export async function generate(config: ApiKitConfig): Promise<void> {
 async function prepareGeneratedDirectory(outDir: string): Promise<string> {
   const outputPath = path.resolve(process.cwd(), outDir);
 
-  if (fs.existsSync(outputPath)) {
-    fs.rmSync(outputPath, { recursive: true, force: true });
+  if (outputPath === process.cwd()) {
+    throw new Error('Cannot use root directory as output path!');
   }
 
-  fs.mkdirSync(outputPath, { recursive: true });
+  if (fs.existsSync(outputPath)) {
+    if (!fs.lstatSync(outputPath).isDirectory()) {
+      throw new Error(
+        `Output path ${outputPath} exists but is not a directory`,
+      );
+    }
+    fs.rmSync(outputPath, {
+      recursive: true,
+      force: true,
+      maxRetries: 3,
+      retryDelay: 100,
+    });
+  }
+
+  fs.mkdirSync(outputPath, {
+    recursive: true,
+    mode: 0o755,
+  });
 
   return outputPath;
 }
