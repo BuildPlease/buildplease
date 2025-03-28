@@ -39,6 +39,6 @@ const staticFilesPlugin: FastifyPluginAsync<ServerPluginOptions> = async (
 };
 
 export default fp(staticFilesPlugin, {
-  name: 'apikit-static-files',
+  name: 'apikit-@fastify/static',
   dependencies: ['@fastify/static'],
 });

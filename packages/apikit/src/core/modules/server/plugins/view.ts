@@ -3,7 +3,7 @@ import fastifyView from '@fastify/view';
 import ejs from 'ejs';
 import type { FastifyPluginAsync } from 'fastify';
 
-const ejsPlugin: FastifyPluginAsync = async (fastify) => {
+const viewPlugin: FastifyPluginAsync = async (fastify) => {
   await fastify.register(fastifyView, {
     engine: {
       ejs: ejs,
@@ -11,7 +11,7 @@ const ejsPlugin: FastifyPluginAsync = async (fastify) => {
   });
 };
 
-export default fp(ejsPlugin, {
-  name: 'apikit-ejs',
-  dependencies: ['ejs'],
+export default fp(viewPlugin, {
+  name: 'apikit-@fastify/view',
+  dependencies: ['@fastify/view', 'ejs'],
 });

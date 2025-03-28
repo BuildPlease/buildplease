@@ -1,3 +1,6 @@
+/// <reference types="@fastify/view" />
+/// <reference types="@fastify/static" />
+
 import { inject, injectable } from 'inversify';
 import type { FastifyReply, FastifyRequest } from 'fastify';
 
@@ -71,7 +74,8 @@ export class ResponseControllerImpl implements ResponseController {
 
     try {
       if (response.shouldRender) {
-        return reply.view(response.filePath, response.data);
+        const html = await reply.viewAsync(response.filePath, response.data);
+        return reply.send(html);
       } else {
         return reply.sendFile(response.filePath);
       }
