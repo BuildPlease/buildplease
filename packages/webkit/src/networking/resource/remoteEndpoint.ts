@@ -1,4 +1,4 @@
-import { RequestConfig } from '@/networking/resource/requestConfig';
+import type { RequestConfig } from '@/networking/resource/requestConfig';
 
 export interface RemoteEndpoint<Input, InputDto, Output, OutputDto> {
   makeRequest(input: InputDto): Promise<RequestConfig>;

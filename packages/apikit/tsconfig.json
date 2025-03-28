@@ -1,42 +1,47 @@
 {
    "compilerOptions":{
       "moduleResolution":"Node",
-      "target":"ESNext",
       "module":"ESNext",
+      "target":"ESNext",
+      "alwaysStrict": true,
       "strict":true,
+      "strictNullChecks": true,
+      "strictFunctionTypes": true,
+      "strictPropertyInitialization": true,
+      "noImplicitAny": true,
+      "noImplicitThis": true,
       "declaration":true,
       "declarationMap":true,
-      "emitDeclarationOnly":true,
       "esModuleInterop":true,
       "skipLibCheck":true,
       "allowSyntheticDefaultImports":true,
       "experimentalDecorators":true,
+      "emitDeclarationOnly":true,
       "emitDecoratorMetadata": true,
+      "resolveJsonModule": true,
       "rootDir":"./",
       "outDir":"dist",
-      "baseUrl":"./",
+      "baseUrl":".",
       "paths":{
          "@/*":[
             "src/*"
          ],
-         "@":[
-            "src/index.ts"
+         "#/*":[
+            "src/core/*"
          ],
-         "@configuration/*":[
-            "configuration/*"
+         "$/*":[
+            "src/core/modules/*"
          ],
-         "@configuration":[
-            "configuration/index.ts"
-         ]
       }
    },
    "include":[
       "index.ts",
       "src/**/*",
-      "configuration"
+      "test/**/*"
    ],
    "exclude":[
       "node_modules",
-      "dist"
+      "dist",
+      "runtime"
    ]
 }

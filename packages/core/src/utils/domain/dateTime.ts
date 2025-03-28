@@ -1,5 +1,6 @@
 export * from 'date-fns';
 
+import type { Duration, Locale } from 'date-fns';
 import {
   add,
   sub,
@@ -14,7 +15,6 @@ import {
   differenceInWeeks,
   differenceInMonths,
   differenceInYears,
-  Duration,
   isValid,
   getUnixTime,
   fromUnixTime,
@@ -62,7 +62,6 @@ import {
   setMinutes,
   setSeconds,
   formatISO,
-  Locale,
 } from 'date-fns';
 
 /**

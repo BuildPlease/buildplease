@@ -2,23 +2,35 @@ import { defineConfig } from 'tsup';
 
 export default defineConfig({
   entry: {
-    index: 'src/index.ts',
-    cli: 'src/cli/index.ts',
+    'cli/index': 'src/cli/index.ts',
+    index: 'index.ts',
   },
   minify: false,
+  bundle: true,
+  shims: true,
   splitting: true,
   sourcemap: true,
   treeshake: true,
   clean: true,
   dts: true,
-  format: ['esm'],
+  format: ['cjs', 'esm'],
   target: 'esnext',
   outDir: 'dist',
   platform: 'neutral',
-  esbuildOptions(options) {
-    if (options.entryPoints?.['cli']) {
-      options.splitting = false;
-      options.bundle = true;
-    }
-  },
+  tsconfig: 'tsconfig.json',
+  external: [
+    'fs',
+    'path',
+    'node:module',
+    'node:path',
+    'node:process',
+    'consola',
+    'citty',
+    'jiti',
+    'pino',
+    'zod',
+    'inversify',
+    '@nidavellirx/meowv-core',
+    '@dotenvx/dotenvx',
+  ],
 });

@@ -1,6 +1,7 @@
 import 'reflect-metadata';
 
-import { MEOWV_CORE_INITIALIZE, Assembly } from '@nidavellirx/meowv-core';
+import type { Assembly } from '@nidavellirx/meowv-core';
+import { MEOWV_CORE_INITIALIZE } from '@nidavellirx/meowv-core';
 import { makeAssemblies } from '@configuration';
 
 export * from './src';

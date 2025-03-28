@@ -9,7 +9,7 @@ import type { NuxtZodi18nOptions } from './types';
 
 export interface Zodi18nNuxtContext {
   resolver: Resolver;
-  logger: ReturnType<(typeof import('@nuxt/kit'))['useLogger']>;
+  logger: ReturnType<typeof useLogger>;
   userOptions: NuxtZodi18nOptions;
   options: Required<NuxtZodi18nOptions>;
   isDev: boolean;

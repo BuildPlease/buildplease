@@ -1,5 +1,5 @@
 import type { Container } from 'inversify';
-import { Assembly } from '@nidavellirx/meowv-core';
+import type { Assembly } from '@nidavellirx/meowv-core';
 
 import { MeowvWebkitSymbols } from '@configuration';
 

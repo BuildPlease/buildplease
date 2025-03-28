@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { Assembly } from '@/di';
+import type { Assembly } from '@/di';
 
 export * from './src';
 

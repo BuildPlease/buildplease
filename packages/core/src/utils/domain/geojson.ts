@@ -1,5 +1,5 @@
 import { ignoreError } from '@/utils/application';
-import { JSONSerializable } from '@/utils/domain';
+import type { JSONSerializable } from '@/utils/domain';
 
 /**
  * Represents a coordinate pair (longitude, latitude).

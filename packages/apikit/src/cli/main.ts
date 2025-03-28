@@ -1,17 +1,18 @@
 import { defineCommand } from 'citty';
-import { consola } from 'consola';
+
+import { name, version, description } from '../../package.json';
 
 import { buildCommand } from './build';
+import { startCommand } from './start';
 
 export const main = defineCommand({
   meta: {
-    name: 'apikit',
+    name: name,
+    version: version,
+    description: description,
   },
   subCommands: {
     build: buildCommand,
-  },
-  async setup() {
-    // Global setup logic
-    consola.debug(`Running in ${process.cwd()}`);
+    start: startCommand,
   },
 });

@@ -9,10 +9,11 @@ export default [
   {
     files: ['**/*.{js,mjs,cjs,ts,jsx,tsx}'],
     ignores: [
-      '**/dist/**/*',
       '**/node_modules',
-      '**/.nuxt/**/*',
+      '**/dist/**/*',
+      '**/runtime/**/*',
       '**/.output/**/*',
+      '**/.nuxt/**/*',
     ],
     languageOptions: {
       parser: typescriptParser,
@@ -46,6 +47,7 @@ export default [
       'no-multiple-empty-lines': ['error', { max: 1 }],
 
       // TypeScript-specific rules
+      '@typescript-eslint/consistent-type-imports': 'error',
       '@typescript-eslint/no-empty-object-type': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-unused-vars': [
