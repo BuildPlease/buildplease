@@ -9,7 +9,7 @@ export default defineConfig({
   bundle: true,
   shims: false,
   splitting: true,
-  sourcemap: true,
+  sourcemap: false,
   treeshake: true,
   clean: true,
   dts: true,

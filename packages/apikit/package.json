@@ -7,10 +7,10 @@
    "license": "ISC",
    "exports": {
       ".": {
-         "types": "./dist/core/index.d.ts",
-         "import": "./dist/core/index.mjs"
-      },
-      "./cli": "./bin/apikit.mjs"
+         "types": "./dist/index.d.ts",
+         "import": "./dist/index.mjs",
+         "require": "./dist/index.js"
+      }
    },
    "bin": {
       "apikit": "./bin/apikit.mjs"
