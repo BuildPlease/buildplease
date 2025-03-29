@@ -9,7 +9,7 @@ export default defineConfig({
   bundle: true,
   shims: false,
   splitting: true,
-  sourcemap: process.env.NODE_ENV === 'development',
+  sourcemap: true,
   treeshake: true,
   clean: true,
   dts: true,
