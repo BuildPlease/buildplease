@@ -1,4 +1,4 @@
-import ms from 'ms';
+import ms, { type StringValue } from 'ms';
 
 /**
  * Represents a time interval in milliseconds, with helper methods for common time units.
@@ -7,15 +7,15 @@ import ms from 'ms';
 export class TimeInterval {
   private _milliseconds: number;
 
-  constructor(interval: string | number) {
-    if (typeof interval === 'string') {
+  constructor(interval: StringValue | number) {
+    if (typeof interval === 'number') {
+      this._milliseconds = interval;
+    } else {
       const parsedMs = ms(interval);
       if (parsedMs === undefined) {
         throw new Error(`Invalid interval format: ${interval}`);
       }
       this._milliseconds = parsedMs;
-    } else {
-      this._milliseconds = interval;
     }
   }
 

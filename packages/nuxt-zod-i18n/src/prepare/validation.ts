@@ -48,5 +48,11 @@ export function prepareValidation(
     logger.fatal('Nuxt 3 or later is required.');
   }
 
+  if (!i18nOptions.bundle) {
+    i18nOptions.bundle = {};
+  }
+
+  i18nOptions.bundle.optimizeTranslationDirective = false;
+
   return i18nOptions;
 }

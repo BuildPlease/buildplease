@@ -1,6 +1,6 @@
 {
   "name": "@nidavellirx/meowv-nuxtkit",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A Nuxt Module for MVVM design pattern and Clean Code architecture",
   "repository": "git@github.com/Nidavellirx/meowv.git",
   "license": "MIT",
@@ -30,19 +30,19 @@
     "test:types": "vue-tsc --noEmit && cd playground && vue-tsc --noEmit"
   },
   "dependencies": {
-    "@nuxt/kit": "3.15.0",
+    "@nuxt/kit": "3.16.1",
     "reflect-metadata": "0.2.2"
   },
   "devDependencies": {
-    "@nuxt/devtools": "1.6.4",
+    "@nuxt/devtools": "2.3.2",
     "@nuxt/module-builder": "0.8.4",
-    "@nuxt/schema": "3.15.0",
+    "@nuxt/schema": "3.16.1",
     "@types/node": "latest",
-    "changelogen": "0.5.7",
-    "inversify": "6.2.1",
-    "nuxt": "3.15.0",
-    "typescript": "5.6.3",
-    "vitest": "2.1.8",
-    "vue-tsc": "2.1.6"
+    "changelogen": "0.6.1",
+    "inversify": "7.3.0",
+    "nuxt": "3.16.1",
+    "typescript": "5.8.2",
+    "vitest": "3.1.1",
+    "vue-tsc": "2.2.8"
   }
 }

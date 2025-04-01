@@ -11,7 +11,7 @@ const df = new DateFormatter('en-US', {
 
 const state = reactive<Partial<UserDto>>({
 	birthDate: new Date('2025-01-01T08:00:00.000Z'),
-	email: 'test@test.com',
+	email: 'test@test_com',
 	firstName: 'test',
 	lastName: 'test',
 	preferredColor: 'blue',

@@ -1,27 +1,30 @@
-import type { Container, interfaces } from 'inversify';
+import type {
+  Container,
+  ResolutionContext,
+  ServiceIdentifier,
+  Newable,
+} from 'inversify';
 
 import type { AsyncOperation } from '@nidavellirx/meowv-core';
 
 import type { RemoteEndpoint } from '@/networking';
 
 export function bindOperation<T extends AsyncOperation<any, any>>(
-  operationSymbol: interfaces.ServiceIdentifier<T>,
+  operationSymbol: ServiceIdentifier<T>,
 ) {
   return {
     withEndpoint(
-      endpointSymbol: interfaces.ServiceIdentifier<
-        RemoteEndpoint<any, any, any, any>
-      >,
+      endpointSymbol: ServiceIdentifier<RemoteEndpoint<any, any, any, any>>,
     ) {
       return {
         toResource<Resource extends AsyncOperation<any, any>>(
-          ResourceClass: interfaces.Newable<Resource>,
+          ResourceClass: Newable<Resource>,
         ) {
           return {
             intoContainer(container: Container) {
               container.bind<T>(operationSymbol).toDynamicValue((context) => {
                 const endpoint =
-                  context.container.get<RemoteEndpoint<any, any, any, any>>(
+                  context.get<RemoteEndpoint<any, any, any, any>>(
                     endpointSymbol,
                   );
                 const additionalDependencies = resolveDependenciesForResource(
@@ -45,7 +48,7 @@ export function bindOperation<T extends AsyncOperation<any, any>>(
 
 function resolveDependenciesForResource(
   ResourceClass: any,
-  _context: interfaces.Context,
+  _context: ResolutionContext,
 ): any[] {
   switch (ResourceClass.name) {
     case 'RemoteResource':
