@@ -8,6 +8,9 @@
       "packages/*"
    ],
    "scripts": {
+      "update:check": "lerna exec -- npx npm-check-updates",
+      "update:all": "lerna exec -- npx npm-check-updates -u",
+      "update:interactive": "lerna exec -- npx npm-check-updates -i",
       "clean": "rimraf \"**/{dist,.nuxt,.output}\" --glob",
       "clean:deep": "pnpm run clean && ./scripts/cleanup",
       "lint": "eslint .",
@@ -15,14 +18,14 @@
       "build": "pnpm run clean && lerna run build"
    },
    "devDependencies": {
-      "@typescript-eslint/eslint-plugin": "^8.18.1",
-      "@typescript-eslint/parser": "^8.18.1",
-      "eslint": "^9.17.0",
-      "eslint-plugin-import": "^2.31.0",
-      "eslint-plugin-prettier": "^5.2.1",
-      "globals": "^15.14.0",
-      "lerna": "^8.1.9",
-      "rimraf": "^6.0.1"
+      "@typescript-eslint/eslint-plugin": "8.28.0",
+      "@typescript-eslint/parser": "8.28.0",
+      "eslint": "9.23.0",
+      "eslint-plugin-import": "2.31.0",
+      "eslint-plugin-prettier": "5.2.5",
+      "globals": "16.0.0",
+      "lerna": "8.2.1",
+      "rimraf": "6.0.1"
    },
    "packageManager": "pnpm@10.7.0"
 }
