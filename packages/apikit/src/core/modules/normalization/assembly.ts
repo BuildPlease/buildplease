@@ -1,7 +1,7 @@
 import type { Container } from 'inversify';
 import type { Assembly } from '@nidavellirx/meowv-core';
 
-import { ApikitSymbols } from '#/di';
+import { ApiKitSymbols } from '$/di';
 import {
   type NormalizationController,
   NormalizationControllerImpl,
@@ -10,7 +10,7 @@ import {
 export class NormalizationAssembly implements Assembly {
   public assemble(container: Container): void {
     container
-      .bind<NormalizationController>(ApikitSymbols.DI.Normalization.Controller)
+      .bind<NormalizationController>(ApiKitSymbols.DI.Normalization.Controller)
       .to(NormalizationControllerImpl)
       .inSingletonScope();
   }

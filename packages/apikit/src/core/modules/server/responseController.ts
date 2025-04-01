@@ -4,7 +4,7 @@
 import { inject, injectable } from 'inversify';
 import type { FastifyReply, FastifyRequest } from 'fastify';
 
-import { ApikitSymbols } from '#/di';
+import { ApiKitSymbols } from '$/di';
 
 import type { LoggerController } from '$/logger';
 
@@ -22,7 +22,7 @@ export interface ResponseController {
 @injectable()
 export class ResponseControllerImpl implements ResponseController {
   constructor(
-    @inject(ApikitSymbols.DI.Logger.Controller)
+    @inject(ApiKitSymbols.DI.Logger.Controller)
     private logger: LoggerController,
   ) {}
 

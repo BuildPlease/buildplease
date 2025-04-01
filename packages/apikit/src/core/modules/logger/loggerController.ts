@@ -7,7 +7,7 @@ import pino from 'pino';
 
 import { filterObject } from '@nidavellirx/meowv-core';
 
-import { ApikitSymbols } from '#/di';
+import { ApiKitSymbols } from '$/di';
 
 import type {
   ApiKitConfigurationController,
@@ -34,7 +34,7 @@ export class LoggerControllerImpl implements LoggerController {
   private logger: Logger;
 
   constructor(
-    @inject(ApikitSymbols.DI.Configuration.Controller)
+    @inject(ApiKitSymbols.DI.Configuration.Controller)
     private configuration: ApiKitConfigurationController,
   ) {
     const loggerConfig = this.configuration.logger;

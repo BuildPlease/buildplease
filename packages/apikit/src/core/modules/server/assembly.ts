@@ -2,7 +2,7 @@ import type { Container } from 'inversify';
 
 import type { Assembly } from '@nidavellirx/meowv-core';
 
-import { ApikitSymbols } from '#/di';
+import { ApiKitSymbols } from '$/di';
 
 import {
   type ServerController,
@@ -16,17 +16,17 @@ import {
 export class ServerAssembly implements Assembly {
   public assemble(container: Container): void {
     container
-      .bind<ServerController>(ApikitSymbols.DI.Server.Controller)
+      .bind<ServerController>(ApiKitSymbols.DI.Server.Controller)
       .to(ServerControllerImpl)
       .inSingletonScope();
 
     container
-      .bind<RequestController>(ApikitSymbols.DI.Server.RequestController)
+      .bind<RequestController>(ApiKitSymbols.DI.Server.RequestController)
       .to(RequestControllerImpl)
       .inSingletonScope();
 
     container
-      .bind<ResponseController>(ApikitSymbols.DI.Server.ResponseController)
+      .bind<ResponseController>(ApiKitSymbols.DI.Server.ResponseController)
       .to(ResponseControllerImpl)
       .inSingletonScope();
   }

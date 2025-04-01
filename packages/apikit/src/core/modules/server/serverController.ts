@@ -7,7 +7,7 @@ import Fastify from 'fastify';
 
 import { fastifyAutoload } from '@fastify/autoload';
 
-import { ApikitSymbols } from '#/di';
+import { ApiKitSymbols } from '$/di';
 
 import type { LoggerController } from '$/logger';
 import type { ApiKitConfigurationController } from '$/configuration';
@@ -28,9 +28,9 @@ export class ServerControllerImpl implements ServerController {
   private server: FastifyInstance;
 
   constructor(
-    @inject(ApikitSymbols.DI.Logger.Controller)
+    @inject(ApiKitSymbols.DI.Logger.Controller)
     private logger: LoggerController,
-    @inject(ApikitSymbols.DI.Configuration.Controller)
+    @inject(ApiKitSymbols.DI.Configuration.Controller)
     private configuration: ApiKitConfigurationController,
   ) {
     this.server = Fastify({
