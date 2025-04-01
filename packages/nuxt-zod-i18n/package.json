@@ -1,6 +1,6 @@
 {
   "name": "@nidavellirx/meowv-nuxt-zod-i18n",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A Nuxt Module for localizing zod error messages.",
   "repository": "git@github.com/Nidavellirx/meowv.git",
   "license": "MIT",
@@ -29,23 +29,23 @@
     "test:types": "vue-tsc --noEmit && cd playground && vue-tsc --noEmit"
   },
   "dependencies": {
-    "@intlify/shared": "10.0.5",
-    "@nuxt/kit": "3.15.0",
-    "vue-i18n": "11.0.1",
+    "@intlify/shared": "11.1.2",
+    "@nuxt/kit": "3.16.1",
     "dedupe": "4.0.3",
     "defu": "6.1.4",
-    "zod": "3.24.1"
+    "vue-i18n": "11.1.2",
+    "zod": "3.24.2"
   },
   "devDependencies": {
-    "@nuxt/devtools": "1.6.4",
+    "@nuxt/devtools": "2.3.2",
     "@nuxt/module-builder": "0.8.4",
-    "@nuxt/schema": "3.15.0",
-    "@nuxtjs/i18n": "9.1.1",
+    "@nuxt/schema": "3.16.1",
+    "@nuxtjs/i18n": "9.4.0",
     "@types/node": "latest",
-    "changelogen": "0.5.7",
-    "nuxt": "3.15.0",
-    "typescript": "5.6.2",
-    "vitest": "2.1.8",
-    "vue-tsc": "2.1.6"
+    "changelogen": "0.6.1",
+    "nuxt": "3.16.1",
+    "typescript": "5.8.2",
+    "vitest": "3.1.1",
+    "vue-tsc": "2.2.8"
   }
 }

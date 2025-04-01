@@ -6,7 +6,7 @@ import { ignoreError } from '@nidavellirx/meowv-core';
 
 import type { ResponseController } from './responseController';
 
-import { ApikitSymbols } from '#/di';
+import { ApiKitSymbols } from '$/di';
 
 import type { LoggerController } from '$/logger';
 import { ApiError, ApiErrorCodes } from '$/error';
@@ -35,9 +35,9 @@ export interface RequestController {
 @injectable()
 export class RequestControllerImpl implements RequestController {
   constructor(
-    @inject(ApikitSymbols.DI.Logger.Controller)
+    @inject(ApiKitSymbols.DI.Logger.Controller)
     private logger: LoggerController,
-    @inject(ApikitSymbols.DI.Server.ResponseController)
+    @inject(ApiKitSymbols.DI.Server.ResponseController)
     private responseController: ResponseController,
   ) {}
 

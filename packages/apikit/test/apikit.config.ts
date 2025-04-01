@@ -1,7 +1,6 @@
 import { defineApikitConfig } from '../src/core/modules/configuration/apikitConfig';
 
 export default defineApikitConfig({
-  outDir: './runtime',
   environments: [
     {
       name: 'development',

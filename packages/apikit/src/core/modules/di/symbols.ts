@@ -31,7 +31,7 @@ const Logger = {
   Controller: Symbol.for(`${prefix}.Logger.Controller`),
 };
 
-export const ApikitSymbols = {
+export const ApiKitSymbols = {
   DI: {
     Configuration,
     Validation,

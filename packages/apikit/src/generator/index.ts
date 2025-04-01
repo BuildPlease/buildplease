@@ -9,7 +9,10 @@ import type { ApiKitConfig } from '$/configuration/apikitConfig';
  * Generate the application core.
  */
 export async function generate(config: ApiKitConfig): Promise<void> {
-  const outputPath = await prepareGeneratedDirectory(config.outDir);
+  const defaultOutputPath = '.apikit';
+  const outputPath = await prepareGeneratedDirectory(
+    config.outDir ?? defaultOutputPath,
+  );
   const generatedFiles: string[] = [];
 
   const generatorMethods = [generateEnvironment];

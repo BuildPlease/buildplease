@@ -19,21 +19,11 @@
          "@/*":[
             "src/*"
          ],
-         "@":[
-            "src/index.ts"
-         ],
-         "@configuration/*":[
-            "configuration/*"
-         ],
-         "@configuration":[
-            "configuration/index.ts"
-         ]
       }
    },
    "include":[
       "index.ts",
       "src/**/*",
-      "configuration"
    ],
    "exclude":[
       "node_modules",

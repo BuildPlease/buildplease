@@ -2,9 +2,11 @@ import { defineConfig } from 'tsup';
 
 export default defineConfig({
   entry: ['index.ts'],
-  minify: false,
+  minify: true,
+  bundle: true,
+  shims: false,
   splitting: true,
-  sourcemap: true,
+  sourcemap: false,
   treeshake: true,
   clean: true,
   dts: true,
@@ -12,4 +14,5 @@ export default defineConfig({
   target: 'esnext',
   outDir: 'dist',
   platform: 'neutral',
+  external: ['fs', 'path', 'node:*', 'reflect-metadata', 'inversify', 'ms'],
 });

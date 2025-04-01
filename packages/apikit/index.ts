@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import type { Assembly } from '@nidavellirx/meowv-core';
+import { type Assembly, MEOWV_CORE_INITIALIZE } from '@nidavellirx/meowv-core';
 
 import {
   ServerAssembly,
@@ -12,6 +12,7 @@ import {
 } from '@/core';
 
 export * from './src';
+export * from '@nidavellirx/meowv-core';
 
 function makeAssemblies(): Assembly[] {
   return [
@@ -26,5 +27,8 @@ function makeAssemblies(): Assembly[] {
 }
 
 export function MEOWV_APIKIT_INITIALIZE(): Assembly[] {
-  return makeAssemblies();
+  const coreAssemblies = MEOWV_CORE_INITIALIZE();
+  const apikitAssemblies = makeAssemblies();
+
+  return [...apikitAssemblies, ...coreAssemblies];
 }

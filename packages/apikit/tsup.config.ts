@@ -22,6 +22,7 @@ export default defineConfig({
     'fs',
     'path',
     'node:*',
+    'reflect-metadata',
     'fastify',
     '@fastify/*',
     'pino',

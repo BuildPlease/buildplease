@@ -1,7 +1,7 @@
 import type { Container } from 'inversify';
 import type { Assembly } from '@nidavellirx/meowv-core';
 
-import { ApikitSymbols } from '#/di';
+import { ApiKitSymbols } from '$/di';
 
 import {
   type ValidationController,
@@ -13,11 +13,11 @@ import {
 export class ValidationAssembly implements Assembly {
   public assemble(container: Container): void {
     container
-      .bind<ValidationController>(ApikitSymbols.DI.Validation.Controller)
+      .bind<ValidationController>(ApiKitSymbols.DI.Validation.Controller)
       .to(ValidationControllerImpl);
 
     container
-      .bind<DtoValidationController>(ApikitSymbols.DI.Validation.DtoController)
+      .bind<DtoValidationController>(ApiKitSymbols.DI.Validation.DtoController)
       .to(DtoValidationControllerImpl);
   }
 }

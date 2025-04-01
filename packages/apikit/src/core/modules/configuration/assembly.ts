@@ -7,13 +7,13 @@ import {
   ApiKitConfigurationControllerImpl,
 } from './apikitConfig';
 
-import { ApikitSymbols } from '#/di';
+import { ApiKitSymbols } from '$/di';
 
 export class ConfigurationAssembly implements Assembly {
   public assemble(container: Container): void {
     container
       .bind<ApiKitConfigurationController>(
-        ApikitSymbols.DI.Configuration.Controller,
+        ApiKitSymbols.DI.Configuration.Controller,
       )
       .to(ApiKitConfigurationControllerImpl)
       .inSingletonScope();
