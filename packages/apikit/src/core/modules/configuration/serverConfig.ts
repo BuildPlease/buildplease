@@ -1,5 +1,11 @@
 export interface ServerConfig {
   /**
+   * Unique identifier for the server configuration.
+   * This must be unique across all server configurations.
+   */
+  identifier: string;
+
+  /**
    * Server host address
    */
   host: string;

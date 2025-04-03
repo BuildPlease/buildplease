@@ -13,10 +13,12 @@ export default defineApikitConfig({
   ],
   server: {
     development: {
+      identifier: 'server-development',
       host: 'localhost',
       port: 3000,
     },
     production: {
+      identifier: 'server-production',
       host: 'localhost',
       port: 3001,
     },

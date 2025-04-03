@@ -1,7 +1,7 @@
 import type { ApiErrorProperties } from '$/error';
 import { ApiError } from '$/error';
 
-function makeError(properties: ApiErrorProperties) {
+export function makeError(properties: ApiErrorProperties) {
   return (message?: string) =>
     new ApiError({
       ...properties,

@@ -1,5 +1,7 @@
 import { injectable } from 'inversify';
 
+import { isDefinedAndNotNull } from '@nidavellirx/meowv-core';
+
 import type { EnvironmentConfig } from './environmentConfig';
 import type { LoggerConfig } from './loggerConfig';
 import type { ServerConfig } from './serverConfig';
@@ -38,6 +40,7 @@ export interface ApiKitConfig {
 export function defineApikitConfig<
   const Environments extends readonly EnvironmentConfig[],
 >(config: ApiKitConfigInput<Environments>): ApiKitConfig {
+  // MARK: - Validate environments
   if (!config.environments?.length) {
     throw new Error(`At least one environment must be defined.`);
   }
@@ -49,6 +52,15 @@ export function defineApikitConfig<
       );
     }
   });
+
+  // MARK: - Validate server identifiers uniqueness
+  const identifiers = Object.values(config.server)
+    .filter((server): server is ServerConfig => isDefinedAndNotNull(server))
+    .map((server) => server.identifier);
+
+  if (new Set(identifiers).size !== identifiers.length) {
+    throw new Error('Server identifiers must be unique');
+  }
 
   return config;
 }
