@@ -14,6 +14,7 @@ export default [
       '**/runtime/**/*',
       '**/.output/**/*',
       '**/.nuxt/**/*',
+      '**/.apikit/**/*',
     ],
     languageOptions: {
       parser: typescriptParser,

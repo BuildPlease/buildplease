@@ -1,32 +1,49 @@
 {
-  "compilerOptions":{
-     "moduleResolution": "Node",
-     "target":"ESNext",
-     "module":"ESNext",
-     "strict":true,
-     "declaration":true,
-     "declarationMap":true,
+   "compilerOptions": {
+      /* Base options: */
+     "esModuleInterop": true,
+     "skipLibCheck": true,
+     "target": "es2022",
+     "allowJs": true,
+     "resolveJsonModule": true,
+     "moduleDetection": "force",
+     "isolatedModules": true,
+     "verbatimModuleSyntax": true,
+      /* Strictness */
+     "alwaysStrict": true,
+     "strict": true,
+     "strictNullChecks": true,
+     "strictFunctionTypes": true,
+     "strictPropertyInitialization": true,
+     "noUncheckedIndexedAccess": true,
+     "noUncheckedSideEffectImports": true,
+     "noImplicitAny": true,
+     "noImplicitThis": true,
+     "forceConsistentCasingInFileNames": true,
+     "noImplicitOverride": true,
+      /* If NOT transpiling with TypeScript: */
+     "module": "preserve",
+     "noEmit": true,
+     "declaration": true,
      "emitDeclarationOnly": true,
-     "esModuleInterop":true,
-     "skipLibCheck":true,
-     "allowSyntheticDefaultImports": true,
-     "experimentalDecorators": true,
      "emitDecoratorMetadata": true,
-     "rootDir":"./",
-     "outDir":"dist",
-     "baseUrl":"./",
-     "paths":{
-        "@/*":[
-           "src/*"
-        ]
+     "experimentalDecorators": true,
+     "rootDir": "./",
+     "outDir": "dist",
+     "baseUrl": ".",
+     "paths": {
+       "@/*": [
+         "src/*"
+       ],
      }
-  },
-  "include":[
+   },
+   "include": [
      "index.ts",
-     "src/**/*"
-  ],
-  "exclude":[
+     "src/**/*",
+     "test/**/*"
+   ],
+   "exclude": [
      "node_modules",
-     "dist"
-  ]
-}
+     "dist",
+   ]
+ }
