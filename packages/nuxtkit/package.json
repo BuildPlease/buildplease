@@ -1,6 +1,6 @@
 {
   "name": "@nidavellirx/meowv-nuxtkit",
-  "version": "1.0.1",
+  "version": "1.0.0",
   "description": "A Nuxt Module for MVVM design pattern and Clean Code architecture",
   "repository": "git@github.com/Nidavellirx/meowv.git",
   "license": "MIT",
