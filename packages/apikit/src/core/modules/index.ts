@@ -8,3 +8,4 @@ export * from './formatter';
 export * from './http';
 export * from './logger';
 export * from './server';
+export * from './di';
