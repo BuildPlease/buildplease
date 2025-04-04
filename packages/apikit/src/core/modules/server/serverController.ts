@@ -20,6 +20,8 @@ export interface ServerPluginOptions {
 }
 
 export interface ServerController {
+  get instance(): FastifyInstance;
+  prepare(): Promise<void>;
   start(): Promise<void>;
 }
 
@@ -46,21 +48,28 @@ export class ServerControllerImpl implements ServerController {
     });
   }
 
-  public async initialize(): Promise<void> {
-    await this.configurePlugins();
+  // MARK: - Public
+
+  public get instance(): FastifyInstance {
+    return this.server;
+  }
+
+  public async prepare(): Promise<void> {
     await this.configureErrorHandler();
+    await this.configurePlugins();
   }
 
   public async start(): Promise<void> {
     const { port, host } = this.configuration.server;
+
     await this.setupServerHandlers();
     await this.server.ready();
-    await this.server.listen({
-      port: port,
-      host: host,
-    });
+    await this.server.listen({ port: port, host: host });
+
     this.logger.info(`Server started on ${host}:${port}`);
   }
+
+  // MARK: - Private
 
   private async configurePlugins(): Promise<void> {
     const options: ServerPluginOptions = {
