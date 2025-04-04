@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { stringToNumber } from '@/validation/domain/validator';
+import { stringToNumber } from '@/validation';
 
 export const CoordinatesSchema = z.object({
   latitude: stringToNumber.refine((val) => val >= -90 && val <= 90, {

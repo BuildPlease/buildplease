@@ -65,7 +65,7 @@ function configureImports(resolver: Resolver) {
     {
       name: 'ViewModel',
       as: 'ViewModel',
-      from: resolver.resolve('./runtime/architecture/viewModel'),
+      from: resolver.resolve('./runtime/architecture/view-model'),
     },
   ]);
 }

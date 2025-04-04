@@ -1,4 +1,4 @@
 export * from './assembly';
-export * from './dtoValidationController';
-export * from './dtoValidationError';
-export * from './validationController';
+export * from './dto-validation-controller';
+export * from './dto-validation-error';
+export * from './validation-controller';

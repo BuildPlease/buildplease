@@ -2,9 +2,11 @@ import { injectable } from 'inversify';
 
 import { isDefinedAndNotNull } from '@nidavellirx/meowv-core';
 
-import type { EnvironmentConfig } from './environmentConfig';
-import type { LoggerConfig } from './loggerConfig';
-import type { ServerConfig } from './serverConfig';
+import type {
+  EnvironmentConfig,
+  LoggerConfig,
+  ServerConfig,
+} from '$/configuration';
 
 /**
  * Configuration options for the Meowv API Kit.

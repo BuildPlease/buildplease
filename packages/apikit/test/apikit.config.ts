@@ -1,4 +1,4 @@
-import { defineApikitConfig } from '../src/core/modules/configuration/apikitConfig';
+import { defineApikitConfig } from '../src/core/modules/configuration/apikit-config';
 
 export default defineApikitConfig({
   environments: [

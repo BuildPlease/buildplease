@@ -1,4 +1,4 @@
-import type { SchemaExample } from './schemaExample';
+import type { SchemaExample } from '$/schema';
 
 export type MediaType =
   | 'application/json'

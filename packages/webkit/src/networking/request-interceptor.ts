@@ -1,4 +1,4 @@
-import type { RequestConfig } from '@/networking/resource/requestConfig';
+import type { RequestConfig } from '@/networking';
 
 export interface RequestInterceptor {
   intercept(config: RequestConfig): RequestConfig;

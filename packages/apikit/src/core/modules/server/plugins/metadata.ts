@@ -4,7 +4,6 @@ import type { FastifyPluginAsync } from 'fastify';
 import { ignoreError, isNullOrEmpty } from '@nidavellirx/meowv-core';
 
 import type { HttpMetadata } from '$/http';
-
 import type { ServerPluginOptions } from '$/server';
 
 const requestMetadataPlugin: FastifyPluginAsync<ServerPluginOptions> = async (

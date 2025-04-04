@@ -1,4 +1,4 @@
-import { LoginAssembly } from '../feature/loginAssembly';
+import { LoginAssembly } from '../feature/login-assembly';
 
 import { defineNuxtPlugin } from '#app';
 

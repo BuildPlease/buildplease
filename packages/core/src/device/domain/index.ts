@@ -1,3 +1,3 @@
-export * from './deviceType';
-export * from './osType';
-export * from './pushNotificationStatus';
+export * from './device-type';
+export * from './os-type';
+export * from './push-notification-status';

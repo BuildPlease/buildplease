@@ -2,8 +2,8 @@ import type { Container } from 'inversify';
 
 import { Symbols } from '../symbols';
 
-import { LoginViewModel } from './loginViewModel';
-import { type LoginController, LoginControllerImpl } from './loginController';
+import { LoginViewModel } from './login-view-model';
+import { type LoginController, LoginControllerImpl } from './login-controller';
 
 export class LoginAssembly {
   public assemble(container: Container): void {

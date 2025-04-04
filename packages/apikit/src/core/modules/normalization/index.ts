@@ -1,2 +1,2 @@
 export * from './assembly';
-export * from './normalizationController';
+export * from './normalization-controller';

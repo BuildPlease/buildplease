@@ -3,7 +3,8 @@ import 'reflect-metadata';
 import type { Assembly } from '@nidavellirx/meowv-core';
 import { MEOWV_CORE_INITIALIZE } from '@nidavellirx/meowv-core';
 
-import { makeAssemblies } from '@/configuration';
+import { ValidationAssembly } from '@/validation';
+import { NetworkingAssembly } from '@/networking';
 
 export * from './src';
 export * from '@nidavellirx/meowv-core';
@@ -13,4 +14,10 @@ export function MEOWV_WEBKIT_INITIALIZE(): Assembly[] {
   const webkitAssemblies = makeAssemblies();
 
   return [...webkitAssemblies, ...coreAssemblies];
+}
+
+// MARK: - Private
+
+function makeAssemblies(): Assembly[] {
+  return [new ValidationAssembly(), new NetworkingAssembly()];
 }

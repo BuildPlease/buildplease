@@ -1,1 +1,1 @@
-export * from './localizableText';
+export * from './localizable-text';

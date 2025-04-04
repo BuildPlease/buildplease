@@ -5,7 +5,7 @@ import type { Assembly } from '@nidavellirx/meowv-core';
 import {
   type ApiKitConfigurationController,
   ApiKitConfigurationControllerImpl,
-} from './apikitConfig';
+} from '$/configuration';
 
 import { ApiKitSymbols } from '$/di';
 

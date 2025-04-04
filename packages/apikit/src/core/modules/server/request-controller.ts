@@ -4,12 +4,10 @@ import type { FastifyReply, FastifyRequest } from 'fastify';
 
 import { ignoreError } from '@nidavellirx/meowv-core';
 
-import type { ResponseController } from './responseController';
-
 import { ApiKitSymbols } from '$/di';
-
 import type { LoggerController } from '$/logger';
 import { ApiError, ApiErrorCodes } from '$/error';
+import type { ResponseController } from '$/server';
 import { type HttpResponse, JSONHttpResponse } from '$/http';
 
 type HttpReplyPromise = (

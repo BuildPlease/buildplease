@@ -1,6 +1,6 @@
+import ejs from 'ejs';
 import fp from 'fastify-plugin';
 import fastifyView from '@fastify/view';
-import ejs from 'ejs';
 import type { FastifyPluginAsync } from 'fastify';
 
 const viewPlugin: FastifyPluginAsync = async (fastify) => {

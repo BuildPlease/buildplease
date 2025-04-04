@@ -1,2 +1,2 @@
-export * from './asyncOperation';
+export * from './async-operation';
 export * from './operation';

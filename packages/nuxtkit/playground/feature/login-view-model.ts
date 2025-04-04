@@ -2,7 +2,7 @@ import { injectable, inject } from 'inversify';
 
 import { Symbols } from '../symbols';
 
-import type { LoginController } from './loginController';
+import type { LoginController } from './login-controller';
 
 export interface LoginState {
   username?: string;

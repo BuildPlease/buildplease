@@ -11,7 +11,7 @@ import { isSSR, isCSR, isHydrating } from '../infrastructure/environment';
 import { useRouter, useRoute, useNuxtApp } from '#app';
 
 export abstract class ViewModel<
-  T extends Record<string, any> = Record<string, any>, // Supports interfaces or dynamic states
+  T extends Record<string, any> = Record<string, any>,
 > implements Lifecycle
 {
   public readonly state: Reactive<T>;

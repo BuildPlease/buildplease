@@ -1,2 +1,2 @@
-export * from './apiError';
-export * from './apiErrorCodes';
+export * from './api-error';
+export * from './api-error-codes';

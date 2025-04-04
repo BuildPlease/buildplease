@@ -1,2 +1,2 @@
 export * from './assembly';
-export * from './formatterController';
+export * from './formatter-controller';

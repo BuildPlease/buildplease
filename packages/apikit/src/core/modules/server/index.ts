@@ -1,4 +1,4 @@
 export * from './assembly';
-export * from './serverController';
-export * from './requestController';
-export * from './responseController';
+export * from './server-controller';
+export * from './request-controller';
+export * from './response-controller';

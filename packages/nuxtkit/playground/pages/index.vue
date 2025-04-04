@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { LoginViewModel } from '~/feature/loginViewModel';
+import { LoginViewModel } from '~/feature/login-view-model';
 import { Symbols } from '../symbols';
 
 const vm = useInstance<LoginViewModel>(Symbols.DI.Feature.Login.ViewModel);
