@@ -24,7 +24,8 @@
    "repository": "git@github.com/Nidavellirx/meowv.git",
    "publishConfig": {
       "registry": "https://npm.pkg.github.com/"
-   },   "scripts": {
+   },
+   "scripts": {
       "build": "tsup"
    },
    "dependencies": {

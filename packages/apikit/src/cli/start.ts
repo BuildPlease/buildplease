@@ -11,7 +11,7 @@ import type {
   EnvironmentConfig,
   LoggerConfig,
   ServerConfig,
-} from '$/configuration';
+} from '#/configuration';
 
 export const startCommand = defineCommand({
   meta: {

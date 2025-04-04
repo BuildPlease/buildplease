@@ -3,7 +3,7 @@ import { existsSync } from 'fs';
 
 import { createJiti } from 'jiti';
 
-import type { ApiKitConfig } from '$/configuration/apikitConfig';
+import type { ApiKitConfig } from '#/configuration';
 
 export const log = {
   success: (message: string) => console.log('\x1b[32m' + message + '\x1b[0m'),
