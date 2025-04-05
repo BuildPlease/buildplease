@@ -79,6 +79,7 @@ export class ServerControllerImpl implements ServerController {
     await this.server.register(fastifyAutoload, {
       dir: path.join(__dirname, 'plugins'),
       options: options,
+      encapsulate: false,
     });
   }
 
