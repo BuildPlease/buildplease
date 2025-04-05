@@ -5,6 +5,7 @@
    "keywords": [],
    "author": "Simon Kovačič",
    "license": "ISC",
+   "type": "module",
    "exports": {
       ".": {
          "types": "./dist/index.d.ts",

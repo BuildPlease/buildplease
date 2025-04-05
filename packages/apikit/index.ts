@@ -1,4 +1,6 @@
 import 'reflect-metadata';
+import fastify from 'fastify';
+
 import { type Assembly, MEOWV_CORE_INITIALIZE } from '@nidavellirx/meowv-core';
 
 import {
@@ -15,6 +17,7 @@ import {
 
 export * from './src';
 export * from '@nidavellirx/meowv-core';
+export { fastify };
 
 export function MEOWV_APIKIT_INITIALIZE(): Assembly[] {
   const coreAssemblies = MEOWV_CORE_INITIALIZE();
