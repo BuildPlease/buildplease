@@ -1,1 +1,1 @@
-export * from './secure-token';
+export * from './token';

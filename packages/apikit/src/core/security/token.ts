@@ -1,6 +1,6 @@
 import { ignoreError } from '@nidavellirx/meowv-core';
 
-export class SecureToken<T extends Record<string, unknown> = any> {
+export class Token<T extends Record<string, unknown> = any> {
   private readonly _value: string;
   private readonly _payload: T;
 
