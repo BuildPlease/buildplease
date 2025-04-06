@@ -1,23 +1,22 @@
-import path from 'path';
-
 import { inject, injectable } from 'inversify';
-
 import type { FastifyInstance, FastifyBaseLogger } from 'fastify';
 import Fastify from 'fastify';
 
-import { fastifyAutoload } from '@fastify/autoload';
+import * as Plugins from './plugins';
 
 import { ApiKitSymbols } from '#/di';
-
 import type { LoggerController } from '#/logger';
+import { ApiError, ApiErrorCodes } from '#/error';
 import type { ApiKitConfigurationController } from '#/configuration';
 
-import { ApiError, ApiErrorCodes } from '#/error';
-
-export interface ServerPluginOptions {
-  logger: LoggerController;
-  configuration: ApiKitConfigurationController;
+// MARK: - Plugins Options
+export interface ServerPluginBaseOptions {
+  loggerController: LoggerController;
+  apikitController: ApiKitConfigurationController;
 }
+
+export type ServerPluginOptions<TExtras extends object = {}> =
+  ServerPluginBaseOptions & TExtras;
 
 export interface ServerController {
   get instance(): FastifyInstance;
@@ -73,14 +72,13 @@ export class ServerControllerImpl implements ServerController {
 
   private async configurePlugins(): Promise<void> {
     const options: ServerPluginOptions = {
-      logger: this.logger,
-      configuration: this.configuration,
+      loggerController: this.logger,
+      apikitController: this.configuration,
     };
-    await this.server.register(fastifyAutoload, {
-      dir: path.join(__dirname, 'plugins'),
-      options: options,
-      encapsulate: false,
-    });
+
+    for (const plugin of Object.values(Plugins)) {
+      await this.server.register(plugin, options);
+    }
   }
 
   private async configureErrorHandler(): Promise<void> {

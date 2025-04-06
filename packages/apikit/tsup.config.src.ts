@@ -1,23 +1,28 @@
 import { defineConfig } from 'tsup';
 
+const outDir = 'dist/src';
+
 export default defineConfig({
+  outDir: outDir,
+  clean: [outDir],
+
   entry: {
-    'cli/index': 'src/cli/index.ts',
     index: 'index.ts',
   },
+
   minify: true,
   bundle: true,
   shims: false,
   splitting: true,
   sourcemap: false,
   treeshake: true,
-  clean: true,
   dts: true,
-  format: ['cjs', 'esm'],
-  target: 'esnext',
-  outDir: 'dist',
-  platform: 'node',
+
   tsconfig: 'tsconfig.json',
+
+  platform: 'node',
+  target: 'esnext',
+  format: ['cjs', 'esm'],
   external: [
     'fs',
     'path',
@@ -26,21 +31,15 @@ export default defineConfig({
     'pino',
     'zod',
     'inversify',
-    'citty',
-    'jiti',
     'bcrypt',
     'axios',
     'ejs',
     'validator',
     'libphonenumber-js',
     '@nidavellirx/*',
-    '@dotenvx/dotenvx',
+    '@dotenvx/*',
     'fastify',
     '@fastify/*',
-    '@fastify/autoload',
-    '@fastify/cookie',
-    '@fastify/static',
-    '@fastify/view',
     'fastify-ip',
     'fastify-plugin',
   ],

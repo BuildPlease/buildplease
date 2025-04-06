@@ -1,6 +1,4 @@
-import 'fastify';
-
-import type { HttpMetadata } from '#/http';
+import type { HttpMetadata } from '@nidavellirx/meowv-apikit';
 
 declare module 'fastify' {
   interface FastifyRequest {

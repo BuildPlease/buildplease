@@ -1,4 +1,5 @@
 import 'reflect-metadata';
+
 import { type Assembly, MEOWV_CORE_INITIALIZE } from '@nidavellirx/meowv-core';
 
 import {
@@ -10,6 +11,8 @@ import {
   NormalizationAssembly,
   FormatterAssembly,
 } from '@/core';
+
+// MARK: - Exports
 
 export * from './src';
 export * from '@nidavellirx/meowv-core';
