@@ -1,3 +1,5 @@
+// MARK: - Global
+
 import type {
   ApiKitConfig,
   EnvironmentConfig,

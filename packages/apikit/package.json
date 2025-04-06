@@ -6,6 +6,7 @@
    "author": "Simon Kovačič",
    "license": "ISC",
    "type": "module",
+   "types": "./dist/index.d.ts",
    "exports": {
       ".": {
          "types": "./dist/index.d.ts",

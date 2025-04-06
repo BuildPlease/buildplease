@@ -1,10 +1,12 @@
 import { defineConfig } from 'tsup';
 
 export default defineConfig({
+  outDir: 'dist',
   entry: {
     'cli/index': 'src/cli/index.ts',
     index: 'index.ts',
   },
+
   minify: true,
   bundle: true,
   shims: false,
@@ -13,11 +15,12 @@ export default defineConfig({
   treeshake: true,
   clean: true,
   dts: true,
-  format: ['cjs', 'esm'],
-  target: 'esnext',
-  outDir: 'dist',
-  platform: 'node',
+
   tsconfig: 'tsconfig.json',
+
+  platform: 'node',
+  target: 'esnext',
+  format: ['cjs', 'esm'],
   external: [
     'fs',
     'path',
@@ -34,13 +37,9 @@ export default defineConfig({
     'validator',
     'libphonenumber-js',
     '@nidavellirx/*',
-    '@dotenvx/dotenvx',
+    '@dotenvx/*',
     'fastify',
     '@fastify/*',
-    '@fastify/autoload',
-    '@fastify/cookie',
-    '@fastify/static',
-    '@fastify/view',
     'fastify-ip',
     'fastify-plugin',
   ],

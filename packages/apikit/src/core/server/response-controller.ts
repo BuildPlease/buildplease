@@ -1,6 +1,3 @@
-/// <reference types="@fastify/view" />
-/// <reference types="@fastify/static" />
-
 import { inject, injectable } from 'inversify';
 import type { FastifyReply, FastifyRequest } from 'fastify';
 

@@ -1,5 +1,3 @@
-import 'fastify';
-
 import type { HttpMetadata } from '#/http';
 
 declare module 'fastify' {
