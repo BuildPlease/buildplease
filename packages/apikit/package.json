@@ -6,29 +6,23 @@
    "author": "Simon Kovačič",
    "license": "ISC",
    "type": "module",
-   "types": "./dist/index.d.ts",
    "exports": {
       ".": {
-         "types": "./dist/index.d.ts",
-         "import": "./dist/index.mjs",
-         "require": "./dist/index.js"
+         "types": "./dist/src/index.d.ts",
+         "import": "./dist/src/index.mjs",
+         "require": "./dist/src/index.js"
       }
    },
    "bin": {
       "apikit": "./bin/apikit.mjs"
    },
-   "directories": {
-      "src": "src"
-   },
-   "files": [
-      "dist"
-   ],
+   "files": ["dist"],
    "repository": "git@github.com/Nidavellirx/meowv.git",
    "publishConfig": {
       "registry": "https://npm.pkg.github.com/"
    },
    "scripts": {
-      "build": "tsup"
+      "build": "tsup --config tsup.config.cli.ts && tsup --config tsup.config.src.ts"
    },
    "dependencies": {
       "@dotenvx/dotenvx": "1.39.0",

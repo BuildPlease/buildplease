@@ -1,9 +1,12 @@
 import { defineConfig } from 'tsup';
 
+const outDir = 'dist/src';
+
 export default defineConfig({
-  outDir: 'dist',
+  outDir: outDir,
+  clean: [outDir],
+
   entry: {
-    'cli/index': 'src/cli/index.ts',
     index: 'index.ts',
   },
 
@@ -13,7 +16,6 @@ export default defineConfig({
   splitting: true,
   sourcemap: false,
   treeshake: true,
-  clean: true,
   dts: true,
 
   tsconfig: 'tsconfig.json',
@@ -29,8 +31,6 @@ export default defineConfig({
     'pino',
     'zod',
     'inversify',
-    'citty',
-    'jiti',
     'bcrypt',
     'axios',
     'ejs',
