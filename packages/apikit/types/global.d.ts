@@ -3,7 +3,7 @@ import type {
   EnvironmentConfig,
   LoggerConfig,
   ServerConfig,
-} from '#/configuration';
+} from '@nidavellirx/meowv-apikit';
 
 declare global {
   var apikit: {
@@ -13,5 +13,3 @@ declare global {
     serverConfig: ServerConfig;
   };
 }
-
-export {};

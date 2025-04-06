@@ -35,9 +35,14 @@
     "sourceMap": false,
 
     /* Paths */
+    "rootDir": "./",
     "outDir": "dist",
     "declarationDir": "dist/types",
     "baseUrl": "./",
+    "typeRoots": [
+      "node_modules/@types", 
+      "src/types"
+    ],
     "paths": {
       "@/*": ["src/*"],
       "#/*": ["src/core/*"],
@@ -46,6 +51,7 @@
   "include": [
     "index.ts",
     "src",
+    "types"
   ],
   "exclude": [
     "node_modules",

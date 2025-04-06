@@ -10,7 +10,7 @@ const requestMetadataPlugin: FastifyPluginAsync<ServerPluginOptions> = async (
   fastify,
   options,
 ) => {
-  const logger = options.logger;
+  const logger = options.loggerController;
 
   fastify.addHook('onRequest', async (request) => {
     const metadata: HttpMetadata = {

@@ -1,13 +1,13 @@
 import { defineConfig } from 'tsup';
 
-const outDir = 'dist/bin';
+const outDir = 'dist/cli';
 
 export default defineConfig({
   outDir: outDir,
   clean: [outDir],
 
   entry: {
-    apikit: 'src/cli/index.ts',
+    index: 'src/cli/index.ts',
   },
 
   minify: true,

@@ -2,17 +2,19 @@ import { inject, injectable } from 'inversify';
 import type { FastifyInstance, FastifyBaseLogger } from 'fastify';
 import Fastify from 'fastify';
 
-import * as Plugins from './plugins';
-
 import { ApiKitSymbols } from '#/di';
 import type { LoggerController } from '#/logger';
 import { ApiError, ApiErrorCodes } from '#/error';
 import type { ApiKitConfigurationController } from '#/configuration';
 
-export interface ServerPluginOptions {
-  logger: LoggerController;
-  configuration: ApiKitConfigurationController;
+// MARK: - Plugins Options
+export interface ServerPluginBaseOptions {
+  loggerController: LoggerController;
+  apikitController: ApiKitConfigurationController;
 }
+
+export type ServerPluginOptions<TExtras extends object = {}> =
+  ServerPluginBaseOptions & TExtras;
 
 export interface ServerController {
   get instance(): FastifyInstance;
@@ -51,7 +53,6 @@ export class ServerControllerImpl implements ServerController {
 
   public async prepare(): Promise<void> {
     await this.configureErrorHandler();
-    await this.configurePlugins();
   }
 
   public async start(): Promise<void> {
@@ -65,17 +66,6 @@ export class ServerControllerImpl implements ServerController {
   }
 
   // MARK: - Private
-
-  private async configurePlugins(): Promise<void> {
-    const options: ServerPluginOptions = {
-      logger: this.logger,
-      configuration: this.configuration,
-    };
-
-    for (const plugin of Object.values(Plugins)) {
-      await this.server.register(plugin, options);
-    }
-  }
 
   private async configureErrorHandler(): Promise<void> {
     this.server.setErrorHandler(async (error, request, reply) => {

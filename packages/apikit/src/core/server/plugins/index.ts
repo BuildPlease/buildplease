@@ -1,5 +1,5 @@
-export { default as cookiePlugin } from './cookie';
-export { default as ipPlugin } from './ip';
-export { default as metadataPlugin } from './metadata';
-export { default as staticPlugin } from './static';
-export { default as viewPlugin } from './view';
+export * from './cookie';
+export * from './ip';
+export * from './metadata';
+export * from './static';
+export * from './view';

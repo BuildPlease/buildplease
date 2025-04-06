@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { fileURLToPath } from 'node:url';
 
-import { runMain } from '../dist/bin/apikit.cjs';
+import { runMain } from '../dist/cli/index.cjs';
 
 globalThis.__apikit_cli__ = {
   startTime: Date.now(),
