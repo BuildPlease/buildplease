@@ -70,11 +70,14 @@ export function isObject(value: unknown): value is object {
 
 /**
  * Checks if a value is an empty object.
+ * This checks if the object is null, undefined, or an empty object and returns a type guard.
  *
- * @param {unknown} value - The value to check.
- * @returns {boolean} - True if the value is an empty object, false otherwise.
+ * @param {T | null | undefined} value - The value to check.
+ * @returns {value is T} - True if the value is an empty object, false otherwise.
  */
-export function isEmptyObject(value: unknown): boolean {
+export function isEmptyObject<T extends object>(
+  value: T | null | undefined,
+): value is T {
   return isObject(value) && Object.keys(value).length === 0;
 }
 
