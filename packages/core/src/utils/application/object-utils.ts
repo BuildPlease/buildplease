@@ -82,6 +82,19 @@ export function isEmptyObject<T extends object>(
 }
 
 /**
+ * Checks if a value is a non-empty object, ensuring it is not null, undefined, or empty.
+ * This acts as a type guard.
+ *
+ * @param {T | null | undefined} value - The value to check.
+ * @returns {value is T} - True if the value is a non-empty object, false otherwise.
+ */
+export function isNonEmptyObject<T extends object>(
+  value: T | null | undefined,
+): value is T {
+  return isObject(value) && Object.keys(value).length > 0;
+}
+
+/**
  * Checks if a value is a plain object (not a class instance or built-in object).
  *
  * @param {unknown} value - The value to check.
