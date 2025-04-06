@@ -4,8 +4,6 @@ import fp from 'fastify-plugin';
 import fastifyStatic, { type FastifyStaticOptions } from '@fastify/static';
 import type { FastifyPluginAsync } from 'fastify';
 
-import '@fastify/static';
-
 import type { ServerPluginOptions } from '#/server';
 
 const staticFilesPlugin: FastifyPluginAsync<ServerPluginOptions> = async (
