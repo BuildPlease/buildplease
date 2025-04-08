@@ -27,5 +27,5 @@
       "lerna": "8.2.1",
       "rimraf": "6.0.1"
    },
-   "packageManager": "pnpm@10.7.1"
+   "packageManager": "pnpm@10.8.0"
 }
