@@ -1,11 +1,5 @@
 const prefix = 'ApiKit.DI';
 
-const Server = {
-  Controller: Symbol.for(`${prefix}.Server.Controller`),
-  RequestController: Symbol.for(`${prefix}.Server.RequestController`),
-  ResponseController: Symbol.for(`${prefix}.Server.ResponseController`),
-};
-
 const Configuration = {
   Controller: Symbol.for(`${prefix}.Configuration.Controller`),
 };
@@ -31,6 +25,16 @@ const Logger = {
   Controller: Symbol.for(`${prefix}.Logger.Controller`),
 };
 
+const Server = {
+  Controller: Symbol.for(`${prefix}.Server.Controller`),
+  RequestController: Symbol.for(`${prefix}.Server.RequestController`),
+  ResponseController: Symbol.for(`${prefix}.Server.ResponseController`),
+};
+
+const Security = {
+  Controller: Symbol.for(`${prefix}.Security.Controller`),
+};
+
 export const ApiKitSymbols = {
   DI: {
     Configuration,
@@ -40,5 +44,6 @@ export const ApiKitSymbols = {
     Formatter,
     Logger,
     Server,
+    Security,
   },
 };

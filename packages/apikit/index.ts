@@ -4,6 +4,7 @@ import { type Assembly, MEOWV_CORE_INITIALIZE } from '@nidavellirx/meowv-core';
 
 import {
   ServerAssembly,
+  SecurityAssembly,
   ConfigurationAssembly,
   LoggerAssembly,
   ValidationAssembly,
@@ -35,5 +36,6 @@ function makeAssemblies(): Assembly[] {
     new SchemaAssembly(),
     new NormalizationAssembly(),
     new FormatterAssembly(),
+    new SecurityAssembly(),
   ];
 }
