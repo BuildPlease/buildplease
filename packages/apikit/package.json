@@ -5,10 +5,11 @@
    "keywords": [],
    "author": "Simon Kovačič",
    "license": "ISC",
+   "type": "module",
    "exports": {
       ".": {
          "types": "./dist/src/index.d.ts",
-         "import": "./dist/src/index.mjs",
+         "import": "./dist/src/index.js",
          "require": "./dist/src/index.cjs"
       }
    },
