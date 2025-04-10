@@ -29,6 +29,7 @@ export default defineConfig({
     'node:*',
     'reflect-metadata',
     'pino',
+    'pino-pretty',
     'zod',
     'inversify',
     'bcrypt',
