@@ -48,7 +48,7 @@ export interface StaticFilesConfig {
 
   /**
    * URL prefix for static routes
-   * @default '/public'
+   * @default '/'
    */
   routePrefix?: string;
 

@@ -14,7 +14,7 @@ const staticFilesPlugin: FastifyPluginAsync<ServerPluginOptions> = async (
 
   const {
     directory = 'public',
-    routePrefix = '/public',
+    routePrefix = '/',
     maxAge = 3600,
   } = configuration;
 
