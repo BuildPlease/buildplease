@@ -11,5 +11,4 @@ const ipPlugin: FastifyPluginAsync = async (fastify) => {
 
 export default fp(ipPlugin, {
   name: 'apikit-fastify-ip',
-  dependencies: ['fastify-ip'],
 });

@@ -11,5 +11,4 @@ const cookiePlugin: FastifyPluginAsync = async (fastify) => {
 
 export default fp(cookiePlugin, {
   name: 'apikit-@fastify/cookie',
-  dependencies: ['@fastify/cookie'],
 });
