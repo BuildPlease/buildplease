@@ -12,11 +12,6 @@ const staticFilesPlugin: FastifyPluginAsync<ServerPluginOptions> = async (
 ) => {
   const configuration = options.apikitController.server.staticFiles ?? {};
 
-  if (configuration.enabled === false) {
-    fastify.log.info('Static file serving disabled by configuration');
-    return;
-  }
-
   const {
     directory = 'public',
     routePrefix = '/public',
@@ -30,8 +25,8 @@ const staticFilesPlugin: FastifyPluginAsync<ServerPluginOptions> = async (
     dotfiles: 'ignore',
     immutable: true,
     etag: true,
-    serve: true,
-    decorateReply: false,
+    serve: configuration.enabled,
+    decorateReply: true,
   };
 
   await fastify.register(fastifyStatic, pluginOptions);
