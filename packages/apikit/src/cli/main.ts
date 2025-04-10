@@ -3,7 +3,6 @@ import { defineCommand } from 'citty';
 import { name, version, description } from '../../package.json';
 
 import { buildCommand } from './build';
-import { startCommand } from './start';
 
 export const main = defineCommand({
   meta: {
@@ -13,6 +12,5 @@ export const main = defineCommand({
   },
   subCommands: {
     build: buildCommand,
-    start: startCommand,
   },
 });

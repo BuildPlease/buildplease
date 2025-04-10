@@ -1,6 +1,6 @@
 import { defineCommand } from 'citty';
 
-import { loadConfig, log } from './utils';
+import { loadConfig, log } from '@/utils';
 
 import { generate } from '@/generator';
 
