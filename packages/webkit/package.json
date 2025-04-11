@@ -13,9 +13,6 @@
          "require": "./dist/index.cjs"
       }
    },
-   "directories": {
-      "src": "src"
-   },
    "files": [
       "dist"
    ],

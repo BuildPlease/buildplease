@@ -1,15 +1,14 @@
 import type { Container } from 'inversify';
 import type { Assembly } from '@nidavellirx/meowv-core';
 
-import { WebKitSymbols } from '@/configuration';
-
+import { WebKitSymbols } from '@/di';
 import {
   type SchemaValidationController,
   SchemaValidationControllerImpl,
 } from '@/validation';
 
 export class ValidationAssembly implements Assembly {
-  assemble(container: Container): void {
+  public assemble(container: Container): void {
     container
       .bind<SchemaValidationController>(
         WebKitSymbols.DI.Validation.SchemaController,

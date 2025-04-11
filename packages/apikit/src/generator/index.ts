@@ -58,7 +58,7 @@ async function generateBarrelExport(
   generatedFiles: string[],
 ) {
   const exportStatements = generatedFiles
-    .map((file) => `export * from './${file.replace('.ts', '')}';`)
+    .map((file) => `export * from './${file}';`)
     .join('\n');
 
   await writeGeneratedFile(outputPath, 'index.ts', exportStatements);

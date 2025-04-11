@@ -2,11 +2,11 @@ import { injectable } from 'inversify';
 
 import type { AsyncOperation } from '@nidavellirx/meowv-core';
 
-import type { HttpClient } from '@/networking';
 import {
   type RemoteEndpoint,
   type RequestConfig,
   type RequestInterceptor,
+  type HttpClient,
   HttpError,
 } from '@/networking';
 

@@ -4,7 +4,6 @@ import type {
   ServiceIdentifier,
   Newable,
 } from 'inversify';
-
 import type { AsyncOperation } from '@nidavellirx/meowv-core';
 
 import type { RemoteEndpoint } from '@/networking';
