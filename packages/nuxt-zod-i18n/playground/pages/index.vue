@@ -43,7 +43,7 @@ function onSubmit(event: FormSubmitEvent<LoginDto>) {
 				>
 					<UInput
 						v-model="state.name"
-						placeholder="Your name"
+						:placeholder="`${t('dictionary.firstName')} + ${t('dictionary.lastName')}`"
 						class="w-full"
 					/>
 				</UFormField>
@@ -54,7 +54,7 @@ function onSubmit(event: FormSubmitEvent<LoginDto>) {
 				>
 					<UInput
 						v-model="state.email"
-						placeholder="Your email"
+						:placeholder="t('dictionary.email')"
 						class="w-full"
 					/>
 				</UFormField>

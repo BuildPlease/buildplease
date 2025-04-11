@@ -5,15 +5,13 @@
   "repository": "git@github.com/Nidavellirx/meowv.git",
   "license": "MIT",
   "type": "module",
+  "main": "./dist/module.mjs",
   "exports": {
     ".": {
-      "import": "./dist/module.mjs",
-      "require": "./dist/module.cjs",
-      "types": "./dist/types.d.ts"
+      "types": "./dist/types.d.mts",
+      "import": "./dist/module.mjs"
     }
   },
-  "main": "./dist/module.cjs",
-  "types": "./dist/types.d.ts",
   "files": [
     "dist"
   ],
@@ -29,22 +27,22 @@
     "test:types": "vue-tsc --noEmit && cd playground && vue-tsc --noEmit"
   },
   "dependencies": {
-    "@intlify/shared": "11.1.2",
-    "@nuxt/kit": "3.16.1",
+    "@intlify/shared": "11.1.3",
+    "@nuxt/kit": "3.16.2",
     "dedupe": "4.0.3",
     "defu": "6.1.4",
-    "vue-i18n": "11.1.2",
+    "vue-i18n": "11.1.3",
     "zod": "3.24.2"
   },
   "devDependencies": {
     "@nuxt/devtools": "2.3.2",
-    "@nuxt/module-builder": "0.8.4",
-    "@nuxt/schema": "3.16.1",
-    "@nuxtjs/i18n": "9.4.0",
+    "@nuxt/module-builder": "1.0.1",
+    "@nuxt/schema": "3.16.2",
+    "@nuxtjs/i18n": "9.5.3",
     "@types/node": "latest",
     "changelogen": "0.6.1",
-    "nuxt": "3.16.1",
-    "typescript": "5.8.2",
+    "nuxt": "3.16.2",
+    "typescript": "5.8.3",
     "vitest": "3.1.1",
     "vue-tsc": "2.2.8"
   }

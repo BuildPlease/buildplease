@@ -53,7 +53,7 @@ export class LoginViewModel extends ViewModel<LoginState> {
   }
 
   public override async onBeforeMount(): Promise<void> {
-    console.log('onBeforeMount invoked');
+    console.log('onBeforeMount invoked, async operation in progress');
     await new Promise((resolve) => setTimeout(resolve, 2000));
   }
 }

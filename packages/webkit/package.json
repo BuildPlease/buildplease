@@ -29,13 +29,13 @@
    "dependencies": {
       "@nidavellirx/meowv-core": "workspace:^",
       "axios": "1.8.4",
-      "inversify": "7.3.0",
+      "inversify": "7.5.0",
       "reflect-metadata": "0.2.2",
       "zod": "3.24.2"
    },
    "devDependencies": {
-      "@swc/core": "1.11.15",
+      "@swc/core": "1.11.20",
       "tsup": "8.4.0",
-      "typescript": "5.8.2"
+      "typescript": "5.8.3"
    }
 }

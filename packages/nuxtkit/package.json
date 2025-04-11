@@ -5,15 +5,13 @@
   "repository": "git@github.com/Nidavellirx/meowv.git",
   "license": "MIT",
   "type": "module",
+  "main": "./dist/module.mjs",
   "exports": {
     ".": {
-      "types": "./dist/types.d.ts",
-      "import": "./dist/module.mjs",
-      "require": "./dist/module.cjs"
+      "types": "./dist/types.d.mts",
+      "import": "./dist/module.mjs"
     }
   },
-  "main": "./dist/module.cjs",
-  "types": "./dist/types.d.ts",
   "files": [
     "dist"
   ],
@@ -30,18 +28,18 @@
     "test:types": "vue-tsc --noEmit && cd playground && vue-tsc --noEmit"
   },
   "dependencies": {
-    "@nuxt/kit": "3.16.1",
+    "@nuxt/kit": "3.16.2",
     "reflect-metadata": "0.2.2"
   },
   "devDependencies": {
     "@nuxt/devtools": "2.3.2",
-    "@nuxt/module-builder": "0.8.4",
-    "@nuxt/schema": "3.16.1",
+    "@nuxt/module-builder": "1.0.1",
+    "@nuxt/schema": "3.16.2",
     "@types/node": "latest",
     "changelogen": "0.6.1",
-    "inversify": "7.3.0",
-    "nuxt": "3.16.1",
-    "typescript": "5.8.2",
+    "inversify": "7.5.0",
+    "nuxt": "3.16.2",
+    "typescript": "5.8.3",
     "vitest": "3.1.1",
     "vue-tsc": "2.2.8"
   }
