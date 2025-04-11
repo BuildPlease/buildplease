@@ -1,4 +1,5 @@
-import path from 'path';
+import { fileURLToPath } from 'node:url';
+import { dirname, resolve } from 'node:path';
 
 import fp from 'fastify-plugin';
 import fastifyStatic, { type FastifyStaticOptions } from '@fastify/static';
@@ -10,6 +11,8 @@ const staticFilesPlugin: FastifyPluginAsync<ServerPluginOptions> = async (
   fastify,
   options,
 ) => {
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = dirname(__filename);
   const configuration = options.apikitController.server.staticFiles ?? {};
 
   const {
@@ -19,7 +22,7 @@ const staticFilesPlugin: FastifyPluginAsync<ServerPluginOptions> = async (
   } = configuration;
 
   const pluginOptions: FastifyStaticOptions = {
-    root: path.resolve(process.cwd(), directory),
+    root: resolve(__dirname, directory),
     prefix: routePrefix,
     maxAge,
     dotfiles: 'ignore',
