@@ -5,10 +5,11 @@ import axios from 'axios';
 @injectable()
 export class HttpClient {
   private readonly axiosInstance: AxiosInstance;
+  private readonly defaultTimeout: number = 10000;
 
-  constructor() {
+  constructor(timeout?: number) {
     this.axiosInstance = axios.create({
-      timeout: 10000,
+      timeout: timeout ?? this.defaultTimeout,
     });
   }
 

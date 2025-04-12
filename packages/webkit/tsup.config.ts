@@ -13,7 +13,7 @@ export default defineConfig({
   format: ['cjs', 'esm'],
   target: 'esnext',
   outDir: 'dist',
-  platform: 'neutral',
+  platform: 'browser',
   tsconfig: 'tsconfig.json',
   external: [
     'fs',
