@@ -2,12 +2,12 @@ import { defineConfig } from 'tsup';
 
 export default defineConfig({
   entry: ['index.ts'],
-  minify: true,
+  minify: false,
   bundle: true,
   shims: false,
-  splitting: true,
+  splitting: false,
   sourcemap: false,
-  treeshake: true,
+  treeshake: false,
   clean: true,
   dts: true,
   format: ['cjs', 'esm'],
@@ -21,7 +21,6 @@ export default defineConfig({
     'node:*',
     'reflect-metadata',
     'axios',
-    'zod',
     'inversify',
     '@nidavellirx/*',
   ],
