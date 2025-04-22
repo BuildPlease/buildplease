@@ -6,7 +6,6 @@ import {
   type RemoteEndpoint,
   type RequestConfig,
   type RequestInterceptor,
-  type HttpClient,
   HttpError,
 } from '@/networking';
 
@@ -19,18 +18,13 @@ export class RemoteResource<
 {
   protected interceptors: Set<RequestInterceptor> = new Set();
 
-  constructor(
-    private client: HttpClient,
-    private endpoint: Endpoint,
-  ) {}
+  constructor(private endpoint: Endpoint) {}
 
   public async execute(input: Input, options?: RequestConfig): Promise<Output> {
     try {
       const inputDto = await this.endpoint.convertInput(input);
-      const request = await this.endpoint.makeRequest(inputDto);
 
       let config: RequestConfig = {
-        ...request,
         ...options,
       };
 
@@ -38,7 +32,7 @@ export class RemoteResource<
         config = interceptor.intercept(config);
       }
 
-      const response = await this.client.request(config);
+      const response = await this.endpoint.makeRequest(inputDto, config);
       const outputDto = await this.endpoint.convertOutput(response);
 
       return outputDto;

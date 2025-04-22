@@ -4,7 +4,6 @@ import type { Assembly } from '@nidavellirx/meowv-core';
 import { MEOWV_CORE_INITIALIZE } from '@nidavellirx/meowv-core';
 
 import { ValidationAssembly } from '@/validation';
-import { NetworkingAssembly } from '@/networking';
 
 // MARK: - Exports
 
@@ -21,5 +20,5 @@ export function MEOWV_WEBKIT_INITIALIZE(): Assembly[] {
 // MARK: - Private
 
 function makeAssemblies(): Assembly[] {
-  return [new ValidationAssembly(), new NetworkingAssembly()];
+  return [new ValidationAssembly()];
 }
