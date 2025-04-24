@@ -140,24 +140,24 @@ export async function ignoreErrorAsync(
 }
 
 /**
- * Attempts to execute an async function and returns its result.
- * If the function throws, returns `null` instead.
- * Optionally executes a provided error handler.
+ * Executes an async function and wraps the result in an Optional.
+ * If the function throws, returns an Optional with `null` value.
  *
- * @template T - The return type.
+ * @template T - The expected return type.
  * @param fn - The async function to execute.
  * @param onError - Optional error handler.
- * @returns The result or `null` if an error occurred.
+ * @returns An Optional wrapping the result, or null if an error occurred.
  */
-export async function ignoreErrorOrNullAsync<T>(
+export async function ignoreErrorOptionalAsync<T>(
   fn: () => Promise<T>,
   onError?: (error: unknown) => void,
-): Promise<T | null> {
+): Promise<Optional<T>> {
   try {
-    return await fn();
+    const result = await fn();
+    return new Optional(result);
   } catch (error) {
     onError?.(error);
-    return null;
+    return new Optional<T>(null);
   }
 }
 
