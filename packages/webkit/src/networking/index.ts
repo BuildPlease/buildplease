@@ -1,4 +1,3 @@
-export * from './bind-operation';
 export * from './http-error';
 export * from './remote-endpoint';
 export * from './remote-resource';
