@@ -10,20 +10,38 @@ export function makeError(properties: ApiErrorProperties) {
 }
 
 export const CommonErrors = {
+  NOT_FOUND: makeError({
+    identifier: 'RESOURCE_NOT_FOUND',
+    message: 'Resource could not be found.',
+    statusCode: 404,
+  }),
+  RESOURCE_ALREADY_EXISTS: makeError({
+    identifier: 'RESOURCE_ALREADY_EXISTS',
+    message: 'Resource already exists.',
+    statusCode: 409,
+  }),
+};
+
+export const ServerErrors = {
   INTERNAL_SERVER_ERROR: makeError({
     identifier: 'INTERNAL_SERVER_ERROR',
     message: 'An internal server error has occurred.',
     statusCode: 500,
   }),
-  JSON_SYNTAX_ERROR: makeError({
-    identifier: 'JSON_SYNTAX_ERROR',
-    message: 'The JSON format is invalid.',
-    statusCode: 400,
+  SERVICE_UNAVAILABLE: makeError({
+    identifier: 'SERVICE_UNAVAILABLE',
+    message: 'The service is temporarily unavailable. Please try again later.',
+    statusCode: 503,
   }),
-  NOT_FOUND: makeError({
-    identifier: 'EVENT_NOT_FOUND',
-    message: 'Resource could not be found.',
-    statusCode: 404,
+  DEPENDENCY_FAILED: makeError({
+    identifier: 'DEPENDENCY_FAILED',
+    message: 'A required dependency failed.',
+    statusCode: 424,
+  }),
+  TIMEOUT: makeError({
+    identifier: 'TIMEOUT',
+    message: 'The server timed out waiting for the request.',
+    statusCode: 504,
   }),
 };
 
@@ -49,9 +67,24 @@ export const AuthorizationErrors = {
 };
 
 export const ValidationErrors = {
+  INVALID_JSON_SYNTAX: makeError({
+    identifier: 'JSON_SYNTAX_ERROR',
+    message: 'The JSON format is invalid.',
+    statusCode: 400,
+  }),
   INVALID_PROPERTIES: makeError({
     identifier: 'INVALID_PROPERTIES',
     message: 'The provided properties are invalid.',
+    statusCode: 400,
+  }),
+  INVALID_FORMAT: makeError({
+    identifier: 'INVALID_FORMAT',
+    message: 'The format is invalid.',
+    statusCode: 400,
+  }),
+  INVALID_DATE_FORMAT: makeError({
+    identifier: 'INVALID_DATE_FORMAT',
+    message: 'The date format is invalid.',
     statusCode: 400,
   }),
   INVALID_PASSWORD: makeError({
@@ -85,20 +118,11 @@ export const ValidationErrors = {
     message: 'The new email must be different from the old email.',
     statusCode: 409,
   }),
-  INVALID_DATE_FORMAT: makeError({
-    identifier: 'INVALID_DATE_FORMAT',
-    message: 'The date format is invalid.',
-    statusCode: 400,
-  }),
-  INVALID_FORMAT: makeError({
-    identifier: 'INVALID_FORMAT',
-    message: 'The format is invalid.',
-    statusCode: 400,
-  }),
 };
 
 export const ApiErrorCodes = {
   Common: CommonErrors,
+  Server: ServerErrors,
   Limit: LimitErrors,
   Authorization: AuthorizationErrors,
   Validation: ValidationErrors,

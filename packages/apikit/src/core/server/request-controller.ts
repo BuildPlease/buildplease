@@ -107,7 +107,7 @@ export class RequestControllerImpl implements RequestController {
     const responseMessage = isApiError ? error.message : 'Something went wrong';
     const responseIdentifier = isApiError
       ? error.identifier
-      : ApiErrorCodes.Common.INTERNAL_SERVER_ERROR().identifier;
+      : ApiErrorCodes.Server.INTERNAL_SERVER_ERROR().identifier;
 
     const data = {
       identifier: responseIdentifier,

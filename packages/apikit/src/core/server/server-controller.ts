@@ -84,7 +84,7 @@ export class ServerControllerImpl implements ServerController {
   private async configureErrorHandler(): Promise<void> {
     this.server.setErrorHandler(async (error, request, reply) => {
       const isInternalError = !error.statusCode || error.statusCode === 500;
-      const internalServerError = ApiErrorCodes.Common.INTERNAL_SERVER_ERROR();
+      const internalServerError = ApiErrorCodes.Server.INTERNAL_SERVER_ERROR();
 
       const handleInternalError = () => {
         this.logger.error('Internal Server Error', {
