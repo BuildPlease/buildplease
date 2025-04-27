@@ -7,12 +7,12 @@ import * as Plugins from './plugins';
 import { ApiKitSymbols } from '#/di';
 import type { LoggerController } from '#/logger';
 import { ApiError, ApiErrorCodes } from '#/error';
-import type { ApiKitConfigurationController } from '#/configuration';
+import type { ApiKitController } from '#/configuration';
 
 // MARK: - Plugins Options
 export interface ServerPluginBaseOptions {
   loggerController: LoggerController;
-  apikitController: ApiKitConfigurationController;
+  apikitController: ApiKitController;
 }
 
 export type ServerPluginOptions<TExtras extends object = {}> =
@@ -32,7 +32,7 @@ export class ServerControllerImpl implements ServerController {
     @inject(ApiKitSymbols.DI.Logger.Controller)
     private logger: LoggerController,
     @inject(ApiKitSymbols.DI.Configuration.Controller)
-    private configuration: ApiKitConfigurationController,
+    private configuration: ApiKitController,
   ) {
     this.server = Fastify({
       disableRequestLogging: true,
