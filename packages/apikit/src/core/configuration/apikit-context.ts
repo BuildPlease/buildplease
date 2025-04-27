@@ -7,6 +7,7 @@ import { loadConfig, log } from '@/utils';
 
 import type {
   ApiKitConfig,
+  EmailConfig,
   EnvironmentConfig,
   LoggerConfig,
   ServerConfig,
@@ -51,12 +52,14 @@ export async function makeApikitContext({
   const environmentConfig = await initializeEnvironment(config, environment);
   const loggerConfig = await initializeLogger(config, environmentConfig);
   const serverConfig = await initializeServer(config, environmentConfig);
+  const emailConfig = await initializeEmail(config, environmentConfig);
 
   global.apikit = {
     config,
     environmentConfig,
     loggerConfig,
     serverConfig,
+    emailConfig,
   };
 
   log.success(
@@ -100,6 +103,22 @@ async function initializeEnvironment(
   }
 
   return environment;
+}
+
+/**
+ * Initializes the email configuration for the given environment.
+ *
+ * @throws Error if the server configuration is missing for the environment.
+ */
+async function initializeEmail(
+  config: ApiKitConfig,
+  env: EnvironmentConfig,
+): Promise<EmailConfig> {
+  const emailConfig = config.email[env.name];
+  if (!emailConfig) {
+    throw new Error(`Missing email configuration for "${env.name}"`);
+  }
+  return emailConfig;
 }
 
 /**

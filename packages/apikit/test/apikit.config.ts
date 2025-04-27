@@ -1,4 +1,4 @@
-import { defineApikitConfig } from '../src/core/configuration/apikit-config';
+import { defineApikitConfig } from '../src/core/configuration/apikit-define';
 
 export default defineApikitConfig({
   environments: [
@@ -66,6 +66,15 @@ export default defineApikitConfig({
           },
         },
       ],
+    },
+  },
+  email: {
+    development: {
+      enabled: true,
+      templatesBasePath: './test/templates',
+    },
+    production: {
+      enabled: false,
     },
   },
 });

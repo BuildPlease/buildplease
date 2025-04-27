@@ -4,6 +4,10 @@ const Configuration = {
   Controller: Symbol.for(`${prefix}.Configuration.Controller`),
 };
 
+const Email = {
+  Controller: Symbol.for(`${prefix}.Email.Controller`),
+};
+
 const Validation = {
   Controller: Symbol.for(`${prefix}.Validation.Controller`),
   DtoController: Symbol.for(`${prefix}.Validation.DtoController`),
@@ -38,6 +42,7 @@ const Security = {
 export const ApiKitSymbols = {
   DI: {
     Configuration,
+    Email,
     Validation,
     Schema,
     Normalization,

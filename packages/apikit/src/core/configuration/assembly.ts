@@ -2,20 +2,14 @@ import type { Container } from 'inversify';
 
 import type { Assembly } from '@nidavellirx/meowv-core';
 
-import {
-  type ApiKitConfigurationController,
-  ApiKitConfigurationControllerImpl,
-} from '#/configuration';
-
 import { ApiKitSymbols } from '#/di';
+import { type ApiKitController, ApiKitControllerImpl } from '#/configuration';
 
 export class ConfigurationAssembly implements Assembly {
   public assemble(container: Container): void {
     container
-      .bind<ApiKitConfigurationController>(
-        ApiKitSymbols.DI.Configuration.Controller,
-      )
-      .to(ApiKitConfigurationControllerImpl)
+      .bind<ApiKitController>(ApiKitSymbols.DI.Configuration.Controller)
+      .to(ApiKitControllerImpl)
       .inSingletonScope();
   }
 }

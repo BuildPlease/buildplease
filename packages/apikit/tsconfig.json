@@ -51,7 +51,8 @@
   "include": [
     "index.ts",
     "src",
-    "types"
+    "types",
+    "test",
   ],
   "exclude": [
     "node_modules",
