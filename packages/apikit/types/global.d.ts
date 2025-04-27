@@ -1,5 +1,6 @@
 import type {
   ApiKitConfig,
+  EmailConfig,
   EnvironmentConfig,
   LoggerConfig,
   ServerConfig,
@@ -11,5 +12,6 @@ declare global {
     environmentConfig: EnvironmentConfig;
     loggerConfig: LoggerConfig;
     serverConfig: ServerConfig;
+    emailConfig: EmailConfig;
   };
 }

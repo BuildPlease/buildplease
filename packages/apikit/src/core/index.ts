@@ -1,5 +1,6 @@
 export * from './configuration';
 export * from './di';
+export * from './email';
 export * from './error';
 export * from './formatter';
 export * from './http';

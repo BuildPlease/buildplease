@@ -3,14 +3,15 @@ import 'reflect-metadata';
 import { type Assembly, MEOWV_CORE_INITIALIZE } from '@nidavellirx/meowv-core';
 
 import {
-  ServerAssembly,
-  SecurityAssembly,
   ConfigurationAssembly,
-  LoggerAssembly,
-  ValidationAssembly,
-  SchemaAssembly,
-  NormalizationAssembly,
+  EmailAssembly,
   FormatterAssembly,
+  LoggerAssembly,
+  NormalizationAssembly,
+  SchemaAssembly,
+  SecurityAssembly,
+  ServerAssembly,
+  ValidationAssembly,
 } from '@/core';
 
 // MARK: - Exports
@@ -29,13 +30,14 @@ export function MEOWV_APIKIT_INITIALIZE(): Assembly[] {
 
 function makeAssemblies(): Assembly[] {
   return [
-    new ServerAssembly(),
     new ConfigurationAssembly(),
-    new LoggerAssembly(),
-    new ValidationAssembly(),
-    new SchemaAssembly(),
-    new NormalizationAssembly(),
+    new EmailAssembly(),
     new FormatterAssembly(),
+    new LoggerAssembly(),
+    new NormalizationAssembly(),
+    new SchemaAssembly(),
     new SecurityAssembly(),
+    new ServerAssembly(),
+    new ValidationAssembly(),
   ];
 }

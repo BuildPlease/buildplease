@@ -2,6 +2,7 @@ import { isDefinedAndNotNull } from '@nidavellirx/meowv-core';
 
 import type {
   ApiKitConfig,
+  EmailConfig,
   EnvironmentConfig,
   ServerConfig,
   LoggerConfig,
@@ -21,6 +22,7 @@ interface ApiKitConfigInput<Environments extends readonly EnvironmentConfig[]> {
   environments: Environments;
   server: { [K in EnvironmentNames<Environments>]: ServerConfig };
   logger: { [K in EnvironmentNames<Environments>]: LoggerConfig };
+  email: { [K in EnvironmentNames<Environments>]: EmailConfig };
 }
 
 export function defineApikitConfig<
