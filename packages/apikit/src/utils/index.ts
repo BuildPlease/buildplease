@@ -51,6 +51,6 @@ export async function loadConfig(
 
     return config as ApiKitConfig;
   } catch (error) {
-    throw new Error(`Failed to load config: ${(error as Error).message}`);
+    throw new Error(`Failed to load config: ${error}`);
   }
 }

@@ -10,7 +10,7 @@ import { filterObject } from '@nidavellirx/meowv-core';
 import { ApiKitSymbols } from '#/di';
 
 import type {
-  ApiKitConfigurationController,
+  ApiKitController,
   TransportOptions,
   ConsoleTransportOptions,
   FileTransportOptions,
@@ -35,7 +35,7 @@ export class LoggerControllerImpl implements LoggerController {
 
   constructor(
     @inject(ApiKitSymbols.DI.Configuration.Controller)
-    private configuration: ApiKitConfigurationController,
+    private configuration: ApiKitController,
   ) {
     const loggerConfig = this.configuration.logger;
     const transports = this.createTransports(loggerConfig.transports);
