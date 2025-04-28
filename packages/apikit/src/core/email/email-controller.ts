@@ -110,11 +110,11 @@ export class EmailControllerImpl implements EmailController {
 
   private makeGenericData() {
     return {
-      generic_organizationName: 'Peyvee',
-      generic_supportEmail: 'support@peyvee.com',
-      generic_copyright: `© ${new Date().getFullYear()} Peyvee.`,
-      generic_generatedDate: new Date().toLocaleString(),
-      generic_logoUrl: 'https://www.peyvee.com/wp-content/uploads/2024/07/peyvee-logo-site.png',
+      organizationName: 'Peyvee',
+      supportEmail: 'support@peyvee.com',
+      copyright: `© ${new Date().getFullYear()} Peyvee.`,
+      generatedDate: new Date().toLocaleString(),
+      logoUrl: 'https://www.peyvee.com/wp-content/uploads/2024/07/peyvee-logo-site.png',
     };
   }
 
