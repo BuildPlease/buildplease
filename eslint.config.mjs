@@ -34,17 +34,14 @@ export default [
         {
           singleQuote: true,
           semi: true,
-          printWidth: 80,
+          printWidth: 100,
           tabWidth: 2,
           useTabs: false,
         },
       ],
 
       // Import sorting
-      'import/order': [
-        'error',
-        { 'newlines-between': 'always-and-inside-groups' },
-      ],
+      'import/order': ['error', { 'newlines-between': 'always-and-inside-groups' }],
       'no-multiple-empty-lines': ['error', { max: 1 }],
 
       // TypeScript-specific rules

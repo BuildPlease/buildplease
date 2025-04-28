@@ -17,9 +17,7 @@ export async function prepareLocales(
   const { resolver, options } = ctx;
 
   // Normalize app-level locales
-  const appLocalesCode = getNormalizedLocales(i18nOptions?.locales).map(
-    ({ code }) => code,
-  );
+  const appLocalesCode = getNormalizedLocales(i18nOptions?.locales).map(({ code }) => code);
 
   // Read available language files
   const languageFiles = await readdir(resolver.resolve('./runtime/locales'));
@@ -27,8 +25,7 @@ export async function prepareLocales(
   // Prepare valid locales based on files and mapping
   const locales = languageFiles.reduce<LocaleObject[]>((acc, file) => {
     const code =
-      options.localeCodesMapping?.[file.replace('.json', '')] ||
-      file.replace('.json', '');
+      options.localeCodesMapping?.[file.replace('.json', '')] || file.replace('.json', '');
 
     if (appLocalesCode.includes(code)) {
       acc.push({ file, code });
@@ -40,9 +37,7 @@ export async function prepareLocales(
   return locales;
 }
 
-function getNormalizedLocales(
-  locales: NuxtI18nOptions['locales'],
-): LocaleObject[] {
+function getNormalizedLocales(locales: NuxtI18nOptions['locales']): LocaleObject[] {
   locales = locales || [];
   const normalized: LocaleObject[] = [];
   for (const locale of locales) {

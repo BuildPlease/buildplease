@@ -5,9 +5,7 @@ export interface ValidationIssue {
 }
 
 export type ValidationIssues<T> = {
-  [K in keyof T]?: T[K] extends object
-    ? ValidationIssues<T[K]>
-    : ValidationIssue;
+  [K in keyof T]?: T[K] extends object ? ValidationIssues<T[K]> : ValidationIssue;
 };
 
 export type ValidationResult<TInput, TOutput> =

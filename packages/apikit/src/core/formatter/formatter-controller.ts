@@ -40,9 +40,7 @@ export class Formatter<T> {
    * @param {Function} predicate - The predicate function.
    * @returns {this} - Returns the Formatter instance for chaining.
    */
-  filter(
-    predicate: (value: any) => boolean = (value) => value !== undefined,
-  ): this {
+  filter(predicate: (value: any) => boolean = (value) => value !== undefined): this {
     if (typeof this.value === 'object' && this.value !== null) {
       this.value = Object.fromEntries(
         Object.entries(this.value).filter(([_, value]) => predicate(value)),

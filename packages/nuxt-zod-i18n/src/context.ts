@@ -22,10 +22,7 @@ export interface Zodi18nNuxtContext {
 
 const resolver = createResolver(import.meta.url);
 
-export function createContext(
-  userOptions: NuxtZodi18nOptions,
-  nuxt: Nuxt,
-): Zodi18nNuxtContext {
+export function createContext(userOptions: NuxtZodi18nOptions, nuxt: Nuxt): Zodi18nNuxtContext {
   const options = userOptions as Required<NuxtZodi18nOptions>;
 
   return {

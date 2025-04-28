@@ -36,8 +36,7 @@ export function mapStringToEnum<T extends Record<string, string | number>>(
   // MARK: - Enum matching loop
   for (const [key, value] of entries) {
     // Determine if comparison should be by key or value, and convert to string for safe normalization
-    const compareValue =
-      options?.matchBy === 'key' ? String(key) : String(value);
+    const compareValue = options?.matchBy === 'key' ? String(key) : String(value);
     if (normalizeFn(compareValue) === normalizedInput) {
       return value;
     }

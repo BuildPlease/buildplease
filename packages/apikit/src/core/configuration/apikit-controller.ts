@@ -1,11 +1,6 @@
 import { injectable } from 'inversify';
 
-import type {
-  EmailConfig,
-  EnvironmentConfig,
-  LoggerConfig,
-  ServerConfig,
-} from '#/configuration';
+import type { EmailConfig, EnvironmentConfig, LoggerConfig, ServerConfig } from '#/configuration';
 
 export interface ApiKitController {
   get environment(): EnvironmentConfig;

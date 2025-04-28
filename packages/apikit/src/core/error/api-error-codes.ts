@@ -104,8 +104,7 @@ export const ValidationErrors = {
   }),
   INVALID_PHONE_NEW_SAME_AS_OLD: makeError({
     identifier: 'INVALID_PHONE_NEW_SAME_AS_OLD',
-    message:
-      'The new phone number must be different from the old phone number.',
+    message: 'The new phone number must be different from the old phone number.',
     statusCode: 409,
   }),
   INVALID_EMAIL_FORMAT: makeError({

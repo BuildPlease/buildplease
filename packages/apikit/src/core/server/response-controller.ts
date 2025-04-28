@@ -9,11 +9,7 @@ import type { JSONHttpResponse, FileHttpResponse } from '#/http';
 import { type HttpResponse, type HttpHeaders, ResponseType } from '#/http';
 
 export interface ResponseController {
-  sendResponse(
-    request: FastifyRequest,
-    reply: FastifyReply,
-    response: HttpResponse,
-  ): Promise<void>;
+  sendResponse(request: FastifyRequest, reply: FastifyReply, response: HttpResponse): Promise<void>;
 }
 
 @injectable()
@@ -30,17 +26,9 @@ export class ResponseControllerImpl implements ResponseController {
   ): Promise<void> {
     switch (response.responseType) {
       case ResponseType.JSON:
-        return await this.sendJSONResponse(
-          request,
-          reply,
-          response as JSONHttpResponse,
-        );
+        return await this.sendJSONResponse(request, reply, response as JSONHttpResponse);
       case ResponseType.File:
-        return await this.sendFileResponse(
-          request,
-          reply,
-          response as FileHttpResponse,
-        );
+        return await this.sendFileResponse(request, reply, response as FileHttpResponse);
       default:
         throw new Error('Unsupported response type');
     }

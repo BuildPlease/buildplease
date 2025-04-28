@@ -7,19 +7,12 @@ import type { FastifyPluginAsync } from 'fastify';
 
 import type { ServerPluginOptions } from '#/server';
 
-const staticFilesPlugin: FastifyPluginAsync<ServerPluginOptions> = async (
-  fastify,
-  options,
-) => {
+const staticFilesPlugin: FastifyPluginAsync<ServerPluginOptions> = async (fastify, options) => {
   const __filename = fileURLToPath(import.meta.url);
   const __dirname = dirname(__filename);
   const configuration = options.apikitController.server.staticFiles ?? {};
 
-  const {
-    directory = 'public',
-    routePrefix = '/',
-    maxAge = 3600,
-  } = configuration;
+  const { directory = 'public', routePrefix = '/', maxAge = 3600 } = configuration;
 
   const pluginOptions: FastifyStaticOptions = {
     root: resolve(__dirname, directory),

@@ -10,13 +10,7 @@ export abstract class HttpResponse {
   readonly headers?: HttpHeaders;
   abstract readonly responseType: ResponseType;
 
-  constructor({
-    statusCode,
-    headers,
-  }: {
-    statusCode: number;
-    headers?: HttpHeaders;
-  }) {
+  constructor({ statusCode, headers }: { statusCode: number; headers?: HttpHeaders }) {
     this.statusCode = statusCode;
     this.headers = headers;
   }

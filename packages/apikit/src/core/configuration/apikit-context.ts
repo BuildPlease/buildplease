@@ -62,9 +62,7 @@ export async function makeApikitContext({
     emailConfig,
   };
 
-  log.success(
-    `\n🚀 ApiKit context created for '${process.env.NODE_ENV}' environment`,
-  );
+  log.success(`\n🚀 ApiKit context created for '${process.env.NODE_ENV}' environment`);
 }
 
 /**
@@ -88,9 +86,7 @@ async function initializeEnvironment(
   );
 
   if (!fs.existsSync(environmentFilePath)) {
-    throw new Error(
-      `Environment file "${environmentFilePath}" does not exist.`,
-    );
+    throw new Error(`Environment file "${environmentFilePath}" does not exist.`);
   }
 
   dotenvx.config({ path: environmentFilePath });
@@ -110,10 +106,7 @@ async function initializeEnvironment(
  *
  * @throws Error if the server configuration is missing for the environment.
  */
-async function initializeEmail(
-  config: ApiKitConfig,
-  env: EnvironmentConfig,
-): Promise<EmailConfig> {
+async function initializeEmail(config: ApiKitConfig, env: EnvironmentConfig): Promise<EmailConfig> {
   const emailConfig = config.email[env.name];
   if (!emailConfig) {
     throw new Error(`Missing email configuration for "${env.name}"`);

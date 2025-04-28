@@ -7,10 +7,7 @@ import bcrypt from 'bcrypt';
  * @param salt - The number of salt rounds to use. Default is 10.
  * @returns A promise that resolves to the hashed string.
  */
-export async function makeHash(
-  input: string,
-  salt: number = 10,
-): Promise<string> {
+export async function makeHash(input: string, salt: number = 10): Promise<string> {
   return bcrypt.hash(input, salt);
 }
 
@@ -21,9 +18,6 @@ export async function makeHash(
  * @param hashed - The hashed string to compare against.
  * @returns A promise that resolves to a boolean indicating if the candidate matches the hash.
  */
-export async function compareHash(
-  candidate: string,
-  hashed: string,
-): Promise<boolean> {
+export async function compareHash(candidate: string, hashed: string): Promise<boolean> {
   return bcrypt.compare(candidate, hashed);
 }

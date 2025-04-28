@@ -8,10 +8,7 @@ import type { Zodi18nNuxtContext } from '../context';
  * Throws errors if validation fails.
  * @returns NuxtI18nOptions.
  */
-export function prepareValidation(
-  { logger }: Zodi18nNuxtContext,
-  nuxt: Nuxt,
-): NuxtI18nOptions {
+export function prepareValidation({ logger }: Zodi18nNuxtContext, nuxt: Nuxt): NuxtI18nOptions {
   let i18nOptions: NuxtI18nOptions = {} as NuxtI18nOptions;
 
   // Check if @nuxtjs/i18n is installed

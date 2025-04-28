@@ -1,9 +1,4 @@
-import type {
-  EnvironmentConfig,
-  EmailConfig,
-  LoggerConfig,
-  ServerConfig,
-} from './';
+import type { EnvironmentConfig, EmailConfig, LoggerConfig, ServerConfig } from './';
 
 /**
  * Configuration options for the Meowv API Kit.

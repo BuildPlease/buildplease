@@ -5,9 +5,7 @@
  * @param {string | null | undefined} value - The string to transform.
  * @returns {string | null} - Returns `null` if the input is an empty string or undefined, otherwise returns the input string.
  */
-export function emptyOrUndefinedStringToNull(
-  value: string | null | undefined,
-): string | null {
+export function emptyOrUndefinedStringToNull(value: string | null | undefined): string | null {
   return value === '' || value === undefined ? null : value;
 }
 

@@ -49,16 +49,11 @@ export class SchemaControllerImpl implements SchemaController {
     );
   }
 
-  private constructExamples(
-    examples: Record<string, SchemaExample>,
-  ): Record<string, any> {
-    return Object.entries(examples).reduce<Record<string, any>>(
-      (acc, [key, example]) => {
-        acc[key] = { summary: example.summary, value: example.value };
-        return acc;
-      },
-      {},
-    );
+  private constructExamples(examples: Record<string, SchemaExample>): Record<string, any> {
+    return Object.entries(examples).reduce<Record<string, any>>((acc, [key, example]) => {
+      acc[key] = { summary: example.summary, value: example.value };
+      return acc;
+    }, {});
   }
 
   private constructHeaders(headers: SchemaHeaders): SchemaHeaders {

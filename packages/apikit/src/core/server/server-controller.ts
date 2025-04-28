@@ -15,8 +15,7 @@ export interface ServerPluginBaseOptions {
   apikitController: ApiKitController;
 }
 
-export type ServerPluginOptions<TExtras extends object = {}> =
-  ServerPluginBaseOptions & TExtras;
+export type ServerPluginOptions<TExtras extends object = {}> = ServerPluginBaseOptions & TExtras;
 
 export interface ServerController {
   get instance(): FastifyInstance;
@@ -98,8 +97,7 @@ export class ServerControllerImpl implements ServerController {
         const statusCode = error.statusCode || 500;
         reply.status(statusCode).send({
           statusCode: statusCode,
-          identifier:
-            error.code || error.name || internalServerError.identifier,
+          identifier: error.code || error.name || internalServerError.identifier,
           message: error.message || internalServerError.message,
         });
       };
@@ -126,12 +124,10 @@ export class ServerControllerImpl implements ServerController {
       process.exit();
     };
 
-    ['SIGINT', 'SIGTERM', 'uncaughtException', 'unhandledRejection'].forEach(
-      (event) => {
-        process.on(event, async (err) => {
-          await shutdown(event, err);
-        });
-      },
-    );
+    ['SIGINT', 'SIGTERM', 'uncaughtException', 'unhandledRejection'].forEach((event) => {
+      process.on(event, async (err) => {
+        await shutdown(event, err);
+      });
+    });
   }
 }

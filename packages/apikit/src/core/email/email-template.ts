@@ -17,9 +17,7 @@ export interface EmailTemplate<T = object> {
  *
  * @template T - Type of the data passed to the template.
  */
-export abstract class BaseEmailTemplate<T extends object>
-  implements EmailTemplate<T>
-{
+export abstract class BaseEmailTemplate<T extends object> implements EmailTemplate<T> {
   recipient: string;
   sender?: string;
   replyTo?: string;

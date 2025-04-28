@@ -8,14 +8,8 @@ import { ApiErrorCodes } from '#/error';
 export interface ValidationController {
   isValidEmail(email?: string | null): boolean;
   isValidEmailThrowing(email?: string | null): void;
-  isValidPhoneNumber(
-    phoneNumber?: string | null,
-    countryCode?: string,
-  ): boolean;
-  isValidPhoneNumberThrowing(
-    phoneNumber?: string | null,
-    countryCode?: string,
-  ): void;
+  isValidPhoneNumber(phoneNumber?: string | null, countryCode?: string): boolean;
+  isValidPhoneNumberThrowing(phoneNumber?: string | null, countryCode?: string): void;
   isValidCode(code?: string | null): boolean;
   isValidCodeThrowing(code?: string | null): void;
   isEmail(input?: string | null): boolean;
@@ -46,19 +40,13 @@ export class ValidationControllerImpl implements ValidationController {
     }
   }
 
-  isValidPhoneNumber(
-    phoneNumber?: string | null,
-    countryCode?: string,
-  ): boolean {
+  isValidPhoneNumber(phoneNumber?: string | null, countryCode?: string): boolean {
     if (!phoneNumber) return false;
 
     let parsedPhoneNumber;
 
     if (countryCode) {
-      parsedPhoneNumber = parsePhoneNumberFromString(
-        phoneNumber,
-        countryCode as CountryCode,
-      );
+      parsedPhoneNumber = parsePhoneNumberFromString(phoneNumber, countryCode as CountryCode);
     } else {
       parsedPhoneNumber = parsePhoneNumberFromString(phoneNumber);
     }
@@ -66,10 +54,7 @@ export class ValidationControllerImpl implements ValidationController {
     return !!parsedPhoneNumber?.isValid();
   }
 
-  isValidPhoneNumberThrowing(
-    phoneNumber?: string | null,
-    countryCode?: string,
-  ): void {
+  isValidPhoneNumberThrowing(phoneNumber?: string | null, countryCode?: string): void {
     if (!this.isValidPhoneNumber(phoneNumber, countryCode)) {
       throw ApiErrorCodes.Validation.INVALID_PHONE_NUMBER_FORMAT();
     }
@@ -81,9 +66,7 @@ export class ValidationControllerImpl implements ValidationController {
 
   isValidCodeThrowing(code?: string | null): void {
     if (!this.isValidCode(code)) {
-      throw ApiErrorCodes.Validation.INVALID_FORMAT(
-        'Input is not a valid code',
-      );
+      throw ApiErrorCodes.Validation.INVALID_FORMAT('Input is not a valid code');
     }
   }
 
@@ -113,9 +96,7 @@ export class ValidationControllerImpl implements ValidationController {
 
   isNumberThrowing(input?: any): void {
     if (!this.isNumber(input)) {
-      throw ApiErrorCodes.Validation.INVALID_PROPERTIES(
-        'Input is not a valid number',
-      );
+      throw ApiErrorCodes.Validation.INVALID_PROPERTIES('Input is not a valid number');
     }
   }
 
@@ -125,9 +106,7 @@ export class ValidationControllerImpl implements ValidationController {
 
   isStringThrowing(input?: string | null): void {
     if (!this.isString(input)) {
-      throw ApiErrorCodes.Validation.INVALID_PROPERTIES(
-        'Input is not a valid string',
-      );
+      throw ApiErrorCodes.Validation.INVALID_PROPERTIES('Input is not a valid string');
     }
   }
 
@@ -137,9 +116,7 @@ export class ValidationControllerImpl implements ValidationController {
 
   isEmptyStringThrowing(input?: string | null): void {
     if (!this.isEmptyString(input)) {
-      throw ApiErrorCodes.Validation.INVALID_PROPERTIES(
-        'Input is not an empty string',
-      );
+      throw ApiErrorCodes.Validation.INVALID_PROPERTIES('Input is not an empty string');
     }
   }
 
@@ -151,9 +128,7 @@ export class ValidationControllerImpl implements ValidationController {
     const validatedInput = input;
 
     if (typeof validatedInput !== 'string' || validatedInput.trim() === '') {
-      throw ApiErrorCodes.Validation.INVALID_PROPERTIES(
-        'Input is empty or not a string',
-      );
+      throw ApiErrorCodes.Validation.INVALID_PROPERTIES('Input is empty or not a string');
     }
 
     return validatedInput;

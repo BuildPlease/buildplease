@@ -7,12 +7,8 @@ import { type LoginController, LoginControllerImpl } from './login-controller';
 
 export class LoginAssembly {
   public assemble(container: Container): void {
-    container
-      .bind<LoginViewModel>(Symbols.DI.Feature.Login.ViewModel)
-      .to(LoginViewModel);
+    container.bind<LoginViewModel>(Symbols.DI.Feature.Login.ViewModel).to(LoginViewModel);
 
-    container
-      .bind<LoginController>(Symbols.DI.Feature.Login.Controller)
-      .to(LoginControllerImpl);
+    container.bind<LoginController>(Symbols.DI.Feature.Login.Controller).to(LoginControllerImpl);
   }
 }

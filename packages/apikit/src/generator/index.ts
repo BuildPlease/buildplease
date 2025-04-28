@@ -10,9 +10,7 @@ import type { ApiKitConfig } from '#/configuration';
  */
 export async function generate(config: ApiKitConfig): Promise<void> {
   const defaultOutputPath = '.apikit';
-  const outputPath = await prepareGeneratedDirectory(
-    config.outDir ?? defaultOutputPath,
-  );
+  const outputPath = await prepareGeneratedDirectory(config.outDir ?? defaultOutputPath);
   const generatedFiles: string[] = [];
 
   const generatorMethods = [generateEnvironment];
@@ -33,9 +31,7 @@ async function prepareGeneratedDirectory(outDir: string): Promise<string> {
 
   if (fs.existsSync(outputPath)) {
     if (!fs.lstatSync(outputPath).isDirectory()) {
-      throw new Error(
-        `Output path ${outputPath} exists but is not a directory`,
-      );
+      throw new Error(`Output path ${outputPath} exists but is not a directory`);
     }
     fs.rmSync(outputPath, {
       recursive: true,
@@ -53,13 +49,8 @@ async function prepareGeneratedDirectory(outDir: string): Promise<string> {
   return outputPath;
 }
 
-async function generateBarrelExport(
-  outputPath: string,
-  generatedFiles: string[],
-) {
-  const exportStatements = generatedFiles
-    .map((file) => `export * from './${file}';`)
-    .join('\n');
+async function generateBarrelExport(outputPath: string, generatedFiles: string[]) {
+  const exportStatements = generatedFiles.map((file) => `export * from './${file}';`).join('\n');
 
   await writeGeneratedFile(outputPath, 'index.ts', exportStatements);
 }

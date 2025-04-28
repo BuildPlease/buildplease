@@ -45,25 +45,17 @@ export class LoggerControllerImpl implements LoggerController {
     this.logger = pino(transport);
   }
 
-  private createTransports(
-    userTransports: TransportOptions[],
-  ): pino.TransportTargetOptions[] {
+  private createTransports(userTransports: TransportOptions[]): pino.TransportTargetOptions[] {
     const transports: pino.TransportTargetOptions[] = [];
 
     userTransports.forEach((transportConfig) => {
       const type = transportConfig.type;
       switch (type) {
         case 'console':
-          transports.push(
-            this.createConsoleTransport(
-              transportConfig as ConsoleTransportOptions,
-            ),
-          );
+          transports.push(this.createConsoleTransport(transportConfig as ConsoleTransportOptions));
           break;
         case 'file':
-          transports.push(
-            this.createFileTransport(transportConfig as FileTransportOptions),
-          );
+          transports.push(this.createFileTransport(transportConfig as FileTransportOptions));
           break;
         default:
           throw new Error(`Unsupported transport type: ${type}`);
@@ -73,9 +65,7 @@ export class LoggerControllerImpl implements LoggerController {
     return transports;
   }
 
-  private createConsoleTransport(
-    config: ConsoleTransportOptions,
-  ): pino.TransportTargetOptions {
+  private createConsoleTransport(config: ConsoleTransportOptions): pino.TransportTargetOptions {
     const transportOptions: Record<string, any> = {
       level: config.level,
       timestamp: config.timestamp,
@@ -83,8 +73,7 @@ export class LoggerControllerImpl implements LoggerController {
 
     if (config.target === 'pino-pretty') {
       transportOptions.colorize = config.pretty?.colorize ?? true;
-      transportOptions.translateTime =
-        config.pretty?.translateTime ?? 'SYS:standard';
+      transportOptions.translateTime = config.pretty?.translateTime ?? 'SYS:standard';
       transportOptions.levelFirst = config.pretty?.levelFirst ?? false;
       transportOptions.ignore = config.pretty?.ignore ?? 'pid,hostname';
     }
@@ -98,9 +87,7 @@ export class LoggerControllerImpl implements LoggerController {
     };
   }
 
-  private createFileTransport(
-    config: FileTransportOptions,
-  ): pino.TransportTargetOptions {
+  private createFileTransport(config: FileTransportOptions): pino.TransportTargetOptions {
     const logPath = this.makeLogPath(config.logFilePath);
 
     const transportOptions = {
@@ -126,9 +113,7 @@ export class LoggerControllerImpl implements LoggerController {
       }
       return path.resolve(loggerPath);
     } catch (error) {
-      throw new Error(
-        `Failed to access or create logger directory at ${loggerPath}: ${error}`,
-      );
+      throw new Error(`Failed to access or create logger directory at ${loggerPath}: ${error}`);
     }
   }
 
@@ -200,9 +185,7 @@ export class LoggerControllerImpl implements LoggerController {
     if (typeof error === 'object' && error !== null) {
       return {
         ...error,
-        message:
-          (error as { message?: string }).message ||
-          'No specific error message provided',
+        message: (error as { message?: string }).message || 'No specific error message provided',
       };
     }
 

@@ -20,12 +20,7 @@ export interface ServerConfig {
    * @see https://www.fastify.io/docs/latest/Reference/Server/#trustproxy
    * @default false
    */
-  trustProxy?:
-    | boolean
-    | string
-    | number
-    | string[]
-    | ((address: string, hop: number) => boolean);
+  trustProxy?: boolean | string | number | string[] | ((address: string, hop: number) => boolean);
 
   /**
    * Static files configuration

@@ -1,11 +1,7 @@
 import { injectable } from 'inversify';
 import type { ZodSchema } from 'zod';
 
-import type {
-  ValidationResult,
-  ValidationIssues,
-  ValidationIssue,
-} from '@/validation';
+import type { ValidationResult, ValidationIssues, ValidationIssue } from '@/validation';
 
 export interface SchemaValidationController {
   validate<TInput, TOutput>(
@@ -15,9 +11,7 @@ export interface SchemaValidationController {
 }
 
 @injectable()
-export class SchemaValidationControllerImpl
-  implements SchemaValidationController
-{
+export class SchemaValidationControllerImpl implements SchemaValidationController {
   async validate<TInput, TOutput>(
     schema: ZodSchema<TOutput, any, unknown>,
     data: TInput,

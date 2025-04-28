@@ -10,10 +10,7 @@ export interface ApiErrorProperties {
  * Custom Api Error class that extends the built-in Error class
  * to include error codes and status codes.
  */
-export class ApiError
-  extends Error
-  implements ApiErrorProperties, JSONSerializable
-{
+export class ApiError extends Error implements ApiErrorProperties, JSONSerializable {
   private _identifier: string;
   private _statusCode: number;
 

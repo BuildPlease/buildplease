@@ -84,13 +84,7 @@ export type GeoJsonTypes = Geometry['type'];
  * Geometry object.
  * https://tools.ietf.org/html/rfc7946#section-3
  */
-export type Geometry =
-  | Point
-  | MultiPoint
-  | LineString
-  | MultiLineString
-  | Polygon
-  | MultiPolygon;
+export type Geometry = Point | MultiPoint | LineString | MultiLineString | Polygon | MultiPolygon;
 
 /**
  * Point geometry object.
@@ -145,9 +139,7 @@ export class MultiPoint implements GeoJsonObject, JSONSerializable {
 
   public static make(coordinates: any): MultiPoint | null {
     return ignoreError(() =>
-      coordinates.map(
-        (coord: any) => new Coordinates(coord as [number, number]),
-      ),
+      coordinates.map((coord: any) => new Coordinates(coord as [number, number])),
     )
       .map((coords) => new MultiPoint(coords))
       .orDefault(null);
@@ -178,9 +170,7 @@ export class LineString implements GeoJsonObject, JSONSerializable {
 
   public static make(coordinates: any): LineString | null {
     return ignoreError(() =>
-      coordinates.map(
-        (coord: any) => new Coordinates(coord as [number, number]),
-      ),
+      coordinates.map((coord: any) => new Coordinates(coord as [number, number])),
     )
       .map((coords) => new LineString(coords))
       .orDefault(null);
@@ -204,9 +194,7 @@ export class MultiLineString implements GeoJsonObject, JSONSerializable {
   public toJSON(): any {
     return {
       type: this.type,
-      coordinates: this.coordinates.map((line) =>
-        line.map((coord) => coord.value),
-      ),
+      coordinates: this.coordinates.map((line) => line.map((coord) => coord.value)),
       ...(this.bbox && { bbox: this.bbox }),
     };
   }
@@ -239,9 +227,7 @@ export class Polygon implements GeoJsonObject, JSONSerializable {
   public toJSON(): any {
     return {
       type: this.type,
-      coordinates: this.coordinates.map((ring) =>
-        ring.map((coord) => coord.value),
-      ),
+      coordinates: this.coordinates.map((ring) => ring.map((coord) => coord.value)),
       ...(this.bbox && { bbox: this.bbox }),
     };
   }

@@ -10,12 +10,11 @@ import type {
 
 // MARK: - Main
 
-type EnvironmentNames<T extends readonly EnvironmentConfig[]> =
-  T extends readonly (infer U)[]
-    ? U extends EnvironmentConfig
-      ? U['name']
-      : never
-    : never;
+type EnvironmentNames<T extends readonly EnvironmentConfig[]> = T extends readonly (infer U)[]
+  ? U extends EnvironmentConfig
+    ? U['name']
+    : never
+  : never;
 
 interface ApiKitConfigInput<Environments extends readonly EnvironmentConfig[]> {
   outDir?: string;
@@ -25,9 +24,9 @@ interface ApiKitConfigInput<Environments extends readonly EnvironmentConfig[]> {
   email: { [K in EnvironmentNames<Environments>]: EmailConfig };
 }
 
-export function defineApikitConfig<
-  const Environments extends readonly EnvironmentConfig[],
->(config: ApiKitConfigInput<Environments>): ApiKitConfig {
+export function defineApikitConfig<const Environments extends readonly EnvironmentConfig[]>(
+  config: ApiKitConfigInput<Environments>,
+): ApiKitConfig {
   // MARK: - Validate environments
   if (!config.environments?.length) {
     throw new Error(`At least one environment must be defined.`);
@@ -35,9 +34,7 @@ export function defineApikitConfig<
 
   config.environments.forEach((env) => {
     if (!env.file) {
-      throw new Error(
-        `Invalid configuration for environment "${env.name}". "file" is mandatory.`,
-      );
+      throw new Error(`Invalid configuration for environment "${env.name}". "file" is mandatory.`);
     }
   });
 

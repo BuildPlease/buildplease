@@ -75,9 +75,7 @@ export function isObject(value: unknown): value is object {
  * @param {T | null | undefined} value - The value to check.
  * @returns {value is T} - True if the value is an empty object, false otherwise.
  */
-export function isEmptyObject<T extends object>(
-  value: T | null | undefined,
-): value is T {
+export function isEmptyObject<T extends object>(value: T | null | undefined): value is T {
   return isObject(value) && Object.keys(value).length === 0;
 }
 
@@ -88,9 +86,7 @@ export function isEmptyObject<T extends object>(
  * @param {T | null | undefined} value - The value to check.
  * @returns {value is T} - True if the value is a non-empty object, false otherwise.
  */
-export function isNonEmptyObject<T extends object>(
-  value: T | null | undefined,
-): value is T {
+export function isNonEmptyObject<T extends object>(value: T | null | undefined): value is T {
   return isObject(value) && Object.keys(value).length > 0;
 }
 

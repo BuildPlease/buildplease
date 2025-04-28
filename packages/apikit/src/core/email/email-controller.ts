@@ -49,11 +49,11 @@ export class EmailControllerImpl implements EmailController {
   }
 
   async sendEmail(template: EmailTemplate): Promise<void> {
-    if (!this.isEnabled) {
-      throw new Error('Email sending is disabled.');
-    }
-
     try {
+      if (!this.isEnabled) {
+        throw new Error('Email sending is disabled.');
+      }
+
       const transporter = this.getOrCreateTransporter();
       const recipient = template.recipient;
       const sender = template.sender || this.smtpConfig.sender;
@@ -93,13 +93,8 @@ export class EmailControllerImpl implements EmailController {
   }
 
   private async renderTemplate<T>(template: EmailTemplate<T>): Promise<string> {
-    const sanitizedTemplatePath = this.sanitizeTemplatePath(
-      template.templatePath,
-    );
-    const templateFullPath = path.join(
-      this.templatesPath,
-      sanitizedTemplatePath,
-    );
+    const sanitizedTemplatePath = this.sanitizeTemplatePath(template.templatePath);
+    const templateFullPath = path.join(this.templatesPath, sanitizedTemplatePath);
 
     if (!existsSync(templateFullPath)) {
       throw new Error(`Email template not found: ${templateFullPath}`);
@@ -119,20 +114,14 @@ export class EmailControllerImpl implements EmailController {
       generic_supportEmail: 'support@peyvee.com',
       generic_copyright: `© ${new Date().getFullYear()} Peyvee.`,
       generic_generatedDate: new Date().toLocaleString(),
+      generic_logoUrl: 'https://www.peyvee.com/wp-content/uploads/2024/07/peyvee-logo-site.png',
     };
   }
 
   private validateSmtpConfig() {
-    const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASSWORD, SMTP_SENDER } =
-      process.env;
+    const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASSWORD, SMTP_SENDER } = process.env;
 
-    if (
-      !SMTP_HOST ||
-      !SMTP_PORT ||
-      !SMTP_USER ||
-      !SMTP_PASSWORD ||
-      !SMTP_SENDER
-    ) {
+    if (!SMTP_HOST || !SMTP_PORT || !SMTP_USER || !SMTP_PASSWORD || !SMTP_SENDER) {
       throw new Error(
         'SMTP configuration is incomplete. Required: SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASSWORD, SMTP_SENDER',
       );

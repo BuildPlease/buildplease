@@ -6,10 +6,7 @@ import { ignoreError, isNullOrEmpty } from '@nidavellirx/meowv-core';
 import type { HttpMetadata } from '#/http';
 import type { ServerPluginOptions } from '#/server';
 
-const requestMetadataPlugin: FastifyPluginAsync<ServerPluginOptions> = async (
-  fastify,
-  options,
-) => {
+const requestMetadataPlugin: FastifyPluginAsync<ServerPluginOptions> = async (fastify, options) => {
   const logger = options.loggerController;
 
   fastify.addHook('onRequest', async (request) => {
@@ -20,9 +17,7 @@ const requestMetadataPlugin: FastifyPluginAsync<ServerPluginOptions> = async (
       protocol: request.protocol,
       query: request.query,
       params: request.params,
-      ip: !isNullOrEmpty(request.ip)
-        ? request.ip
-        : (request.ips?.[0] ?? request.ip),
+      ip: !isNullOrEmpty(request.ip) ? request.ip : (request.ips?.[0] ?? request.ip),
       headers: request.headers,
     };
 

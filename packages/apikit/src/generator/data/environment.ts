@@ -27,11 +27,7 @@ export async function generateEnvironment(
 
   const environmentFileContent = `${environmentEnum}\n\n${environmentObject}\n`;
 
-  await writeGeneratedFile(
-    outputPath,
-    'environment.ts',
-    environmentFileContent,
-  );
+  await writeGeneratedFile(outputPath, 'environment.ts', environmentFileContent);
 
   return ['environment.ts'];
 }

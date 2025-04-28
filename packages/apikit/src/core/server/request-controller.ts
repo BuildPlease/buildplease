@@ -10,10 +10,7 @@ import { ApiError, ApiErrorCodes } from '#/error';
 import type { ResponseController } from '#/server';
 import { type HttpResponse, JSONHttpResponse } from '#/http';
 
-type HttpReplyPromise = (
-  request: FastifyRequest,
-  options: object,
-) => Promise<HttpResponse>;
+type HttpReplyPromise = (request: FastifyRequest, options: object) => Promise<HttpResponse>;
 type HttpOrVoidReplyPromise = (
   request: FastifyRequest,
   options?: object,
@@ -43,11 +40,7 @@ export class RequestControllerImpl implements RequestController {
     return async (request: FastifyRequest, reply: FastifyReply) => {
       try {
         const response = await controllerFn(request, options);
-        return await this.responseController.sendResponse(
-          request,
-          reply,
-          response,
-        );
+        return await this.responseController.sendResponse(request, reply, response);
       } catch (error) {
         return this.handleError(request, reply, error);
       }
@@ -59,11 +52,7 @@ export class RequestControllerImpl implements RequestController {
       try {
         const response = await controllerFn(request, options);
         if (response) {
-          return await this.responseController.sendResponse(
-            request,
-            reply,
-            response,
-          );
+          return await this.responseController.sendResponse(request, reply, response);
         }
       } catch (error) {
         return this.handleError(request, reply, error);

@@ -57,10 +57,7 @@ export class RemoteResource<
     return new Error('An unexpected error occurred');
   }
 
-  private getNestedProperty<T = unknown>(
-    obj: unknown,
-    path: string,
-  ): T | undefined {
+  private getNestedProperty<T = unknown>(obj: unknown, path: string): T | undefined {
     return path.split('.').reduce((acc, key) => {
       if (acc && typeof acc === 'object') {
         return (acc as any)[key];

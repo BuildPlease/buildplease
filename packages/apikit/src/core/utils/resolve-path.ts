@@ -9,9 +9,7 @@ import path from 'node:path';
  * @returns Absolute resolved path.
  */
 export function resolvePath(base: string, relativePath: string): string {
-  const basePath = base.startsWith('file://')
-    ? path.dirname(fileURLToPath(base))
-    : base;
+  const basePath = base.startsWith('file://') ? path.dirname(fileURLToPath(base)) : base;
 
   return path.resolve(basePath, relativePath);
 }

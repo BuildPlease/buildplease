@@ -6,10 +6,7 @@ export interface LoginController extends Controller {
 }
 
 @injectable()
-export class LoginControllerImpl
-  extends ControllerImpl
-  implements LoginController
-{
+export class LoginControllerImpl extends ControllerImpl implements LoginController {
   constructor() {
     super();
   }
