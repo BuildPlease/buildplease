@@ -36,18 +36,28 @@ export class Formatter<T> {
   }
 
   /**
-   * Filters the value based on provided predicate.
-   * @param {Function} predicate - The predicate function.
+   * Filters the value recursively based on the provided predicate.
+   * Removes undefined, null, or unwanted fields deeply from objects and arrays.
+   *
+   * @param {Function} predicate - A predicate function to determine if a value should be kept. Defaults to checking for `!== undefined`.
    * @returns {this} - Returns the Formatter instance for chaining.
    */
   filter(predicate: (value: any) => boolean = (value) => value !== undefined): this {
-    if (typeof this.value === 'object' && this.value !== null) {
-      this.value = Object.fromEntries(
-        Object.entries(this.value).filter(([_, value]) => predicate(value)),
-      ) as unknown as T;
-    } else if (!predicate(this.value)) {
-      this.value = undefined as unknown as T;
-    }
+    const deepFilter = (obj: any): any => {
+      if (Array.isArray(obj)) {
+        const filteredArray = obj.map(deepFilter).filter(predicate);
+        return filteredArray.length > 0 ? filteredArray : undefined;
+      } else if (typeof obj === 'object' && obj !== null) {
+        const entries = Object.entries(obj)
+          .map(([key, value]) => [key, deepFilter(value)] as const)
+          .filter(([_, value]) => predicate(value));
+        return entries.length > 0 ? Object.fromEntries(entries) : undefined;
+      } else {
+        return predicate(obj) ? obj : undefined;
+      }
+    };
+
+    this.value = deepFilter(this.value) as unknown as T;
     return this;
   }
 
