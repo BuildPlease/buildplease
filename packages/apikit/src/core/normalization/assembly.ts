@@ -8,7 +8,6 @@ export class NormalizationAssembly implements Assembly {
   public assemble(container: Container): void {
     container
       .bind<NormalizationController>(ApiKitSymbols.DI.Normalization.Controller)
-      .to(NormalizationControllerImpl)
-      .inSingletonScope();
+      .to(NormalizationControllerImpl);
   }
 }

@@ -1,4 +1,5 @@
 export * from './configuration';
+export * from './database';
 export * from './di';
 export * from './email';
 export * from './error';

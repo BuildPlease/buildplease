@@ -8,7 +8,6 @@ export class SecurityAssembly implements Assembly {
   public assemble(container: Container): void {
     container
       .bind<SecurityController>(ApiKitSymbols.DI.Security.Controller)
-      .to(SecurityControllerImpl)
-      .inSingletonScope();
+      .to(SecurityControllerImpl);
   }
 }

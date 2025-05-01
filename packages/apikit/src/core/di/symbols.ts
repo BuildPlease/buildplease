@@ -4,6 +4,12 @@ const Configuration = {
   Controller: Symbol.for(`${prefix}.Configuration.Controller`),
 };
 
+const Database = {
+  MongoDB: {
+    QueryFormatter: Symbol.for(`${prefix}.Database.MongoDB.QueryFormatter`),
+  },
+};
+
 const Email = {
   Controller: Symbol.for(`${prefix}.Email.Controller`),
 };
@@ -42,6 +48,7 @@ const Security = {
 export const ApiKitSymbols = {
   DI: {
     Configuration,
+    Database,
     Email,
     Validation,
     Schema,

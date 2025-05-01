@@ -4,6 +4,7 @@ import { type Assembly, MEOWV_CORE_INITIALIZE } from '@nidavellirx/meowv-core';
 
 import {
   ConfigurationAssembly,
+  DatabaseAssembly,
   EmailAssembly,
   FormatterAssembly,
   LoggerAssembly,
@@ -31,6 +32,7 @@ export function MEOWV_APIKIT_INITIALIZE(): Assembly[] {
 function makeAssemblies(): Assembly[] {
   return [
     new ConfigurationAssembly(),
+    new DatabaseAssembly(),
     new EmailAssembly(),
     new FormatterAssembly(),
     new LoggerAssembly(),

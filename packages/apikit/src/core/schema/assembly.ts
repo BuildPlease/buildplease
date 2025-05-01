@@ -6,9 +6,6 @@ import { type SchemaController, SchemaControllerImpl } from '#/schema';
 
 export class SchemaAssembly implements Assembly {
   public assemble(container: Container): void {
-    container
-      .bind<SchemaController>(ApiKitSymbols.DI.Schema.Controller)
-      .to(SchemaControllerImpl)
-      .inSingletonScope();
+    container.bind<SchemaController>(ApiKitSymbols.DI.Schema.Controller).to(SchemaControllerImpl);
   }
 }
