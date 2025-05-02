@@ -19,6 +19,7 @@ export type ServerPluginOptions<TExtras extends object = {}> = ServerPluginBaseO
 
 export interface ServerController {
   get instance(): FastifyInstance;
+  preparePlugins(registerExternal?: (instance: FastifyInstance) => Promise<void>): Promise<void>;
   prepare(): Promise<void>;
   start(): Promise<void>;
 }
@@ -52,9 +53,23 @@ export class ServerControllerImpl implements ServerController {
     return this.server;
   }
 
+  public async preparePlugins(
+    registerExternal: (instance: FastifyInstance) => Promise<void> = async () => {},
+  ): Promise<void> {
+    const options: ServerPluginOptions = {
+      loggerController: this.logger,
+      apikitController: this.configuration,
+    };
+
+    await registerExternal(this.server);
+
+    for (const plugin of Object.values(Plugins)) {
+      await this.server.register(plugin, options);
+    }
+  }
+
   public async prepare(): Promise<void> {
     await this.configureErrorHandler();
-    await this.configurePlugins();
   }
 
   public async start(): Promise<void> {
