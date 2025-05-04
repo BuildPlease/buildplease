@@ -8,10 +8,9 @@ import ejs from 'ejs';
 
 import { ApiKitSymbols } from '#/di';
 import { resolvePath } from '#/utils';
-
 import type { EmailTemplate } from '#/email';
-import type { ApiKitController } from '#/configuration';
 import type { LoggerController } from '#/logger';
+import type { ApiKitController } from '#/configuration';
 
 export interface EmailController {
   sendEmail(template: EmailTemplate): Promise<void>;

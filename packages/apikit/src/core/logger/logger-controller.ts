@@ -8,7 +8,6 @@ import pino from 'pino';
 import { filterObject, isEmptyObject } from '@nidavellirx/meowv-core';
 
 import { ApiKitSymbols } from '#/di';
-
 import type {
   ApiKitController,
   TransportOptions,

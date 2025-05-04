@@ -2,7 +2,6 @@ import type { Container } from 'inversify';
 import type { Assembly } from '@nidavellirx/meowv-core';
 
 import { ApiKitSymbols } from '#/di';
-
 import {
   type ValidationController,
   ValidationControllerImpl,
