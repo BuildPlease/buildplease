@@ -66,12 +66,12 @@ export class RequestControllerImpl implements RequestController {
     if (isApiError) {
       this.logger.info('Api Error Response', {
         error: { id: error.identifier, message: error.message },
-        metadata: { reqId: request.metadata.reqId },
+        metadata: { requestId: request.metadata.reqId },
       });
     } else {
       this.logger.error('Unexpected Error', {
         error: error,
-        metadata: { reqId: request.metadata.reqId },
+        metadata: { requestId: request.metadata.reqId },
       });
     }
   }
@@ -90,18 +90,17 @@ export class RequestControllerImpl implements RequestController {
     reply: FastifyReply,
     error: Error | unknown,
   ) {
+    const internalServerError = ApiErrorCodes.Server.INTERNAL_SERVER_ERROR();
     const isApiError = error instanceof ApiError;
 
-    const statusCode = isApiError ? error.statusCode : 500;
-    const responseMessage = isApiError ? error.message : 'Something went wrong';
-    const responseIdentifier = isApiError
-      ? error.identifier
-      : ApiErrorCodes.Server.INTERNAL_SERVER_ERROR().identifier;
+    const statusCode = isApiError ? error.statusCode : internalServerError.statusCode;
+    const responseIdentifier = isApiError ? error.identifier : internalServerError.identifier;
+    const responseMessage = isApiError ? error.message : internalServerError.message;
 
     const data = {
+      statusCode: statusCode,
       identifier: responseIdentifier,
       message: responseMessage,
-      statusCode: statusCode,
     };
 
     const response = new JSONHttpResponse({

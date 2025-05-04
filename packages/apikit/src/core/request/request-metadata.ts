@@ -1,7 +1,7 @@
 import type { HttpHeaders } from '#/http';
 
-export interface HttpMetadata {
-  reqId: string;
+export interface RequestMetadata {
+  requestId: string;
   method: string;
   url: string;
   protocol: string;
@@ -9,4 +9,5 @@ export interface HttpMetadata {
   params: any;
   ip: string;
   headers: HttpHeaders;
+  locale?: string;
 }

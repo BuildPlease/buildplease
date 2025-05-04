@@ -2,7 +2,7 @@ import { inject, injectable } from 'inversify';
 import type { FastifyInstance, FastifyBaseLogger } from 'fastify';
 import Fastify from 'fastify';
 
-import * as Plugins from './plugins';
+import Plugins from './plugins';
 
 import { ApiKitSymbols } from '#/di';
 import type { LoggerController } from '#/logger';
@@ -61,9 +61,18 @@ export class ServerControllerImpl implements ServerController {
       apikitController: this.configuration,
     };
 
+    // MARK: - 1. Core internal plugins (must run before external)
+    const earlyInternalPlugins = [Plugins.cookie, Plugins.ip, Plugins.metadata, Plugins.scope];
+    for (const plugin of earlyInternalPlugins) {
+      await this.server.register(plugin, options);
+    }
+
+    // MARK: - 2. External app-specific plugins (e.g., CORS, Auth, etc.)
     await registerExternal(this.server);
 
-    for (const plugin of Object.values(Plugins)) {
+    // MARK: - 3. UI/static late plugins (can run after external)
+    const lateInternalPlugins = [Plugins.staticFiles, Plugins.view];
+    for (const plugin of lateInternalPlugins) {
       await this.server.register(plugin, options);
     }
   }
@@ -84,49 +93,52 @@ export class ServerControllerImpl implements ServerController {
 
   // MARK: - Private
 
-  private async configurePlugins(): Promise<void> {
-    const options: ServerPluginOptions = {
-      loggerController: this.logger,
-      apikitController: this.configuration,
-    };
-
-    for (const plugin of Object.values(Plugins)) {
-      await this.server.register(plugin, options);
-    }
-  }
-
   private async configureErrorHandler(): Promise<void> {
     this.server.setErrorHandler(async (error, request, reply) => {
+      const isValidationError = Array.isArray(error.validation);
       const isInternalError = !error.statusCode || error.statusCode === 500;
-      const internalServerError = ApiErrorCodes.Server.INTERNAL_SERVER_ERROR();
-
-      const handleInternalError = () => {
-        this.logger.error('Internal Server Error', {
-          metadata: { reqId: request.metadata.reqId },
-          error: error,
-        });
-        reply.status(500).send(internalServerError);
-      };
-
-      const handleCommonError = () => {
-        const statusCode = error.statusCode || 500;
-        reply.status(statusCode).send({
-          statusCode: statusCode,
-          identifier: error.code || error.name || internalServerError.identifier,
-          message: error.message || internalServerError.message,
-        });
-      };
+      const internalError = ApiErrorCodes.Server.INTERNAL_SERVER_ERROR();
 
       const handleApiError = (apiError: ApiError) => {
         reply.status(apiError.statusCode).send(apiError.toJSON());
       };
 
+      const handleValidationError = () => {
+        const validationError = ApiErrorCodes.Validation.BAD_REQUEST();
+        const statusCode = error.statusCode || validationError.statusCode;
+
+        reply.status(statusCode).send({
+          statusCode: statusCode,
+          identifier: validationError.identifier,
+          message: error.message,
+        });
+      };
+
+      const handleInternalError = () => {
+        this.logger.error('Internal Server Error', {
+          metadata: { requestId: request.metadata.reqId },
+          error: error,
+        });
+        reply.status(500).send(internalError);
+      };
+
+      const handleError = () => {
+        const statusCode = error.statusCode || 500;
+        reply.status(statusCode).send({
+          statusCode: statusCode,
+          identifier: error.code || error.name || internalError.identifier,
+          message: error.message || internalError.message,
+        });
+      };
+
       if (error instanceof ApiError) {
         return handleApiError(error);
+      } else if (isValidationError) {
+        return handleValidationError();
       } else if (isInternalError) {
         return handleInternalError();
       } else {
-        return handleCommonError();
+        return handleError();
       }
     });
   }

@@ -8,6 +8,7 @@ export * from './http';
 export * from './logger';
 export * from './normalization';
 export * from './schema';
+export * from './request';
 export * from './security';
 export * from './server';
 export * from './utils';

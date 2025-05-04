@@ -1,5 +1,4 @@
 import validator from 'validator';
-import type { NumberFormat } from 'libphonenumber-js';
 import { parsePhoneNumberWithError } from 'libphonenumber-js';
 import { injectable } from 'inversify';
 
@@ -37,7 +36,7 @@ export class NormalizationControllerImpl implements NormalizationController {
   normalizePhoneToE164(phoneNumber: string): string {
     try {
       const number = parsePhoneNumberWithError(phoneNumber);
-      return number.format('E.164' as NumberFormat);
+      return number.format('E.164');
     } catch {
       throw ApiErrorCodes.Validation.INVALID_PHONE_NUMBER_FORMAT();
     }
@@ -46,7 +45,7 @@ export class NormalizationControllerImpl implements NormalizationController {
   normalizePhoneToInternational(phoneNumber: string): string {
     try {
       const number = parsePhoneNumberWithError(phoneNumber);
-      return number.format('INTERNATIONAL' as NumberFormat);
+      return number.format('INTERNATIONAL');
     } catch {
       throw ApiErrorCodes.Validation.INVALID_PHONE_NUMBER_FORMAT();
     }
@@ -55,7 +54,7 @@ export class NormalizationControllerImpl implements NormalizationController {
   normalizePhoneToNational(phoneNumber: string): string {
     try {
       const number = parsePhoneNumberWithError(phoneNumber);
-      return number.format('NATIONAL' as NumberFormat).replace(/[^\d]/g, '');
+      return number.format('NATIONAL').replace(/[^\d]/g, '');
     } catch {
       throw ApiErrorCodes.Validation.INVALID_PHONE_NUMBER_FORMAT();
     }

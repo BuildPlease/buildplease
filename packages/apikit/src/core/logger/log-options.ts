@@ -1,9 +1,9 @@
 import type { LogFlag } from '#/logger';
-import type { HttpMetadata } from '#/http';
+import type { RequestMetadata } from '#/request';
 
 export interface LogOptions {
   flag?: LogFlag;
   content?: object;
   error?: Error | unknown;
-  metadata?: Partial<HttpMetadata>;
+  metadata?: Partial<RequestMetadata>;
 }

@@ -16,7 +16,7 @@ import type {
   FileTransportOptions,
 } from '#/configuration';
 import type { LogOptions } from '#/logger';
-import type { HttpMetadata } from '#/http';
+import type { RequestMetadata } from '#/request';
 
 export interface LoggerController {
   get instance(): Logger;
@@ -167,7 +167,7 @@ export class LoggerControllerImpl implements LoggerController {
       logObject.error = this.prepareErrorContent(options.error);
     }
     if (options?.metadata) {
-      logObject.metadata = this.prepareHttpMetadata(options.metadata);
+      logObject.metadata = this.prepareMetadata(options.metadata);
     }
 
     this.logger[level]({ msg: title, ...logObject });
@@ -195,22 +195,22 @@ export class LoggerControllerImpl implements LoggerController {
     };
   }
 
-  private prepareHttpMetadata(metadata: Partial<HttpMetadata>): object {
+  private prepareMetadata(metadata: Partial<RequestMetadata>): object {
     const selectedHeaders = {
       accept: metadata.headers?.accept,
-      'accept-language': metadata.headers?.['accept-language'],
       'content-type': metadata.headers?.['content-type'],
       'user-agent': metadata.headers?.['user-agent'],
     };
 
     const input = {
-      reqId: metadata.reqId,
+      reqId: metadata.requestId,
       method: metadata.method,
       url: metadata.url,
       protocol: metadata.protocol,
       query: metadata.query,
       params: metadata.params,
       ip: metadata.ip,
+      locale: metadata.locale,
       headers: selectedHeaders,
     };
 

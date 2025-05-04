@@ -67,6 +67,11 @@ export const AuthorizationErrors = {
 };
 
 export const ValidationErrors = {
+  BAD_REQUEST: makeError({
+    identifier: 'BAD_REQUEST',
+    message: 'The request is invalid.',
+    statusCode: 400,
+  }),
   INVALID_JSON_SYNTAX: makeError({
     identifier: 'JSON_SYNTAX_ERROR',
     message: 'The JSON format is invalid.',
