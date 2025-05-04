@@ -66,12 +66,12 @@ export class RequestControllerImpl implements RequestController {
     if (isApiError) {
       this.logger.info('Api Error Response', {
         error: { id: error.identifier, message: error.message },
-        metadata: { requestId: request.metadata.reqId },
+        metadata: { requestId: request.metadata.requestId },
       });
     } else {
       this.logger.error('Unexpected Error', {
         error: error,
-        metadata: { requestId: request.metadata.reqId },
+        metadata: { requestId: request.metadata.requestId },
       });
     }
   }

@@ -116,7 +116,7 @@ export class ServerControllerImpl implements ServerController {
 
       const handleInternalError = () => {
         this.logger.error('Internal Server Error', {
-          metadata: { requestId: request.metadata.reqId },
+          metadata: { requestId: request.metadata.requestId },
           error: error,
         });
         reply.status(500).send(internalError);

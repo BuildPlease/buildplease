@@ -35,7 +35,7 @@ const requestMetadataPlugin: FastifyPluginAsync<ServerPluginOptions> = async (fa
     await ignoreErrorAsync(async () => {
       logger.info('Sending Response', {
         metadata: {
-          requestId: request.metadata.reqId,
+          requestId: request.metadata.requestId,
         },
         content: {
           elapsedTime: reply.elapsedTime,
