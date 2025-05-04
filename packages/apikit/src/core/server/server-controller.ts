@@ -20,7 +20,7 @@ export type ServerPluginOptions<TExtras extends object = {}> = ServerPluginBaseO
 export interface ServerController {
   get instance(): FastifyInstance;
   preparePlugins(registerExternal?: (instance: FastifyInstance) => Promise<void>): Promise<void>;
-  prepare(): Promise<void>;
+  prepare(shutdownHook?: () => Promise<void>): Promise<void>;
   start(): Promise<void>;
 }
 
@@ -77,14 +77,14 @@ export class ServerControllerImpl implements ServerController {
     }
   }
 
-  public async prepare(): Promise<void> {
+  public async prepare(shutdownHook?: () => Promise<void>): Promise<void> {
     await this.configureErrorHandler();
+    await this.configureShutdownHandler(shutdownHook);
   }
 
   public async start(): Promise<void> {
     const { port, host } = this.configuration.server;
 
-    await this.setupServerHandlers();
     await this.server.ready();
     await this.server.listen({ port: port, host: host });
 
@@ -143,18 +143,45 @@ export class ServerControllerImpl implements ServerController {
     });
   }
 
-  private async setupServerHandlers(): Promise<void> {
-    const shutdown = async (signal: string, reason: string) => {
-      this.logger.warn(`Received ${signal}, shutting down gracefully`);
-      await this.server.close();
-      this.logger.fatal(`Server shutting down due to: ${reason}`);
-      process.exit();
+  private async configureShutdownHandler(hook?: () => Promise<void>): Promise<void> {
+    type ShutdownSignal = NodeJS.Signals;
+    type ShutdownErrorEvent = 'uncaughtException' | 'unhandledRejection';
+    type ShutdownEvent = ShutdownSignal | ShutdownErrorEvent;
+
+    const shutdown = async (reason: ShutdownEvent, error?: unknown) => {
+      this.logger.warn(`⛔ Shutdown: ${reason}`);
+
+      if (hook) {
+        try {
+          await hook();
+        } catch (err) {
+          this.logger.error('⚠️ Shutdown hook failed', { error: err });
+        }
+      }
+
+      try {
+        await this.server.close();
+        this.logger.info('✅ Server closed');
+      } catch (err) {
+        this.logger.error('❌ Server close failed', { error: err });
+      }
+
+      if (error) {
+        this.logger.error('🚨 Fatal error during shutdown', { error });
+      }
+
+      process.exit(error ? 1 : 0);
     };
 
-    ['SIGINT', 'SIGTERM', 'uncaughtException', 'unhandledRejection'].forEach((event) => {
-      process.on(event, async (err) => {
-        await shutdown(event, err);
-      });
-    });
+    const events: [ShutdownEvent, (arg: any) => void][] = [
+      ['SIGINT', () => shutdown('SIGINT')],
+      ['SIGTERM', () => shutdown('SIGTERM')],
+      ['uncaughtException', (err) => shutdown('uncaughtException', err)],
+      ['unhandledRejection', (err) => shutdown('unhandledRejection', err)],
+    ];
+
+    for (const [event, handler] of events) {
+      process.on(event, handler as any);
+    }
   }
 }
