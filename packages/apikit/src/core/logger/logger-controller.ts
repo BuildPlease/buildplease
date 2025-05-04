@@ -5,7 +5,7 @@ import { injectable, inject } from 'inversify';
 import type { Bindings, Logger } from 'pino';
 import pino from 'pino';
 
-import { filterObject } from '@nidavellirx/meowv-core';
+import { filterObject, isEmptyObject } from '@nidavellirx/meowv-core';
 
 import { ApiKitSymbols } from '#/di';
 
@@ -164,16 +164,17 @@ export class LoggerControllerImpl implements LoggerController {
       logObject.content = options.content;
     }
     if (options?.error) {
-      logObject.error = this.prepareErrorContent(options.error);
+      logObject.error = this.formatError(options.error);
     }
     if (options?.metadata) {
-      logObject.metadata = this.prepareMetadata(options.metadata);
+      const formatter = this.formatMetadata(options.metadata);
+      if (formatter) logObject.metadata = formatter;
     }
 
     this.logger[level]({ msg: title, ...logObject });
   }
 
-  private prepareErrorContent(error: unknown): object {
+  private formatError(error: unknown): object {
     if (error instanceof Error) {
       return {
         name: error.name,
@@ -183,10 +184,9 @@ export class LoggerControllerImpl implements LoggerController {
     }
 
     if (typeof error === 'object' && error !== null) {
-      return {
-        ...error,
-        message: (error as { message?: string }).message || 'No specific error message provided',
-      };
+      const fallbackMessage = 'No specific error message provided';
+      const errorMessage = (error as { message?: string }).message;
+      return { ...error, message: errorMessage || fallbackMessage };
     }
 
     return {
@@ -195,7 +195,7 @@ export class LoggerControllerImpl implements LoggerController {
     };
   }
 
-  private prepareMetadata(metadata: Partial<RequestMetadata>): object {
+  private formatMetadata(metadata: Partial<RequestMetadata>): object | undefined {
     const selectedHeaders = {
       accept: metadata.headers?.accept,
       'content-type': metadata.headers?.['content-type'],
@@ -214,12 +214,14 @@ export class LoggerControllerImpl implements LoggerController {
       headers: selectedHeaders,
     };
 
-    return filterObject(input, {
+    const filtered = filterObject(input, {
       filterNull: true,
       filterUndefined: true,
       filterEmptyString: true,
       filterEmptyArray: true,
       filterEmptyObject: true,
     });
+
+    return isEmptyObject(filtered) ? undefined : filtered;
   }
 }

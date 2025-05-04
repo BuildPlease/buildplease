@@ -1,7 +1,7 @@
 import fp from 'fastify-plugin';
 import type { FastifyPluginAsync } from 'fastify';
 
-import { ignoreError, isNullOrEmpty } from '@nidavellirx/meowv-core';
+import { ignoreErrorAsync, isNullOrEmpty } from '@nidavellirx/meowv-core';
 
 import type { RequestMetadata } from '#/request';
 import type { ServerPluginOptions } from '#/server';
@@ -9,6 +9,7 @@ import type { ServerPluginOptions } from '#/server';
 const requestMetadataPlugin: FastifyPluginAsync<ServerPluginOptions> = async (fastify, options) => {
   const logger = options.loggerController;
 
+  // MARK: - onRequest
   fastify.addHook('onRequest', async (request) => {
     const metadata: RequestMetadata = {
       requestId: request.id,
@@ -23,21 +24,16 @@ const requestMetadataPlugin: FastifyPluginAsync<ServerPluginOptions> = async (fa
     };
 
     request.metadata = metadata;
-  });
 
-  // MARK: - Log Incoming Request
-  fastify.addHook('onRequest', async (request) => {
-    ignoreError(async () => {
-      logger.info('Incoming request', {
-        metadata: request.metadata,
-      });
+    await ignoreErrorAsync(async () => {
+      logger.info('Incoming Request', { metadata: request.metadata });
     });
   });
 
-  // MARK: - Log Outgoing Request
+  // MARK: - onResponse
   fastify.addHook('onResponse', async (request, reply) => {
-    ignoreError(async () => {
-      logger.info('Sending response', {
+    await ignoreErrorAsync(async () => {
+      logger.info('Sending Response', {
         metadata: {
           requestId: request.metadata.reqId,
         },
