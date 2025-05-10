@@ -1,0 +1,24 @@
+{
+  "errors": {
+    "RESOURCE_NOT_FOUND": "The requested resource was not found.",
+    "RESOURCE_ALREADY_EXISTS": "The specified resource already exists.",
+    "INTERNAL_SERVER_ERROR": "An internal server error occurred.",
+    "SERVICE_UNAVAILABLE": "The service is temporarily unavailable. Please try again later.",
+    "DEPENDENCY_FAILED": "A required service or dependency failed.",
+    "TIMEOUT": "The server timed out while waiting for a response.",
+    "TOO_MANY_REQUESTS": "You have exceeded the allowed request limit.",
+    "UNAUTHORIZED": "You are not authorized to perform this action.",
+    "FORBIDDEN": "You do not have access to this resource.",
+    "BAD_REQUEST": "The request is malformed or invalid.",
+    "JSON_SYNTAX_ERROR": "The JSON structure is invalid.",
+    "INVALID_PROPERTIES": "Some of the provided values are invalid.",
+    "INVALID_FORMAT": "The provided format is not valid.",
+    "INVALID_DATE_FORMAT": "The date format is incorrect.",
+    "INVALID_PASSWORD": "The password you entered is incorrect.",
+    "INVALID_PASSWORD_NEW_SAME_AS_OLD": "The new password must differ from the current password.",
+    "INVALID_PHONE_NUMBER_FORMAT": "The phone number format is not valid.",
+    "INVALID_PHONE_NEW_SAME_AS_OLD": "The new phone number must be different from the previous one.",
+    "INVALID_EMAIL_FORMAT": "The email address format is not valid.",
+    "INVALID_EMAIL_NEW_SAME_AS_OLD": "The new email must differ from the existing one."
+  }
+}

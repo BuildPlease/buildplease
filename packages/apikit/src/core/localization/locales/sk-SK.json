@@ -1,0 +1,24 @@
+{
+  "errors": {
+    "RESOURCE_NOT_FOUND": "Požadovaný zdroj sa nenašiel.",
+    "RESOURCE_ALREADY_EXISTS": "Zadaný zdroj už existuje.",
+    "INTERNAL_SERVER_ERROR": "Na serveri došlo k internej chybe.",
+    "SERVICE_UNAVAILABLE": "Služba je momentálne nedostupná. Skúste to prosím neskôr.",
+    "DEPENDENCY_FAILED": "Zlyhala požadovaná externá služba alebo závislosť.",
+    "TIMEOUT": "Časový limit požiadavky bol prekročený.",
+    "TOO_MANY_REQUESTS": "Bolo prekročené povolené množstvo požiadaviek.",
+    "UNAUTHORIZED": "Nemáte oprávnenie na vykonanie tejto akcie.",
+    "FORBIDDEN": "K tomuto zdroju nemáte prístup.",
+    "BAD_REQUEST": "Odoslaná požiadavka je neplatná.",
+    "JSON_SYNTAX_ERROR": "Zistený neplatný formát JSON.",
+    "INVALID_PROPERTIES": "Niektoré zadané hodnoty sú neplatné.",
+    "INVALID_FORMAT": "Zadaný formát nie je platný.",
+    "INVALID_DATE_FORMAT": "Formát dátumu nie je platný.",
+    "INVALID_PASSWORD": "Zadané heslo je nesprávne.",
+    "INVALID_PASSWORD_NEW_SAME_AS_OLD": "Nové heslo sa musí líšiť od aktuálneho.",
+    "INVALID_PHONE_NUMBER_FORMAT": "Formát telefónneho čísla nie je správny.",
+    "INVALID_PHONE_NEW_SAME_AS_OLD": "Nové telefónne číslo sa musí líšiť od predchádzajúceho.",
+    "INVALID_EMAIL_FORMAT": "Formát e-mailovej adresy nie je správny.",
+    "INVALID_EMAIL_NEW_SAME_AS_OLD": "Nový e-mail sa musí líšiť od aktuálneho."
+  }
+}
