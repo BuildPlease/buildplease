@@ -5,6 +5,7 @@ import type {
   LoggerConfig,
   ServerConfig,
   I18nConfig,
+  StaticFilesConfig,
 } from '@nidavellirx/meowv-apikit';
 
 declare global {
@@ -15,5 +16,6 @@ declare global {
     serverConfig: ServerConfig;
     emailConfig: EmailConfig;
     i18nConfig?: I18nConfig;
+    staticFileConfig?: StaticFilesConfig;
   };
 }

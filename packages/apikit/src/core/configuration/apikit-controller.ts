@@ -6,6 +6,7 @@ import type {
   LoggerConfig,
   ServerConfig,
   I18nConfig,
+  StaticFilesConfig,
 } from '#/configuration';
 
 export interface ApiKitController {
@@ -14,77 +15,44 @@ export interface ApiKitController {
   get server(): ServerConfig;
   get email(): EmailConfig;
   get i18n(): I18nConfig | undefined;
+  get staticFile(): StaticFilesConfig | undefined;
 }
 
 @injectable()
 export class ApiKitControllerImpl implements ApiKitController {
-  private _environment: EnvironmentConfig;
-  private _logger: LoggerConfig;
-  private _server: ServerConfig;
-  private _email: EmailConfig;
-  private _i18n?: I18nConfig;
-
-  constructor() {
-    this._environment = this.makeEnvironment();
-    this._logger = this.makeLogger();
-    this._server = this.makeServer();
-    this._email = this.makeEmail();
-    this._i18n = this.makeI18n();
+  get environment(): EnvironmentConfig {
+    if (!global.apikit?.environmentConfig) {
+      throw new Error('Current environment is not defined.');
+    }
+    return global.apikit.environmentConfig;
   }
 
-  public get environment(): EnvironmentConfig {
-    return this._environment;
+  get logger(): LoggerConfig {
+    if (!global.apikit?.loggerConfig) {
+      throw new Error('Logger configuration is not defined.');
+    }
+    return global.apikit.loggerConfig;
   }
 
-  public get logger(): LoggerConfig {
-    return this._logger;
+  get server(): ServerConfig {
+    if (!global.apikit?.serverConfig) {
+      throw new Error('Server configuration is not defined.');
+    }
+    return global.apikit.serverConfig;
   }
 
-  public get server(): ServerConfig {
-    return this._server;
+  get email(): EmailConfig {
+    if (!global.apikit?.emailConfig) {
+      throw new Error('Email configuration is not defined.');
+    }
+    return global.apikit.emailConfig;
   }
 
-  public get email(): EmailConfig {
-    return this._email;
-  }
-
-  public get i18n(): I18nConfig | undefined {
-    return this._i18n;
-  }
-
-  private makeEnvironment(): EnvironmentConfig {
-    const environment = global.apikit.environmentConfig;
-
-    if (!environment) throw new Error('Current environment is not defined.');
-
-    return environment;
-  }
-
-  private makeLogger(): LoggerConfig {
-    const loggerConfig = global.apikit.loggerConfig;
-
-    if (!loggerConfig) throw new Error('Logger configuration is not defined.');
-
-    return loggerConfig;
-  }
-
-  private makeServer(): ServerConfig {
-    const serverConfig = global.apikit.serverConfig;
-
-    if (!serverConfig) throw new Error('Server configuration is not defined.');
-
-    return serverConfig;
-  }
-
-  private makeEmail(): EmailConfig {
-    const emailConfig = global.apikit.emailConfig;
-
-    if (!emailConfig) throw new Error('Email configuration is not defined.');
-
-    return emailConfig;
-  }
-
-  private makeI18n(): I18nConfig | undefined {
+  get i18n(): I18nConfig | undefined {
     return global.apikit.i18nConfig;
+  }
+
+  get staticFile(): StaticFilesConfig | undefined {
+    return global.apikit.staticFileConfig;
   }
 }

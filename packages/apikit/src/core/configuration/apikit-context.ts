@@ -12,6 +12,7 @@ import type {
   LoggerConfig,
   ServerConfig,
   I18nConfig,
+  StaticFilesConfig,
 } from '#/configuration';
 
 /**
@@ -55,6 +56,7 @@ export async function makeApikitContext({
   const serverConfig = await initializeServer(config, environmentConfig);
   const emailConfig = await initializeEmail(config);
   const i18nConfig = await initializeI18n(config);
+  const staticFileConfig = await initializeStaticFile(config);
 
   global.apikit = {
     config: config,
@@ -63,6 +65,7 @@ export async function makeApikitContext({
     serverConfig: serverConfig,
     emailConfig: emailConfig,
     i18nConfig: i18nConfig,
+    staticFileConfig: staticFileConfig,
   };
 
   log.success(`\n🚀 ApiKit context created for '${process.env.NODE_ENV}' environment`);
@@ -135,7 +138,7 @@ async function initializeServer(
 /**
  * Initializes the email configuration for the given environment.
  *
- * @throws Error if the server configuration is missing for the environment.
+ * @throws Error if the email configuration is missing for the environment.
  */
 async function initializeEmail(config: ApiKitConfig): Promise<EmailConfig> {
   const emailConfig = config.email;
@@ -143,8 +146,16 @@ async function initializeEmail(config: ApiKitConfig): Promise<EmailConfig> {
   return emailConfig;
 }
 
+/**
+ * Returns i18n config if defined.
+ */
 async function initializeI18n(config: ApiKitConfig): Promise<I18nConfig | undefined> {
-  if (!config.i18n) return undefined;
-
   return config.i18n;
+}
+
+/**
+ * Returns static files config if defined.
+ */
+async function initializeStaticFile(config: ApiKitConfig): Promise<StaticFilesConfig | undefined> {
+  return config.staticFiles;
 }

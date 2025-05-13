@@ -6,7 +6,7 @@ import { resolvePath } from '#/utils';
 import type { ServerPluginOptions } from '#/server';
 
 const staticFilesPlugin: FastifyPluginAsync<ServerPluginOptions> = async (fastify, options) => {
-  const configuration = options.apikitController.server.staticFiles ?? {};
+  const configuration = options.apikitController.staticFile ?? {};
 
   const { path = 'public', routePrefix = '/', maxAge = 3600 } = configuration;
 

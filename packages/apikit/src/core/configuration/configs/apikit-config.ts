@@ -1,4 +1,11 @@
-import type { EnvironmentConfig, EmailConfig, LoggerConfig, ServerConfig, I18nConfig } from './';
+import type {
+  EnvironmentConfig,
+  EmailConfig,
+  LoggerConfig,
+  ServerConfig,
+  I18nConfig,
+  StaticFilesConfig,
+} from './';
 
 export interface ApiKitConfig {
   /**
@@ -37,4 +44,9 @@ export interface ApiKitConfig {
    * Localization/i18n configuration for register custom file entries.
    */
   i18n?: I18nConfig;
+
+  /**
+   * Static files configuration
+   */
+  staticFiles?: StaticFilesConfig;
 }
