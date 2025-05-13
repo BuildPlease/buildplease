@@ -59,7 +59,6 @@ export async function makeApikitContext({
   const staticFilesConfig = await initializeStaticFiles(config);
 
   global.apikit = {
-    config: config,
     environmentConfig: environmentConfig,
     loggerConfig: loggerConfig,
     serverConfig: serverConfig,

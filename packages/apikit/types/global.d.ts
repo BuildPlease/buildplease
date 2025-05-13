@@ -1,5 +1,4 @@
 import type {
-  ApiKitConfig,
   EmailConfig,
   EnvironmentConfig,
   LoggerConfig,
@@ -10,7 +9,6 @@ import type {
 
 declare global {
   var apikit: {
-    config: ApiKitConfig;
     environmentConfig: EnvironmentConfig;
     loggerConfig: LoggerConfig;
     serverConfig: ServerConfig;

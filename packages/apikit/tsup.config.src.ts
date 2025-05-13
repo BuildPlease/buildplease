@@ -8,7 +8,7 @@ import { resolvePath } from './src/core/utils';
 const outDir = 'dist/src';
 
 export default defineConfig({
-  outDir,
+  outDir: outDir,
   clean: [outDir],
 
   entry: {
@@ -74,7 +74,7 @@ export default defineConfig({
 
 async function copyLocales(): Promise<void> {
   const sourceLocalesDir = resolvePath(import.meta.url, './src/core/i18n/locales');
-  const destLocalesDir = resolvePath(import.meta.url, './dist/src/locales');
+  const destLocalesDir = resolvePath(import.meta.url, `./${outDir}/locales`);
 
   const entries = await fs.promises.readdir(sourceLocalesDir, { withFileTypes: true });
   await fs.promises.mkdir(destLocalesDir, { recursive: true });

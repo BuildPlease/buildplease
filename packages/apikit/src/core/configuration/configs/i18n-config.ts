@@ -1,81 +1,152 @@
+import type { InitOptions } from 'i18next';
+
 export interface I18nDirEntry {
   /**
-   * Path to a folder containing JSON translation files.
-   *
-   * Files must follow the format: `<locale>.json`, e.g., `en.json`, `sk.json`.
-   *
+   * Path to a folder of locale JSON files.
    * @example './src/locales'
    */
   path: string;
+
+  /**
+   * Namespace to assign to all files in this directory.
+   * @default defaultNamespace
+   * @example 'errors'
+   */
+  namespace?: string;
 }
 
 export interface I18nFileEntry {
   /**
-   * Path to a single JSON translation file.
-   *
+   * The language code this file represents.
+   * @example 'sk'
+   */
+  locale: string;
+
+  /**
+   * Path to a single translation file.
    * @example './src/locales/sk.json'
    */
   path: string;
 
   /**
-   * The language code this file represents.
-   *
-   * @example 'sk'
+   * Namespace to assign to this file.
+   * @default defaultNamespace
+   * @example 'common'
    */
-  locale: string;
+  namespace?: string;
 }
 
 export interface I18nConfig {
   /**
    * Directories containing multiple translation files.
-   *
-   * All `.json` files will be automatically loaded and inferred as locale files.
-   *
-   * @example [{ path: './src/locales' }]
+   * The framework will load all `.json` files and infer their locales from filenames.
+   * @default []
    */
   directories?: I18nDirEntry[];
 
   /**
-   * Individual translation files mapped to specific language codes.
-   * These can override or extend directory-based files.
-   *
-   * @example [{ locale: 'sk', path: './overrides/sk.json' }]
+   * Individual translation files mapped to specific locales.
+   * Can override or extend directory-based files.
+   * @default []
    */
   files?: I18nFileEntry[];
 
   /**
-   * Language code to use as fallback when no translation is found.
-   *
+   * Default language to initialize i18next with (InitOptions['lng']).
+   * Also used as fallback when a translation is missing in the requested locale.
    * @default 'en'
    */
-  defaultLanguage?: string;
+  defaultLanguage?: InitOptions['lng'];
 
   /**
-   * List of language codes to preload at startup.
+   * Allowed languages to preload and lookup (InitOptions['supportedLngs']).
    * Must include `defaultLanguage`.
-   *
-   * @default ['en', 'sk', 'cs']
+   * @default ['en','sk','cs']
    */
-  supportedLanguages?: string[];
+  supportedLanguages?: Exclude<InitOptions['supportedLngs'], false>;
 
   /**
-   * Optional list of namespaces to register (e.g., ['common', 'errors']).
-   *
+   * Languages to try if a translation key is missing in the requested language (InitOptions['fallbackLng']).
+   * Can be a single code or an array of codes, in lookup order.
+   * @default same as `defaultLanguage`
+   */
+  fallbackLanguages?: InitOptions['fallbackLng'];
+
+  /**
+   * Automatically match base language codes (e.g. match 'en' to 'en-US' bundles).
+   * @default true
+   */
+  nonExplicitSupportedLngs?: InitOptions['nonExplicitSupportedLngs'];
+
+  /**
+   * Language code lookup strategy (InitOptions['load']).
+   * - 'all'          → ['en-US','en','dev']
+   * - 'currentOnly'  → ['en-US']
+   * - 'languageOnly' → ['en']
+   * @default 'languageOnly'
+   */
+  load?: InitOptions['load'];
+
+  /**
+   * Languages to preload on startup (InitOptions['preload']).
+   * Preloads ensure keys are available before requests are handled.
+   * @default false
+   */
+  preload?: InitOptions['preload'];
+
+  /**
+   * If true, lowercases full locale codes (InitOptions['lowerCaseLng']).
+   * @default false
+   */
+  lowerCaseLng?: InitOptions['lowerCaseLng'];
+
+  /**
+   * If true, only lowercases the language part of the code (InitOptions['cleanCode']).
+   * @default false
+   */
+  cleanCode?: InitOptions['cleanCode'];
+
+  /**
+   * Registered namespaces (InitOptions['ns']).
+   * Allows grouping translations by file/module.
    * @default ['translation']
    */
-  namespaces?: string[];
+  namespaces?: InitOptions['ns'];
 
   /**
-   * The default namespace used when calling `t()` without specifying one.
-   *
+   * Default namespace for translation calls.
+   * Must be a single (string) namespace—not an array.
    * @default 'translation'
    */
   defaultNamespace?: string;
 
   /**
-   * Enables debug logging during i18next initialization.
-   *
+   * Key separator for nested JSON keys (InitOptions['keySeparator']).
+   * @default '.'
+   */
+  keySeparator?: InitOptions['keySeparator'];
+
+  /**
+   * Namespace separator (InitOptions['nsSeparator']).
+   * @default ':'
+   */
+  nsSeparator?: InitOptions['nsSeparator'];
+
+  /**
+   * Plural separator for keys (InitOptions['pluralSeparator']).
+   * @default '_'
+   */
+  pluralSeparator?: InitOptions['pluralSeparator'];
+
+  /**
+   * Context separator for keys (InitOptions['contextSeparator']).
+   * @default '_'
+   */
+  contextSeparator?: InitOptions['contextSeparator'];
+
+  /**
+   * Enable debug logging in i18next initialization and translation (InitOptions['debug']).
    * @default false
    */
-  debug?: boolean;
+  debug?: InitOptions['debug'];
 }
