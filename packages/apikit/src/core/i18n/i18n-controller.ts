@@ -20,10 +20,13 @@ export interface I18nController {
   prepare(): Promise<void>;
 
   /**
-   * Extracts the base language from an Accept-Language header.
-   * Example: "sk-SK,sk;q=0.8" → "sk"
+   * Determines the client’s preferred base language from an Accept-Language header,
+   * honoring quality values (q=) and falling back to the configured default language.
+   *
+   * @param input - Full Accept-Language header, e.g. `"fr-CA,fr;q=0.8,en-US;q=0.6,en;q=0.4"`
+   * @returns The best matching base language code (e.g. `"fr"`, `"en"`)
    */
-  parseLocale(header?: string): string | undefined;
+  parseLocale(input?: string): string | undefined;
 }
 
 @injectable()
@@ -62,10 +65,34 @@ export class I18nControllerImpl implements I18nController {
     await i18next.init(initOptions);
   }
 
-  public parseLocale(input?: string): string | undefined {
-    if (!input) return undefined;
-    const raw = input.split(',')[0]?.trim().toLowerCase();
-    return raw ? raw.split('-')[0] : undefined;
+  public parseLocale(input?: string): string {
+    const { supportedLanguages, defaultLanguage } = this.prepareConfig();
+
+    if (!input) {
+      return defaultLanguage;
+    }
+
+    // MARK: 1 - parse and normalize into [{ lang, q }]
+    const candidates = input.split(',').map((part) => {
+      const [rawLang = '', qStr] = part.trim().split(';q=');
+      const lang = rawLang.toLowerCase();
+      const q = qStr !== undefined ? parseFloat(qStr) : 1;
+      return { lang, q };
+    });
+
+    // MARK: 2 - sort by quality descending
+    candidates.sort((a, b) => b.q - a.q);
+
+    // MARK: 3 - pick the first supported base language
+    for (const { lang } of candidates) {
+      const [base = ''] = lang.split('-');
+      if (supportedLanguages.includes(base)) {
+        return base;
+      }
+    }
+
+    // MARK: 4 - fallback
+    return defaultLanguage;
   }
 
   private prepareConfig(): Required<I18nConfig> {
