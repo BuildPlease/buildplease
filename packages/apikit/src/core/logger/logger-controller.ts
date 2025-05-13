@@ -1,13 +1,11 @@
-import path from 'path';
-import fs from 'fs';
-
 import { injectable, inject } from 'inversify';
-import type { Bindings, Logger } from 'pino';
+import type { Bindings, Logger, Level } from 'pino';
 import pino from 'pino';
 
 import { filterObject, isEmptyObject } from '@nidavellirx/meowv-core';
 
 import { ApiKitSymbols } from '#/di';
+import { ensureDirectory } from '#/utils';
 import type {
   ApiKitController,
   TransportOptions,
@@ -39,92 +37,14 @@ export class LoggerControllerImpl implements LoggerController {
     private configuration: ApiKitController,
   ) {
     const loggerConfig = this.configuration.logger;
-    const transports = this.createTransports(loggerConfig.transports);
+    const targets = this.createTargets(loggerConfig.transports);
+    const transport = pino.transport({ targets: targets });
+    const globalLevel = this.resolveGlobalLogLevel(loggerConfig.transports);
 
-    const transport = pino.transport({ targets: transports });
-
-    this.logger = pino(transport);
+    this.logger = pino({ level: globalLevel }, transport);
   }
 
-  private createTransports(userTransports: TransportOptions[]): pino.TransportTargetOptions[] {
-    const transports: pino.TransportTargetOptions[] = [];
-
-    userTransports.forEach((transportConfig) => {
-      const type = transportConfig.type;
-      switch (type) {
-        case 'console':
-          transports.push(this.createConsoleTransport(transportConfig as ConsoleTransportOptions));
-          break;
-        case 'file':
-          transports.push(this.createFileTransport(transportConfig as FileTransportOptions));
-          break;
-        default:
-          throw new Error(`Unsupported transport type: ${type}`);
-      }
-    });
-
-    return transports;
-  }
-
-  private createConsoleTransport(config: ConsoleTransportOptions): pino.TransportTargetOptions {
-    const { target, level } = config;
-
-    if (target === 'pino-pretty') {
-      const prettyConfig = config as PrettyConsoleTransportOptions;
-
-      return {
-        target: 'pino-pretty',
-        options: {
-          ...prettyConfig.pretty,
-          level,
-        },
-      };
-    }
-
-    if (target === 'console') {
-      const rawConfig = config as RawConsoleTransportOptions;
-
-      return {
-        target: 'console',
-        options: {
-          level,
-          timestamp: rawConfig.timestamp,
-        },
-      };
-    }
-
-    throw new Error(`Unsupported console target: ${target}`);
-  }
-
-  private createFileTransport(config: FileTransportOptions): pino.TransportTargetOptions {
-    const logPath = this.makeLogPath(config.logFilePath);
-
-    const transportOptions = {
-      level: config.level,
-      timestamp: config.timestamp,
-      destination: logPath,
-      sync: config.options?.sync ?? false,
-      mode: config.options?.mode ?? 0o666,
-      mkdir: config.options?.mkdir ?? false,
-    };
-
-    return {
-      target: 'pino/file',
-      options: transportOptions,
-    };
-  }
-
-  private makeLogPath(loggerPath: string): string {
-    try {
-      const logDir = path.dirname(loggerPath);
-      if (!fs.existsSync(logDir)) {
-        fs.mkdirSync(logDir, { recursive: true });
-      }
-      return path.resolve(loggerPath);
-    } catch (error) {
-      throw new Error(`Failed to access or create logger directory at ${loggerPath}: ${error}`);
-    }
-  }
+  // MARK: - Public
 
   public get instance(): Logger {
     return this.logger;
@@ -157,6 +77,8 @@ export class LoggerControllerImpl implements LoggerController {
   public child(bindings: Bindings) {
     return this.logger.child(bindings);
   }
+
+  // MARK: - Private: Log
 
   private log(level: pino.Level, title: string, options?: LogOptions) {
     const logObject: {
@@ -232,5 +154,90 @@ export class LoggerControllerImpl implements LoggerController {
     });
 
     return isEmptyObject(filtered) ? undefined : filtered;
+  }
+
+  // MARK: - Private: Configuration
+
+  private createTargets(userTransports: TransportOptions[]): pino.TransportTargetOptions[] {
+    const transports: pino.TransportTargetOptions[] = [];
+
+    userTransports.forEach((transportConfig) => {
+      const type = transportConfig.type;
+      switch (type) {
+        case 'console':
+          transports.push(this.createConsoleTarget(transportConfig as ConsoleTransportOptions));
+          break;
+        case 'file':
+          transports.push(this.createFileTarget(transportConfig as FileTransportOptions));
+          break;
+        default:
+          throw new Error(`Unsupported transport type: ${type}`);
+      }
+    });
+
+    return transports;
+  }
+
+  private createConsoleTarget(config: ConsoleTransportOptions): pino.TransportTargetOptions {
+    const { target, level } = config;
+
+    if (target === 'pino-pretty') {
+      const prettyConfig = config as PrettyConsoleTransportOptions;
+
+      return {
+        target: 'pino-pretty',
+        options: {
+          level: level,
+          ...prettyConfig.pretty,
+        },
+      };
+    }
+
+    if (target === 'console') {
+      const rawConfig = config as RawConsoleTransportOptions;
+
+      return {
+        target: 'console',
+        options: {
+          level: level,
+          timestamp: rawConfig.timestamp,
+        },
+      };
+    }
+
+    throw new Error(`Unsupported console target: ${target}`);
+  }
+
+  private createFileTarget(config: FileTransportOptions): pino.TransportTargetOptions {
+    try {
+      const fileDestination = ensureDirectory(config.logFilePath);
+
+      return {
+        target: 'pino/file',
+        options: {
+          destination: fileDestination,
+          level: config.level,
+        },
+      };
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  private resolveGlobalLogLevel(transports: TransportOptions[]): Level {
+    const fallback: Level = 'info';
+    const weights: Record<Level, number> = {
+      trace: 0,
+      debug: 1,
+      info: 2,
+      warn: 3,
+      error: 4,
+      fatal: 5,
+    };
+
+    return transports.reduce<Level>((lowest, t) => {
+      const level = (t.level ?? fallback) as Level;
+      return weights[level] < weights[lowest] ? level : lowest;
+    }, fallback);
   }
 }

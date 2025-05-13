@@ -47,12 +47,6 @@ export default defineApikitConfig({
         {
           type: 'file',
           logFilePath: './logs/production.log',
-          timestamp: true,
-          options: {
-            sync: false,
-            mode: 0o666,
-            mkdir: true,
-          },
         },
       ],
     },

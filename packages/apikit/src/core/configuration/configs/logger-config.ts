@@ -1,11 +1,5 @@
+import type { Level } from 'pino';
 import type { PrettyOptions } from 'pino-pretty';
-
-/**
- * Defines valid log levels.
- * @options 'trace', 'debug', 'info', 'warn', 'error'
- *
- */
-export type LogLevel = 'trace' | 'debug' | 'info' | 'warn' | 'error';
 
 /**
  * Base transport configuration options.
@@ -15,7 +9,7 @@ interface BaseTransportOptions {
    * The minimum level of logs to capture.
    * @default 'info'
    */
-  level?: LogLevel;
+  level?: Level;
 }
 
 // ────────────────────────────────────────────────────────────────────────────────
@@ -83,40 +77,11 @@ export interface FileTransportOptions extends BaseTransportOptions {
   type: 'file';
 
   /**
-   * The path to the log file.
-   * @required
-   * @example './logs/app.log'
+   * Absolute path to the log file.
+   * Should be resolved via `resolvePath`.
+   * @example resolvePath(import.meta.url, './logs/production.log')
    */
   logFilePath: string;
-
-  /**
-   * Indicates whether to include timestamps in log entries.
-   * @default true
-   */
-  timestamp: boolean;
-
-  /**
-   * Additional options specific to file transport.
-   */
-  options?: {
-    /**
-     * Specifies whether to use synchronous writes to the log file.
-     * @default false
-     */
-    sync?: boolean;
-
-    /**
-     * The file permissions for the log file.
-     * @default 0o666
-     */
-    mode?: number;
-
-    /**
-     * Determines whether to create the directory if it does not exist.
-     * @default false
-     */
-    mkdir?: boolean;
-  };
 }
 
 // ────────────────────────────────────────────────────────────────────────────────
