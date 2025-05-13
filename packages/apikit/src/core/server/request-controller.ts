@@ -6,7 +6,7 @@ import { ignoreError } from '@nidavellirx/meowv-core';
 
 import { ApiKitSymbols } from '#/di';
 import type { LoggerController } from '#/logger';
-import { ApiError, ApiErrorCodes } from '#/error';
+import { ApiError, ApiErrorFactory } from '#/error';
 import type { ResponseController } from '#/server';
 import { type HttpResponse, JSONHttpResponse } from '#/http';
 
@@ -65,7 +65,7 @@ export class RequestControllerImpl implements RequestController {
     const isApiError = error instanceof ApiError;
     if (isApiError) {
       this.logger.info('Api Error Response', {
-        error: { id: error.identifier, message: error.message },
+        error: { code: error.code, message: error.message },
         metadata: { requestId: request.metadata.requestId },
       });
     } else {
@@ -90,16 +90,16 @@ export class RequestControllerImpl implements RequestController {
     reply: FastifyReply,
     error: Error | unknown,
   ) {
-    const internalServerError = ApiErrorCodes.Server.INTERNAL_SERVER_ERROR();
+    const internalServerError = ApiErrorFactory.make('Server.INTERNAL_SERVER_ERROR');
     const isApiError = error instanceof ApiError;
 
     const statusCode = isApiError ? error.statusCode : internalServerError.statusCode;
-    const responseIdentifier = isApiError ? error.identifier : internalServerError.identifier;
+    const responseCode = isApiError ? error.code : internalServerError.code;
     const responseMessage = isApiError ? error.message : internalServerError.message;
 
     const data = {
       statusCode: statusCode,
-      identifier: responseIdentifier,
+      identifier: responseCode,
       message: responseMessage,
     };
 

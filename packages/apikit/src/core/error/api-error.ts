@@ -1,23 +1,22 @@
-import type { JSONSerializable } from '@nidavellirx/meowv-core';
+import { type JSONSerializable, filterObject } from '@nidavellirx/meowv-core';
 
 export interface ApiErrorProperties {
-  identifier: string;
+  code: string;
   message: string;
   statusCode: number;
+  details?: string;
 }
 
-/**
- * Custom Api Error class that extends the built-in Error class
- * to include error codes and status codes.
- */
 export class ApiError extends Error implements ApiErrorProperties, JSONSerializable {
-  private _identifier: string;
+  private _code: string;
   private _statusCode: number;
+  private _details?: string;
 
-  constructor({ identifier, message, statusCode }: ApiErrorProperties) {
+  constructor({ code, message, statusCode, details }: ApiErrorProperties) {
     super(message);
-    this._identifier = identifier;
+    this._code = code;
     this._statusCode = statusCode;
+    this._details = details;
 
     if (Error.captureStackTrace) {
       Error.captureStackTrace(this, ApiError);
@@ -26,29 +25,39 @@ export class ApiError extends Error implements ApiErrorProperties, JSONSerializa
     Object.setPrototypeOf(this, ApiError.prototype);
   }
 
-  get identifier(): string {
-    return this._identifier;
+  get code(): string {
+    return this._code;
   }
 
   get statusCode(): number {
     return this._statusCode;
   }
 
-  /**
-   * Creates a new `ApiError` instance with optional message override.
-   */
-  static with(error: ApiErrorProperties, customMessage?: string) {
+  get details(): string | undefined {
+    return this._details;
+  }
+
+  static with(error: ApiErrorProperties, customMessage?: string, details?: string): ApiError {
     return new ApiError({
       ...error,
       message: customMessage ?? error.message,
+      details,
     });
   }
 
-  public toJSON() {
-    return {
+  public toJSON(): any {
+    const json = {
       statusCode: this._statusCode,
-      identifier: this._identifier,
+      code: this._code,
       message: this.message,
+      details: this._details,
     };
+
+    return filterObject(json, {
+      filterNull: true,
+      filterUndefined: true,
+      filterEmptyString: true,
+      filterEmptyObject: true,
+    });
   }
 }

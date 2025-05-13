@@ -1,9 +1,7 @@
 import { injectable } from 'inversify';
-import type { ZodSchema } from 'zod';
-import { ZodError } from 'zod';
+import { type ZodSchema, ZodError } from 'zod';
 
-import type { ApiError } from '#/error';
-import { ApiErrorCodes } from '#/error';
+import { type ApiError, ApiErrorFactory } from '#/error';
 import { DtoValidationError } from '#/validation';
 
 export interface DtoValidationController {
@@ -25,7 +23,7 @@ export class DtoValidationControllerImpl implements DtoValidationController {
       if (this.isValidationError(error)) {
         throw this.formatValidationError(error);
       } else if (error instanceof DtoValidationError) {
-        throw ApiErrorCodes.Validation.INVALID_PROPERTIES(error.message);
+        throw ApiErrorFactory.make('Validation.INVALID_PROPERTIES', { details: error.message });
       } else {
         throw error;
       }
@@ -36,7 +34,7 @@ export class DtoValidationControllerImpl implements DtoValidationController {
     const errorMessage = error.issues
       .map((issue) => `${issue.path.join('.')} ${issue.message}`)
       .join(', ');
-    return ApiErrorCodes.Validation.INVALID_PROPERTIES(errorMessage);
+    return ApiErrorFactory.make('Validation.INVALID_PROPERTIES', { details: errorMessage });
   }
 
   private isValidationError(error: Error | unknown): error is ZodError {

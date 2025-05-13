@@ -1,24 +1,34 @@
 {
   "errors": {
-    "RESOURCE_NOT_FOUND": "Požadovaný zdroj sa nenašiel.",
-    "RESOURCE_ALREADY_EXISTS": "Zadaný zdroj už existuje.",
-    "INTERNAL_SERVER_ERROR": "Na serveri došlo k internej chybe.",
-    "SERVICE_UNAVAILABLE": "Služba je momentálne nedostupná. Skúste to prosím neskôr.",
-    "DEPENDENCY_FAILED": "Zlyhala požadovaná externá služba alebo závislosť.",
-    "TIMEOUT": "Časový limit požiadavky bol prekročený.",
-    "TOO_MANY_REQUESTS": "Bolo prekročené povolené množstvo požiadaviek.",
-    "UNAUTHORIZED": "Nemáte oprávnenie na vykonanie tejto akcie.",
-    "FORBIDDEN": "K tomuto zdroju nemáte prístup.",
-    "BAD_REQUEST": "Odoslaná požiadavka je neplatná.",
-    "JSON_SYNTAX_ERROR": "Zistený neplatný formát JSON.",
-    "INVALID_PROPERTIES": "Niektoré zadané hodnoty sú neplatné.",
-    "INVALID_FORMAT": "Zadaný formát nie je platný.",
-    "INVALID_DATE_FORMAT": "Formát dátumu nie je platný.",
-    "INVALID_PASSWORD": "Zadané heslo je nesprávne.",
-    "INVALID_PASSWORD_NEW_SAME_AS_OLD": "Nové heslo sa musí líšiť od aktuálneho.",
-    "INVALID_PHONE_NUMBER_FORMAT": "Formát telefónneho čísla nie je správny.",
-    "INVALID_PHONE_NEW_SAME_AS_OLD": "Nové telefónne číslo sa musí líšiť od predchádzajúceho.",
-    "INVALID_EMAIL_FORMAT": "Formát e-mailovej adresy nie je správny.",
-    "INVALID_EMAIL_NEW_SAME_AS_OLD": "Nový e-mail sa musí líšiť od aktuálneho."
+    "common": {
+      "not_found": "Požadovaný obsah sa nenašiel.",
+      "already_exists": "Zadaný obsah už existuje."
+    },
+    "server": {
+      "internal": "Vyskytla sa interná chyba na serveri.",
+      "unavailable": "Služba je momentálne nedostupná. Skúste to neskôr.",
+      "dependency_failed": "Zlyhala externá služba alebo závislosť.",
+      "timeout": "Uplynul časový limit na odpoveď zo servera."
+    },
+    "limit": {
+      "too_many_requests": "Bolo odoslaných príliš veľa požiadaviek. Skúste to prosím neskôr."
+    },
+    "auth": {
+      "unauthorized": "Nemáte oprávnenie na vykonanie tejto akcie.",
+      "forbidden": "K tomuto zdroju nemáte prístup."
+    },
+    "validation": {
+      "bad_request": "Odoslané údaje nie sú platné.",
+      "invalid_json_syntax": "Formát JSON nie je správny.",
+      "invalid_properties": "Niektoré zadané údaje sú neplatné.",
+      "invalid_format": "Zadaný formát nie je platný.",
+      "invalid_date_format": "Formát dátumu je nesprávny.",
+      "invalid_password": "Zadané heslo je nesprávne.",
+      "invalid_password_new_same_as_old": "Nové heslo sa musí líšiť od pôvodného.",
+      "invalid_phone_number_format": "Formát telefónneho čísla nie je správny.",
+      "invalid_phone_new_same_as_old": "Nové číslo sa musí líšiť od pôvodného.",
+      "invalid_email_format": "Formát e-mailu nie je správny.",
+      "invalid_email_new_same_as_old": "Nový e-mail sa musí líšiť od aktuálneho."
+    }
   }
 }
