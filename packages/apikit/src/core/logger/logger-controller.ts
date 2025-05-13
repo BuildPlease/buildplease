@@ -37,8 +37,8 @@ export class LoggerControllerImpl implements LoggerController {
     private configuration: ApiKitController,
   ) {
     const loggerConfig = this.configuration.logger;
-    const targets = this.createTargets(loggerConfig.transports);
-    const transport = pino.transport({ targets: targets });
+    const transportTargets = this.makeTransportTargets(loggerConfig.transports);
+    const transport = pino.transport({ targets: transportTargets });
     const globalLevel = this.resolveGlobalLogLevel(loggerConfig.transports);
 
     this.logger = pino({ level: globalLevel }, transport);
@@ -158,17 +158,23 @@ export class LoggerControllerImpl implements LoggerController {
 
   // MARK: - Private: Configuration
 
-  private createTargets(userTransports: TransportOptions[]): pino.TransportTargetOptions[] {
+  private makeTransportTargets(input: TransportOptions[]): pino.TransportTargetOptions[] {
+    if (input.filter((t) => t.type === 'console').length > 1) {
+      throw new Error('[Logger] Multiple console transports are not supported.');
+    }
+
     const transports: pino.TransportTargetOptions[] = [];
 
-    userTransports.forEach((transportConfig) => {
+    input.forEach((transportConfig) => {
       const type = transportConfig.type;
       switch (type) {
         case 'console':
-          transports.push(this.createConsoleTarget(transportConfig as ConsoleTransportOptions));
+          const consoleTransport = this.makeConsoleTransportTarget(transportConfig);
+          transports.push(consoleTransport);
           break;
         case 'file':
-          transports.push(this.createFileTarget(transportConfig as FileTransportOptions));
+          const fileTransport = this.makeFileTransportTarget(transportConfig);
+          transports.push(fileTransport);
           break;
         default:
           throw new Error(`Unsupported transport type: ${type}`);
@@ -178,7 +184,7 @@ export class LoggerControllerImpl implements LoggerController {
     return transports;
   }
 
-  private createConsoleTarget(config: ConsoleTransportOptions): pino.TransportTargetOptions {
+  private makeConsoleTransportTarget(config: ConsoleTransportOptions): pino.TransportTargetOptions {
     const { target, level } = config;
 
     if (target === 'pino-pretty') {
@@ -208,7 +214,7 @@ export class LoggerControllerImpl implements LoggerController {
     throw new Error(`Unsupported console target: ${target}`);
   }
 
-  private createFileTarget(config: FileTransportOptions): pino.TransportTargetOptions {
+  private makeFileTransportTarget(config: FileTransportOptions): pino.TransportTargetOptions {
     let fileDestination: string;
 
     try {
