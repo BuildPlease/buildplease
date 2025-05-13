@@ -4,13 +4,13 @@ export interface ApiErrorProperties {
   code: string;
   message: string;
   statusCode: number;
-  details?: string;
+  details?: string | unknown;
 }
 
 export class ApiError extends Error implements ApiErrorProperties, JSONSerializable {
   private _code: string;
   private _statusCode: number;
-  private _details?: string;
+  private _details?: string | unknown;
 
   constructor({ code, message, statusCode, details }: ApiErrorProperties) {
     super(message);
@@ -33,7 +33,7 @@ export class ApiError extends Error implements ApiErrorProperties, JSONSerializa
     return this._statusCode;
   }
 
-  get details(): string | undefined {
+  get details(): string | undefined | unknown {
     return this._details;
   }
 

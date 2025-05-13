@@ -2,13 +2,13 @@ import { injectable, inject } from 'inversify';
 
 import type { FastifyReply, FastifyRequest } from 'fastify';
 
-import { ignoreError } from '@nidavellirx/meowv-core';
+import { ignoreErrorAsync } from '@nidavellirx/meowv-core';
 
 import { ApiKitSymbols } from '#/di';
 import type { LoggerController } from '#/logger';
-import { ApiError, ApiErrorFactory } from '#/error';
+import { ApiError } from '#/error';
 import type { ResponseController } from '#/server';
-import { type HttpResponse, JSONHttpResponse } from '#/http';
+import { type HttpResponse } from '#/http';
 
 type HttpReplyPromise = (request: FastifyRequest, options: object) => Promise<HttpResponse>;
 type HttpOrVoidReplyPromise = (
@@ -42,7 +42,8 @@ export class RequestControllerImpl implements RequestController {
         const response = await controllerFn(request, options);
         return await this.responseController.sendResponse(request, reply, response);
       } catch (error) {
-        return this.handleError(request, reply, error);
+        await this.logError(request, error);
+        throw error;
       }
     };
   }
@@ -55,59 +56,28 @@ export class RequestControllerImpl implements RequestController {
           return await this.responseController.sendResponse(request, reply, response);
         }
       } catch (error) {
-        return this.handleError(request, reply, error);
+        await this.logError(request, error);
+        throw error;
       }
     };
   }
 
-  // MARK: - Error handling
-  private logError(request: FastifyRequest, error: any) {
-    const isApiError = error instanceof ApiError;
-    if (isApiError) {
-      this.logger.info('Api Error Response', {
-        error: { code: error.code, message: error.message },
-        metadata: { requestId: request.metadata.requestId },
-      });
-    } else {
-      this.logger.error('Unexpected Error', {
-        error: error,
-        metadata: { requestId: request.metadata.requestId },
-      });
-    }
-  }
+  // MARK: - Private
 
-  private async handleError(
-    request: FastifyRequest,
-    reply: FastifyReply,
-    error: Error | unknown,
-  ): Promise<void> {
-    ignoreError(async () => this.logError(request, error));
-    return await this.sendJSONError(request, reply, error);
-  }
-
-  private async sendJSONError(
-    request: FastifyRequest,
-    reply: FastifyReply,
-    error: Error | unknown,
-  ) {
-    const internalServerError = ApiErrorFactory.make('Server.INTERNAL_SERVER_ERROR');
-    const isApiError = error instanceof ApiError;
-
-    const statusCode = isApiError ? error.statusCode : internalServerError.statusCode;
-    const responseCode = isApiError ? error.code : internalServerError.code;
-    const responseMessage = isApiError ? error.message : internalServerError.message;
-
-    const data = {
-      statusCode: statusCode,
-      identifier: responseCode,
-      message: responseMessage,
-    };
-
-    const response = new JSONHttpResponse({
-      statusCode: statusCode,
-      data: data,
+  private async logError(request: FastifyRequest, error: unknown): Promise<void> {
+    await ignoreErrorAsync(() => {
+      const metadata = request.metadata;
+      if (error instanceof ApiError) {
+        this.logger.info('Api Error Response', {
+          error: { code: error.code, message: error.message },
+          metadata: { requestId: metadata.requestId },
+        });
+      } else {
+        this.logger.error('Unexpected Error', {
+          error,
+          metadata: { requestId: metadata.requestId },
+        });
+      }
     });
-
-    return await this.responseController.sendResponse(request, reply, response);
   }
 }
