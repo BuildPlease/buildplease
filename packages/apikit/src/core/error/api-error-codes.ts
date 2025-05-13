@@ -22,7 +22,7 @@ export function defineErrors<T extends RecursiveErrorTree>(errors: T): T {
  * A recursive object structure for organizing nested error definitions.
  * Leaf nodes must be valid `LocalizedApiError` objects.
  */
-type RecursiveErrorTree = {
+export type RecursiveErrorTree = {
   [key: string]: RecursiveErrorTree | LocalizedApiError;
 };
 

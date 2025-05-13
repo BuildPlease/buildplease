@@ -1,87 +1,167 @@
+import merge from 'lodash.merge';
+
 import type { LocalizedApiError } from '#/error';
-import { ApiError, ApiErrorCodes } from '#/error';
+import { type RecursiveErrorTree, ApiError, ApiErrorCodes } from '#/error';
 import { type I18nOptions, I18nProvider } from '#/i18n';
 
+/**
+ * Configuration options for creating API errors with localized messages
+ * @extends I18nOptions
+ *
+ * @property {string} [message] - Optional override for translated error message
+ * @property {string} [details] - Technical details for debugging/logging purposes
+ *
+ * @example
+ * // Create error with custom message and debug details
+ * ApiErrorFactory.make('Validation.INVALID_EMAIL', {
+ *   message: 'Invalid email format',
+ *   details: 'Received value: user@example',
+ *   lng: 'es' // Force Spanish translation
+ * });
+ */
 export interface ApiErrorFactoryOptions extends I18nOptions {
-  /**
-   * Overrides the localized message for this error.
-   * Use this to supply a custom error message instead of a translated one.
-   */
   message?: string;
-
-  /**
-   * Additional technical or contextual information about the error.
-   * This is useful for internal debugging and will be included in the serialized error response.
-   */
   details?: string;
 }
 
+/**
+ * Factory class for creating standardized, localized API errors
+ *
+ * @class
+ *
+ * @example
+ * // Basic usage
+ * const error = ApiErrorFactory.make('Common.NOT_FOUND');
+ *
+ * @example
+ * // Extended factory with custom errors
+ * const AppErrors = ApiErrorFactory.extend({
+ *   Payment: {
+ *     DECLINED: {
+ *       code: 'PAYMENT_DECLINED',
+ *       statusCode: 402,
+ *       key: 'errors.payment.declined'
+ *     }
+ *   }
+ * });
+ * const paymentError = AppErrors.make('Payment.DECLINED');
+ */
 export class ApiErrorFactory {
-  static make<K extends AllErrorKeys>(key: K, options: ApiErrorFactoryOptions = {}): ApiError {
-    const def: ErrorByKey<K> = getErrorByPath(ApiErrorCodes, key);
-    const message = options.message ?? I18nProvider.t(def.key, options);
+  /**
+   * Creates an API error instance from built-in error definitions
+   *
+   * @template {BuiltInKeys} K - Error key path type
+   * @param {K} key - Dot-separated path to error definition (e.g., 'Validation.INVALID_EMAIL')
+   * @param {ApiErrorFactoryOptions} [opts] - Configuration options
+   * @returns {ApiError} Configured error instance
+   * @throws {Error} When invalid key path is provided
+   */
+  static make(key: BuiltInKeys, opts: ApiErrorFactoryOptions = {}): ApiError {
+    const def = getErrorByPath(ApiErrorCodes, key);
+    if (!def) throw new Error(`Invalid error key: ${key}`);
 
     return new ApiError({
       code: def.code,
       statusCode: def.statusCode,
-      message,
-      details: options.details,
+      message: opts.message ?? I18nProvider.t(def.key, opts),
+      details: opts.details,
     });
+  }
+
+  /**
+   * Creates new error factory with merged error definitions
+   *
+   * @template {Record<string, RecursiveErrorTree>} Extra - Custom error definitions type
+   * @param {Extra} extra - Custom error hierarchy to merge
+   * @returns {ExtendedErrorFactory} New factory class with combined error definitions
+   *
+   * @example
+   * // Create extended factory with deep error structure
+   * const InventoryErrors = ApiErrorFactory.extend({
+   *   Stock: {
+   *     OutOfStock: {
+   *       code: 'STOCK_EMPTY',
+   *       statusCode: 409,
+   *       key: 'errors.inventory.out_of_stock'
+   *     }
+   *   }
+   * });
+   */
+  static extend<Extra extends Record<string, RecursiveErrorTree>>(extra: Extra) {
+    const mergedCodes = merge({}, ApiErrorCodes, extra) as typeof ApiErrorCodes & Extra;
+
+    return class ExtendedErrorFactory {
+      /** @readonly Merged error definitions */
+      static readonly codes = mergedCodes;
+
+      /**
+       * Creates error from merged definitions
+       *
+       * @template {Flatten<typeof mergedCodes>} K - Merged error key path type
+       * @param {K} key - Dot-separated path in merged error hierarchy
+       * @param {ApiErrorFactoryOptions} [opts] - Configuration options
+       * @returns {ApiError} Configured error instance
+       * @throws {Error} When invalid extended key path is provided
+       */
+      static make(key: Flatten<typeof mergedCodes>, opts: ApiErrorFactoryOptions = {}): ApiError {
+        const def = getErrorByPath(this.codes, key);
+        if (!def) throw new Error(`Invalid extended error key: ${key}`);
+
+        return new ApiError({
+          code: def.code,
+          statusCode: def.statusCode,
+          message: opts.message ?? I18nProvider.t(def.key, opts),
+          details: opts.details,
+        });
+      }
+
+      /** @inheritDoc ApiErrorFactory.extend */
+      static extend = ApiErrorFactory.extend;
+    };
   }
 }
 
-// MARK: - Private
-
-function getErrorByPath(obj: any, path: string): any {
-  return path.split('.').reduce((acc, key) => acc?.[key], obj);
-}
+// MARK: - Private Implementation
 
 /**
- * Flattens a nested error tree into dot-notation string keys.
+ * Type helper that generates dot-separated paths for error keys
+ * @template T - Error tree type to flatten
  *
- * @template T - The nested error object.
- * @template P - Used for recursive path prefixing.
  * @example
- * // From:
- * // { Auth: { UNAUTHORIZED: { ... } } }
- * // To: "Auth.UNAUTHORIZED"
+ * type Example = Flatten<{
+ *   A: { B: LocalizedApiError },
+ *   C: { D: { E: LocalizedApiError } }
+ * }>;
+ * // Result: "A.B" | "C.D.E"
  */
-type Flatten<T, P extends string = ''> = {
-  [K in keyof T]: T[K] extends LocalizedApiError
-    ? `${P}${K & string}`
-    : Flatten<T[K], `${P}${K & string}.`>;
-}[keyof T];
-
-/**
- * Resolves a nested value by a flattened dot-notation key.
- *
- * @template T - The object tree to traverse.
- * @template P - The dot-separated path (e.g., "Auth.UNAUTHORIZED").
- */
-
-type ValueAtPath<T, P extends string> = P extends `${infer Head}.${infer Rest}`
-  ? Head extends keyof T
-    ? ValueAtPath<T[Head], Rest>
-    : never
-  : P extends keyof T
-    ? T[P]
+type Flatten<T> = T extends LocalizedApiError
+  ? ''
+  : {
+        [K in keyof T]: K extends string
+          ? `${K}${T[K] extends LocalizedApiError ? '' : '.'}${Flatten<T[K]>}`
+          : never;
+      }[keyof T] extends infer D
+    ? D extends string
+      ? D
+      : never
     : never;
 
 /**
- * All valid error keys derived from the nested error tree.
- * Used for autocomplete and compile-time safety.
- *
- * @example
- * 'Validation.INVALID_EMAIL_FORMAT'
- * 'Server.TIMEOUT'
+ * Union type of all valid built-in error paths
+ * @typedef {Flatten<typeof ApiErrorCodes>} BuiltInKeys
  */
-type AllErrorKeys = Flatten<typeof ApiErrorCodes>;
+type BuiltInKeys = Flatten<typeof ApiErrorCodes>;
 
 /**
- * Resolves the full `LocalizedApiError` type for a given dot-notation key.
+ * Retrieves error definition from nested object structure
+ * @private
+ * @param {object} obj - Root error definition object
+ * @param {string} path - Dot-separated key path
+ * @returns {LocalizedApiError} Found error definition
  *
- * @template K - A valid key from `AllErrorKeys`.
  * @example
- * ErrorByKey<'Validation.INVALID_FORMAT'> -> { code, key, statusCode }
+ * const def = getErrorByPath(ApiErrorCodes, 'Validation.INVALID_EMAIL');
  */
-type ErrorByKey<K extends AllErrorKeys> = ValueAtPath<typeof ApiErrorCodes, K>;
+function getErrorByPath(obj: object, path: string): LocalizedApiError {
+  return path.split('.').reduce<any>((acc, key) => acc?.[key], obj);
+}
