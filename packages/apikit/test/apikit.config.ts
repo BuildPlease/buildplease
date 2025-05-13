@@ -28,35 +28,24 @@ export default defineApikitConfig({
       transports: [
         {
           type: 'console',
-          level: 'info',
           target: 'pino-pretty',
-          timestamp: true,
+          level: 'debug',
           pretty: {
             colorize: true,
             translateTime: 'SYS:standard',
-            levelFirst: true,
-            ignore: 'pid,hostname',
           },
+        },
+        {
+          type: 'console',
+          target: 'console',
+          timestamp: false,
         },
       ],
     },
     production: {
       transports: [
         {
-          type: 'console',
-          level: 'warn',
-          target: 'console',
-          timestamp: true,
-          pretty: {
-            colorize: true,
-            translateTime: 'SYS:standard',
-            levelFirst: true,
-            ignore: 'pid,hostname',
-          },
-        },
-        {
           type: 'file',
-          level: 'debug',
           logFilePath: './logs/production.log',
           timestamp: true,
           options: {

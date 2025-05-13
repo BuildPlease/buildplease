@@ -1,9 +1,40 @@
+import type { PrettyOptions } from 'pino-pretty';
+
+/**
+ * Defines valid log levels.
+ * @options 'trace', 'debug', 'info', 'warn', 'error'
+ *
+ */
+export type LogLevel = 'trace' | 'debug' | 'info' | 'warn' | 'error';
+
+/**
+ * Base transport configuration options.
+ */
 interface BaseTransportOptions {
   /**
    * The minimum level of logs to capture.
-   * @options 'trace', 'debug', 'info', 'warn', 'error'
+   * @default 'info'
    */
-  level?: 'trace' | 'debug' | 'info' | 'warn' | 'error';
+  level?: LogLevel;
+}
+
+// ────────────────────────────────────────────────────────────────────────────────
+// Console transport types
+
+/**
+ * Console transport using raw `console` output.
+ */
+export interface RawConsoleTransportOptions extends BaseTransportOptions {
+  /**
+   * Transport type: console.
+   */
+  type: 'console';
+
+  /**
+   * Specifies the target transport.
+   * Must be 'console' for raw output.
+   */
+  target: 'console';
 
   /**
    * Indicates whether to include timestamps in log entries.
@@ -12,51 +43,42 @@ interface BaseTransportOptions {
   timestamp: boolean;
 }
 
-export interface ConsoleTransportOptions extends BaseTransportOptions {
+/**
+ * Console transport using `pino-pretty` formatter.
+ */
+export interface PrettyConsoleTransportOptions extends BaseTransportOptions {
   /**
-   * Defines the transport type. Must be 'console' for console-based transport.
+   * Transport type: console.
    */
   type: 'console';
 
   /**
    * Specifies the target transport.
-   * @options 'pino-pretty', 'console'
+   * Must be 'pino-pretty' for pretty output.
    */
-  target: 'pino-pretty' | 'console';
+  target: 'pino-pretty';
 
   /**
-   * Options for formatting console output when using 'pino-pretty'.
+   * Options for formatting console output.
+   * Taken directly from `pino-pretty` typings.
    */
-  pretty?: {
-    /**
-     * Enables or disables colorized output in the console.
-     * @default false
-     */
-    colorize?: boolean;
-
-    /**
-     * Specifies the timestamp format.
-     * @default 'SYS:standard'
-     */
-    translateTime?: string | boolean;
-
-    /**
-     * Specifies whether to print the log level before the log message.
-     * @default false
-     */
-    levelFirst?: boolean;
-
-    /**
-     * A comma-separated list of keys to exclude from the log output (e.g., 'pid,hostname').
-     * @default 'pid,hostname'
-     */
-    ignore?: string;
-  };
+  pretty?: PrettyOptions;
 }
 
+/**
+ * All supported console transport variants.
+ */
+export type ConsoleTransportOptions = RawConsoleTransportOptions | PrettyConsoleTransportOptions;
+
+// ────────────────────────────────────────────────────────────────────────────────
+// File transport
+
+/**
+ * File-based logging transport.
+ */
 export interface FileTransportOptions extends BaseTransportOptions {
   /**
-   * Defines the transport type. Must be 'file' for file-based logging.
+   * Transport type: file.
    */
   type: 'file';
 
@@ -66,6 +88,12 @@ export interface FileTransportOptions extends BaseTransportOptions {
    * @example './logs/app.log'
    */
   logFilePath: string;
+
+  /**
+   * Indicates whether to include timestamps in log entries.
+   * @default true
+   */
+  timestamp: boolean;
 
   /**
    * Additional options specific to file transport.
@@ -91,8 +119,16 @@ export interface FileTransportOptions extends BaseTransportOptions {
   };
 }
 
+// ────────────────────────────────────────────────────────────────────────────────
+
+/**
+ * All supported logger transports.
+ */
 export type TransportOptions = ConsoleTransportOptions | FileTransportOptions;
 
+/**
+ * Full logger configuration structure.
+ */
 export interface LoggerConfig {
   /**
    * A list of transport configurations for the logger.

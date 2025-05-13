@@ -12,6 +12,8 @@ import type {
   ApiKitController,
   TransportOptions,
   ConsoleTransportOptions,
+  PrettyConsoleTransportOptions,
+  RawConsoleTransportOptions,
   FileTransportOptions,
 } from '#/configuration';
 import type { LogOptions } from '#/logger';
@@ -65,25 +67,33 @@ export class LoggerControllerImpl implements LoggerController {
   }
 
   private createConsoleTransport(config: ConsoleTransportOptions): pino.TransportTargetOptions {
-    const transportOptions: Record<string, any> = {
-      level: config.level,
-      timestamp: config.timestamp,
-    };
+    const { target, level } = config;
 
-    if (config.target === 'pino-pretty') {
-      transportOptions.colorize = config.pretty?.colorize ?? true;
-      transportOptions.translateTime = config.pretty?.translateTime ?? 'SYS:standard';
-      transportOptions.levelFirst = config.pretty?.levelFirst ?? false;
-      transportOptions.ignore = config.pretty?.ignore ?? 'pid,hostname';
+    if (target === 'pino-pretty') {
+      const prettyConfig = config as PrettyConsoleTransportOptions;
+
+      return {
+        target: 'pino-pretty',
+        options: {
+          ...prettyConfig.pretty,
+          level,
+        },
+      };
     }
 
-    if (config.target === 'console') {
+    if (target === 'console') {
+      const rawConfig = config as RawConsoleTransportOptions;
+
+      return {
+        target: 'console',
+        options: {
+          level,
+          timestamp: rawConfig.timestamp,
+        },
+      };
     }
 
-    return {
-      target: config.target,
-      options: transportOptions,
-    };
+    throw new Error(`Unsupported console target: ${target}`);
   }
 
   private createFileTransport(config: FileTransportOptions): pino.TransportTargetOptions {
