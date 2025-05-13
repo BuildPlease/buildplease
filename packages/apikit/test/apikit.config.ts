@@ -46,14 +46,14 @@ export default defineApikitConfig({
       transports: [
         {
           type: 'file',
-          logFilePath: './logs/production.log',
+          path: './logs/production.log',
         },
       ],
     },
   },
   email: {
     enabled: true,
-    templatesBasePath: './test/templates',
+    templatesPath: './test/templates',
   },
   i18n: {
     directories: [{ path: './src/locales' }],

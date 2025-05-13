@@ -1,14 +1,10 @@
 import type { EnvironmentConfig, EmailConfig, LoggerConfig, ServerConfig, I18nConfig } from './';
 
-/**
- * Configuration options for the Meowv API Kit.
- */
 export interface ApiKitConfig {
   /**
    * The output directory where the generated API files will be stored.
-   * If not specified, it defaults to `.apikit`.
    *
-   * @default ".apikit"
+   * @default ".runtime"
    */
   outDir?: string;
 

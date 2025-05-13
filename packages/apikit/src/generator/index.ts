@@ -1,15 +1,15 @@
 import fs from 'fs';
-import path from 'path';
 
 import { generateEnvironment, writeGeneratedFile } from './data';
 
+import { resolvePath, ensureDirectory } from '#/utils';
 import type { ApiKitConfig } from '#/configuration';
 
 /**
  * Generate the application core.
  */
 export async function generate(config: ApiKitConfig): Promise<void> {
-  const defaultOutputPath = '.apikit';
+  const defaultOutputPath = '.runtime';
   const outputPath = await prepareGeneratedDirectory(config.outDir ?? defaultOutputPath);
   const generatedFiles: string[] = [];
 
@@ -23,7 +23,7 @@ export async function generate(config: ApiKitConfig): Promise<void> {
 }
 
 async function prepareGeneratedDirectory(outDir: string): Promise<string> {
-  const outputPath = path.resolve(process.cwd(), outDir);
+  const outputPath = resolvePath(process.cwd(), outDir);
 
   if (outputPath === process.cwd()) {
     throw new Error('Cannot use root directory as output path!');
@@ -33,6 +33,7 @@ async function prepareGeneratedDirectory(outDir: string): Promise<string> {
     if (!fs.lstatSync(outputPath).isDirectory()) {
       throw new Error(`Output path ${outputPath} exists but is not a directory`);
     }
+
     fs.rmSync(outputPath, {
       recursive: true,
       force: true,
@@ -41,10 +42,7 @@ async function prepareGeneratedDirectory(outDir: string): Promise<string> {
     });
   }
 
-  fs.mkdirSync(outputPath, {
-    recursive: true,
-    mode: 0o755,
-  });
+  ensureDirectory(outputPath);
 
   return outputPath;
 }

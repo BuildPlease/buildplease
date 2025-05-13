@@ -81,7 +81,7 @@ export interface FileTransportOptions extends BaseTransportOptions {
    * Should be resolved via `resolvePath`.
    * @example resolvePath(import.meta.url, './logs/production.log')
    */
-  logFilePath: string;
+  path: string;
 }
 
 // ────────────────────────────────────────────────────────────────────────────────

@@ -9,15 +9,13 @@ export interface EmailConfig {
   /**
    * Base path to the folder containing email templates.
    * Must be an absolute file system path.
-   *
-   * If not provided, defaults to `resolvePath(process.cwd(), './src/templates/email')`.
+   * Should be resolved via `resolvePath`.
    *
    * @example
-   * // When setting manually, resolve from your app root:
    * resolvePath(import.meta.url, './src/templates/email')
    *
    * @default
-   * resolvePath(process.cwd(), './src/templates/email')
+   * resolvePath(process.cwd(), './src/templates')
    */
-  templatesBasePath?: string;
+  templatesPath?: string;
 }

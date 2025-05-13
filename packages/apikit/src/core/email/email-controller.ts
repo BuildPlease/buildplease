@@ -37,8 +37,7 @@ export class EmailControllerImpl implements EmailController {
   ) {
     this.isEnabled = this.configuration.email.enabled;
     this.templatesPath =
-      this.configuration.email.templatesBasePath ||
-      resolvePath(process.cwd(), './src/templates/email');
+      this.configuration.email.templatesPath || resolvePath(process.cwd(), './src/templates');
 
     if (this.isEnabled) {
       this.smtpConfig = this.validateSmtpConfig();

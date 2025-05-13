@@ -5,7 +5,6 @@ import pino from 'pino';
 import { filterObject, isEmptyObject } from '@nidavellirx/meowv-core';
 
 import { ApiKitSymbols } from '#/di';
-import { ensureDirectory } from '#/utils';
 import type {
   ApiKitController,
   TransportOptions,
@@ -16,6 +15,7 @@ import type {
 } from '#/configuration';
 import type { LogOptions } from '#/logger';
 import type { RequestMetadata } from '#/request';
+import { ensureDirectory, createFile } from '#/utils';
 
 export interface LoggerController {
   get instance(): Logger;
@@ -209,19 +209,21 @@ export class LoggerControllerImpl implements LoggerController {
   }
 
   private createFileTarget(config: FileTransportOptions): pino.TransportTargetOptions {
-    try {
-      const fileDestination = ensureDirectory(config.logFilePath);
+    let fileDestination: string;
 
-      return {
-        target: 'pino/file',
-        options: {
-          destination: fileDestination,
-          level: config.level,
-        },
-      };
-    } catch (error) {
-      throw error;
+    try {
+      fileDestination = ensureDirectory(config.path);
+    } catch {
+      fileDestination = createFile(config.path);
     }
+
+    return {
+      target: 'pino/file',
+      options: {
+        destination: fileDestination,
+        level: config.level,
+      },
+    };
   }
 
   private resolveGlobalLogLevel(transports: TransportOptions[]): Level {

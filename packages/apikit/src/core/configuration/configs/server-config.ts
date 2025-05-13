@@ -36,10 +36,15 @@ export interface StaticFilesConfig {
   enabled?: boolean;
 
   /**
-   * Directory containing static assets, relative to the project root
-   * @default 'public'
+   * Path to directory containing static assets, relative to the project root
+   * Should be resolved via `resolvePath`.
+   *
+   * @example
+   * resolvePath(import.meta.url, './src/public')
+   * @default
+   * resolvePath(process.cwd(), 'public')
    */
-  directory?: string;
+  path?: string;
 
   /**
    * URL prefix for static routes
