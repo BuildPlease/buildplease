@@ -15,5 +15,18 @@ export default defineConfig({
   outDir: 'dist',
   platform: 'neutral',
   tsconfig: 'tsconfig.json',
-  external: ['fs', 'path', 'node:*', 'reflect-metadata', 'inversify', 'ms'],
+  external: [
+    // Node built-ins
+    'fs',
+    'path',
+    'node:*',
+
+    // Decorator metadata
+    'reflect-metadata',
+
+    // External dependencies
+    'inversify',
+    'ms',
+    'date-fns',
+  ],
 });

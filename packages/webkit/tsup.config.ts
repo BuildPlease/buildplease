@@ -16,13 +16,20 @@ export default defineConfig({
   platform: 'browser',
   tsconfig: 'tsconfig.json',
   external: [
+    // Node built-ins (polyfilled or ignored in browser)
     'fs',
     'path',
     'node:*',
+
+    // Decorator metadata
     'reflect-metadata',
+
+    // External runtime dependencies
     'axios',
     'inversify',
     'zod',
-    '@nidavellirx/*',
+
+    // Internal workspace packages
+    '@nidavellirx/meowv-core',
   ],
 });

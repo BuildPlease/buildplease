@@ -23,5 +23,15 @@ export default defineConfig({
   platform: 'node',
   target: 'esnext',
   format: ['esm'],
-  external: ['fs', 'path', 'node:*', 'citty', 'jiti', '@dotenvx/*'],
+  external: [
+    // Node built-ins
+    'fs',
+    'path',
+    'node:*',
+
+    // CLI utilities
+    'citty',
+    'jiti',
+    '@dotenvx/dotenvx',
+  ],
 });

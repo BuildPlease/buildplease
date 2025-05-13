@@ -29,25 +29,43 @@ export default defineConfig({
   format: ['cjs', 'esm'],
 
   external: [
+    // Node built-ins
     'fs',
     'path',
     'node:*',
+
+    // Decorator shim
     'reflect-metadata',
+
+    // Internal workspace packages
+    '@nidavellirx/meowv-core',
+
+    // External dependencies used in the lib
+    'i18next',
+    'i18next-fs-backend',
+    'lodash.merge',
+    'inversify',
     'pino',
     'pino-pretty',
     'zod',
-    'inversify',
     'bcrypt',
     'axios',
     'ejs',
     'validator',
     'libphonenumber-js',
-    '@nidavellirx/*',
-    '@dotenvx/*',
+    'nodemailer',
+
+    // Fastify & related plugins
     'fastify',
-    '@fastify/*',
+    '@fastify/cookie',
+    '@fastify/static',
+    '@fastify/view',
     'fastify-ip',
     'fastify-plugin',
+
+    // ESM config loader
+    '@dotenvx/dotenvx',
+    'jiti',
   ],
 
   onSuccess: async () => {
