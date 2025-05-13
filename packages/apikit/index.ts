@@ -7,7 +7,7 @@ import {
   DatabaseAssembly,
   EmailAssembly,
   FormatterAssembly,
-  LocalizationAssembly,
+  I18nAssembly,
   LoggerAssembly,
   NormalizationAssembly,
   SchemaAssembly,
@@ -33,15 +33,15 @@ export function MEOWV_APIKIT_INITIALIZE(): Assembly[] {
 function makeAssemblies(): Assembly[] {
   return [
     new ConfigurationAssembly(),
+    new LoggerAssembly(),
+    new I18nAssembly(),
     new DatabaseAssembly(),
     new EmailAssembly(),
     new FormatterAssembly(),
-    new LocalizationAssembly(),
-    new LoggerAssembly(),
     new NormalizationAssembly(),
     new SchemaAssembly(),
     new SecurityAssembly(),
-    new ServerAssembly(),
     new ValidationAssembly(),
+    new ServerAssembly(),
   ];
 }

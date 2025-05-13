@@ -16,6 +16,6 @@ declare global {
     serverConfig: ServerConfig;
     emailConfig: EmailConfig;
     i18nConfig?: I18nConfig;
-    staticFileConfig?: StaticFilesConfig;
+    staticFilesConfig?: StaticFilesConfig;
   };
 }

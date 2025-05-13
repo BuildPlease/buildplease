@@ -25,7 +25,7 @@ interface ApiKitConfigInput<Environments extends readonly EnvironmentConfig[]> {
   logger: { [K in EnvironmentNames<Environments>]: LoggerConfig };
   email: EmailConfig;
   i18n?: I18nConfig;
-  staticFile?: StaticFilesConfig;
+  staticFiles?: StaticFilesConfig;
 }
 
 export function defineApikitConfig<const Environments extends readonly EnvironmentConfig[]>(

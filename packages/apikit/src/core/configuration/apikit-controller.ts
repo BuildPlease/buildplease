@@ -15,44 +15,82 @@ export interface ApiKitController {
   get server(): ServerConfig;
   get email(): EmailConfig;
   get i18n(): I18nConfig | undefined;
-  get staticFile(): StaticFilesConfig | undefined;
+  get staticFiles(): StaticFilesConfig | undefined;
 }
 
 @injectable()
 export class ApiKitControllerImpl implements ApiKitController {
+  private readonly _environment: EnvironmentConfig;
+  private readonly _logger: LoggerConfig;
+  private readonly _server: ServerConfig;
+  private readonly _email: EmailConfig;
+  private readonly _i18n?: I18nConfig;
+  private readonly _staticFiles?: StaticFilesConfig;
+
+  constructor() {
+    this._environment = this.loadEnvironmentConfig();
+    this._logger = this.loadLoggerConfig();
+    this._server = this.loadServerConfig();
+    this._email = this.loadEmailConfig();
+    this._i18n = this.loadI18nConfig();
+    this._staticFiles = this.loadStaticFilesConfig();
+  }
+
   get environment(): EnvironmentConfig {
-    if (!global.apikit?.environmentConfig) {
-      throw new Error('Current environment is not defined.');
-    }
-    return global.apikit.environmentConfig;
+    return this._environment;
   }
 
   get logger(): LoggerConfig {
-    if (!global.apikit?.loggerConfig) {
-      throw new Error('Logger configuration is not defined.');
-    }
-    return global.apikit.loggerConfig;
+    return this._logger;
   }
 
   get server(): ServerConfig {
-    if (!global.apikit?.serverConfig) {
-      throw new Error('Server configuration is not defined.');
-    }
-    return global.apikit.serverConfig;
+    return this._server;
   }
 
   get email(): EmailConfig {
-    if (!global.apikit?.emailConfig) {
-      throw new Error('Email configuration is not defined.');
-    }
-    return global.apikit.emailConfig;
+    return this._email;
   }
 
   get i18n(): I18nConfig | undefined {
-    return global.apikit.i18nConfig;
+    return this._i18n;
   }
 
-  get staticFile(): StaticFilesConfig | undefined {
-    return global.apikit.staticFileConfig;
+  get staticFiles(): StaticFilesConfig | undefined {
+    return this._staticFiles;
+  }
+
+  // MARK: - Private loaders
+
+  private loadEnvironmentConfig(): EnvironmentConfig {
+    const config = global.apikit?.environmentConfig;
+    if (!config) throw new Error('Environment config is missing.');
+    return config;
+  }
+
+  private loadLoggerConfig(): LoggerConfig {
+    const config = global.apikit?.loggerConfig;
+    if (!config) throw new Error('Logger config is missing.');
+    return config;
+  }
+
+  private loadServerConfig(): ServerConfig {
+    const config = global.apikit?.serverConfig;
+    if (!config) throw new Error('Server config is missing.');
+    return config;
+  }
+
+  private loadEmailConfig(): EmailConfig {
+    const config = global.apikit?.emailConfig;
+    if (!config) throw new Error('Email config is missing.');
+    return config;
+  }
+
+  private loadI18nConfig(): I18nConfig | undefined {
+    return global.apikit?.i18nConfig;
+  }
+
+  private loadStaticFilesConfig(): StaticFilesConfig | undefined {
+    return global.apikit?.staticFilesConfig;
   }
 }

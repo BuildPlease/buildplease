@@ -7,19 +7,20 @@ import type { FastifyPluginAsync } from 'fastify';
 import { resolvePath, ensureDirectory } from '#/utils';
 import type { ServerPluginOptions } from '#/server';
 
+const pluginName = 'apikit-@fastify/static';
+
 const staticFilesPlugin: FastifyPluginAsync<ServerPluginOptions> = async (fastify, options) => {
-  const config = options.apikitController.staticFile;
+  const config = options.apikitController.staticFiles;
 
   // MARK: - Skip if not configured
   if (!config) {
-    fastify.log.info('[static] No static file config provided — skipping static plugin');
+    fastify.log.info(`[${pluginName}] No static file config provided — skipping`);
     return;
   }
 
   // MARK: - Resolve and ensure path
-  const resolvedPath = path.isAbsolute(config.rootPath)
-    ? config.rootPath
-    : resolvePath(process.cwd(), config.rootPath);
+  const rootPath = config.rootPath;
+  const resolvedPath = path.isAbsolute(rootPath) ? rootPath : resolvePath(process.cwd(), rootPath);
   const root = ensureDirectory(resolvedPath);
 
   // MARK: - Options with defaults
@@ -47,9 +48,9 @@ const staticFilesPlugin: FastifyPluginAsync<ServerPluginOptions> = async (fastif
   };
 
   await fastify.register(fastifyStatic, pluginOptions);
-  fastify.log.info(`Serving static files from ${pluginOptions.root}`);
+  fastify.log.info(`Serving static files from ${root}`);
 };
 
 export default fp(staticFilesPlugin, {
-  name: 'apikit-@fastify/static',
+  name: pluginName,
 });

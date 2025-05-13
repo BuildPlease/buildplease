@@ -56,7 +56,7 @@ export async function makeApikitContext({
   const serverConfig = await initializeServer(config, environmentConfig);
   const emailConfig = await initializeEmail(config);
   const i18nConfig = await initializeI18n(config);
-  const staticFileConfig = await initializeStaticFile(config);
+  const staticFilesConfig = await initializeStaticFiles(config);
 
   global.apikit = {
     config: config,
@@ -65,7 +65,7 @@ export async function makeApikitContext({
     serverConfig: serverConfig,
     emailConfig: emailConfig,
     i18nConfig: i18nConfig,
-    staticFileConfig: staticFileConfig,
+    staticFilesConfig: staticFilesConfig,
   };
 
   log.success(`\n🚀 ApiKit context created for '${process.env.NODE_ENV}' environment`);
@@ -156,6 +156,6 @@ async function initializeI18n(config: ApiKitConfig): Promise<I18nConfig | undefi
 /**
  * Returns static files config if defined.
  */
-async function initializeStaticFile(config: ApiKitConfig): Promise<StaticFilesConfig | undefined> {
+async function initializeStaticFiles(config: ApiKitConfig): Promise<StaticFilesConfig | undefined> {
   return config.staticFiles;
 }
