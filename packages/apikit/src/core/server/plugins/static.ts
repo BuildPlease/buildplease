@@ -1,24 +1,49 @@
+import path from 'node:path';
+
 import fp from 'fastify-plugin';
 import fastifyStatic, { type FastifyStaticOptions } from '@fastify/static';
 import type { FastifyPluginAsync } from 'fastify';
 
-import { resolvePath } from '#/utils';
+import { resolvePath, ensureDirectory } from '#/utils';
 import type { ServerPluginOptions } from '#/server';
 
 const staticFilesPlugin: FastifyPluginAsync<ServerPluginOptions> = async (fastify, options) => {
-  const configuration = options.apikitController.staticFile ?? {};
+  const config = options.apikitController.staticFile;
 
-  const { path = 'public', routePrefix = '/', maxAge = 3600 } = configuration;
+  // MARK: - Skip if not configured
+  if (!config) {
+    fastify.log.info('[static] No static file config provided — skipping static plugin');
+    return;
+  }
+
+  // MARK: - Resolve and ensure path
+  const resolvedPath = path.isAbsolute(config.rootPath)
+    ? config.rootPath
+    : resolvePath(process.cwd(), config.rootPath);
+  const root = ensureDirectory(resolvedPath);
+
+  // MARK: - Options with defaults
+  const {
+    routePrefix = '/',
+    maxAge = 3600,
+    enabled = true,
+    dotfiles = 'ignore',
+    decorateReply = true,
+    immutable = true,
+    etag = true,
+    preCompressed = false,
+  } = config;
 
   const pluginOptions: FastifyStaticOptions = {
-    root: resolvePath(process.cwd(), path),
+    root: root,
     prefix: routePrefix,
-    maxAge,
-    dotfiles: 'ignore',
-    immutable: true,
-    etag: true,
-    serve: configuration.enabled,
-    decorateReply: true,
+    maxAge: maxAge,
+    serve: enabled,
+    dotfiles: dotfiles,
+    decorateReply: decorateReply,
+    immutable: immutable,
+    etag: etag,
+    preCompressed: preCompressed,
   };
 
   await fastify.register(fastifyStatic, pluginOptions);

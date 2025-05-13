@@ -7,6 +7,7 @@ import type {
   ServerConfig,
   LoggerConfig,
   I18nConfig,
+  StaticFilesConfig,
 } from '#/configuration';
 
 // MARK: - Main
@@ -24,6 +25,7 @@ interface ApiKitConfigInput<Environments extends readonly EnvironmentConfig[]> {
   logger: { [K in EnvironmentNames<Environments>]: LoggerConfig };
   email: EmailConfig;
   i18n?: I18nConfig;
+  staticFile?: StaticFilesConfig;
 }
 
 export function defineApikitConfig<const Environments extends readonly EnvironmentConfig[]>(

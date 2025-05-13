@@ -38,7 +38,7 @@ export class ResponseControllerImpl implements ResponseController {
   }
 
   private async sendJSONResponse(
-    request: FastifyRequest,
+    _request: FastifyRequest,
     reply: FastifyReply,
     response: JSONHttpResponse,
   ): Promise<void> {
