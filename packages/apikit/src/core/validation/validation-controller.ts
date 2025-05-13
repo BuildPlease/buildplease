@@ -1,9 +1,8 @@
 import validator from 'validator';
 import { injectable } from 'inversify';
-import type { CountryCode } from 'libphonenumber-js';
-import { parsePhoneNumberFromString } from 'libphonenumber-js';
+import { type CountryCode, parsePhoneNumberFromString } from 'libphonenumber-js';
 
-import { ApiErrorCodes } from '#/error';
+import { ApiErrorFactory } from '#/error';
 
 export interface ValidationController {
   isValidEmail(email?: string | null): boolean;
@@ -36,7 +35,7 @@ export class ValidationControllerImpl implements ValidationController {
 
   isValidEmailThrowing(email?: string | null): void {
     if (!this.isValidEmail(email)) {
-      throw ApiErrorCodes.Validation.INVALID_EMAIL_FORMAT();
+      throw ApiErrorFactory.make('Validation.INVALID_EMAIL_FORMAT');
     }
   }
 
@@ -56,7 +55,7 @@ export class ValidationControllerImpl implements ValidationController {
 
   isValidPhoneNumberThrowing(phoneNumber?: string | null, countryCode?: string): void {
     if (!this.isValidPhoneNumber(phoneNumber, countryCode)) {
-      throw ApiErrorCodes.Validation.INVALID_PHONE_NUMBER_FORMAT();
+      throw ApiErrorFactory.make('Validation.INVALID_PHONE_NUMBER_FORMAT');
     }
   }
 
@@ -66,7 +65,9 @@ export class ValidationControllerImpl implements ValidationController {
 
   isValidCodeThrowing(code?: string | null): void {
     if (!this.isValidCode(code)) {
-      throw ApiErrorCodes.Validation.INVALID_FORMAT('Input is not a valid code');
+      throw ApiErrorFactory.make('Validation.INVALID_FORMAT', {
+        details: 'Input is not a valid code',
+      });
     }
   }
 
@@ -76,7 +77,7 @@ export class ValidationControllerImpl implements ValidationController {
 
   isEmailThrowing(input?: string | null): void {
     if (!this.isEmail(input)) {
-      throw ApiErrorCodes.Validation.INVALID_EMAIL_FORMAT();
+      throw ApiErrorFactory.make('Validation.INVALID_EMAIL_FORMAT');
     }
   }
 
@@ -86,7 +87,7 @@ export class ValidationControllerImpl implements ValidationController {
 
   isPhoneNumberThrowing(input?: string | null): void {
     if (!this.isPhoneNumber(input)) {
-      throw ApiErrorCodes.Validation.INVALID_PHONE_NUMBER_FORMAT();
+      throw ApiErrorFactory.make('Validation.INVALID_PHONE_NUMBER_FORMAT');
     }
   }
 
@@ -96,7 +97,8 @@ export class ValidationControllerImpl implements ValidationController {
 
   isNumberThrowing(input?: any): void {
     if (!this.isNumber(input)) {
-      throw ApiErrorCodes.Validation.INVALID_PROPERTIES('Input is not a valid number');
+      const details = 'Input is not a valid number';
+      throw ApiErrorFactory.make('Validation.INVALID_PROPERTIES', { details: details });
     }
   }
 
@@ -106,7 +108,8 @@ export class ValidationControllerImpl implements ValidationController {
 
   isStringThrowing(input?: string | null): void {
     if (!this.isString(input)) {
-      throw ApiErrorCodes.Validation.INVALID_PROPERTIES('Input is not a valid string');
+      const details = 'Input is not a valid string';
+      throw ApiErrorFactory.make('Validation.INVALID_PROPERTIES', { details: details });
     }
   }
 
@@ -116,7 +119,8 @@ export class ValidationControllerImpl implements ValidationController {
 
   isEmptyStringThrowing(input?: string | null): void {
     if (!this.isEmptyString(input)) {
-      throw ApiErrorCodes.Validation.INVALID_PROPERTIES('Input is not an empty string');
+      const details = 'Input is not an empty string';
+      throw ApiErrorFactory.make('Validation.INVALID_PROPERTIES', { details: details });
     }
   }
 
@@ -128,7 +132,8 @@ export class ValidationControllerImpl implements ValidationController {
     const validatedInput = input;
 
     if (typeof validatedInput !== 'string' || validatedInput.trim() === '') {
-      throw ApiErrorCodes.Validation.INVALID_PROPERTIES('Input is empty or not a string');
+      const details = 'Input is empty or not a string';
+      throw ApiErrorFactory.make('Validation.INVALID_PROPERTIES', { details: details });
     }
 
     return validatedInput;
@@ -143,7 +148,7 @@ export class ValidationControllerImpl implements ValidationController {
 
   isValidDateThrowing(dateString?: string | null): Date {
     if (!this.isValidDate(dateString)) {
-      throw ApiErrorCodes.Validation.INVALID_DATE_FORMAT();
+      throw ApiErrorFactory.make('Validation.INVALID_DATE_FORMAT');
     }
 
     return new Date(dateString!);

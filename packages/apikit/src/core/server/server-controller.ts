@@ -6,7 +6,7 @@ import Plugins from './plugins';
 
 import { ApiKitSymbols } from '#/di';
 import type { LoggerController } from '#/logger';
-import { ApiError, ApiErrorCodes } from '#/error';
+import { ApiError, ApiErrorFactory } from '#/error';
 import type { ApiKitController } from '#/configuration';
 
 // MARK: - Plugins Options
@@ -97,21 +97,22 @@ export class ServerControllerImpl implements ServerController {
     this.server.setErrorHandler(async (error, request, reply) => {
       const isValidationError = Array.isArray(error.validation);
       const isInternalError = !error.statusCode || error.statusCode === 500;
-      const internalError = ApiErrorCodes.Server.INTERNAL_SERVER_ERROR();
+      const internalError = ApiErrorFactory.make('Server.INTERNAL_SERVER_ERROR');
 
       const handleApiError = (apiError: ApiError) => {
         reply.status(apiError.statusCode).send(apiError.toJSON());
       };
 
       const handleValidationError = () => {
-        const validationError = ApiErrorCodes.Validation.BAD_REQUEST();
+        const validationError = ApiErrorFactory.make('Validation.BAD_REQUEST');
         const statusCode = error.statusCode || validationError.statusCode;
-
-        reply.status(statusCode).send({
+        const response = ApiError.with({
           statusCode: statusCode,
-          identifier: validationError.identifier,
+          code: validationError.code,
           message: error.message,
-        });
+        }).toJSON();
+
+        reply.status(statusCode).send(response);
       };
 
       const handleInternalError = () => {
@@ -124,11 +125,13 @@ export class ServerControllerImpl implements ServerController {
 
       const handleError = () => {
         const statusCode = error.statusCode || 500;
-        reply.status(statusCode).send({
+        const response = ApiError.with({
           statusCode: statusCode,
-          identifier: error.code || error.name || internalError.identifier,
+          code: error.code || error.name || internalError.code,
           message: error.message || internalError.message,
-        });
+        }).toJSON();
+
+        reply.status(statusCode).send(response);
       };
 
       if (error instanceof ApiError) {

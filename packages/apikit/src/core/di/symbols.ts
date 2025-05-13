@@ -23,6 +23,10 @@ const Schema = {
   Controller: Symbol.for(`${prefix}.Schema.DtoController`),
 };
 
+const Localization = {
+  Controller: Symbol.for(`${prefix}.Localization.Controller`),
+};
+
 const Normalization = {
   Controller: Symbol.for(`${prefix}.Normalization.Controller`),
 };
@@ -52,6 +56,7 @@ export const ApiKitSymbols = {
     Email,
     Validation,
     Schema,
+    Localization,
     Normalization,
     Formatter,
     Logger,

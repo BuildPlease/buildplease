@@ -1,8 +1,8 @@
+import { injectable } from 'inversify';
 import validator from 'validator';
 import { parsePhoneNumberWithError } from 'libphonenumber-js';
-import { injectable } from 'inversify';
 
-import { ApiErrorCodes } from '#/error';
+import { ApiErrorFactory } from '#/error';
 
 export interface NormalizationController {
   normalizeEmail(email: string): string;
@@ -28,7 +28,7 @@ export class NormalizationControllerImpl implements NormalizationController {
       icloud_remove_subaddress: true,
     });
     if (!normalizedEmail) {
-      throw ApiErrorCodes.Validation.INVALID_EMAIL_FORMAT();
+      throw ApiErrorFactory.make('Validation.INVALID_PHONE_NUMBER_FORMAT');
     }
     return normalizedEmail as string;
   }
@@ -38,7 +38,7 @@ export class NormalizationControllerImpl implements NormalizationController {
       const number = parsePhoneNumberWithError(phoneNumber);
       return number.format('E.164');
     } catch {
-      throw ApiErrorCodes.Validation.INVALID_PHONE_NUMBER_FORMAT();
+      throw ApiErrorFactory.make('Validation.INVALID_PHONE_NUMBER_FORMAT');
     }
   }
 
@@ -47,7 +47,7 @@ export class NormalizationControllerImpl implements NormalizationController {
       const number = parsePhoneNumberWithError(phoneNumber);
       return number.format('INTERNATIONAL');
     } catch {
-      throw ApiErrorCodes.Validation.INVALID_PHONE_NUMBER_FORMAT();
+      throw ApiErrorFactory.make('Validation.INVALID_PHONE_NUMBER_FORMAT');
     }
   }
 
@@ -56,7 +56,7 @@ export class NormalizationControllerImpl implements NormalizationController {
       const number = parsePhoneNumberWithError(phoneNumber);
       return number.format('NATIONAL').replace(/[^\d]/g, '');
     } catch {
-      throw ApiErrorCodes.Validation.INVALID_PHONE_NUMBER_FORMAT();
+      throw ApiErrorFactory.make('Validation.INVALID_PHONE_NUMBER_FORMAT');
     }
   }
 }
