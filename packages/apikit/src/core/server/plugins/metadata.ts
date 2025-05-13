@@ -8,6 +8,7 @@ import type { ServerPluginOptions } from '#/server';
 
 const requestMetadataPlugin: FastifyPluginAsync<ServerPluginOptions> = async (fastify, options) => {
   const logger = options.loggerController;
+  const i18n = options.i18nController;
 
   // MARK: - onRequest
   fastify.addHook('onRequest', async (request) => {
@@ -19,7 +20,7 @@ const requestMetadataPlugin: FastifyPluginAsync<ServerPluginOptions> = async (fa
       query: request.query,
       params: request.params,
       ip: !isNullOrEmpty(request.ip) ? request.ip : (request.ips?.[0] ?? request.ip),
-      locale: request.headers['accept-language'],
+      locale: i18n.parseLocale(request.headers['accept-language']),
       headers: request.headers,
     };
 

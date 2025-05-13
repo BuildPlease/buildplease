@@ -1,45 +1,79 @@
+export interface I18nDirEntry {
+  /**
+   * Path to a folder containing JSON translation files.
+   *
+   * Files must follow the format: `<locale>.json`, e.g., `en.json`, `sk.json`.
+   *
+   * @example './src/locales'
+   */
+  path: string;
+}
+
 export interface I18nFileEntry {
   /**
-   * Absolute or relative path to the JSON file containing translations.
+   * Path to a single JSON translation file.
    *
-   * @example './locales/en.json'
+   * @example './src/locales/sk.json'
    */
   path: string;
 
   /**
-   * The locale code this file represents (e.g. 'en', 'sk', 'de').
+   * The language code this file represents.
    *
-   * @example 'en'
+   * @example 'sk'
    */
   locale: string;
 }
 
 export interface I18nConfig {
   /**
-   * Custom localization files to be merged into the i18n store.
-   * These override or extend the built-in framework translations.
+   * Directories containing multiple translation files.
    *
-   * @default []
+   * All `.json` files will be automatically loaded and inferred as locale files.
+   *
+   * @example [{ path: './src/locales' }]
    */
-  locales?: I18nFileEntry[];
+  directories?: I18nDirEntry[];
 
   /**
-   * The default language to use for translation fallback.
+   * Individual translation files mapped to specific language codes.
+   * These can override or extend directory-based files.
+   *
+   * @example [{ locale: 'sk', path: './overrides/sk.json' }]
+   */
+  files?: I18nFileEntry[];
+
+  /**
+   * Language code to use as fallback when no translation is found.
    *
    * @default 'en'
    */
   defaultLanguage?: string;
 
   /**
-   * List of all locales to preload into memory.
-   * Must include the defaultLanguage if used.
+   * List of language codes to preload at startup.
+   * Must include `defaultLanguage`.
    *
-   * @default ['en']
+   * @default ['en', 'sk', 'cs']
    */
   supportedLanguages?: string[];
 
   /**
-   * Enables debug logging for i18next initialization.
+   * Optional list of namespaces to register (e.g., ['common', 'errors']).
+   *
+   * @default ['translation']
+   */
+  namespaces?: string[];
+
+  /**
+   * The default namespace used when calling `t()` without specifying one.
+   *
+   * @default 'translation'
+   */
+  defaultNamespace?: string;
+
+  /**
+   * Enables debug logging during i18next initialization.
    *
    * @default false
    */

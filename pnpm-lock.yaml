@@ -74,9 +74,6 @@ importers:
       i18next:
         specifier: 25.1.2
         version: 25.1.2(typescript@5.8.3)
-      i18next-fs-backend:
-        specifier: 2.6.0
-        version: 2.6.0
       inversify:
         specifier: 7.5.0
         version: 7.5.0(reflect-metadata@0.2.2)
@@ -4347,9 +4344,6 @@ packages:
   human-signals@5.0.0:
     resolution: {integrity: sha512-AXcZb6vzzrFAUE61HnN4mpLqd/cSIwNQjtNWR0euPm6y0iqx3G4gOXaIDdtdDwZmhwe82LA6+zinmW4UBWVePQ==}
     engines: {node: '>=16.17.0'}
-
-  i18next-fs-backend@2.6.0:
-    resolution: {integrity: sha512-3ZlhNoF9yxnM8pa8bWp5120/Ob6t4lVl1l/tbLmkml/ei3ud8IWySCHt2lrY5xWRlSU5D9IV2sm5bEbGuTqwTw==}
 
   i18next@25.1.2:
     resolution: {integrity: sha512-SP63m8LzdjkrAjruH7SCI3ndPSgjt4/wX7ouUUOzCW/eY+HzlIo19IQSfYA9X3qRiRP1SYtaTsg/Oz/PGsfD8w==}
@@ -12702,8 +12696,6 @@ snapshots:
   human-signals@4.3.1: {}
 
   human-signals@5.0.0: {}
-
-  i18next-fs-backend@2.6.0: {}
 
   i18next@25.1.2(typescript@5.8.3):
     dependencies:

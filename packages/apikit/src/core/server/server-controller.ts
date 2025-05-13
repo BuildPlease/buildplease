@@ -5,12 +5,14 @@ import Fastify from 'fastify';
 import Plugins from './plugins';
 
 import { ApiKitSymbols } from '#/di';
+import type { I18nController } from '#/i18n';
 import type { LoggerController } from '#/logger';
 import { ApiError, ApiErrorFactory } from '#/error';
 import type { ApiKitController } from '#/configuration';
 
 // MARK: - Plugins Options
 export interface ServerPluginBaseOptions {
+  i18nController: I18nController;
   loggerController: LoggerController;
   apikitController: ApiKitController;
 }
@@ -29,6 +31,8 @@ export class ServerControllerImpl implements ServerController {
   private server: FastifyInstance;
 
   constructor(
+    @inject(ApiKitSymbols.DI.I18n.Controller)
+    private i18n: I18nController,
     @inject(ApiKitSymbols.DI.Logger.Controller)
     private logger: LoggerController,
     @inject(ApiKitSymbols.DI.Configuration.Controller)
@@ -57,6 +61,7 @@ export class ServerControllerImpl implements ServerController {
     registerExternal: (instance: FastifyInstance) => Promise<void> = async () => {},
   ): Promise<void> {
     const options: ServerPluginOptions = {
+      i18nController: this.i18n,
       loggerController: this.logger,
       apikitController: this.configuration,
     };

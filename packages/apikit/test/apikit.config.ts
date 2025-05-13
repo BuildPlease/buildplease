@@ -72,4 +72,13 @@ export default defineApikitConfig({
     enabled: true,
     templatesBasePath: './test/templates',
   },
+  i18n: {
+    directories: [{ path: './src/locales' }],
+    files: [
+      { locale: 'sk', path: './src/locales/sk-custom.json' },
+      { locale: 'en', path: './overrides/en.json' },
+    ],
+    defaultLanguage: 'sk',
+    supportedLanguages: ['sk', 'en'],
+  },
 });

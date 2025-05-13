@@ -42,7 +42,6 @@ export default defineConfig({
 
     // External dependencies used in the lib
     'i18next',
-    'i18next-fs-backend',
     'lodash.merge',
     'inversify',
     'pino',
@@ -74,7 +73,7 @@ export default defineConfig({
 });
 
 async function copyLocales(): Promise<void> {
-  const sourceLocalesDir = resolvePath(import.meta.url, './src/core/localization/locales');
+  const sourceLocalesDir = resolvePath(import.meta.url, './src/core/i18n/locales');
   const destLocalesDir = resolvePath(import.meta.url, './dist/src/locales');
 
   const entries = await fs.promises.readdir(sourceLocalesDir, { withFileTypes: true });

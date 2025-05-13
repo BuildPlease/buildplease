@@ -5,7 +5,7 @@ export * from './email';
 export * from './error';
 export * from './formatter';
 export * from './http';
-export * from './localization';
+export * from './i18n';
 export * from './logger';
 export * from './normalization';
 export * from './schema';

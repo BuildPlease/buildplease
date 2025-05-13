@@ -1,8 +1,8 @@
 import type { LocalizedApiError } from '#/error';
 import { ApiError, ApiErrorCodes } from '#/error';
-import { type LocalizationOptions, LocalizationProvider } from '#/localization';
+import { type I18nOptions, I18nProvider } from '#/i18n';
 
-export interface ApiErrorFactoryOptions extends LocalizationOptions {
+export interface ApiErrorFactoryOptions extends I18nOptions {
   /**
    * Overrides the localized message for this error.
    * Use this to supply a custom error message instead of a translated one.
@@ -19,7 +19,7 @@ export interface ApiErrorFactoryOptions extends LocalizationOptions {
 export class ApiErrorFactory {
   static make<K extends AllErrorKeys>(key: K, options: ApiErrorFactoryOptions = {}): ApiError {
     const def: ErrorByKey<K> = getErrorByPath(ApiErrorCodes, key);
-    const message = options.message ?? LocalizationProvider.t(def.key, options);
+    const message = options.message ?? I18nProvider.t(def.key, options);
 
     return new ApiError({
       code: def.code,
