@@ -1,4 +1,4 @@
-import type { EnvironmentConfig, EmailConfig, LoggerConfig, ServerConfig } from './';
+import type { EnvironmentConfig, EmailConfig, LoggerConfig, ServerConfig, I18nConfig } from './';
 
 /**
  * Configuration options for the Meowv API Kit.
@@ -31,9 +31,14 @@ export interface ApiKitConfig {
   logger: Record<string, LoggerConfig>;
 
   /**
-   * Email configurations mapped by environment or custom keys.
+   * Email configurations
    * Defines email template base paths and whether email sending is enabled.
    *
    */
-  email: Record<string, EmailConfig>;
+  email: EmailConfig;
+
+  /**
+   * Localization/i18n configuration for register custom file entries.
+   */
+  i18n?: I18nConfig;
 }

@@ -4,6 +4,7 @@ import type {
   EnvironmentConfig,
   LoggerConfig,
   ServerConfig,
+  I18nConfig,
 } from '@nidavellirx/meowv-apikit';
 
 declare global {
@@ -13,5 +14,6 @@ declare global {
     loggerConfig: LoggerConfig;
     serverConfig: ServerConfig;
     emailConfig: EmailConfig;
+    i18nConfig?: I18nConfig;
   };
 }

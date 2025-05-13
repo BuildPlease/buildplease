@@ -69,12 +69,7 @@ export default defineApikitConfig({
     },
   },
   email: {
-    development: {
-      enabled: true,
-      templatesBasePath: './test/templates',
-    },
-    production: {
-      enabled: false,
-    },
+    enabled: true,
+    templatesBasePath: './test/templates',
   },
 });

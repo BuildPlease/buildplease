@@ -1,85 +1,41 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-import { injectable } from 'inversify';
+import { inject, injectable } from 'inversify';
 import i18next, { type ReadCallback } from 'i18next';
 import Backend from 'i18next-fs-backend';
-import { merge } from 'lodash';
+import merge from 'lodash.merge';
 
-export interface LocalizationFileEntry {
-  /**
-   * Absolute or relative path to the JSON file containing translations.
-   *
-   * @example './locales/en.json'
-   */
-  path: string;
-
-  /**
-   * The locale code this file represents (e.g. 'en', 'sk', 'de').
-   *
-   * @example 'en'
-   */
-  locale: string;
-}
-
-export interface LocalizationConfigurationOptions {
-  /**
-   * Custom localization files to be merged into the i18n store.
-   * These override or extend the built-in framework translations.
-   *
-   * @default []
-   */
-  locales?: LocalizationFileEntry[];
-
-  /**
-   * The default language to use for translation fallback.
-   *
-   * @default 'en'
-   */
-  defaultLanguage?: string;
-
-  /**
-   * List of all locales to preload into memory.
-   * Must include the defaultLanguage if used.
-   *
-   * @default ['en']
-   */
-  supportedLanguages?: string[];
-
-  /**
-   * Enables debug logging for i18next initialization.
-   *
-   * @default false
-   */
-  debug?: boolean;
-}
+import { ApiKitSymbols } from '#/di';
+import type { ApiKitController, I18nConfig, I18nFileEntry } from '#/configuration';
 
 export interface LocalizationController {
-  prepare(options?: LocalizationConfigurationOptions): Promise<void>;
+  prepare(): Promise<void>;
 }
 
 @injectable()
 export class LocalizationControllerImpl implements LocalizationController {
   private readonly builtinLocalesDir = path.resolve(__dirname, 'locales');
 
-  public async prepare(options: LocalizationConfigurationOptions = {}): Promise<void> {
-    const {
-      locales = [],
-      defaultLanguage = 'en',
-      supportedLanguages = ['en'],
-      debug = false,
-    } = options;
+  constructor(
+    @inject(ApiKitSymbols.DI.Configuration.Controller)
+    private readonly configuration: ApiKitController,
+  ) {}
 
-    const allLocales: LocalizationFileEntry[] = [...this.resolveBuiltinLocales(), ...locales];
+  public async prepare(): Promise<void> {
+    const config = this.prepareConfig();
+
+    const builtinLocales = this.resolveBuiltinLocales();
+    const allLocales: I18nFileEntry[] = [...builtinLocales, ...config.locales];
 
     const translations = this.buildTranslationMap(allLocales);
     const LOAD_PATH_TEMPLATE = '{{lng}}.json';
 
     await i18next.use(Backend).init({
-      lng: defaultLanguage,
-      fallbackLng: defaultLanguage,
-      preload: supportedLanguages,
-      debug,
+      lng: config.defaultLanguage,
+      fallbackLng: config.defaultLanguage,
+      preload: config.supportedLanguages,
+      debug: config.debug,
       backend: {
         loadPath: LOAD_PATH_TEMPLATE,
         read: (lng: string, _ns: string, callback: ReadCallback) => {
@@ -91,8 +47,26 @@ export class LocalizationControllerImpl implements LocalizationController {
     });
   }
 
-  private resolveBuiltinLocales(): LocalizationFileEntry[] {
-    const entries: LocalizationFileEntry[] = [];
+  // MARK: - Private
+
+  private prepareConfig(): Required<I18nConfig> {
+    const i18nConfig = this.configuration.i18n ?? {};
+
+    const defaultI18nConfig: Required<I18nConfig> = {
+      locales: [],
+      defaultLanguage: 'en',
+      supportedLanguages: ['en'],
+      debug: false,
+    };
+
+    return {
+      ...defaultI18nConfig,
+      ...i18nConfig,
+    };
+  }
+
+  private resolveBuiltinLocales(): I18nFileEntry[] {
+    const entries: I18nFileEntry[] = [];
 
     const files = fs.readdirSync(this.builtinLocalesDir);
     for (const file of files) {
@@ -108,7 +82,7 @@ export class LocalizationControllerImpl implements LocalizationController {
     return entries;
   }
 
-  private buildTranslationMap(locales: LocalizationFileEntry[]): Record<string, any> {
+  private buildTranslationMap(locales: I18nFileEntry[]): Record<string, any> {
     const translations: Record<string, any> = {};
 
     for (const { path: filePath, locale } of locales) {
@@ -127,6 +101,7 @@ export class LocalizationControllerImpl implements LocalizationController {
         throw new Error(`[i18n] Invalid JSON in file: ${resolvedPath}`);
       }
 
+      // Merge custom values into base, respecting override
       merge(translations, { [locale]: json });
     }
 

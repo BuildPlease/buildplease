@@ -11,6 +11,7 @@ import type {
   EnvironmentConfig,
   LoggerConfig,
   ServerConfig,
+  I18nConfig,
 } from '#/configuration';
 
 /**
@@ -52,14 +53,16 @@ export async function makeApikitContext({
   const environmentConfig = await initializeEnvironment(config, environment);
   const loggerConfig = await initializeLogger(config, environmentConfig);
   const serverConfig = await initializeServer(config, environmentConfig);
-  const emailConfig = await initializeEmail(config, environmentConfig);
+  const emailConfig = await initializeEmail(config);
+  const i18nConfig = await initializeI18n(config);
 
   global.apikit = {
-    config,
-    environmentConfig,
-    loggerConfig,
-    serverConfig,
-    emailConfig,
+    config: config,
+    environmentConfig: environmentConfig,
+    loggerConfig: loggerConfig,
+    serverConfig: serverConfig,
+    emailConfig: emailConfig,
+    i18nConfig: i18nConfig,
   };
 
   log.success(`\n🚀 ApiKit context created for '${process.env.NODE_ENV}' environment`);
@@ -102,19 +105,6 @@ async function initializeEnvironment(
 }
 
 /**
- * Initializes the email configuration for the given environment.
- *
- * @throws Error if the server configuration is missing for the environment.
- */
-async function initializeEmail(config: ApiKitConfig, env: EnvironmentConfig): Promise<EmailConfig> {
-  const emailConfig = config.email[env.name];
-  if (!emailConfig) {
-    throw new Error(`Missing email configuration for "${env.name}"`);
-  }
-  return emailConfig;
-}
-
-/**
  * Initializes the logger configuration for the given environment.
  *
  * @throws Error if the logger configuration is missing for the environment.
@@ -124,9 +114,7 @@ async function initializeLogger(
   env: EnvironmentConfig,
 ): Promise<LoggerConfig> {
   const loggerConfig = config.logger[env.name];
-  if (!loggerConfig) {
-    throw new Error(`Missing logger configuration for "${env.name}"`);
-  }
+  if (!loggerConfig) throw new Error(`Missing logger configuration for "${env.name}"`);
   return loggerConfig;
 }
 
@@ -140,8 +128,23 @@ async function initializeServer(
   env: EnvironmentConfig,
 ): Promise<ServerConfig> {
   const serverConfig = config.server[env.name];
-  if (!serverConfig) {
-    throw new Error(`Missing server configuration for "${env.name}"`);
-  }
+  if (!serverConfig) throw new Error(`Missing server configuration for "${env.name}"`);
   return serverConfig;
+}
+
+/**
+ * Initializes the email configuration for the given environment.
+ *
+ * @throws Error if the server configuration is missing for the environment.
+ */
+async function initializeEmail(config: ApiKitConfig): Promise<EmailConfig> {
+  const emailConfig = config.email;
+  if (!emailConfig) throw new Error(`Missing email configuration`);
+  return emailConfig;
+}
+
+async function initializeI18n(config: ApiKitConfig): Promise<I18nConfig | undefined> {
+  if (!config.i18n) return undefined;
+
+  return config.i18n;
 }

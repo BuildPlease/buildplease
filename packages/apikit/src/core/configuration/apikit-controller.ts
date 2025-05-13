@@ -1,12 +1,19 @@
 import { injectable } from 'inversify';
 
-import type { EmailConfig, EnvironmentConfig, LoggerConfig, ServerConfig } from '#/configuration';
+import type {
+  EmailConfig,
+  EnvironmentConfig,
+  LoggerConfig,
+  ServerConfig,
+  I18nConfig,
+} from '#/configuration';
 
 export interface ApiKitController {
   get environment(): EnvironmentConfig;
   get logger(): LoggerConfig;
   get server(): ServerConfig;
   get email(): EmailConfig;
+  get i18n(): I18nConfig | undefined;
 }
 
 @injectable()
@@ -15,12 +22,14 @@ export class ApiKitControllerImpl implements ApiKitController {
   private _logger: LoggerConfig;
   private _server: ServerConfig;
   private _email: EmailConfig;
+  private _i18n?: I18nConfig;
 
   constructor() {
     this._environment = this.makeEnvironment();
     this._logger = this.makeLogger();
     this._server = this.makeServer();
     this._email = this.makeEmail();
+    this._i18n = this.makeI18n();
   }
 
   public get environment(): EnvironmentConfig {
@@ -39,12 +48,14 @@ export class ApiKitControllerImpl implements ApiKitController {
     return this._email;
   }
 
+  public get i18n(): I18nConfig | undefined {
+    return this._i18n;
+  }
+
   private makeEnvironment(): EnvironmentConfig {
     const environment = global.apikit.environmentConfig;
 
-    if (!environment) {
-      throw new Error('Current environment is not defined.');
-    }
+    if (!environment) throw new Error('Current environment is not defined.');
 
     return environment;
   }
@@ -52,9 +63,7 @@ export class ApiKitControllerImpl implements ApiKitController {
   private makeLogger(): LoggerConfig {
     const loggerConfig = global.apikit.loggerConfig;
 
-    if (!loggerConfig) {
-      throw new Error('Logger configuration is not defined.');
-    }
+    if (!loggerConfig) throw new Error('Logger configuration is not defined.');
 
     return loggerConfig;
   }
@@ -62,9 +71,7 @@ export class ApiKitControllerImpl implements ApiKitController {
   private makeServer(): ServerConfig {
     const serverConfig = global.apikit.serverConfig;
 
-    if (!serverConfig) {
-      throw new Error('Server configuration is not defined.');
-    }
+    if (!serverConfig) throw new Error('Server configuration is not defined.');
 
     return serverConfig;
   }
@@ -72,10 +79,12 @@ export class ApiKitControllerImpl implements ApiKitController {
   private makeEmail(): EmailConfig {
     const emailConfig = global.apikit.emailConfig;
 
-    if (!emailConfig) {
-      throw new Error('Email configuration is not defined.');
-    }
+    if (!emailConfig) throw new Error('Email configuration is not defined.');
 
     return emailConfig;
+  }
+
+  private makeI18n(): I18nConfig | undefined {
+    return global.apikit.i18nConfig;
   }
 }

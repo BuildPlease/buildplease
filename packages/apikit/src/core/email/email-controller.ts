@@ -31,7 +31,7 @@ export class EmailControllerImpl implements EmailController {
 
   constructor(
     @inject(ApiKitSymbols.DI.Configuration.Controller)
-    private configuration: ApiKitController,
+    private readonly configuration: ApiKitController,
     @inject(ApiKitSymbols.DI.Logger.Controller)
     private logger: LoggerController,
   ) {
