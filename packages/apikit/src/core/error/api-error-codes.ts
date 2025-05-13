@@ -1,3 +1,12 @@
+export interface LocalizedApiError {
+  /** A machine-readable error code. */
+  code: string;
+  /** A translation key used for localization. */
+  key: string;
+  /** The associated HTTP status code. */
+  statusCode: number;
+}
+
 /**
  * Registers a validated, nested error definition tree.
  *
@@ -9,15 +18,6 @@ export function defineErrors<T extends RecursiveErrorTree>(errors: T): T {
   return errors;
 }
 
-export interface LocalizedApiError {
-  /** A machine-readable error code. */
-  code: string;
-  /** A translation key used for localization. */
-  key: string;
-  /** The associated HTTP status code. */
-  statusCode: number;
-}
-
 /**
  * A recursive object structure for organizing nested error definitions.
  * Leaf nodes must be valid `LocalizedApiError` objects.
@@ -25,37 +25,6 @@ export interface LocalizedApiError {
 type RecursiveErrorTree = {
   [key: string]: RecursiveErrorTree | LocalizedApiError;
 };
-
-/**
- * Flattens a nested error tree into dot-notation string keys.
- *
- * @template T - The nested error object.
- * @template P - Used for recursive path prefixing.
- * @example
- * // From:
- * // { Auth: { UNAUTHORIZED: { ... } } }
- * // To: "Auth.UNAUTHORIZED"
- */
-type Flatten<T, P extends string = ''> = {
-  [K in keyof T]: T[K] extends LocalizedApiError
-    ? `${P}${K & string}`
-    : Flatten<T[K], `${P}${K & string}.`>;
-}[keyof T];
-
-/**
- * Resolves a nested value by a flattened dot-notation key.
- *
- * @template T - The object tree to traverse.
- * @template P - The dot-separated path (e.g., "Auth.UNAUTHORIZED").
- */
-
-type ValueAtPath<T, P extends string> = P extends `${infer Head}.${infer Rest}`
-  ? Head extends keyof T
-    ? ValueAtPath<T[Head], Rest>
-    : never
-  : P extends keyof T
-    ? T[P]
-    : never;
 
 // --- Runtime Error Definitions ---
 
@@ -181,22 +150,3 @@ export const ApiErrorCodes = {
   Authorization: AuthorizationErrors,
   Validation: ValidationErrors,
 } as const;
-
-/**
- * All valid error keys derived from the nested error tree.
- * Used for autocomplete and compile-time safety.
- *
- * @example
- * 'Validation.INVALID_EMAIL_FORMAT'
- * 'Server.TIMEOUT'
- */
-export type AllErrorKeys = Flatten<typeof ApiErrorCodes>;
-
-/**
- * Resolves the full `LocalizedApiError` type for a given dot-notation key.
- *
- * @template K - A valid key from `AllErrorKeys`.
- * @example
- * ErrorByKey<'Validation.INVALID_FORMAT'> -> { code, key, statusCode }
- */
-export type ErrorByKey<K extends AllErrorKeys> = ValueAtPath<typeof ApiErrorCodes, K>;

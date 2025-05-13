@@ -1,4 +1,5 @@
-import { ApiError, ApiErrorCodes, type AllErrorKeys, type ErrorByKey } from '#/error';
+import type { LocalizedApiError } from '#/error';
+import { ApiError, ApiErrorCodes } from '#/error';
 import { type LocalizationOptions, LocalizationProvider } from '#/localization';
 
 export interface ApiErrorFactoryOptions extends LocalizationOptions {
@@ -29,6 +30,58 @@ export class ApiErrorFactory {
   }
 }
 
+// MARK: - Private
+
 function getErrorByPath(obj: any, path: string): any {
   return path.split('.').reduce((acc, key) => acc?.[key], obj);
 }
+
+/**
+ * Flattens a nested error tree into dot-notation string keys.
+ *
+ * @template T - The nested error object.
+ * @template P - Used for recursive path prefixing.
+ * @example
+ * // From:
+ * // { Auth: { UNAUTHORIZED: { ... } } }
+ * // To: "Auth.UNAUTHORIZED"
+ */
+type Flatten<T, P extends string = ''> = {
+  [K in keyof T]: T[K] extends LocalizedApiError
+    ? `${P}${K & string}`
+    : Flatten<T[K], `${P}${K & string}.`>;
+}[keyof T];
+
+/**
+ * Resolves a nested value by a flattened dot-notation key.
+ *
+ * @template T - The object tree to traverse.
+ * @template P - The dot-separated path (e.g., "Auth.UNAUTHORIZED").
+ */
+
+type ValueAtPath<T, P extends string> = P extends `${infer Head}.${infer Rest}`
+  ? Head extends keyof T
+    ? ValueAtPath<T[Head], Rest>
+    : never
+  : P extends keyof T
+    ? T[P]
+    : never;
+
+/**
+ * All valid error keys derived from the nested error tree.
+ * Used for autocomplete and compile-time safety.
+ *
+ * @example
+ * 'Validation.INVALID_EMAIL_FORMAT'
+ * 'Server.TIMEOUT'
+ */
+type AllErrorKeys = Flatten<typeof ApiErrorCodes>;
+
+/**
+ * Resolves the full `LocalizedApiError` type for a given dot-notation key.
+ *
+ * @template K - A valid key from `AllErrorKeys`.
+ * @example
+ * ErrorByKey<'Validation.INVALID_FORMAT'> -> { code, key, statusCode }
+ */
+type ErrorByKey<K extends AllErrorKeys> = ValueAtPath<typeof ApiErrorCodes, K>;
