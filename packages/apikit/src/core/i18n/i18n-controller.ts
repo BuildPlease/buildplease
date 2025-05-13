@@ -5,7 +5,7 @@ import i18next from 'i18next';
 import merge from 'lodash.merge';
 
 import { ApiKitSymbols } from '#/di';
-import { resolvePath } from '#/utils';
+import { resolvePath, ensureDirectory } from '#/utils';
 import type { LoggerController } from '#/logger';
 import type { ApiKitController, I18nConfig, I18nFileEntry } from '#/configuration';
 
@@ -108,15 +108,18 @@ export class I18nControllerImpl implements I18nController {
   }
 
   private resolveLocalesFromDir(dir: string): I18nFileEntry[] {
-    if (!fs.existsSync(dir)) return [];
+    const absoluteDir = ensureDirectory(dir);
 
-    return fs
-      .readdirSync(dir)
-      .filter((file) => file.endsWith('.json'))
-      .map((file) => ({
-        locale: file.replace('.json', ''),
-        path: resolvePath(dir, file),
-      }));
+    const files = fs.readdirSync(absoluteDir).filter((file) => file.endsWith('.json'));
+
+    if (files.length === 0) {
+      throw new Error(`[i18n] No .json files found in directory: ${absoluteDir}`);
+    }
+
+    return files.map((file) => ({
+      locale: file.replace('.json', ''),
+      path: resolvePath(absoluteDir, file),
+    }));
   }
 
   private mergeLocales(entries: I18nFileEntry[]): Record<string, any> {
