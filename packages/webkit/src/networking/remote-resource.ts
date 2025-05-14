@@ -1,6 +1,12 @@
 import { injectable } from 'inversify';
 
-import type { AsyncOperation } from '@nidavellirx/meowv-core';
+import {
+  type AsyncOperation,
+  isDefined,
+  isDefinedAndNotNull,
+  isNonEmptyString,
+  emptyOrUndefinedStringToNull,
+} from '@nidavellirx/meowv-core';
 
 import {
   type RemoteEndpoint,
@@ -42,18 +48,30 @@ export class RemoteResource<
   }
 
   public parseError(error: unknown): Error {
+    // MARK: - 1) get HTTP status (axios.response.status or direct .status)
     const statusCode =
       this.getNestedProperty<number>(error, 'response.status') ??
       this.getNestedProperty<number>(error, 'status');
 
-    const responseMessage =
-      this.getNestedProperty<string>(error, 'response.data.message') ??
-      this.getNestedProperty<string>(error, 'message');
+    // MARK: - 2) get JSON body, if any
+    const payload = this.getNestedProperty<Record<string, any>>(error, 'response.data');
 
-    if (statusCode) {
-      return new HttpError(statusCode, responseMessage);
+    // MARK: - 3) require status + code + message
+    if (
+      isDefined(statusCode) &&
+      isDefinedAndNotNull(payload) &&
+      isNonEmptyString(payload.code) &&
+      isNonEmptyString(payload.message)
+    ) {
+      return new HttpError({
+        statusCode,
+        code: payload.code,
+        message: payload.message,
+        details: emptyOrUndefinedStringToNull(payload.details),
+      });
     }
 
+    // MARK: - 4) fallback
     return new Error('An unexpected error occurred');
   }
 
