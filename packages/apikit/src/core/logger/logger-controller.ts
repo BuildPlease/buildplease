@@ -128,9 +128,10 @@ export class LoggerControllerImpl implements LoggerController {
 
   private formatMetadata(metadata: Partial<RequestMetadata>): object | undefined {
     const selectedHeaders = {
-      accept: metadata.headers?.accept,
-      'content-type': metadata.headers?.['content-type'],
       'user-agent': metadata.headers?.['user-agent'],
+      'content-type': metadata.headers?.['content-type'],
+      'accept-language': metadata.headers?.['accept-language'],
+      accept: metadata.headers?.accept,
     };
 
     const input = {
