@@ -1,3 +1,5 @@
+import path from 'node:path';
+
 import { injectable, inject } from 'inversify';
 import type { Bindings, Logger, Level } from 'pino';
 import pino from 'pino';
@@ -15,7 +17,7 @@ import type {
 } from '#/configuration';
 import type { LogOptions } from '#/logger';
 import type { RequestMetadata } from '#/request';
-import { ensureDirectory, createFile } from '#/utils';
+import { resolvePath, createDirectory, createFile } from '#/utils';
 
 export interface LoggerController {
   get instance(): Logger;
@@ -216,18 +218,15 @@ export class LoggerControllerImpl implements LoggerController {
   }
 
   private makeFileTransportTarget(config: FileTransportOptions): pino.TransportTargetOptions {
-    let fileDestination: string;
+    const absFile = resolvePath(process.cwd(), config.path);
 
-    try {
-      fileDestination = ensureDirectory(config.path);
-    } catch {
-      fileDestination = createFile(config.path);
-    }
+    createDirectory(path.dirname(absFile));
+    createFile(absFile);
 
     return {
       target: 'pino/file',
       options: {
-        destination: fileDestination,
+        destination: absFile,
         level: config.level,
       },
     };
