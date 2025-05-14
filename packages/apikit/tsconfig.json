@@ -52,11 +52,11 @@
     "index.ts",
     "src",
     "types",
-    "test",
+    "tests",
   ],
   "exclude": [
     "node_modules",
     "dist",
-    ".apikit"
+    ".apikit",
   ]
 }

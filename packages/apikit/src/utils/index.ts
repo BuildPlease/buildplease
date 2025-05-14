@@ -1,9 +1,7 @@
-import { existsSync } from 'fs';
-
 import { createJiti } from 'jiti';
 
 import type { ApiKitConfig } from '#/configuration';
-import { resolvePath } from '#/utils';
+import { resolvePath, ensureDirectory } from '#/utils';
 
 export const log = {
   success: (message: string) => console.log('\x1b[32m' + message + '\x1b[0m'),
@@ -22,9 +20,7 @@ export async function loadConfig(dir?: string, configName?: string): Promise<Api
   const cwd = process.cwd();
   const rootDir = dir ? resolvePath(cwd, dir) : cwd;
 
-  if (!existsSync(rootDir)) {
-    throw new Error(`Directory ${rootDir} does not exist`);
-  }
+  ensureDirectory(rootDir);
 
   const configFile = configName
     ? resolvePath(rootDir, configName)

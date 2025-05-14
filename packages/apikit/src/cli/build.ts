@@ -1,8 +1,7 @@
 import { defineCommand } from 'citty';
 
-import { loadConfig, log } from '@/utils';
-
 import { generate } from '@/generator';
+import { loadConfig, log } from '@/utils';
 
 export const buildCommand = defineCommand({
   meta: {
@@ -16,22 +15,24 @@ export const buildCommand = defineCommand({
       'Examples:',
       '  apikit build',
       '  apikit build --dir ./src',
-      '  apikit build -c custom.config -d ./configs',
+      '  apikit build -d ./configs -c custom.config',
     ].join('\n'),
   },
   args: {
     dir: {
       type: 'string',
-      description: 'The directory to build',
+      description: 'Directory to look for apikit.config',
       name: 'dir',
+      alias: 'd',
       required: false,
     },
     config: {
       type: 'string',
       name: 'config',
+      alias: 'c',
       description: [
         'The configuration file to use relative to the current working directory.',
-        'By default, apikit tries to read `apikit.config` from the build `DIR` by default.',
+        'By default, apikit tries to read `apikit.config`',
         '',
       ].join('\n'),
       required: false,
@@ -39,14 +40,14 @@ export const buildCommand = defineCommand({
   },
   run: async ({ args }) => {
     try {
-      log.info('🚀 Building...');
+      log.info('🚀 Building Apikit');
 
       const { dir: argDirPath, config: argConfigName } = args;
       const apikitConfig = await loadConfig(argDirPath, argConfigName);
 
       await generate(apikitConfig);
 
-      log.success('🎉 Build complete!');
+      log.success('🎉 Build Complete!');
     } catch (error) {
       log.error((error as Error).message);
       process.exit(1);
