@@ -9,25 +9,29 @@ export async function generateEnvironment(
 ): Promise<string[]> {
   const { environments } = config;
 
+  // ENUM with single quotes
   const environmentEnum = `export enum Environment {
-    ${environments.map((env) => `${env.name} = "${env.name}"`).join(',\n    ')}
-  }`;
+${environments.map((env) => `  ${env.name} = '${env.name}',`).join('\n')}
+}`;
 
+  // OBJECT with single quotes
   const environmentObject = `export const Environments = {
-    ${environments
-      .map(
-        (env) =>
-          `${env.name}: { name: Environment.${env.name}, file: "${env.file}", fileDir: "${env.fileDir || ''}" }`,
-      )
-      .join(',\n    ')}
-  } as const;
-  export type EnvironmentType = keyof typeof Environments;`;
+${environments
+  .map(
+    (env) =>
+      `  ${env.name}: { name: Environment.${env.name}, file: '${env.file}', fileDir: '${env.fileDir ?? ''}' },`,
+  )
+  .join('\n')}
+} as const;
+
+export type EnvironmentType = keyof typeof Environments;`;
 
   const content = `${environmentEnum}\n\n${environmentObject}\n`;
 
-  const fileName = 'environment.ts';
-  const fullPath = path.join(outputPath, fileName);
+  const baseName = 'environment';
+  const filename = `${baseName}.ts`;
+  const fullPath = path.join(outputPath, filename);
   createFile(fullPath, content);
 
-  return [fileName];
+  return [baseName];
 }

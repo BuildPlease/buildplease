@@ -1,20 +1,19 @@
+import path from 'node:path';
+
 import { generateEnvironment } from './data';
 
-import { resolvePath, removePath, createDirectory, createFile } from '#/utils';
 import type { ApiKitConfig } from '#/configuration';
+import { resolvePath, removePath, createDirectory, createFile } from '#/utils';
 
 export async function generate(config: ApiKitConfig): Promise<void> {
   const defaultOutputPath = '.apikit';
   const outputPath = await prepareGeneratedDirectory(config.outDir ?? defaultOutputPath);
-  const generatedFiles: string[] = [];
 
-  const generatorMethods = [generateEnvironment];
+  const generatedBases: string[] = [];
 
-  for (const gen of generatorMethods) {
-    generatedFiles.push(...(await gen(config, outputPath)));
-  }
+  generatedBases.push(...(await generateEnvironment(config, outputPath)));
 
-  await generateBarrelExport(outputPath, generatedFiles);
+  await generateBarrelExport(outputPath, generatedBases);
 }
 
 async function prepareGeneratedDirectory(outDir: string): Promise<string> {
@@ -30,7 +29,8 @@ async function prepareGeneratedDirectory(outDir: string): Promise<string> {
   return outputPath;
 }
 
-async function generateBarrelExport(outputPath: string, generatedFiles: string[]) {
-  const exportStatements = generatedFiles.map((file) => `export * from './${file}';`).join('\n');
-  createFile(`${outputPath}/index.ts`, exportStatements);
+async function generateBarrelExport(outputPath: string, generatedBases: string[]) {
+  const exportStatements = generatedBases.map((base) => `export * from './${base}.js';`).join('\n');
+
+  createFile(path.join(outputPath, 'index.ts'), exportStatements);
 }
