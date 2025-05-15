@@ -16,28 +16,6 @@ interface BaseTransportOptions {
 // Console transport types
 
 /**
- * Console transport using raw `console` output.
- */
-export interface RawConsoleTransportOptions extends BaseTransportOptions {
-  /**
-   * Transport type: console.
-   */
-  type: 'console';
-
-  /**
-   * Specifies the target transport.
-   * Must be 'console' for raw output.
-   */
-  target: 'console';
-
-  /**
-   * Indicates whether to include timestamps in log entries.
-   * @default false
-   */
-  timestamp: boolean;
-}
-
-/**
  * Console transport using `pino-pretty` formatter.
  */
 export interface PrettyConsoleTransportOptions extends BaseTransportOptions {
@@ -62,7 +40,7 @@ export interface PrettyConsoleTransportOptions extends BaseTransportOptions {
 /**
  * All supported console transport variants.
  */
-export type ConsoleTransportOptions = RawConsoleTransportOptions | PrettyConsoleTransportOptions;
+export type ConsoleTransportOptions = PrettyConsoleTransportOptions;
 
 // ────────────────────────────────────────────────────────────────────────────────
 // File transport

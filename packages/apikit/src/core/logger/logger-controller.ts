@@ -2,7 +2,7 @@ import path from 'node:path';
 
 import { injectable, inject } from 'inversify';
 import type { Bindings, Logger, Level } from 'pino';
-import pino from 'pino';
+import { type LoggerOptions, pino } from 'pino';
 
 import { filterObject, isEmptyObject } from '@nidavellirx/meowv-core';
 
@@ -12,7 +12,6 @@ import type {
   TransportOptions,
   ConsoleTransportOptions,
   PrettyConsoleTransportOptions,
-  RawConsoleTransportOptions,
   FileTransportOptions,
 } from '#/configuration';
 import type { LogOptions } from '#/logger';
@@ -32,25 +31,26 @@ export interface LoggerController {
 
 @injectable()
 export class LoggerControllerImpl implements LoggerController {
-  private logger: Logger;
+  public instance: Logger;
 
   constructor(
     @inject(ApiKitSymbols.DI.Configuration.Controller)
     private configuration: ApiKitController,
   ) {
-    const loggerConfig = this.configuration.logger;
-    const transportTargets = this.makeTransportTargets(loggerConfig.transports);
-    const transport = pino.transport({ targets: transportTargets });
-    const globalLevel = this.resolveGlobalLogLevel(loggerConfig.transports);
+    const transports = this.configuration.logger.transports;
+    const level = this.resolveGlobalLogLevel(transports);
 
-    this.logger = pino({ level: globalLevel }, transport);
+    const options: LoggerOptions = { level };
+
+    // only supply a transport block if user actually configured any transports
+    if (transports.length > 0) {
+      options.transport = { targets: this.makeTransportTargets(transports) };
+    }
+
+    this.instance = pino(options);
   }
 
   // MARK: - Public
-
-  public get instance(): Logger {
-    return this.logger;
-  }
 
   public info(title: string, options?: LogOptions) {
     this.log('info', title, options);
@@ -77,7 +77,7 @@ export class LoggerControllerImpl implements LoggerController {
   }
 
   public child(bindings: Bindings) {
-    return this.logger.child(bindings);
+    return this.instance.child(bindings);
   }
 
   // MARK: - Private: Log
@@ -100,11 +100,11 @@ export class LoggerControllerImpl implements LoggerController {
       logObject.error = this.formatError(options.error);
     }
     if (options?.metadata) {
-      const formatter = this.formatMetadata(options.metadata);
-      if (formatter) logObject.metadata = formatter;
+      const formatted = this.formatMetadata(options.metadata);
+      if (formatted) logObject.metadata = formatted;
     }
 
-    this.logger[level]({ msg: title, ...logObject });
+    this.instance[level]({ msg: title, ...logObject });
   }
 
   private formatError(error: unknown): object {
@@ -198,18 +198,6 @@ export class LoggerControllerImpl implements LoggerController {
         options: {
           level: level,
           ...prettyConfig.pretty,
-        },
-      };
-    }
-
-    if (target === 'console') {
-      const rawConfig = config as RawConsoleTransportOptions;
-
-      return {
-        target: 'console',
-        options: {
-          level: level,
-          timestamp: rawConfig.timestamp,
         },
       };
     }

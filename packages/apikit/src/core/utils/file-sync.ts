@@ -3,15 +3,31 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 /**
- * Resolves an absolute path from a given base.
+ * Resolve `relative` against `base`, _unless_ `relative` is already absolute,
+ * in which case just normalize & return it.
  *
- * @param base - The base directory path or module URL (e.g., `import.meta.url`).
- * @param relativePath - The relative path to resolve from the base.
- * @returns Absolute resolved path.
+ * @param base     file:// URL or filesystem path
+ * @param relative relative path (./foo or ../bar) or an absolute path
  */
-export function resolvePath(base: string, relativePath: string): string {
-  const basePath = base.startsWith('file://') ? path.dirname(fileURLToPath(base)) : base;
-  return path.resolve(basePath, relativePath);
+export function resolvePath(base: string, relative: string): string {
+  // 1) If caller really passed an absolute path, just normalize & return.
+  if (path.isAbsolute(relative)) {
+    return path.normalize(relative);
+  }
+
+  // 2) Otherwise do our URL-or-path logic
+  let baseDir: string;
+  try {
+    const maybeUrl = new URL(base);
+    if (maybeUrl.protocol !== 'file:') {
+      throw new Error(`Unsupported URL protocol "${maybeUrl.protocol}"`);
+    }
+    baseDir = path.dirname(fileURLToPath(maybeUrl));
+  } catch {
+    baseDir = base;
+  }
+
+  return path.resolve(baseDir, relative);
 }
 
 /**

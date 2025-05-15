@@ -31,11 +31,6 @@ export default defineApikitConfig({
             translateTime: 'SYS:standard',
           },
         },
-        {
-          type: 'console',
-          target: 'console',
-          timestamp: false,
-        },
       ],
     },
     production: {
