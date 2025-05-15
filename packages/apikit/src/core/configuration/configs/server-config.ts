@@ -6,16 +6,6 @@ export interface ServerConfig {
   identifier: string;
 
   /**
-   * Server host address
-   */
-  host: string;
-
-  /**
-   * Server port number
-   */
-  port: number;
-
-  /**
    * Trust proxy configuration
    * @see https://www.fastify.io/docs/latest/Reference/Server/#trustproxy
    * @default false

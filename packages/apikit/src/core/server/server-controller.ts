@@ -88,10 +88,21 @@ export class ServerControllerImpl implements ServerController {
   }
 
   public async start(): Promise<void> {
-    const { port, host } = this.configuration.server;
+    const rawHost = process.env.SERVER_HOST;
+    const rawPort = process.env.SERVER_PORT;
+
+    if (!rawHost) throw new Error('Missing required environment variable: SERVER_HOST');
+    if (!rawPort) throw new Error('Missing required environment variable: SERVER_PORT');
+
+    const host = rawHost;
+    const port = Number(rawPort);
+
+    if (!Number.isInteger(port) || port <= 0 || port > 65535) {
+      throw new Error(`Invalid SERVER_PORT "${rawPort}", must be an integer 1-65535`);
+    }
 
     await this.server.ready();
-    await this.server.listen({ port: port, host: host });
+    await this.server.listen({ port, host });
 
     this.logger.info(`Server started on ${host}:${port}`);
   }
