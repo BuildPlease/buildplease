@@ -8,6 +8,7 @@
       "packages/*"
    ],
    "scripts": {
+      "preinstall": "npx only-allow pnpm",
       "update:check": "lerna exec -- npx npm-check-updates",
       "update:all": "lerna exec -- npx npm-check-updates -u",
       "update:interactive": "lerna exec -- npx npm-check-updates -i",
