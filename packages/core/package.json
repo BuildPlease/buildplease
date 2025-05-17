@@ -24,6 +24,7 @@
       "build": "tsup"
    },
    "dependencies": {
+      "bcryptjs": "^3.0.2",
       "date-fns": "4.1.0",
       "inversify": "7.5.0",
       "ms": "2.1.3",

@@ -33,7 +33,6 @@
       "@fastify/view": "11.0.0",
       "@nidavellirx/meowv-core": "workspace:^",
       "axios": "1.8.4",
-      "bcrypt": "5.1.1",
       "citty": "0.1.6",
       "ejs": "3.1.10",
       "fastify": "5.2.2",
@@ -53,7 +52,6 @@
    },
    "devDependencies": {
       "@swc/core": "1.11.20",
-      "@types/bcrypt": "5.0.2",
       "@types/ejs": "3.1.5",
       "@types/lodash.merge": "4.6.9",
       "@types/nodemailer": "6.4.17",
