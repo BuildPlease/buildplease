@@ -143,10 +143,19 @@ export const ValidationErrors = defineErrors({
   },
 });
 
+export const FormatErrors = defineErrors({
+  UNSUPPORTED_FORMAT: {
+    code: 'UNSUPPORTED_FORMAT',
+    key: 'errors.format.unsupported',
+    statusCode: 400,
+  },
+});
+
 export const ApiErrorCodes = {
   Common: CommonErrors,
   Server: ServerErrors,
   Limit: LimitErrors,
   Authorization: AuthorizationErrors,
   Validation: ValidationErrors,
+  Format: FormatErrors,
 } as const;

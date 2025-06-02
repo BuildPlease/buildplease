@@ -1,23 +1,13 @@
 import merge from 'lodash.merge';
 
-import type { LocalizedApiError } from '#/error';
-import { type RecursiveErrorTree, ApiError, ApiErrorCodes } from '#/error';
+import { type RecursiveErrorTree, type LocalizedApiError, ApiError, ApiErrorCodes } from '#/error';
 import { type I18nOptions, I18nProvider } from '#/i18n';
 
 /**
- * Configuration options for creating API errors with localized messages
- * @extends I18nOptions
+ * Options for creating a localized API error.
  *
- * @property {string} [message] - Optional override for translated error message
- * @property {string} [details] - Technical details for debugging/logging purposes
- *
- * @example
- * // Create error with custom message and debug details
- * ApiErrorFactory.make('Validation.INVALID_EMAIL', {
- *   message: 'Invalid email format',
- *   details: 'Received value: user@example',
- *   lng: 'es' // Force Spanish translation
- * });
+ * @property {string} [message]  Override for translated error message
+ * @property {string} [details]  Technical details for debugging or logging
  */
 export interface ApiErrorFactoryOptions extends I18nOptions {
   message?: string;
@@ -25,40 +15,38 @@ export interface ApiErrorFactoryOptions extends I18nOptions {
 }
 
 /**
- * Factory class for creating standardized, localized API errors
- *
- * @class
+ * Factory for creating standardized, localized API errors.
  *
  * @example
- * // Extended factory with custom errors
- * export const NotificationErrors = defineErrors({
+ * // Extend with custom errors
+ * const NotificationErrors = defineErrors({
  *   PUSH_NOTIFICATIONS_DISABLED: {
  *     code: 'PUSH_NOTIFICATIONS_DISABLED',
  *     key: 'errors.notification.push_notifications_disabled',
  *     statusCode: 409,
  *   },
- * }
+ * });
  * ApiErrorFactory.extend(NotificationErrors);
  *
  * @example
- * // Create error with default translation (based on current locale)
+ * // Create an error with default translation
  * ApiErrorFactory.make('Validation.INVALID_EMAIL');
  *
  * @example
- * // Create error with custom message only
+ * // Create an error with custom message
  * ApiErrorFactory.make('Validation.INVALID_EMAIL', {
- *   message: 'The provided email address is not formatted correctly.'
+ *   message: 'The provided email address is not formatted correctly.',
  * });
  *
  * @example
- * // Create error with custom message and debug details
+ * // Create an error with custom message and debug details
  * ApiErrorFactory.make('Validation.INVALID_EMAIL', {
  *   message: 'Invalid email format',
  *   details: 'Received value: user@example',
  * });
  *
  * @example
- * // Create error with forced locale override (e.g., Spanish) and custom details
+ * // Create an error with forced locale and details
  * ApiErrorFactory.make('Validation.INVALID_EMAIL', {
  *   lng: 'es',
  *   message: 'Formato de correo electrónico inválido',
@@ -67,13 +55,12 @@ export interface ApiErrorFactoryOptions extends I18nOptions {
  */
 export class ApiErrorFactory {
   /**
-   * Creates an API error instance from built-in error definitions
+   * Create an API error from built-in definitions.
    *
-   * @template {BuiltInKeys} K - Error key path type
-   * @param {K} key - Dot-separated path to error definition (e.g., 'Validation.INVALID_EMAIL')
-   * @param {ApiErrorFactoryOptions} [opts] - Configuration options
-   * @returns {ApiError} Configured error instance
-   * @throws {Error} When invalid key path is provided
+   * @param key   Dot-separated path to error definition, e.g. 'Validation.INVALID_EMAIL'
+   * @param opts  Options for message override, details, or locale
+   * @returns     Configured ApiError instance
+   * @throws      Error if the key path is invalid
    */
   static make(key: BuiltInKeys, opts: ApiErrorFactoryOptions = {}): ApiError {
     const def = getErrorByPath(ApiErrorCodes, key);
@@ -88,20 +75,18 @@ export class ApiErrorFactory {
   }
 
   /**
-   * Creates new error factory with merged error definitions
+   * Extend the factory with additional error definitions.
    *
-   * @template {Record<string, RecursiveErrorTree>} Extra - Custom error definitions type
-   * @param {Extra} extra - Custom error hierarchy to merge
-   * @returns {ExtendedErrorFactory} New factory class with combined error definitions
+   * @param extra  Custom error hierarchy to merge
+   * @returns      A new factory class with combined error definitions
    *
    * @example
-   * // Create extended factory with deep error structure
    * const InventoryErrors = ApiErrorFactory.extend({
    *   Stock: {
    *     OutOfStock: {
    *       code: 'STOCK_EMPTY',
    *       statusCode: 409,
-   *       key: 'errors.inventory.out_of_stock'
+   *       key: 'errors.inventory.out_of_stock',
    *     }
    *   }
    * });
@@ -114,13 +99,12 @@ export class ApiErrorFactory {
       static readonly codes = mergedCodes;
 
       /**
-       * Creates error from merged definitions
+       * Create an error from merged definitions.
        *
-       * @template {Flatten<typeof mergedCodes>} K - Merged error key path type
-       * @param {K} key - Dot-separated path in merged error hierarchy
-       * @param {ApiErrorFactoryOptions} [opts] - Configuration options
-       * @returns {ApiError} Configured error instance
-       * @throws {Error} When invalid extended key path is provided
+       * @param key   Dot-separated path in combined error hierarchy
+       * @param opts  Options for message override, details, or locale
+       * @returns     Configured ApiError instance
+       * @throws      Error if the key path is invalid
        */
       static make(key: Flatten<typeof mergedCodes>, opts: ApiErrorFactoryOptions = {}): ApiError {
         const def = getErrorByPath(this.codes, key);
@@ -143,8 +127,7 @@ export class ApiErrorFactory {
 // MARK: - Private Implementation
 
 /**
- * Type helper that generates dot-separated paths for error keys
- * @template T - Error tree type to flatten
+ * Generate dot-separated paths for nested error keys.
  *
  * @example
  * type Example = Flatten<{
@@ -165,18 +148,16 @@ type Flatten<T> = T extends LocalizedApiError
       : never
     : never;
 
-/**
- * Union type of all valid built-in error paths
- * @typedef {Flatten<typeof ApiErrorCodes>} BuiltInKeys
- */
+/** Union of all valid built-in error paths */
 type BuiltInKeys = Flatten<typeof ApiErrorCodes>;
 
 /**
- * Retrieves error definition from nested object structure
+ * Retrieve an error definition by its dot-separated path.
+ *
  * @private
- * @param {object} obj - Root error definition object
- * @param {string} path - Dot-separated key path
- * @returns {LocalizedApiError} Found error definition
+ * @param obj   Root error definitions object
+ * @param path  Dot-separated key path
+ * @returns     Found LocalizedApiError or undefined
  *
  * @example
  * const def = getErrorByPath(ApiErrorCodes, 'Validation.INVALID_EMAIL');
