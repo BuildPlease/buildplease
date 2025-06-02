@@ -84,7 +84,7 @@ importers:
         specifier: 4.6.2
         version: 4.6.2
       mime-types:
-        specifier: ^3.0.1
+        specifier: 3.0.1
         version: 3.0.1
       nodemailer:
         specifier: 6.10.1
@@ -115,7 +115,7 @@ importers:
         specifier: 4.6.9
         version: 4.6.9
       '@types/mime-types':
-        specifier: ^3.0.0
+        specifier: 3.0.0
         version: 3.0.0
       '@types/nodemailer':
         specifier: 6.4.17
@@ -13567,7 +13567,7 @@ snapshots:
 
   log-symbols@4.1.0:
     dependencies:
-      chalk: 4.1.2
+      chalk: 4.1.0
       is-unicode-supported: 0.1.0
 
   logform@2.7.0:

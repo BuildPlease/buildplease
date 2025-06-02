@@ -2,8 +2,12 @@ import { DateTime } from '@/utils';
 
 /**
  * Parses an input into a DateTime object if valid.
- * @param input - The input value to parse.
- * @returns A DateTime object if the input is a valid date, or null otherwise.
+ *
+ * @param {any} input
+ *   The input value to parse (string or Date).
+ *
+ * @returns {DateTime|null}
+ *   A DateTime object if the input is a valid date, or null otherwise.
  */
 export function parseDate(input: any): DateTime | null {
   if (typeof input === 'string' || input instanceof Date) {
@@ -17,9 +21,15 @@ export function parseDate(input: any): DateTime | null {
 
 /**
  * Parses an input into a DateTime object or throws an error if invalid.
- * @param input - The input value to parse.
- * @returns A DateTime object if the input is a valid date.
- * @throws Error if the input is an invalid date.
+ *
+ * @param {any} input
+ *   The input value to parse.
+ *
+ * @returns {DateTime}
+ *   A DateTime object if the input is a valid date.
+ *
+ * @throws {Error}
+ *   If the input is an invalid date.
  */
 export function parseDateThrowing(input: any): DateTime {
   const dateTime = parseDate(input);

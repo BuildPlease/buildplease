@@ -3,11 +3,17 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 /**
- * Resolve `relative` against `base`, _unless_ `relative` is already absolute,
- * in which case just normalize & return it.
+ * Resolve `relative` against `base`, unless `relative` is already absolute,
+ * in which case just normalize and return it.
  *
- * @param base     file:// URL or filesystem path
- * @param relative relative path (./foo or ../bar) or an absolute path
+ * @param {string} base
+ *   A `file://` URL or filesystem path to serve as the base.
+ * @param {string} relative
+ *   A relative path (e.g. `./foo` or `../bar`) or an absolute filesystem path.
+ * @returns {string}
+ *   The resulting absolute (normalized) filesystem path.
+ * @throws {Error}
+ *   If `base` is a non-file URL or cannot be parsed.
  */
 export function resolvePath(base: string, relative: string): string {
   // 1) If caller really passed an absolute path, just normalize & return.
@@ -15,7 +21,7 @@ export function resolvePath(base: string, relative: string): string {
     return path.normalize(relative);
   }
 
-  // 2) Otherwise do our URL-or-path logic
+  // 2) Otherwise, treat `base` as URL or filesystem path
   let baseDir: string;
   try {
     const maybeUrl = new URL(base);
@@ -33,13 +39,19 @@ export function resolvePath(base: string, relative: string): string {
 /**
  * Remove or clean a file or directory.
  *
- * @param target - File or directory path (relative or absolute).
- * @param opts - Removal options.
- * @param [opts.recursive=true] - Recurse into subdirectories when deleting a directory.
- * @param [opts.force=true] - Ignore “not found” errors.
- * @param [opts.cleanOnly=false] - If true:
- *   - For a directory: delete its contents but leave the directory itself.
- *   - For a file: truncate it without deleting the file.
+ * @param {string} target
+ *   File or directory path (relative or absolute).
+ * @param {object} [opts]
+ *   Removal options.
+ * @param {boolean} [opts.recursive=true]
+ *   Recurse into subdirectories when deleting a directory.
+ * @param {boolean} [opts.force=true]
+ *   Ignore “not found” errors.
+ * @param {boolean} [opts.cleanOnly=false]
+ *   When true:
+ *     - For a directory: delete its contents but leave the directory itself.
+ *     - For a file: truncate it without deleting the file.
+ * @returns {void}
  */
 export function removePath(
   target: string,
@@ -74,9 +86,12 @@ export function removePath(
 /**
  * Ensures the directory for a given path exists.
  *
- * @param targetPath - File or directory path.
- * @returns Absolute resolved path.
- * @throws If the target directory does not exist.
+ * @param {string} targetPath
+ *   File or directory path (relative or absolute).
+ * @returns {string}
+ *   The absolute, resolved path.
+ * @throws {Error}
+ *   If the target directory does not exist.
  */
 export function ensureDirectory(targetPath: string): string {
   const absolutePath = resolvePath(process.cwd(), targetPath);
@@ -94,9 +109,12 @@ export function ensureDirectory(targetPath: string): string {
 /**
  * Creates a directory if it doesn't exist.
  *
- * @param dirPath - The path to the directory.
- * @returns Absolute path to the created directory.
- * @throws If the path is invalid or a file already exists there.
+ * @param {string} dirPath
+ *   The path to the directory (relative or absolute).
+ * @returns {string}
+ *   The absolute path to the created directory.
+ * @throws {Error}
+ *   If the path is invalid or a file already exists at that path.
  */
 export function createDirectory(dirPath: string): string {
   const absolutePath = resolvePath(process.cwd(), dirPath);
@@ -121,10 +139,14 @@ export function createDirectory(dirPath: string): string {
  * Creates a file if it doesn't exist, and optionally seeds/appends content.
  * Also ensures its parent directory exists.
  *
- * @param filePath - Path to the file (relative or absolute).
- * @param content  - Optional string to write into the file (appended if exists).
- * @returns Absolute path to the created file.
- * @throws If the path exists but is not a file, or writing fails.
+ * @param {string} filePath
+ *   Path to the file (relative or absolute).
+ * @param {string} [content='']
+ *   Optional string to write into the file (appended if it already exists).
+ * @returns {string}
+ *   The absolute path to the created file.
+ * @throws {Error}
+ *   If the path exists but is not a file, or if writing fails.
  */
 export function createFile(filePath: string, content: string = ''): string {
   const absolutePath = resolvePath(process.cwd(), filePath);
@@ -133,7 +155,6 @@ export function createFile(filePath: string, content: string = ''): string {
   // ensure parent directory exists (throws if not)
   ensureDirectory(parentDir);
 
-  // stat or undefined if missing
   const stat = maybeStat(absolutePath);
 
   if (!stat) {
@@ -152,10 +173,13 @@ export function createFile(filePath: string, content: string = ''): string {
   return absolutePath;
 }
 
-// MARK: Private
-
 /**
- * Try to stat the given path; return Stats or undefined if it doesn't exist.
+ * Attempt to stat the given path; returns fs.Stats or undefined if it doesn't exist.
+ *
+ * @param {string} p
+ *   The path to check.
+ * @returns {fs.Stats | undefined}
+ *   The file/directory stats, or undefined if the path does not exist.
  */
 function maybeStat(p: string): fs.Stats | undefined {
   try {

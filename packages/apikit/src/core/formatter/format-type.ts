@@ -6,7 +6,22 @@ import { ApiErrorFactory } from '#/error';
  * Wraps both raw MIME strings (e.g. "image/png") and file extensions (e.g. "png", "foo.png")
  * into a validated media-type. Throws if the input cannot be resolved.
  *
+ * @param {string} input
+ *   Either a raw media-type ("type/subtype") or a filename/extension
+ *   (e.g. "foo.png", ".png", "png"). If unrecognized, throws a Format error.
+ *
  * @example
+ * // Using FormatErrors from defineErrors:
+ * import { defineErrors } from '@nidavellirx/meowv-apikit';
+ *
+ * export const FormatErrors = defineErrors({
+ *   UNSUPPORTED_FORMAT: {
+ *     code: 'UNSUPPORTED_FORMAT',
+ *     key: 'errors.format.unsupported',
+ *     statusCode: 400,
+ *   },
+ * });
+ *
  * // Create from a filename extension
  * const fmt1 = new FormatType('foo.png');
  * console.log(fmt1.value);      // "image/png"
@@ -30,7 +45,8 @@ import { ApiErrorFactory } from '#/error';
  *   const fmt = new FormatType('application/octet-stream');
  *   console.log(fmt.extension);
  * } catch {
- *   // ApiErrorFactory.make('Format.UNSUPPORTED_FORMAT') was thrown
+ *   // FormatErrors.UNSUPPORTED_FORMAT was thrown
+ *   throw ApiErrorFactory.make('Format.UNSUPPORTED_FORMAT');
  * }
  *
  * @example
@@ -48,31 +64,6 @@ import { ApiErrorFactory } from '#/error';
 export class FormatType {
   private readonly mimeType: string;
 
-  /**
-   * @param input
-   *   Either a raw media-type ("type/subtype") or a filename/extension
-   *   (e.g. "foo.png", ".png", "png").
-   *
-   * @throws
-   *   ApiErrorFactory.make('Format.UNSUPPORTED_FORMAT') if the input cannot be resolved
-   *   to a known MIME type.
-   *
-   * @example
-   * // Valid extension
-   * new FormatType('jpg'); // resolves to "image/jpeg"
-   *
-   * @example
-   * // Valid MIME
-   * new FormatType('text/plain'); // resolves to "text/plain"
-   *
-   * @example
-   * // Invalid input throws
-   * try {
-   *   new FormatType('unknown.ext');
-   * } catch (err) {
-   *   // err is an ApiError with code "Format.UNSUPPORTED_FORMAT"
-   * }
-   */
   constructor(input: string) {
     // MARK: - “type/subtype”: validate that it’s known
     if (input.includes('/')) {
@@ -101,7 +92,7 @@ export class FormatType {
   /**
    * The canonical file extension for this media type (e.g. "png" for "image/png").
    *
-   * @throws
+   * @throws {Error}
    *   ApiErrorFactory.make('Format.UNSUPPORTED_FORMAT') if no extension is found.
    *
    * @example
@@ -119,10 +110,10 @@ export class FormatType {
   /**
    * Compares this FormatType with another by their media-type strings.
    *
-   * @param other
+   * @param {FormatType} other
    *   Another FormatType to compare against.
    *
-   * @returns
+   * @returns {boolean}
    *   True if both instances resolve to the same media-type; false otherwise.
    *
    * @example

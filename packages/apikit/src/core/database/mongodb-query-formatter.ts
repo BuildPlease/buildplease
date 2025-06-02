@@ -3,43 +3,53 @@ import { injectable } from 'inversify';
 import type { MongoDbQuery } from '#/database';
 
 /**
- * Accepts a potentially nested MongoDbQuery<T> and returns a
- * flat object suitable for Mongoose’s `.find(...)` or similar methods.
+ * Flattens a potentially nested MongoDbQuery<T> into a single-level filter object.
  *
- * - Automatically skips any `undefined` values.
- * - Automatically skips any empty plain objects (`{}`).
+ * - Skips any `undefined` values.
+ * - Skips any empty plain objects (`{}`).
  * - Preserves MongoDB operators (keys starting with `$`).
- * - Flattens nested fields into dot‐notation (e.g., `{ a: { b: 5 } }` → `{ "a.b": 5 }`).
+ * - Flattens nested fields into dot-notation (e.g. `{ a: { b: 5 } }` → `{ "a.b": 5 }`).
  */
 export interface MongoDbQueryFormatter {
+  /**
+   * @template T
+   * @param query
+   *   Possibly nested query filters.
+   * @returns
+   *   A flat filter with no `undefined` or empty-object keys.
+   */
   format<T>(query: MongoDbQuery<T>): Record<string, any>;
 }
 
 @injectable()
 export class MongoDbQueryControllerImpl implements MongoDbQueryFormatter {
   /**
-   * Entry point: flattens the provided query object into a single‐level map.
+   * Flattens the provided query object into a single-level map.
    *
-   * @template T - The domain/entity type being queried.
-   * @param {MongoDbQuery<T>} query - Possibly nested query filters.
-   * @returns {Record<string, any>} - A flat filter with no `undefined` or empty‐object keys.
+   * @template T
+   * @param query
+   *   Possibly nested query filters.
+   * @returns
+   *   A flat filter with no `undefined` or empty-object keys.
    */
   format<T>(query: MongoDbQuery<T>): Record<string, any> {
-    // We treat the input as a plain object; any `undefined` keys will be dropped in flattenRecursive.
     return this.flattenRecursive(query as Record<string, any>, '');
   }
 
   /**
    * Recursively traverses `input` to build a flat filter map.
    *
-   * - If a value is `undefined`, it is skipped.
-   * - If a value is an empty plain object (`{}`), it is skipped.
-   * - If a key starts with `$`, it is treated as an operator and not further flattened.
-   * - Otherwise, nested objects without operators are expanded into dot‐notation keys.
+   * - Skips `undefined` values.
+   * - Skips empty plain objects (`{}`).
+   * - Preserves MongoDB operator keys (starting with `$`).
+   * - Flattens nested objects (without operators) into dot-notation keys.
    *
-   * @param {Record<string, any>} input - The current subtree to flatten.
-   * @param {string} path - Dot‐notation prefix (empty for top‐level).
-   * @returns {Record<string, any>} - The accumulated flat filter for this branch.
+   * @param input
+   *   The current subtree to flatten.
+   * @param path
+   *   Dot-notation prefix (empty for top-level).
+   * @returns
+   *   The accumulated flat filter for this branch.
    */
   private flattenRecursive(input: Record<string, any>, path: string): Record<string, any> {
     const result: Record<string, any> = {};
@@ -47,36 +57,36 @@ export class MongoDbQueryControllerImpl implements MongoDbQueryFormatter {
     for (const key of Object.keys(input)) {
       const value = input[key];
 
-      // 1) Skip `undefined`
+      // 1) Skip `undefined`.
       if (value === undefined) {
         continue;
       }
 
-      // 2) If this is an empty plain object, skip:
+      // 2) Skip empty plain object (`{}`).
       if (this.isPlainObject(value) && Object.keys(value).length === 0) {
         continue;
       }
 
-      // 3) If key is a MongoDB operator (e.g. "$and", "$or", "$expr"), preserve it:
+      // 3) Preserve MongoDB operator clause.
       if (this.isOperator(key)) {
         result[key] = this.processOperator(key, value);
         continue;
       }
 
-      // 4) Build the full dot‐notation path: "parent.child"
+      // 4) Build full dot-notation path: "parent.child".
       const fullKey = path ? `${path}.${key}` : key;
 
-      // 5) If value is a plain object without any operator children, flatten recursively:
+      // 5) If value is a plain object, check for operator children.
       if (this.isPlainObject(value)) {
-        // 5a) If it contains any operator (e.g. {$gt:5}), treat as a comparison clause:
         if (this.containsOperator(value)) {
+          // Treat as a comparison clause (e.g. `{ $gt: 5 }`).
           result[fullKey] = { ...value };
         } else {
-          // 5b) No operators, descend deeper
+          // Descend deeper.
           Object.assign(result, this.flattenRecursive(value, fullKey));
         }
       } else {
-        // 6) Value is primitive, array, or RegExp: emit directly
+        // 6) Primitive, array, or RegExp: emit directly.
         result[fullKey] = value;
       }
     }
@@ -85,11 +95,11 @@ export class MongoDbQueryControllerImpl implements MongoDbQueryFormatter {
   }
 
   /**
-   * Checks if `key` starts with `$`.
-   * MongoDB operators always begin with `$`.
+   * Checks if a key is a MongoDB operator (starts with `$`).
    *
-   * @param {string} key
-   * @returns {boolean}
+   * @param key
+   * @returns
+   *   True if the key begins with `$`.
    */
   private isOperator(key: string): boolean {
     return key.startsWith('$');
@@ -97,10 +107,10 @@ export class MongoDbQueryControllerImpl implements MongoDbQueryFormatter {
 
   /**
    * Determines whether `obj` has any keys that start with `$`.
-   * Used to detect nested comparison clauses.
    *
-   * @param {Record<string, any>} obj
-   * @returns {boolean}
+   * @param obj
+   * @returns
+   *   True if at least one key begins with `$`.
    */
   private containsOperator(obj: Record<string, any>): boolean {
     return Object.keys(obj).some((k) => this.isOperator(k));
@@ -108,10 +118,11 @@ export class MongoDbQueryControllerImpl implements MongoDbQueryFormatter {
 
   /**
    * Checks if `val` is a plain object (i.e., `{ ... }`).
-   * Arrays, Date objects, and other non‐plain‐object values return `false`.
+   * Returns false for arrays, Date objects, and other non-plain values.
    *
-   * @param {unknown} val
-   * @returns {val is Record<string, any>}
+   * @param val
+   * @returns
+   *   True if `val` is a non-null object whose prototype is `Object.prototype`.
    */
   private isPlainObject(val: unknown): val is Record<string, any> {
     return (
@@ -125,34 +136,32 @@ export class MongoDbQueryControllerImpl implements MongoDbQueryFormatter {
   /**
    * Handles the contents of a MongoDB operator clause:
    *
-   * - For $expr, return as-is (aggregation expression).
+   * - For `$expr`, return as-is (aggregation expression).
    * - If the operator’s value is an array (e.g. `$or: [ {...}, {...} ]`),
-   *   flatten each element of that array recursively.
-   * - If the operator’s value is a nested object (e.g. `$gt: 5` or `$in: { nested: 3 }`),
-   *   flatten that object with no prefix.
+   *   flatten each element recursively.
+   * - If the operator’s value is a nested object (e.g. `$gt: 5`), flatten that object.
    * - Otherwise, return the primitive/RegExp as-is.
    *
-   * @param {string} key - The operator name (e.g. "$or", "$gt").
-   * @param {any} value - The operator’s value.
-   * @returns {any}
+   * @param key
+   *   The operator name (e.g. `"$or"`, `"$gt"`).
+   * @param value
+   *   The operator’s value.
+   * @returns
+   *   The processed operator value.
    */
   private processOperator(key: string, value: any): any {
     if (key === '$expr') {
-      // `$expr` expects an aggregation expression tree—keep it untouched
       return value;
     }
 
     if (Array.isArray(value)) {
-      // e.g. { $or: [ { a: 1 }, { b: 2 } ] }
       return value.map((item) => this.flattenRecursive(item, ''));
     }
 
     if (this.isPlainObject(value)) {
-      // e.g. { $gt: 5 } or { $in: { nested: 3 } }
       return this.flattenRecursive(value, '');
     }
 
-    // Primitive, RegExp, boolean, etc.
     return value;
   }
 }
