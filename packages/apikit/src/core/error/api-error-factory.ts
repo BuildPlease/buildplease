@@ -30,21 +30,40 @@ export interface ApiErrorFactoryOptions extends I18nOptions {
  * @class
  *
  * @example
- * // Basic usage
- * const error = ApiErrorFactory.make('Common.NOT_FOUND');
+ * // Extended factory with custom errors
+ * export const NotificationErrors = defineErrors({
+ *   PUSH_NOTIFICATIONS_DISABLED: {
+ *     code: 'PUSH_NOTIFICATIONS_DISABLED',
+ *     key: 'errors.notification.push_notifications_disabled',
+ *     statusCode: 409,
+ *   },
+ * }
+ * ApiErrorFactory.extend(NotificationErrors);
  *
  * @example
- * // Extended factory with custom errors
- * const AppErrors = ApiErrorFactory.extend({
- *   Payment: {
- *     DECLINED: {
- *       code: 'PAYMENT_DECLINED',
- *       statusCode: 402,
- *       key: 'errors.payment.declined'
- *     }
- *   }
+ * // Create error with default translation (based on current locale)
+ * ApiErrorFactory.make('Validation.INVALID_EMAIL');
+ *
+ * @example
+ * // Create error with custom message only
+ * ApiErrorFactory.make('Validation.INVALID_EMAIL', {
+ *   message: 'The provided email address is not formatted correctly.'
  * });
- * const paymentError = AppErrors.make('Payment.DECLINED');
+ *
+ * @example
+ * // Create error with custom message and debug details
+ * ApiErrorFactory.make('Validation.INVALID_EMAIL', {
+ *   message: 'Invalid email format',
+ *   details: 'Received value: user@example',
+ * });
+ *
+ * @example
+ * // Create error with forced locale override (e.g., Spanish) and custom details
+ * ApiErrorFactory.make('Validation.INVALID_EMAIL', {
+ *   lng: 'es',
+ *   message: 'Formato de correo electrónico inválido',
+ *   details: 'Valor recibido: user@example',
+ * });
  */
 export class ApiErrorFactory {
   /**
