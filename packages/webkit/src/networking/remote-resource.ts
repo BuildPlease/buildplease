@@ -72,7 +72,7 @@ export class RemoteResource<
     }
 
     // MARK: - 4) fallback
-    return new Error('An unexpected error occurred');
+    return new Error(`An unexpected error occurred: ${error}`);
   }
 
   private getNestedProperty<T = unknown>(obj: unknown, path: string): T | undefined {
