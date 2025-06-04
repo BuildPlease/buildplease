@@ -1,5 +1,5 @@
 export * from './date-time';
-export * from './deep-partial';
+export * from './partial';
 export * from './empty';
 export * from './geojson';
 export * from './object-id';
