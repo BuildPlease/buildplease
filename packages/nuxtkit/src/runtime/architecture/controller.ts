@@ -1,49 +1,54 @@
 import { reactive } from 'vue';
 import type { Router, RouteLocationNormalizedLoaded } from 'vue-router';
-
 import { useRouter, useRoute } from '#app';
 
 /**
- * Controller interface.
+ * Generic interface for a controller with reactive status.
  */
 export interface Controller {
+  /** Current status of the controller. */
   readonly status: 'idle' | 'loading' | 'failed';
+
+  /** Indicates whether the controller is in a loading state. */
   readonly isLoading: boolean;
 }
 
-/**
- * Base Controller implementation with reactive status and routing support.
- */
 export abstract class ControllerImpl implements Controller {
-  protected router: Router;
-  protected route: RouteLocationNormalizedLoaded;
-
+  /** Internal reactive state. */
   protected state = reactive({
     status: 'idle' as 'idle' | 'loading' | 'failed',
   });
 
-  constructor() {
-    this.router = useRouter();
-    this.route = useRoute();
+  /**
+   * Vue Router instance (non-reactive).
+   * @readonly
+   */
+  protected get router(): Router {
+    return useRouter();
   }
 
   /**
-   * Getter for reactive status.
+   * Current route (reactive).
+   * @readonly
    */
-  public get status() {
+  protected get route(): RouteLocationNormalizedLoaded {
+    return useRoute();
+  }
+
+  /** Current controller status. */
+  public get status(): 'idle' | 'loading' | 'failed' {
     return this.state.status;
   }
 
-  /**
-   * Computed property to check if the controller is currently loading.
-   */
-  public get isLoading() {
+  /** `true` if the controller is currently loading. */
+  public get isLoading(): boolean {
     return this.state.status === 'loading';
   }
 
   /**
-   * Setter to update the status reactively.
-   * @param newStatus - New status to set ('idle' | 'loading' | 'failed').
+   * Updates the reactive status.
+   *
+   * @param newStatus - New status to assign
    */
   protected setStatus(newStatus: 'idle' | 'loading' | 'failed'): void {
     this.state.status = newStatus;

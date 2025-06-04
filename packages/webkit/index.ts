@@ -3,8 +3,6 @@ import 'reflect-metadata';
 import type { Assembly } from '@nidavellirx/meowv-core';
 import { MEOWV_CORE_INITIALIZE } from '@nidavellirx/meowv-core';
 
-import { ValidationAssembly } from '@/validation';
-
 // MARK: - Exports
 
 export * from './src';
@@ -20,5 +18,5 @@ export function MEOWV_WEBKIT_INITIALIZE(): Assembly[] {
 // MARK: - Private
 
 function makeAssemblies(): Assembly[] {
-  return [new ValidationAssembly()];
+  return [];
 }

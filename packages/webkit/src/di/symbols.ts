@@ -1,10 +1,6 @@
-const prefix = 'WebKit.DI';
+const _prefix = 'WebKit.DI';
 
-const DI = {
-  Validation: {
-    SchemaController: Symbol.for(`${prefix}.Validation.SchemaController`),
-  },
-};
+const DI = {};
 
 export const WebKitSymbols = {
   DI: DI,

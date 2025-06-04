@@ -10,26 +10,46 @@ import { isSSR, isCSR, isHydrating } from '../infrastructure/environment';
 
 import { useRouter, useRoute, useNuxtApp } from '#app';
 
+/**
+ * Base class for managing reactive state and lifecycle logic in UI view models.
+ *
+ * @template T Reactive state shape
+ */
 export abstract class ViewModel<
   T extends Record<string, any> = Record<string, any>,
-> implements Lifecycle
-{
+> implements Lifecycle {
+  /**
+   * Reactive state for the ViewModel.
+   * @readonly
+   */
   public readonly state: Reactive<T>;
-
-  protected router: Router;
-  protected route: RouteLocationNormalizedLoaded;
 
   constructor(initialState: T) {
     this.state = this.defineState<T>(initialState);
-    this.router = useRouter();
-    this.route = useRoute();
   }
 
   /**
-   * Utility method for initializing reactive states within ViewModels.
+   * Vue Router instance.
+   * @readonly
+   */
+  protected get router(): Router {
+    return useRouter();
+  }
+
+  /**
+   * Reactive route location.
+   * @readonly
+   */
+  protected get route(): RouteLocationNormalizedLoaded {
+    return useRoute();
+  }
+
+  /**
+   * Initializes reactive state.
    *
-   * @param initialState - Default values for the state.
-   * @returns A reactive object strongly typed as T.
+   * @template S State shape
+   * @param {S} initialState - Initial state values
+   * @returns {Reactive<S>} Reactive state object
    */
   protected defineState<S extends Record<string, any>>(
     initialState: S,
@@ -38,25 +58,13 @@ export abstract class ViewModel<
   }
 
   /**
-   * Fetches data before rendering based on the provided options.
+   * Runs `_fetchBeforeRendering` based on rendering context.
    *
-   * @param {object} [options={}] - Configuration options to control where and when fetching should occur.
-   * @param {boolean} [options.runOnSSR=false] - If `true`, fetches data during SSR (Server-Side Rendering). Defaults to `false`.
-   * @param {boolean} [options.runOnCSR=false] - If `true`, fetches data during CSR (Client-Side Rendering). Defaults to `false`.
-   * @param {boolean} [options.skipDuringHydration=true] - If `true`, skips fetching during hydration to avoid duplicate calls. Defaults to `true`.
-   * @returns {Promise<void>} - Resolves when fetching is complete or does nothing if conditions are not met.
-   *
-   * @example
-   * // Fetch only during SSR
-   * await viewModel.fetchBeforeRendering({ runOnSSR: true });
-   *
-   * @example
-   * // Fetch only during CSR, skipping hydration
-   * await viewModel.fetchBeforeRendering({ runOnCSR: true, skipDuringHydration: true });
-   *
-   * @example
-   * // Fetch both during SSR and CSR
-   * await viewModel.fetchBeforeRendering({ runOnSSR: true, runOnCSR: true });
+   * @param {Object} [options] - Fetching options
+   * @param {boolean} [options.runOnSSR=false] - Fetch on SSR
+   * @param {boolean} [options.runOnCSR=false] - Fetch on CSR
+   * @param {boolean} [options.skipDuringHydration=true] - Skip during hydration
+   * @returns {Promise<void>}
    */
   public async fetchBeforeRendering({
     runOnSSR = false,
@@ -79,31 +87,70 @@ export abstract class ViewModel<
     }
   }
 
+  /**
+   * Optional data fetching hook before rendering.
+   * Override in subclass if needed.
+   * @protected
+   */
   protected async _fetchBeforeRendering(): Promise<void> {}
 
   // MARK: - Lifecycle Hooks
+
+  /** Called after component is mounted. */
   public async onMounted(): Promise<void> {}
+
+  /** Called before component is mounted. */
   public async onBeforeMount(): Promise<void> {}
+
+  /** Called after component is unmounted. */
   public async onUnmounted(): Promise<void> {}
+
+  /** Called before component is unmounted. */
   public async onBeforeUnmount(): Promise<void> {}
 
+  /** Called when component is activated (keep-alive). */
   public async onActivated(): Promise<void> {}
+
+  /** Called when component is deactivated (keep-alive). */
   public async onDeactivated(): Promise<void> {}
 
+  /** Called after component updates. */
   public async onUpdated(): Promise<void> {}
+
+  /** Called before component updates. */
   public async onBeforeUpdate(): Promise<void> {}
 
+  /**
+   * Hook for navigation guard on route leave.
+   * @param {NavigationGuard} _guard
+   */
   public async onBeforeRouteLeave(_guard: NavigationGuard): Promise<void> {}
+
+  /**
+   * Hook for navigation guard on route update.
+   * @param {NavigationGuard} _guard
+   */
   public async onBeforeRouteUpdate(_guard: NavigationGuard): Promise<void> {}
 
+  /** Called on server prefetch phase. */
   public async onServerPrefetch(): Promise<any> {}
 
+  /**
+   * Called when an error is captured.
+   *
+   * @param {unknown} _err - The error
+   * @param {any} _instance - Component instance
+   * @param {string} _instanceinfo - Additional info
+   */
   public async onErrorCaptured(
     _err: unknown,
     _instance: any,
     _instanceinfo: string,
   ): Promise<void> {}
 
+  /** Called when render is tracked. */
   public async onRenderTracked(_e: any): Promise<void> {}
+
+  /** Called when render is triggered. */
   public async onRenderTriggered(_e: any): Promise<void> {}
 }
