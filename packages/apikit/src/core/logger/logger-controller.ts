@@ -85,7 +85,7 @@ export class LoggerControllerImpl implements LoggerController {
   private log(level: pino.Level, title: string, options?: LogOptions) {
     const logObject: {
       flag?: string;
-      content?: object;
+      details?: object;
       error?: object;
       metadata?: object;
     } = {};
@@ -93,8 +93,8 @@ export class LoggerControllerImpl implements LoggerController {
     if (options?.flag) {
       logObject.flag = options.flag;
     }
-    if (options?.content) {
-      logObject.content = options.content;
+    if (options?.details) {
+      logObject.details = options.details;
     }
     if (options?.error) {
       logObject.error = this.formatError(options.error);
