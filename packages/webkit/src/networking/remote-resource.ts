@@ -8,19 +8,11 @@ import {
   emptyOrUndefinedStringToNull,
 } from '@nidavellirx/meowv-core';
 
-import {
-  type RemoteEndpoint,
-  type RequestConfig,
-  type RequestInterceptor,
-  HttpError,
-} from '@/networking';
+import { type RemoteEndpoint, type RequestConfig, type RequestInterceptor, HttpError } from '@/networking';
 
 @injectable()
-export class RemoteResource<
-  Input,
-  Output,
-  Endpoint extends RemoteEndpoint<Input, unknown, Output, unknown>,
-> implements AsyncOperation<Input, Output>
+export class RemoteResource<Input, Output, Endpoint extends RemoteEndpoint<Input, unknown, Output, unknown>>
+  implements AsyncOperation<Input, Output>
 {
   protected interceptors: Set<RequestInterceptor> = new Set();
 

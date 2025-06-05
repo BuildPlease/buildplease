@@ -1,12 +1,6 @@
 import { injectable } from 'inversify';
 
-import type {
-  MediaType,
-  SchemaMediaType,
-  SchemaResponse,
-  SchemaExample,
-  SchemaHeaders,
-} from '#/schema';
+import type { MediaType, SchemaMediaType, SchemaResponse, SchemaExample, SchemaHeaders } from '#/schema';
 
 export interface SchemaController {
   makeResponse(

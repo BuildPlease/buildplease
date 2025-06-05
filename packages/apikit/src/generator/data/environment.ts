@@ -3,10 +3,7 @@ import path from 'node:path';
 import { createFile } from '#/utils';
 import type { ApiKitConfig } from '#/configuration';
 
-export async function generateEnvironment(
-  config: ApiKitConfig,
-  outputPath: string,
-): Promise<string[]> {
+export async function generateEnvironment(config: ApiKitConfig, outputPath: string): Promise<string[]> {
   const { environments } = config;
 
   // ENUM with single quotes

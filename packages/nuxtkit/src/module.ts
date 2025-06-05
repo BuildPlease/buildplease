@@ -42,10 +42,7 @@ function configureHooks(app: Nuxt, resolver: Resolver) {
 }
 
 function configureImports(resolver: Resolver) {
-  addImportsDir([
-    resolver.resolve('./runtime/composables'),
-    resolver.resolve('./runtime/infrastructure'),
-  ]);
+  addImportsDir([resolver.resolve('./runtime/composables'), resolver.resolve('./runtime/infrastructure')]);
 
   addImports([
     {

@@ -59,9 +59,7 @@ export interface GeoJsonObject {
  * - [minX, minY, maxX, maxY] or
  * - [minX, minY, minZ, maxX, maxY, maxZ].
  */
-export type BBox =
-  | [number, number, number, number]
-  | [number, number, number, number, number, number];
+export type BBox = [number, number, number, number] | [number, number, number, number, number, number];
 
 /**
  * Valid GeoJSON types, based on geometry classes.
@@ -337,9 +335,7 @@ export class MultiPolygon implements GeoJsonObject, JSONSerializable {
   public toJSON(): any {
     return {
       type: this.type,
-      coordinates: this.coordinates.map((polygon) =>
-        polygon.map((ring) => ring.map((coord) => coord.value)),
-      ),
+      coordinates: this.coordinates.map((polygon) => polygon.map((ring) => ring.map((coord) => coord.value))),
       ...(this.bbox && { bbox: this.bbox }),
     };
   }

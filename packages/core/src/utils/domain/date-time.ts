@@ -148,9 +148,7 @@ export class DateTime {
     formatString?: DateFormat | string,
     referenceDate: Date = new Date(),
   ): DateTime | null {
-    const date = formatString
-      ? parse(dateString, formatString, referenceDate)
-      : parseISO(dateString);
+    const date = formatString ? parse(dateString, formatString, referenceDate) : parseISO(dateString);
 
     return isValid(date) ? new DateTime(date) : null;
   }

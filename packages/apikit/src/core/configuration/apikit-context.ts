@@ -87,20 +87,14 @@ export async function makeApikitContext({
  *   If the environment is not defined in the configuration, if the `.env` file
  *   does not exist, or if `NODE_ENV` does not match after loading.
  */
-async function initializeEnvironment(
-  config: ApiKitConfig,
-  envName: string,
-): Promise<EnvironmentConfig> {
+async function initializeEnvironment(config: ApiKitConfig, envName: string): Promise<EnvironmentConfig> {
   const environment = config.environments.find((env) => env.name === envName);
 
   if (!environment) {
     throw new Error(`Environment "${envName}" is not defined in config.`);
   }
 
-  const environmentFilePath = path.resolve(
-    environment.fileDir || process.cwd(),
-    `.env.${environment.name}`,
-  );
+  const environmentFilePath = path.resolve(environment.fileDir || process.cwd(), `.env.${environment.name}`);
 
   if (!fs.existsSync(environmentFilePath)) {
     throw new Error(`Environment file "${environmentFilePath}" does not exist.`);
@@ -110,9 +104,7 @@ async function initializeEnvironment(
   process.env.NODE_ENV = environment.name;
 
   if (process.env.NODE_ENV !== environment.name) {
-    throw new Error(
-      `NODE_ENV mismatch: Expected "${environment.name}", got "${process.env.NODE_ENV}"`,
-    );
+    throw new Error(`NODE_ENV mismatch: Expected "${environment.name}", got "${process.env.NODE_ENV}"`);
   }
 
   return environment;
@@ -131,10 +123,7 @@ async function initializeEnvironment(
  * @throws {Error}
  *   If the logger configuration is missing for the environment.
  */
-async function initializeLogger(
-  config: ApiKitConfig,
-  envConfig: EnvironmentConfig,
-): Promise<LoggerConfig> {
+async function initializeLogger(config: ApiKitConfig, envConfig: EnvironmentConfig): Promise<LoggerConfig> {
   const loggerConfig = config.logger[envConfig.name];
   if (!loggerConfig) {
     throw new Error(`Missing logger configuration for "${envConfig.name}"`);
@@ -155,10 +144,7 @@ async function initializeLogger(
  * @throws {Error}
  *   If the server configuration is missing for the environment.
  */
-async function initializeServer(
-  config: ApiKitConfig,
-  envConfig: EnvironmentConfig,
-): Promise<ServerConfig> {
+async function initializeServer(config: ApiKitConfig, envConfig: EnvironmentConfig): Promise<ServerConfig> {
   const serverConfig = config.server[envConfig.name];
   if (!serverConfig) {
     throw new Error(`Missing server configuration for "${envConfig.name}"`);

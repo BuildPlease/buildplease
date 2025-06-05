@@ -99,8 +99,7 @@ export class I18nControllerImpl implements I18nController {
     const ext = this.configuration.i18n ?? {};
 
     // default namespace
-    const defaultNS =
-      typeof ext.defaultNamespace === 'string' ? ext.defaultNamespace : 'translation';
+    const defaultNS = typeof ext.defaultNamespace === 'string' ? ext.defaultNamespace : 'translation';
 
     // primary & fallback languages
     const defaultLanguage = ext.defaultLanguage ?? 'en';

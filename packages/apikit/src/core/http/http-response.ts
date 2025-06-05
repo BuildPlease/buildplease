@@ -20,15 +20,7 @@ export class JSONHttpResponse extends HttpResponse {
   readonly data: any;
   readonly responseType = ResponseType.JSON;
 
-  constructor({
-    statusCode,
-    data,
-    headers,
-  }: {
-    statusCode: number;
-    data: any;
-    headers?: HttpHeaders;
-  }) {
+  constructor({ statusCode, data, headers }: { statusCode: number; data: any; headers?: HttpHeaders }) {
     super({ statusCode, headers });
     this.data = data;
   }

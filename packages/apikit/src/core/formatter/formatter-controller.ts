@@ -74,9 +74,7 @@ export class Formatter<T> {
    * @private
    * @param {Partial<Record<keyof T, (value: any) => any>>} transformations - The transformations object.
    */
-  private applyTransformations(
-    transformations: Partial<Record<keyof T, (value: any) => any>>,
-  ): void {
+  private applyTransformations(transformations: Partial<Record<keyof T, (value: any) => any>>): void {
     if (typeof this.value === 'object' && this.value !== null) {
       this.value = Object.fromEntries(
         Object.entries(this.value).map(([key, value]) => [

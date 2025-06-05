@@ -5,7 +5,6 @@ import typescriptEslint from '@typescript-eslint/eslint-plugin';
 import typescriptParser from '@typescript-eslint/parser';
 
 export default [
-  // TypeScript and JavaScript configuration
   {
     files: ['**/*.{js,mjs,cjs,ts,jsx,tsx}'],
     ignores: [
@@ -18,7 +17,10 @@ export default [
     ],
     languageOptions: {
       parser: typescriptParser,
-      globals: globals.browser,
+      globals: {
+        ...globals.node,
+        ...globals.browser,
+      },
     },
     plugins: {
       '@typescript-eslint': typescriptEslint,
@@ -34,7 +36,7 @@ export default [
         {
           singleQuote: true,
           semi: true,
-          printWidth: 100,
+          printWidth: 110,
           tabWidth: 2,
           useTabs: false,
         },

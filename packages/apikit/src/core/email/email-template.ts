@@ -24,13 +24,7 @@ export abstract class BaseEmailTemplate<T extends object> implements EmailTempla
   subject: string;
   data?: T;
 
-  constructor(params: {
-    recipient: string;
-    sender?: string;
-    replyTo?: string;
-    subject?: string;
-    data?: T;
-  }) {
+  constructor(params: { recipient: string; sender?: string; replyTo?: string; subject?: string; data?: T }) {
     this.recipient = params.recipient;
     this.sender = params.sender;
     this.replyTo = params.replyTo;

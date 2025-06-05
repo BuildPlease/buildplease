@@ -22,9 +22,7 @@ export async function loadConfig(dir?: string, configName?: string): Promise<Api
 
   ensureDirectory(rootDir);
 
-  const configFile = configName
-    ? resolvePath(rootDir, configName)
-    : resolvePath(rootDir, 'apikit.config');
+  const configFile = configName ? resolvePath(rootDir, configName) : resolvePath(rootDir, 'apikit.config');
 
   try {
     const jiti = createJiti(rootDir, {

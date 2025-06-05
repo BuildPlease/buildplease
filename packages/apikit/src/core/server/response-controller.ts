@@ -22,11 +22,7 @@ export class ResponseControllerImpl implements ResponseController {
     private logger: LoggerController,
   ) {}
 
-  async sendResponse(
-    request: FastifyRequest,
-    reply: FastifyReply,
-    response: HttpResponse,
-  ): Promise<void> {
+  async sendResponse(request: FastifyRequest, reply: FastifyReply, response: HttpResponse): Promise<void> {
     switch (response.responseType) {
       case ResponseType.JSON:
         return await this.sendJSONResponse(request, reply, response as JSONHttpResponse);

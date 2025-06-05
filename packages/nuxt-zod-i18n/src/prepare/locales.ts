@@ -24,8 +24,7 @@ export async function prepareLocales(
 
   // Prepare valid locales based on files and mapping
   const locales = languageFiles.reduce<LocaleObject[]>((acc, file) => {
-    const code =
-      options.localeCodesMapping?.[file.replace('.json', '')] || file.replace('.json', '');
+    const code = options.localeCodesMapping?.[file.replace('.json', '')] || file.replace('.json', '');
 
     if (appLocalesCode.includes(code)) {
       acc.push({ file, code });
