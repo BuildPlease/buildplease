@@ -1,43 +1,41 @@
 {
-   "name":"@nidavellirx/meowv-webkit",
-   "version":"1.0.0",
-   "description":"",
-   "keywords":[
-      
-   ],
-   "author":"Simon Kovačič",
-   "license":"ISC",
-   "type":"module",
-   "exports":{
-      ".":{
-         "types":"./dist/index.d.ts",
-         "import":"./dist/index.js",
-         "require":"./dist/index.cjs"
-      }
-   },
-   "files":[
-      "dist"
-   ],
-   "repository":"git@github.com/Nidavellirx/meowv.git",
-   "publishConfig":{
-      "registry":"https://npm.pkg.github.com/"
-   },
-   "scripts":{
-      "build":"tsup"
-   },
-   "dependencies":{
-      "@nidavellirx/meowv-core":"workspace:^",
-      "axios":"1.9.0",
-      "reflect-metadata":"0.2.2",
-      "zod":"3.25.51"
-   },
-   "peerDependencies":{
-      "inversify":"7.5.0"
-   },
-   "devDependencies":{
-      "@swc/core":"1.11.31",
-      "inversify":"7.5.0",
-      "tsup":"8.5.0",
-      "typescript":"5.8.3"
-   }
+  "name": "@nidavellirx/meowv-webkit",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [],
+  "author": "Simon Kovačič",
+  "license": "ISC",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "repository": "git@github.com/Nidavellirx/meowv.git",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
+  "scripts": {
+    "build": "tsup"
+  },
+  "dependencies": {
+    "@nidavellirx/meowv-core": "workspace:^",
+    "axios": "1.9.0",
+    "reflect-metadata": "0.2.2",
+    "zod": "3.25.51"
+  },
+  "peerDependencies": {
+    "inversify": "7.5.0"
+  },
+  "devDependencies": {
+    "@swc/core": "1.11.31",
+    "inversify": "7.5.0",
+    "tsup": "8.5.0",
+    "typescript": "5.8.3"
+  }
 }
