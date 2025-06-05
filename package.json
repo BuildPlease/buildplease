@@ -9,9 +9,7 @@
    ],
    "scripts": {
       "preinstall": "npx only-allow pnpm",
-      "update:check": "lerna exec -- npx npm-check-updates",
-      "update:all": "lerna exec -- npx npm-check-updates -u",
-      "update:interactive": "lerna exec -- npx npm-check-updates -i",
+      "update:check": "./scripts/update_check",
       "clean": "rimraf \"**/{dist,.nuxt,.output,.runtime,.build,.apikit}\" --glob",
       "clean:deep": "pnpm run clean && ./scripts/cleanup",
       "lint": "eslint .",
