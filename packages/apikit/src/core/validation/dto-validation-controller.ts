@@ -1,5 +1,5 @@
 import { injectable } from 'inversify';
-import { type z, type ZodSchema, ZodError } from 'zod';
+import { type z, type ZodTypeAny, ZodError } from 'zod';
 
 import { ApiErrorFactory } from '#/error';
 
@@ -8,13 +8,13 @@ export interface DtoValidationController {
    * Synchronously parse & validate `data` against `schema`.
    *
    * @param schema
-   *   A ZodSchema defining validation rules.
+   *   Any Zod schema (object, array, union, etc.).
    * @param data
    *   The raw input to validate.
    * @returns
-   *   The schema’s output type (i.e. `z.output<typeof schema>`).
+   *   The parsed output type, i.e. `z.infer<Schema>`.
    * @throws {ApiError}
-   *   If Zod validation fails, throws ApiError with code `"Validation.INVALID_PROPERTIES"`.
+   *   If validation fails, throws an ApiError with code `"Validation.INVALID_PROPERTIES"`.
    *
    * @example
    * ```ts
@@ -22,29 +22,26 @@ export interface DtoValidationController {
    *
    * const UserSchema = z.object({
    *   name: z.string().min(1),
-   *   age: z.number().int().nonnegative(),
+   *   age:  z.number().int().nonnegative(),
    * });
    *
-   * // Inferred return type is { name: string; age: number }
+   * // return type is { name: string; age: number }
    * const user = validator.validate(UserSchema, { name: 'Alice', age: 30 });
    * ```
    */
-  validate<Schema extends ZodSchema<any, any, any>>(
-    schema: Schema,
-    data: unknown,
-  ): z.output<Schema>;
+  validate<Schema extends ZodTypeAny>(schema: Schema, data: unknown): z.infer<Schema>;
 
   /**
    * Asynchronously parse & validate `data` against `schema`.
    *
    * @param schema
-   *   A ZodSchema defining validation rules.
+   *   Any Zod schema.
    * @param data
    *   The raw input to validate.
    * @returns
-   *   A promise resolving to the schema’s output type.
+   *   A Promise resolving to `z.infer<Schema>`.
    * @throws {ApiError}
-   *   If Zod validation fails, throws ApiError with code `"Validation.INVALID_PROPERTIES"`.
+   *   If validation fails, throws an ApiError with code `"Validation.INVALID_PROPERTIES"`.
    *
    * @example
    * ```ts
@@ -52,25 +49,19 @@ export interface DtoValidationController {
    *
    * const AddressSchema = z.object({
    *   street: z.string().min(1),
-   *   zip: z.string().length(5),
+   *   zip:    z.string().length(5),
    * });
    *
-   * // Inferred resolved type is { street: string; zip: string }
+   * // resolved type is { street: string; zip: string }
    * const address = await validator.validateAsync(AddressSchema, { street: 'Main', zip: '12345' });
    * ```
    */
-  validateAsync<Schema extends ZodSchema<any, any, any>>(
-    schema: Schema,
-    data: unknown,
-  ): Promise<z.output<Schema>>;
+  validateAsync<Schema extends ZodTypeAny>(schema: Schema, data: unknown): Promise<z.infer<Schema>>;
 }
 
 @injectable()
 export class DtoValidationControllerImpl implements DtoValidationController {
-  public validate<Schema extends ZodSchema<any, any, any>>(
-    schema: Schema,
-    data: unknown,
-  ): z.output<Schema> {
+  public validate<Schema extends ZodTypeAny>(schema: Schema, data: unknown): z.infer<Schema> {
     try {
       return schema.parse(data);
     } catch (error) {
@@ -78,10 +69,10 @@ export class DtoValidationControllerImpl implements DtoValidationController {
     }
   }
 
-  public async validateAsync<Schema extends ZodSchema<any, any, any>>(
+  public async validateAsync<Schema extends ZodTypeAny>(
     schema: Schema,
     data: unknown,
-  ): Promise<z.output<Schema>> {
+  ): Promise<z.infer<Schema>> {
     try {
       return await schema.parseAsync(data);
     } catch (error) {
@@ -100,7 +91,7 @@ export class DtoValidationControllerImpl implements DtoValidationController {
    */
   private handleError(error: unknown): never {
     if (error instanceof ZodError) {
-      throw ApiErrorFactory.make('Validation.INVALID_PROPERTIES');
+      throw ApiErrorFactory.make('Validation.INVALID_PROPERTIES', { details: error.message });
     }
     throw error;
   }
