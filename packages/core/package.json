@@ -31,9 +31,9 @@
       "reflect-metadata": "0.2.2"
    },
    "devDependencies": {
-      "@swc/core": "1.11.20",
+      "@swc/core": "1.11.31",
       "@types/ms": "2.1.0",
-      "tsup": "8.4.0",
+      "tsup": "8.5.0",
       "typescript": "5.8.3"
    }
 }

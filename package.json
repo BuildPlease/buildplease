@@ -10,6 +10,7 @@
    "scripts": {
       "preinstall": "npx only-allow pnpm",
       "update:check": "./scripts/update_check",
+      "update:all": "./scripts/update_all",
       "clean": "rimraf \"**/{dist,.nuxt,.output,.runtime,.build,.apikit}\" --glob",
       "clean:deep": "pnpm run clean && ./scripts/cleanup",
       "lint": "eslint .",
@@ -17,13 +18,13 @@
       "build": "pnpm run clean && lerna run build"
    },
    "devDependencies": {
-      "@typescript-eslint/eslint-plugin": "8.28.0",
-      "@typescript-eslint/parser": "8.28.0",
-      "eslint": "9.23.0",
+      "@typescript-eslint/eslint-plugin": "8.33.1",
+      "@typescript-eslint/parser": "8.33.1",
+      "eslint": "9.28.0",
       "eslint-plugin-import": "2.31.0",
-      "eslint-plugin-prettier": "5.2.5",
-      "globals": "16.0.0",
-      "lerna": "8.2.1",
+      "eslint-plugin-prettier": "5.4.1",
+      "globals": "16.2.0",
+      "lerna": "8.2.2",
       "rimraf": "6.0.1"
    },
    "packageManager": "pnpm@10.11.1"

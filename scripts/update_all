@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# 1) Loop through each workspace path returned by Lerna
+for WS in $(lerna ls --all --parseable); do
+  # 2) Extract the package name from that workspace's package.json
+  pkg_name=$(grep -m1 '"name"' "$WS/package.json" | sed -E 's/.*"name": *"([^"]+)".*/\1/')
+
+  echo
+  echo "— $pkg_name —"
+  echo
+
+  # 3) Show "pnpm outdated" for that package (ignore exit code)
+  (
+    cd "$WS"
+    pnpm outdated || true
+  )
+
+  echo
+  # 4) Prompt whether to update to latest
+  read -r -p "Update $pkg_name to latest? [y/N] " answer
+  if [[ $answer =~ ^[Yy]$ ]]; then
+    echo "→ Updating $pkg_name to latest versions..."
+    (
+      cd "$WS"
+      pnpm update --latest
+    )
+    echo "✔ Updated $pkg_name"
+  else
+    echo "→ Skipping $pkg_name"
+  fi
+done
+
+echo
+echo "🎉 Done. All workspaces processed."
