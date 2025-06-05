@@ -1,7 +1,8 @@
 export * from 'date-fns';
 
-import type { Duration, Locale } from 'date-fns';
 import {
+  type Duration,
+  type Locale,
   add,
   sub,
   format as formatDate,
@@ -68,7 +69,7 @@ import {
  * A date-and-time utility class offering parsing, formatting, and arithmetic.
  *
  * - Instantiate with no arguments for current date/time.
- * - Instantiate with a `Date` or ISO-format string to wrap that moment.
+ * - Instantiate with a `Date` or ISO-format string.
  *
  * @throws {Error} If the provided date input is invalid.
  *
@@ -93,13 +94,14 @@ export class DateTime {
     }
 
     if (input instanceof Date) {
-      if (!isValid(input)) throw new Error('Invalid Date object');
+      if (!isValid(input)) throw new Error('DateTime: Invalid date object');
       this.date = input;
-    } else {
-      const parsed = parseISO(input);
-      if (!isValid(parsed)) throw new Error('Invalid date string');
-      this.date = parsed;
+      return;
     }
+
+    const parsed = parseISO(input);
+    if (!isValid(parsed)) throw new Error('DateTime: Invalid date string');
+    this.date = parsed;
   }
 
   // MARK: - Static Factory Methods
@@ -107,45 +109,62 @@ export class DateTime {
   /**
    * Creates a DateTime from a Date object.
    *
-   * @param {Date} date
-   * @returns {DateTime | null} Null if invalid.
+   * @param date
+   *   A JavaScript Date instance.
+   * @returns {DateTime | null}
+   *   A new DateTime if valid; otherwise null.
    */
   public static fromDate(date: Date): DateTime | null {
     return isValid(date) ? new DateTime(date) : null;
   }
 
   /**
-   * Parses a string into DateTime.
+   * Parses a string into a DateTime instance.
    *
-   * @param {string} dateString
-   * @param {string} [formatString]
-   * @param {Date} [referenceDate=new Date()]
-   * @returns {DateTime | null} Null if parsing fails.
+   * @param dateString
+   *   The input date string (e.g. "2025-06-05T14:30:00Z" or "06/05/2025").
+   * @param formatString
+   *   An optional format to use for parsing (e.g. one of the `DateFormat` values
+   *   or any custom string). If omitted, ISO parsing is applied.
+   * @param referenceDate
+   *   The reference date (defaults to now) when parsing non-ISO strings.
+   * @returns
+   *   A new `DateTime` if parsing succeeds; otherwise `null`.
+   *
+   * @example
+   * ```ts
+   * // Using a named enum format:
+   * const dt1 = DateTime.fromString("06/05/2025", DateFormat.MM_DD_YYYY);
+   *
+   * // Using a raw format string:
+   * const dt2 = DateTime.fromString("2025/06/05 14:30:00", "yyyy/MM/dd HH:mm:ss");
+   *
+   * // Omitted formatString: tries ISO parsing
+   * const dt3 = DateTime.fromString("2025-06-05T14:30:00Z");
+   * ```
    */
   public static fromString(
     dateString: string,
-    formatString?: string,
+    formatString?: DateFormat | string,
     referenceDate: Date = new Date(),
   ): DateTime | null {
     const date = formatString
       ? parse(dateString, formatString, referenceDate)
       : parseISO(dateString);
+
     return isValid(date) ? new DateTime(date) : null;
   }
 
-  /**
-   * Now.
-   *
-   * @returns {DateTime}
-   */
+  /** @returns The current moment as a DateTime. */
   public static now(): DateTime {
     return new DateTime(new Date());
   }
 
   /**
-   * From Unix timestamp (seconds).
+   * Create a DateTime from a Unix timestamp (seconds).
    *
-   * @param {number} unixTimestamp
+   * @param unixTimestamp
+   *   The Unix timestamp in seconds.
    * @returns {DateTime}
    */
   public static fromUnixTimestamp(unixTimestamp: number): DateTime {
@@ -154,41 +173,42 @@ export class DateTime {
 
   // MARK: - Converters
 
-  /**
-   * To JavaScript Date.
-   *
-   * @returns {Date}
-   */
+  /** @returns The wrapped JavaScript Date. */
   public toDate(): Date {
     return this.date;
   }
 
-  /**
-   * To Unix timestamp (seconds).
-   *
-   * @returns {number}
-   */
+  /** @returns The Unix timestamp in seconds. */
   public toUnixTimestamp(): number {
     return getUnixTime(this.date);
   }
 
-  /**
-   * To ISO 8601 string.
-   *
-   * @returns {string}
-   */
+  /** @returns An ISO‐8601 string. */
   public toISOString(): string {
     return formatISO(this.date);
   }
 
   /**
-   * Format with a pattern.
+   * Formats this DateTime using the given pattern.
    *
-   * @param {string} pattern
-   * @param {{ locale?: Locale }} [options]
-   * @returns {string}
+   * @param pattern
+   *   A format string (for example, one of the `DateFormat` values or
+   *   any custom string).
+   * @param options
+   *   Optional `{ locale?: Locale }` for localized month/day names.
+   * @returns
+   *   The formatted date string.
+   *
+   * @example
+   * ```ts
+   * const dt = new DateTime('2025-06-05T14:30:00Z');
+   * console.log(dt.format(DateFormat.ISO_DATETIME));  // "2025-06-05T14:30:00+00:00"
+   * console.log(dt.format(DateFormat.MM_DD_YYYY));    // "06/05/2025"
+   * console.log(dt.format(DateFormat.RSS));           // "Fri, 05 Jun 2025 14:30:00 +0000"
+   * console.log(dt.format('yyyy/MM/dd HH:mm:ss'));    // "2025/06/05 14:30:00"
+   * ```
    */
-  public format(pattern: string, options?: { locale?: Locale }): string {
+  public format(pattern: DateFormat | string, options?: { locale?: Locale }): string {
     return formatDate(this.date, pattern, options);
   }
 
@@ -360,7 +380,7 @@ export class DateTime {
   /**
    * Sets the day of the month.
    *
-   * @param {number} day  Day of the month (1–31).
+   * @param day  Day of the month (1–31).
    * @returns {DateTime}
    */
   public settingDayOfMonth(day: number): DateTime {
@@ -370,7 +390,7 @@ export class DateTime {
   /**
    * Sets the day of the week.
    *
-   * @param {number} day  Day of the week (0–6, 0 = Sunday).
+   * @param day  Day of the week (0–6, 0 = Sunday).
    * @returns {DateTime}
    */
   public settingDayOfWeek(day: number): DateTime {
@@ -380,7 +400,7 @@ export class DateTime {
   /**
    * Sets the month.
    *
-   * @param {number} month  Month (0–11).
+   * @param month  Month (0–11).
    * @returns {DateTime}
    */
   public settingMonth(month: number): DateTime {
@@ -390,7 +410,7 @@ export class DateTime {
   /**
    * Sets the year.
    *
-   * @param {number} year  Year.
+   * @param year  Year.
    * @returns {DateTime}
    */
   public settingYear(year: number): DateTime {
@@ -400,7 +420,7 @@ export class DateTime {
   /**
    * Sets the hours.
    *
-   * @param {number} hours  Hours (0–23).
+   * @param hours  Hours (0–23).
    * @returns {DateTime}
    */
   public settingHours(hours: number): DateTime {
@@ -410,7 +430,7 @@ export class DateTime {
   /**
    * Sets the minutes.
    *
-   * @param {number} minutes  Minutes (0–59).
+   * @param minutes  Minutes (0–59).
    * @returns {DateTime}
    */
   public settingMinutes(minutes: number): DateTime {
@@ -420,10 +440,45 @@ export class DateTime {
   /**
    * Sets the seconds.
    *
-   * @param {number} seconds  Seconds (0–59).
+   * @param seconds  Seconds (0–59).
    * @returns {DateTime}
    */
   public settingSeconds(seconds: number): DateTime {
     return new DateTime(setSeconds(this.date, seconds));
   }
+}
+
+export enum DateFormat {
+  /** ISO date only (yyyy-MM-dd), e.g. "2025-06-05" */
+  ISO_DATE = 'yyyy-MM-dd',
+
+  /** ISO date + time with offset, e.g. "2025-06-05T13:24:00+00:00" */
+  ISO_DATETIME = "yyyy-MM-dd'T'HH:mm:ssXXX",
+
+  /** Month/day/year, e.g. "06/05/2025" */
+  MM_DD_YYYY = 'MM/dd/yyyy',
+
+  /** Full month name + day + year, e.g. "June 5, 2025" */
+  FULL_MONTH_DAY_YEAR = 'MMMM d, yyyy',
+
+  /** Abbreviated month + day + year, e.g. "Jun 5, 2025" */
+  ABBR_MONTH_DAY_YEAR = 'MMM d, yyyy',
+
+  /** RFC-3339 with milliseconds, e.g. "2025-06-05T13:24:00.000Z" */
+  RFC_3339 = "yyyy-MM-dd'T'HH:mm:ss.SSSxxx",
+
+  /** Alternative RSS date, e.g. "09 Sep 2011 15:26:08 +0200" */
+  ALT_RSS = 'd MMM yyyy HH:mm:ss ZZZ',
+
+  /** Standard RSS date, e.g. "Fri, 09 Sep 2011 15:26:08 +0200" */
+  RSS = 'EEE, d MMM yyyy HH:mm:ss ZZZ',
+
+  /** HTTP header date, e.g. "Tue, 15 Nov 1994 12:45:26 GMT" */
+  HTTP_HEADER = 'EEE, dd MMM yyyy HH:mm:ss zzz',
+
+  /** Generic standard format, e.g. "Fri Sep 09 15:26:08 +0000 2011" */
+  STANDARD = 'EEE MMM dd HH:mm:ss Z yyyy',
+
+  /** Extended format, e.g. "Fri 09-Sep-2011 AD 15:26:08.000 UTC" */
+  EXTENDED = 'eee dd-MMM-yyyy GG HH:mm:ss.SSS zzz',
 }
