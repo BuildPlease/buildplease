@@ -1,47 +1,55 @@
 /**
- * Converts a string input to a matching enum value by applying normalization.
+ * Try to map any input into one of the values of a TS enum.
  *
- * @template T - An enum type whose values are of type `string | number`.
- * @param input - The input string to match with an enum value.
- * @param enumObject - The enum object containing possible values.
- * @param options - Optional settings for matching.
- * @param options.normalize - A function to normalize both input and enum values for comparison.
- * @param options.matchBy - Determines whether to match by enum `key` or `value`. Defaults to `value`.
- * @returns The matched enum value or `null` if no match is found.
+ * - Supports both string enums and numeric enums.
+ * - Matches against both the enum’s **key** and its **value** (after normalization).
+ * - Skips the “reverse-mapping” entries that TS emits for numeric enums.
+ *
+ * @param input   Anything the user passed in
+ * @param enumObj The enum object you want to map into
+ * @param options.normalize  Optional normalizer for comparing strings (default trims + uppercases)
+ * @returns       One of the enum’s values, or null if nothing matches
  */
-// MARK: - Main Function
-export function mapStringToEnum<T extends Record<string, string | number>>(
-  input: string | null | undefined,
-  enumObject: T,
-  options?: {
-    normalize?: (input: string) => string;
-    matchBy?: 'value' | 'key';
-  },
-): T[keyof T] | null {
-  // MARK: - Handle null or undefined input
-  if (!input) return null;
+export function mapToEnum<V extends string | number, E extends Record<string, V>>(
+  input: unknown,
+  enumObj: E,
+  options?: { normalize?: (s: string) => string },
+): V | null {
+  // only strings and numbers are allowed
+  if (typeof input !== 'string' && typeof input !== 'number') {
+    return null;
+  }
 
-  // MARK: - Define normalization function
-  // Default normalization to trim and uppercase input if no custom function is provided
-  const defaultNormalize = (s: string) => s.trim().toUpperCase();
-  const normalizeFn = options?.normalize || defaultNormalize;
+  // default normalizer → trim + uppercase
+  const normalize = options?.normalize ?? ((s) => s.trim().toUpperCase());
 
-  // Normalize the input once for consistent matching
-  const normalizedInput = normalizeFn(input);
+  // unify to a string for comparison
+  const raw = typeof input === 'number' ? String(input) : input;
+  const normalizedInput = normalize(raw);
 
-  // MARK: - Retrieve enum entries
-  // Convert enum object entries into [key, value] pairs
-  const entries = Object.entries(enumObject) as [keyof T, T[keyof T]][];
+  for (const [key, value] of Object.entries(enumObj)) {
+    // skip TS’s reverse‐mapping entries for numeric enums (e.g. "0": "BASIC")
+    if (!Number.isNaN(Number(key))) {
+      continue;
+    }
 
-  // MARK: - Enum matching loop
-  for (const [key, value] of entries) {
-    // Determine if comparison should be by key or value, and convert to string for safe normalization
-    const compareValue = options?.matchBy === 'key' ? String(key) : String(value);
-    if (normalizeFn(compareValue) === normalizedInput) {
-      return value;
+    // If it’s a number-valued enum
+    if (typeof value === 'number') {
+      // match numeric input
+      if (!Number.isNaN(Number(raw)) && Number(raw) === value) {
+        return value;
+      }
+      // match by key name
+      if (normalize(key) === normalizedInput) {
+        return value;
+      }
+    } else {
+      // string-valued enum → match either the value or the key
+      if (normalize(value) === normalizedInput || normalize(key) === normalizedInput) {
+        return value;
+      }
     }
   }
 
-  // MARK: - Return null if no match is found
   return null;
 }
