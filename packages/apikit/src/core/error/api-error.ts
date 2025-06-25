@@ -1,16 +1,18 @@
 import { type JSONSerializable, filterObject } from '@nidavellirx/meowv-core';
 
+export type ApiErrorDetails = string | string[] | Record<string, string[]>;
+
 export interface ApiErrorProperties {
   code: string;
   message: string;
   statusCode: number;
-  details?: string | unknown;
+  details?: ApiErrorDetails;
 }
 
 export class ApiError extends Error implements ApiErrorProperties, JSONSerializable {
   private _code: string;
   private _statusCode: number;
-  private _details?: string | unknown;
+  private _details?: ApiErrorDetails;
 
   constructor({ code, message, statusCode, details }: ApiErrorProperties) {
     super(message);
@@ -33,24 +35,22 @@ export class ApiError extends Error implements ApiErrorProperties, JSONSerializa
     return this._statusCode;
   }
 
-  get details(): string | undefined | unknown {
+  get details(): ApiErrorDetails | undefined {
     return this._details;
   }
 
-  static with(error: ApiErrorProperties, customMessage?: string, details?: string): ApiError {
+  static with(properties: ApiErrorProperties, customMessage?: string): ApiError {
     return new ApiError({
-      ...error,
-      message: customMessage ?? error.message,
-      details,
+      ...properties,
+      message: customMessage ?? properties.message,
     });
   }
 
   public toJSON(): any {
     const json = {
-      statusCode: this._statusCode,
       code: this._code,
       message: this.message,
-      details: this._details,
+      details: this.formatDetails(this.details),
     };
 
     return filterObject(json, {
@@ -59,5 +59,22 @@ export class ApiError extends Error implements ApiErrorProperties, JSONSerializa
       filterEmptyString: true,
       filterEmptyObject: true,
     });
+  }
+
+  private formatDetails(details?: ApiErrorDetails): Record<string, string[]> | undefined {
+    if (!details) return undefined;
+
+    // MARK: - Single string
+    if (typeof details === 'string') {
+      return { _error: [details] };
+    }
+
+    // MARK: - Array of strings
+    if (Array.isArray(details)) {
+      return { _errors: details };
+    }
+
+    // MARK: - Already formatted
+    return details;
   }
 }

@@ -1,6 +1,12 @@
 import merge from 'lodash.merge';
 
-import { type RecursiveErrorTree, type LocalizedApiError, ApiError, ApiErrorCodes } from '#/error';
+import {
+  type RecursiveErrorTree,
+  type LocalizedApiError,
+  type ApiErrorDetails,
+  ApiError,
+  ApiErrorCodes,
+} from '#/error';
 import { type I18nOptions, I18nProvider } from '#/i18n';
 
 /**
@@ -13,7 +19,7 @@ import { type I18nOptions, I18nProvider } from '#/i18n';
  */
 export interface ApiErrorFactoryOptions extends I18nOptions {
   message?: string;
-  details?: string;
+  details?: ApiErrorDetails;
 }
 
 /**
@@ -64,9 +70,7 @@ export class ApiErrorFactory {
    */
   static make(key: BuiltInKeys, opts: ApiErrorFactoryOptions = {}): ApiError {
     const def = getErrorByPath(ApiErrorCodes, key);
-    if (!def) {
-      throw new Error(`Invalid error key: ${key}`);
-    }
+    if (!def) throw new Error(`Invalid error key: ${key}`);
 
     return new ApiError({
       code: def.code,

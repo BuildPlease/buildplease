@@ -2,14 +2,22 @@
 export const ErrorResponseSchema = {
   $id: 'ErrorResponse',
   type: 'object',
-  additionalProperties: false,
   properties: {
-    statusCode: { type: 'number', example: 401 },
-    code: { type: 'string', example: 'UNATHORIZED' },
+    code: { type: 'string', example: 'UNAUTHORIZED' },
     message: { type: 'string', example: 'Authorization failed' },
-    details: { type: 'string', example: 'Invalid token.' },
+    details: {
+      type: 'object',
+      additionalProperties: {
+        type: 'array',
+        items: { type: 'string' },
+      },
+      example: {
+        deviceId: ['Required'],
+        password: ['Must be at least 8 chars'],
+      },
+    },
   },
-  required: ['statusCode', 'code', 'message'],
+  required: ['code', 'message'],
 };
 
 /* MARK: - Localizable Text */
@@ -25,6 +33,50 @@ export const LocalizableTextSchema = {
 };
 
 /* MARK: - Device */
+export const DeviceSchema = {
+  $id: 'Device',
+  type: 'object',
+  required: ['deviceId'],
+  properties: {
+    deviceId: {
+      type: 'string',
+      description: 'A unique identifier for the device',
+      example: '2D4C2D66-6E6A-4E1A-AC79-6A2CF2349F9D',
+    },
+    deviceName: {
+      type: 'string',
+      description: 'Name of the device (e.g., "John\'s iPhone")',
+      example: "John's iPhone",
+    },
+    deviceType: { $ref: 'DeviceType#' },
+    osType: { $ref: 'OSType#' },
+    osVersion: {
+      type: 'string',
+      description: 'Version of the operating system',
+      example: '14.3',
+    },
+    appVersion: {
+      type: 'string',
+      description: 'Version of the application',
+      example: '2.1.0',
+    },
+    locale: {
+      type: 'string',
+      description: 'Locale settings of the device',
+      example: 'en-US',
+    },
+    pushToken: {
+      type: 'string',
+      description: 'Push notification token',
+      example: 'fake_push_token',
+    },
+    pushNotificationStatus: {
+      $ref: 'PushNotificationStatus#',
+      description: 'Push notification status',
+      example: 'ON',
+    },
+  },
+};
 export const OSTypeSchema = {
   $id: 'OSType',
   type: 'string',
@@ -294,6 +346,7 @@ export const PolygonSchema = {
 export const ApiKitSchemas = {
   ErrorResponse: ErrorResponseSchema,
   LocalizableText: LocalizableTextSchema,
+  Device: DeviceSchema,
   OSType: OSTypeSchema,
   DeviceType: DeviceTypeSchema,
   PushNotificationStatus: PushNotificationStatusSchema,
