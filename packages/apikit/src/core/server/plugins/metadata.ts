@@ -1,7 +1,7 @@
 import fp from 'fastify-plugin';
 import type { FastifyPluginAsync } from 'fastify';
 
-import { ignoreErrorAsync, isNullOrEmpty } from '@nidavellirx/meowv-core';
+import { ignoreError, isNullOrEmpty } from '@nidavellirx/meowv-core';
 
 import type { RequestMetadata } from '#/request';
 import type { ServerPluginOptions } from '#/server';
@@ -26,19 +26,17 @@ const requestMetadataPlugin: FastifyPluginAsync<ServerPluginOptions> = async (fa
 
     request.metadata = metadata;
 
-    await ignoreErrorAsync(async () => {
-      logger.info('Incoming Request', { metadata: request.metadata });
-    });
+    ignoreError(() => logger.info('Incoming Request', { metadata: request.metadata }));
   });
 
   // MARK: - onResponse
   fastify.addHook('onResponse', async (request, reply) => {
-    await ignoreErrorAsync(async () => {
+    ignoreError(() => {
       logger.info('Sending Response', {
         metadata: {
           requestId: request.metadata.requestId,
         },
-        content: {
+        details: {
           elapsedTime: reply.elapsedTime,
           statusCode: reply.statusCode,
         },

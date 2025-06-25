@@ -145,73 +145,6 @@ export function optional<T>(value: T | null | undefined): Optional<T> {
 }
 
 /**
- * Executes a function and wraps the result in an Optional.
- * If the function throws, returns an Optional with `null` value.
- *
- * @param {() => T} fn
- *   The function to execute.
- * @template T
- * @returns {Optional<T>}
- *   An Optional wrapping the function result, or `Optional<null>` if an error occurs.
- */
-export function ignoreError<T>(fn: () => T): Optional<T> {
-  try {
-    return new Optional(fn());
-  } catch {
-    return new Optional<T>(null);
-  }
-}
-
-/**
- * Executes the provided function and suppresses any errors.
- * Supports both synchronous and asynchronous functions.
- * Optionally executes a provided error handler function if an error occurs.
- *
- * @param {() => any | Promise<any>} fn
- *   A function that can return a value or a Promise.
- * @param {(error: any) => void} [onError]
- *   Optional function that handles the error.
- * @returns {Promise<void>}
- */
-export async function ignoreErrorAsync(
-  fn: () => any | Promise<any>,
-  onError?: (error: any) => void,
-): Promise<void> {
-  try {
-    await fn();
-  } catch (error) {
-    if (onError) {
-      onError(error);
-    }
-  }
-}
-
-/**
- * Executes an async function and wraps the result in an Optional.
- * If the function throws, returns an Optional with `null` value.
- *
- * @param {() => Promise<T>} fn
- *   The async function to execute.
- * @param {(error: unknown) => void} [onError]
- *   Optional error handler.
- * @template T
- * @returns {Promise<Optional<T>>}
- *   An Optional wrapping the result, or `Optional<null>` if an error occurred.
- */
-export async function ignoreErrorOptionalAsync<T>(
-  fn: () => Promise<T>,
-  onError?: (error: unknown) => void,
-): Promise<Optional<T>> {
-  try {
-    const result = await fn();
-    return new Optional(result);
-  } catch (error) {
-    if (onError) onError(error);
-    return new Optional<T>(null);
-  }
-}
-
-/**
  * Checks if a value is defined (not `undefined`).
  *
  * @param {OptionalValue<T>} value
@@ -248,4 +181,128 @@ export function isNotNull<T>(value: OptionalValue<T>): value is T {
  */
 export function isDefinedAndNotNull<T>(value: OptionalValue<T>): value is T {
   return isDefined(value) && isNotNull(value);
+}
+
+/**
+ * Executes a function and wraps the result in an Optional.
+ * If the function throws, returns an Optional with `null` value.
+ *
+ * @param fn - The function to execute.
+ * @template T
+ * @returns An Optional wrapping the function result, or `Optional<null>` if an error occurs.
+ *
+ * @example
+ * // A) single-expression sync (no braces, no return)
+ * const optA = ignoreError(() => JSON.parse('{ bad json }'));
+ * // optA.isNil === true
+ *
+ * @example
+ * // B) block-body sync (braces, implicit return via function result)
+ * const optB = ignoreError(() => {
+ *   // might throw
+ *   return JSON.parse('{"ok":true}');
+ * });
+ * // optB.or(() => ({ ok: false })) === { ok: true }
+ *
+ * @example
+ * // C) throwing sync
+ * const optC = ignoreError(() => { throw new Error('ouch'); });
+ * // optC.isNil === true
+ */
+export function ignoreError<T>(fn: () => T): Optional<T> {
+  try {
+    return new Optional(fn());
+  } catch {
+    return new Optional<T>(null);
+  }
+}
+
+/**
+ * Executes the provided function and suppresses any errors.
+ * Supports both synchronous and asynchronous bodies.
+ * Optionally handles any error via `onError`.
+ *
+ * @param fn
+ *   A function that can return a value or a Promise.
+ * @param onError
+ *   Optional function that handles the error.
+ * @returns Promise that always resolves to void.
+ *
+ * @example
+ * // A) single-expression async return
+ * await ignoreErrorAsync(() => cleanupTempFiles());
+ *
+ * @example
+ * // B) block-body sync (fn returns void)
+ * await ignoreErrorAsync(() => {
+ *   console.log('might throw');
+ *   // no return needed
+ * });
+ *
+ * @example
+ * // C) block-body returning a Promise
+ * await ignoreErrorAsync(() => {
+ *   return fetch('/api/data');
+ * }, err => {
+ *   console.warn('fetch failed:', err);
+ * });
+ *
+ * @example
+ * // D) async wrapper (can use await inside)
+ * await ignoreErrorAsync(async () => {
+ *   await cleanupTempFiles();
+ *   await notifyAdmin();
+ * }, err => {
+ *   console.error('cleanup+notify failed:', err);
+ * });
+ */
+export async function ignoreErrorAsync(
+  fn: () => any | Promise<any>,
+  onError?: (error: any) => void,
+): Promise<void> {
+  try {
+    await fn();
+  } catch (error) {
+    if (onError) onError(error);
+  }
+}
+
+/**
+ * Executes an async function and wraps the result in an Optional.
+ * If the function throws, returns an Optional with `null` value.
+ *
+ * @param fn - The async function to execute.
+ * @param onError - Optional handler for any thrown error.
+ * @template T
+ * @returns Promise<Optional<T>> wrapping the result or null.
+ *
+ * @example
+ * // A) simple async call
+ * const optA = await ignoreErrorOptionalAsync(() => fetchJson('/user'));
+ * // optA.ifPresent(data => console.log(data))
+ *
+ * @example
+ * // B) block-body async with error callback
+ * const optB = await ignoreErrorOptionalAsync(async () => {
+ *   const resp = await fetch('/user');
+ *   return resp.json();
+ * }, err => {
+ *   console.error('load user failed:', err);
+ * });
+ *
+ * @example
+ * // C) explicit return of promise
+ * const optC = await ignoreErrorOptionalAsync(() => fetchJson('/settings'));
+ */
+export async function ignoreErrorOptionalAsync<T>(
+  fn: () => Promise<T>,
+  onError?: (error: unknown) => void,
+): Promise<Optional<T>> {
+  try {
+    const result = await fn();
+    return new Optional(result);
+  } catch (error) {
+    if (onError) onError(error);
+    return new Optional<T>(null);
+  }
 }

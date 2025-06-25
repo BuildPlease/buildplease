@@ -70,10 +70,7 @@ export class RequestControllerImpl implements RequestController {
           metadata: { requestId: metadata.requestId },
         });
       } else {
-        this.logger.error('Unexpected Error', {
-          error,
-          metadata: { requestId: metadata.requestId },
-        });
+        this.logger.error('Unexpected Error', { error, metadata: { requestId: metadata.requestId } });
       }
     });
   }
