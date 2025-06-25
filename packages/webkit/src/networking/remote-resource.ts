@@ -1,12 +1,7 @@
 import { injectable } from 'inversify';
+import axios from 'axios';
 
-import {
-  type AsyncOperation,
-  isDefined,
-  isDefinedAndNotNull,
-  isNonEmptyString,
-  emptyOrUndefinedStringToNull,
-} from '@nidavellirx/meowv-core';
+import { type AsyncOperation, isNonEmptyString, emptyOrUndefinedStringToNull } from '@nidavellirx/meowv-core';
 
 import { type RemoteEndpoint, type RequestConfig, type RequestInterceptor, HttpError } from '@/networking';
 
@@ -40,39 +35,29 @@ export class RemoteResource<Input, Output, Endpoint extends RemoteEndpoint<Input
   }
 
   public parseError(error: unknown): Error {
-    // MARK: - 1) get HTTP status (axios.response.status or direct .status)
-    const statusCode =
-      this.getNestedProperty<number>(error, 'response.status') ??
-      this.getNestedProperty<number>(error, 'status');
+    if (axios.isAxiosError(error) && error.response) {
+      const { status, data } = error.response;
 
-    // MARK: - 2) get JSON body, if any
-    const payload = this.getNestedProperty<Record<string, any>>(error, 'response.data');
+      let payload: any = data;
+      if (typeof payload === 'string') {
+        try {
+          payload = JSON.parse(payload);
+        } catch {
+          // No-op
+        }
+      }
 
-    // MARK: - 3) require status + code + message
-    if (
-      isDefined(statusCode) &&
-      isDefinedAndNotNull(payload) &&
-      isNonEmptyString(payload.code) &&
-      isNonEmptyString(payload.message)
-    ) {
+      const fallbackCode = 'UNKNOWN_ERROR';
+      const fallbackMessage = 'Something went wrong';
+
       return new HttpError({
-        statusCode,
-        code: payload.code,
-        message: payload.message,
-        details: emptyOrUndefinedStringToNull(payload.details),
+        statusCode: status,
+        code: isNonEmptyString(payload?.code) ? payload.code : fallbackCode,
+        message: isNonEmptyString(payload?.message) ? payload.message : fallbackMessage,
+        details: emptyOrUndefinedStringToNull(payload?.details),
       });
     }
 
-    // MARK: - 4) fallback
-    return new Error(`An unexpected error occurred: ${error}`);
-  }
-
-  private getNestedProperty<T = unknown>(obj: unknown, path: string): T | undefined {
-    return path.split('.').reduce((acc, key) => {
-      if (acc && typeof acc === 'object') {
-        return (acc as any)[key];
-      }
-      return undefined;
-    }, obj) as T | undefined;
+    return new Error(`[Remote Resource] - An unexpected error occurred: ${error}`);
   }
 }
