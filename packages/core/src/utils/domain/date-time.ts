@@ -65,6 +65,8 @@ import {
   formatISO,
 } from 'date-fns';
 
+import type { JSONSerializable } from '@/utils';
+
 /**
  * A date-and-time utility class offering parsing, formatting, and arithmetic.
  *
@@ -78,7 +80,7 @@ import {
  * const fromDate = new DateTime(new Date('2022-12-12'));
  * const fromIso  = new DateTime('2022-12-12T00:00:00Z');
  */
-export class DateTime {
+export class DateTime implements JSONSerializable {
   private readonly date: Date;
 
   /**
@@ -167,6 +169,14 @@ export class DateTime {
    */
   public static fromUnixTimestamp(unixTimestamp: number): DateTime {
     return new DateTime(fromUnixTime(unixTimestamp));
+  }
+
+  /**
+   * JSON.stringify will look for `toJSON()` first, so
+   * we emit an ISO string by default.
+   */
+  public toJSON(): string {
+    return this.toISOString();
   }
 
   // MARK: - Converters
