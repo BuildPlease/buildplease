@@ -11,7 +11,7 @@
          "timeout":"Uplynul časový limit na odpoveď zo servera"
       },
       "limit":{
-         "too_many_requests":"Bolo odoslaných príliš veľa požiadaviek Skúste to prosím neskôr"
+         "too_many_requests":"Bolo odoslaných príliš veľa požiadaviek. Skúste to prosím neskôr"
       },
       "auth":{
          "unauthorized":"Nemáte oprávnenie na vykonanie tejto akcie",

@@ -11,7 +11,7 @@
          "timeout":"Časový limit požadavku byl překročen"
       },
       "limit":{
-         "too_many_requests":"Byl překročen povolený limit požadavků"
+         "too_many_requests":"Byl překročen povolený limit požadavků. Zkuste to prosím později"
       },
       "auth":{
          "unauthorized":"Nemáte oprávnění k provedení této akce",
