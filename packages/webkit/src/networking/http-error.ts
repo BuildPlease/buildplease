@@ -21,11 +21,16 @@ export interface HttpErrorOptions {
   message: string;
 
   /**
-   * Optional technical details for debugging.
-   * @example "Failed to verify JWT token"
-   * @example "User ID: 123 | Path: /api/v1/users"
+   * Optional structured details for debugging.
+   * Each key maps to an array of error messages for that field.
+   *
+   * @example
+   * {
+   *   "email": ["must be a valid email address"],
+   *   "password": ["required", "must be at least 8 characters"]
+   * }
    */
-  details?: string | null;
+  details?: Record<string, string[]>;
 }
 
 /**
@@ -44,37 +49,22 @@ export interface HttpErrorOptions {
  * });
  *
  * @example
- * // With debug details
+ * // With structured debug details
  * throw new HttpError({
- *   statusCode: 403,
- *   code: "FORBIDDEN",
- *   message: "Insufficient permissions",
- *   details: "User tried accessing /admin"
+ *   statusCode: 422,
+ *   code: "VALIDATION_ERROR",
+ *   message: "One or more fields are invalid",
+ *   details: {
+ *     "email": ["must be a valid email address"],
+ *     "password": ["required", "must be at least 8 characters"]
+ *   }
  * });
  */
 export class HttpError extends Error {
-  /**
-   * The HTTP status code from the error response.
-   * @example 401
-   */
-  public readonly statusCode: number;
+  public readonly statusCode: HttpErrorOptions['statusCode'];
+  public readonly code: HttpErrorOptions['code'];
+  public readonly details?: HttpErrorOptions['details'];
 
-  /**
-   * A short, machine‐readable code identifying the error type.
-   * @example "VALIDATION_ERROR"
-   */
-  public readonly code: string;
-
-  /**
-   * Optional technical details for debugging.
-   * @example "Invalid email format: 'user@example'"
-   */
-  public readonly details?: string | null;
-
-  /**
-   * Constructs a new `HttpError`.
-   * @param opts - Configuration options for the error.
-   */
   constructor(opts: HttpErrorOptions) {
     super(opts.message);
     this.name = 'HttpError';

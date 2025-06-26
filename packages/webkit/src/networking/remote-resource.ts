@@ -1,7 +1,12 @@
 import { injectable } from 'inversify';
 import axios from 'axios';
 
-import { type AsyncOperation, isNonEmptyString, emptyOrUndefinedStringToNull } from '@nidavellirx/meowv-core';
+import {
+  type AsyncOperation,
+  isNonEmptyString,
+  isPlainObject,
+  isDefinedAndNotNull,
+} from '@nidavellirx/meowv-core';
 
 import { type RemoteEndpoint, type RequestConfig, type RequestInterceptor, HttpError } from '@/networking';
 
@@ -47,6 +52,8 @@ export class RemoteResource<Input, Output, Endpoint extends RemoteEndpoint<Input
         }
       }
 
+      const details = this.isStringArrayRecord(payload.details) ? payload.details : undefined;
+
       const fallbackCode = 'UNKNOWN_ERROR';
       const fallbackMessage = 'Something went wrong';
 
@@ -54,10 +61,16 @@ export class RemoteResource<Input, Output, Endpoint extends RemoteEndpoint<Input
         statusCode: status,
         code: isNonEmptyString(payload?.code) ? payload.code : fallbackCode,
         message: isNonEmptyString(payload?.message) ? payload.message : fallbackMessage,
-        details: emptyOrUndefinedStringToNull(payload?.details),
+        details: details,
       });
     }
 
     return new Error(`[Remote Resource] - An unexpected error occurred: ${error}`);
+  }
+
+  private isStringArrayRecord(value: unknown): value is Record<string, string[]> {
+    if (!isDefinedAndNotNull(value) || !isPlainObject(value)) return false;
+
+    return Object.values(value).every((arr) => Array.isArray(arr) && arr.every((v) => typeof v === 'string'));
   }
 }
