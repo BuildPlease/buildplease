@@ -1,26 +1,43 @@
 import { injectable } from 'inversify';
 
+import { isPlainObject, isObject } from '@nidavellirx/meowv-core';
+
 /**
- * Interface for the FormatterController
+ * FormatterController is responsible for creating Formatter instances.
+ * Use FormatterController to apply transformations and filters to any data
+ * object in a fluent, chainable manner.
  */
 export interface FormatterController {
+  /**
+   * Creates a new Formatter for the provided input value.
+   * @param input - The value to format (object, array, primitive, etc.).
+   */
   format<T>(input: T): Formatter<T>;
 }
 
 /**
- * Class representing a Formatter which supports method chaining for formatting, transforming, and filtering.
+ * Formatter<T> provides a fluent API for transforming and filtering
+ * values of type T. Supports:
+ * - apply(): field-level transformations or full-object mapping
+ * - filter(): deep removal of undefined or unwanted values
+ * - exec(): retrieve the final formatted result
+ *
+ * @typeParam T - The type of the value being formatted.
  */
 export class Formatter<T> {
   private value: T;
 
+  /**
+   * @param value - The initial value to be processed.
+   */
   constructor(value: T) {
     this.value = value;
   }
 
   /**
-   * Applies transformations to the value.
-   * @param {Partial<Record<keyof T, (value: any) => any>> | ((value: T) => T | null | undefined)} transformationsOrTransformer - The transformations or transformer function.
-   * @returns {Formatter<T | null | undefined>} - Returns the Formatter instance for chaining with the updated type.
+   * Applies transformations to the current value.
+   * @param transformationsOrTransformer - Field map or full-object transformer.
+   * @returns The same Formatter instance for chaining.
    */
   apply(
     transformationsOrTransformer:
@@ -36,25 +53,26 @@ export class Formatter<T> {
   }
 
   /**
-   * Filters the value recursively based on the provided predicate.
-   * Removes undefined, null, or unwanted fields deeply from objects and arrays.
-   *
-   * @param {Function} predicate - A predicate function to determine if a value should be kept. Defaults to checking for `!== undefined`.
-   * @returns {this} - Returns the Formatter instance for chaining.
+   * Recursively filters out values based on the provided predicate.
+   * Works deeply on arrays and plain objects, while treating custom
+   * class instances and primitives as leaves.
+   * @param predicate - Function to test each leaf value.
+   * @returns The same Formatter instance for chaining.
    */
   filter(predicate: (value: any) => boolean = (value) => value !== undefined): this {
     const deepFilter = (obj: any): any => {
       if (Array.isArray(obj)) {
-        const filteredArray = obj.map(deepFilter).filter(predicate);
-        return filteredArray.length > 0 ? filteredArray : undefined;
-      } else if (typeof obj === 'object' && obj !== null) {
-        const entries = Object.entries(obj)
-          .map(([key, value]) => [key, deepFilter(value)] as const)
-          .filter(([_, value]) => predicate(value));
-        return entries.length > 0 ? Object.fromEntries(entries) : undefined;
-      } else {
-        return predicate(obj) ? obj : undefined;
+        const arr = obj.map(deepFilter).filter(predicate);
+        return arr.length > 0 ? arr : undefined;
       }
+      if (isPlainObject(obj)) {
+        const entries = Object.entries(obj)
+          .map(([k, v]) => [k, deepFilter(v)] as const)
+          .filter(([_, v]) => predicate(v));
+        return entries.length > 0 ? Object.fromEntries(entries) : undefined;
+      }
+      // Non-objects (primitives, class instances, Dates) are treated as leaves
+      return predicate(obj) ? obj : undefined;
     };
 
     this.value = deepFilter(this.value) as unknown as T;
@@ -62,20 +80,19 @@ export class Formatter<T> {
   }
 
   /**
-   * Executes the Formatter and returns the formatted and filtered value.
-   * @returns {T} - The formatted and filtered value.
+   * Retrieves the formatted and filtered result.
+   * @returns The processed value of type T.
    */
   exec(): T {
     return this.value;
   }
 
   /**
-   * Applies multiple transformations to the value.
-   * @private
-   * @param {Partial<Record<keyof T, (value: any) => any>>} transformations - The transformations object.
+   * Applies multiple field-level transformations in a single step.
+   * @param transformations - Object mapping keys to transformer functions.
    */
   private applyTransformations(transformations: Partial<Record<keyof T, (value: any) => any>>): void {
-    if (typeof this.value === 'object' && this.value !== null) {
+    if (isObject(this.value)) {
       this.value = Object.fromEntries(
         Object.entries(this.value).map(([key, value]) => [
           key,
@@ -86,9 +103,6 @@ export class Formatter<T> {
   }
 }
 
-/**
- * Implementation of the FormatterController
- */
 @injectable()
 export class FormatterControllerImpl implements FormatterController {
   format<T>(input: T): Formatter<T> {
