@@ -6,7 +6,7 @@ import i18next from 'i18next';
 import merge from 'lodash.merge';
 
 import { ApiKitSymbols } from '#/di';
-import { resolvePath, ensureDirectory } from '#/utils';
+import { resolvePath, ensureDirectory } from '#/file';
 import type { ApiKitController, I18nConfig, I18nFileEntry } from '#/configuration';
 
 type ResourceEntry = {

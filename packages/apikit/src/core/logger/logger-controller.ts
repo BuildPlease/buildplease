@@ -16,7 +16,7 @@ import type {
 } from '#/configuration';
 import type { LogOptions } from '#/logger';
 import type { RequestMetadata } from '#/request';
-import { resolvePath, createDirectory, createFile } from '#/utils';
+import { resolvePath, createDirectory, createFile } from '#/file';
 
 export interface LoggerController {
   get instance(): Logger;

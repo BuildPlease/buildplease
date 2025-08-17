@@ -14,6 +14,10 @@ const Email = {
   Controller: Symbol.for(`${prefix}.Email.Controller`),
 };
 
+const File = {
+  TemporaryRepository: Symbol.for(`${prefix}.File.TemporaryRepository`),
+};
+
 const Validation = {
   Controller: Symbol.for(`${prefix}.Validation.Controller`),
   DtoController: Symbol.for(`${prefix}.Validation.DtoController`),
@@ -35,6 +39,10 @@ const Formatter = {
   Controller: Symbol.for(`${prefix}.Formatter.Controller`),
 };
 
+const Image = {
+  NormalizationController: Symbol.for(`${prefix}.Image.NormalizationController`),
+};
+
 const Logger = {
   Controller: Symbol.for(`${prefix}.Logger.Controller`),
 };
@@ -54,11 +62,13 @@ export const ApiKitSymbols = {
     Configuration,
     Database,
     Email,
+    File,
     Validation,
     Schema,
     I18n,
     Normalization,
     Formatter,
+    Image,
     Logger,
     Server,
     Security,

@@ -51,6 +51,7 @@
     "zod": "3.25.51"
   },
   "peerDependencies": {
+    "sharp": "0.34.3",
     "inversify": "7.5.0"
   },
   "devDependencies": {

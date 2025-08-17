@@ -4,7 +4,7 @@ import fp from 'fastify-plugin';
 import fastifyStatic, { type FastifyStaticOptions } from '@fastify/static';
 import type { FastifyPluginAsync } from 'fastify';
 
-import { resolvePath, ensureDirectory } from '#/utils';
+import { resolvePath, ensureDirectory } from '#/file';
 import type { ServerPluginOptions } from '#/server';
 
 const pluginName = 'apikit-@fastify/static';

@@ -3,9 +3,13 @@ import path from 'node:path';
 
 import { defineConfig } from 'tsup';
 
-import { resolvePath } from './src/core/utils';
+import { resolvePath } from './src/core/file';
+
+import pkg from './package.json' assert { type: 'json' };
 
 const outDir = 'dist/src';
+const workspacePackages = ['@nidavellirx/meowv-core'];
+const peers = Object.keys(pkg.peerDependencies ?? {});
 
 export default defineConfig({
   outDir: outDir,
@@ -28,44 +32,7 @@ export default defineConfig({
   target: 'esnext',
   format: ['cjs', 'esm'],
 
-  external: [
-    // Node built-ins
-    'fs',
-    'path',
-    'node:*',
-
-    // Decorator shim
-    'reflect-metadata',
-
-    // Internal workspace packages
-    '@nidavellirx/meowv-core',
-
-    // External dependencies used in the lib
-    'i18next',
-    'lodash.merge',
-    'inversify',
-    'pino',
-    'pino-pretty',
-    'zod',
-    'bcrypt',
-    'axios',
-    'ejs',
-    'validator',
-    'libphonenumber-js',
-    'nodemailer',
-
-    // Fastify & related plugins
-    'fastify',
-    '@fastify/cookie',
-    '@fastify/static',
-    '@fastify/view',
-    'fastify-ip',
-    'fastify-plugin',
-
-    // ESM config loader
-    '@dotenvx/dotenvx',
-    'jiti',
-  ],
+  external: ['node:*', 'reflect-metadata', ...peers, ...workspacePackages],
 
   onSuccess: async () => {
     await copyLocales();

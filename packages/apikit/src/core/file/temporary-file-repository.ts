@@ -1,0 +1,176 @@
+import os from 'node:os';
+import fs from 'node:fs';
+import path from 'node:path';
+import { Readable } from 'node:stream';
+import { pipeline as pipelineAsync } from 'node:stream/promises';
+
+import { injectable, inject } from 'inversify';
+
+import { ApiKitSymbols } from '#/di';
+import type { LoggerController } from '#/logger';
+import type { FormatType } from '#/formatter';
+import { createDirectoryAsync, ensureDirectoryAsync, removePathAsync } from '#/file';
+
+export interface TemporaryFileRepository {
+  /**
+   * Absolute path to the OS temporary directory used as a root for all operations.
+   */
+  get rootDirectory(): string;
+
+  /**
+   * Ensure a subdirectory under the temp root exists.
+   *
+   * @param relativePath - A subpath like `request-id/cover`. Treated as relative to the temp root.
+   * @returns Absolute path to the created/existing directory.
+   * @throws If the directory cannot be created.
+   */
+  createDirectory(relativePath: string): Promise<string>;
+
+  /**
+   * Remove a directory (recursively) under the temp root.
+   *
+   * @param relativePath - A subpath like `request-id/cover`. Treated as relative to the temp root.
+   * @returns Resolves when deletion completes. No-op if it doesn’t exist.
+   * @throws If the deletion fails.
+   */
+  deleteDirectory(relativePath: string): Promise<void>;
+
+  /**
+   * Persist a file under the temp root.
+   *
+   * The final filename will be `<filename>.<type.extension>`.
+   *
+   * @param filename - Basename without extension (e.g., `cover`, `preview_0`).
+   * @param content - Buffer or Readable stream to write.
+   * @param type - Output type providing the file extension.
+   * @param relativeDirectory - Subdirectory under the temp root (e.g., `request-id/cover`).
+   * @returns Absolute file path written on disk.
+   * @throws If writing fails or content type is unsupported.
+   */
+  save(
+    filename: string,
+    content: NodeJS.ReadableStream | Buffer,
+    type: FormatType,
+    relativeDirectory: string,
+  ): Promise<string>;
+
+  /**
+   * Remove a file under the temp root.
+   *
+   * @param relativeFilePath - Subpath like `request-id/cover/cover.jpeg`.
+   * @returns Resolves when deletion completes. No-op if it doesn’t exist.
+   * @throws If the deletion fails.
+   */
+  delete(relativeFilePath: string): Promise<void>;
+}
+
+@injectable()
+export class TemporaryFileRepositoryImpl implements TemporaryFileRepository {
+  private readonly rootDir: string;
+
+  constructor(
+    @inject(ApiKitSymbols.DI.Logger.Controller)
+    private readonly logger: LoggerController,
+  ) {
+    this.rootDir = os.tmpdir();
+  }
+
+  get rootDirectory(): string {
+    return this.rootDir;
+  }
+
+  async createDirectory(relativePath: string): Promise<string> {
+    const abs = this.safeJoin(relativePath);
+    try {
+      return await createDirectoryAsync(abs);
+    } catch (error) {
+      this.logger.error('TemporaryFileRepository.createDirectory error', { error, details: { abs } });
+      throw error;
+    }
+  }
+
+  async deleteDirectory(relativePath: string): Promise<void> {
+    const abs = this.safeJoin(relativePath);
+    try {
+      await removePathAsync(abs, { recursive: true, force: true });
+    } catch (error) {
+      this.logger.error('TemporaryFileRepository.deleteDirectory error', { error, details: { abs } });
+      throw error;
+    }
+  }
+
+  async save(
+    filename: string,
+    content: NodeJS.ReadableStream | Buffer,
+    type: FormatType,
+    relativeDirectory: string,
+  ): Promise<string> {
+    const dirAbs = this.safeJoin(relativeDirectory);
+    const fileAbs = path.join(dirAbs, `${filename}.${type.extension}`);
+
+    try {
+      // Ensure parent directory exists (and is a directory).
+      await createDirectoryAsync(dirAbs);
+      await ensureDirectoryAsync(dirAbs);
+
+      if (Buffer.isBuffer(content)) {
+        await fs.promises.writeFile(fileAbs, content);
+        return fileAbs;
+      }
+
+      if (content instanceof Readable) {
+        const writeStream = fs.createWriteStream(fileAbs);
+        try {
+          await pipelineAsync(content, writeStream);
+          return fileAbs;
+        } finally {
+          writeStream.close();
+        }
+      }
+
+      const error = new Error('Unsupported content type: expected Buffer or Readable.');
+
+      this.logger.error('TemporaryFileRepository.save unsupported content', {
+        error: error,
+        details: { fileAbs, typeof: typeof content },
+      });
+      throw error;
+    } catch (error) {
+      this.logger.error('TemporaryFileRepository.save error', {
+        error,
+        details: { fileAbs, relativeDirectory, filename, extension: type.extension },
+      });
+      throw error;
+    }
+  }
+
+  async delete(relativeFilePath: string): Promise<void> {
+    const abs = this.safeJoin(relativeFilePath);
+    try {
+      await removePathAsync(abs, { recursive: false, force: true });
+    } catch (error) {
+      this.logger.error('TemporaryFileRepository.delete error', { error, details: { abs } });
+      throw error;
+    }
+  }
+
+  /**
+   * Resolve a user-provided relative path against the repository root,
+   * normalize it, and reject traversal outside the root.
+   */
+  private safeJoin(relativePath: string): string {
+    const joined = path.resolve(this.rootDir, relativePath);
+    const rootWithSep = this.rootDir.endsWith(path.sep) ? this.rootDir : this.rootDir + path.sep;
+
+    if (!joined.startsWith(rootWithSep) && joined !== this.rootDir) {
+      const error = new Error(`Path escapes repository root: "${relativePath}"`);
+      this.logger.error('TemporaryFileRepository.safeJoin traversal attempt', {
+        error,
+        details: { root: this.rootDir, attempted: joined },
+      });
+      throw error;
+    }
+
+    return joined;
+  }
+}

@@ -7,7 +7,7 @@ import nodemailer from 'nodemailer';
 import ejs from 'ejs';
 
 import { ApiKitSymbols } from '#/di';
-import { resolvePath } from '#/utils';
+import { resolvePath } from '#/file';
 import type { EmailTemplate } from '#/email';
 import type { LoggerController } from '#/logger';
 import type { ApiKitController } from '#/configuration';

@@ -1,7 +1,7 @@
 import { createJiti } from 'jiti';
 
 import type { ApiKitConfig } from '#/configuration';
-import { resolvePath, ensureDirectory } from '#/utils';
+import { resolvePath, ensureDirectory } from '#/file';
 
 export const log = {
   success: (message: string) => console.log('\x1b[32m' + message + '\x1b[0m'),

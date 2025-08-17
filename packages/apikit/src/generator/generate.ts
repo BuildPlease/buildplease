@@ -3,7 +3,7 @@ import path from 'node:path';
 import { generateEnvironment } from './data';
 
 import type { ApiKitConfig } from '#/configuration';
-import { resolvePath, removePath, createDirectory, createFile } from '#/utils';
+import { resolvePath, removePath, createDirectory, createFile } from '#/file';
 
 export async function generate(config: ApiKitConfig): Promise<void> {
   const defaultOutputPath = '.apikit';
