@@ -27,11 +27,11 @@
     "build": "tsup --config tsup.config.cli.ts && tsup --config tsup.config.src.ts"
   },
   "dependencies": {
-    "@nidavellirx/meowv-core": "workspace:^",
     "@dotenvx/dotenvx": "1.44.1",
     "@fastify/cookie": "11.0.2",
     "@fastify/static": "8.2.0",
     "@fastify/view": "11.1.0",
+    "@nidavellirx/meowv-core": "workspace:^",
     "axios": "1.9.0",
     "citty": "0.1.6",
     "ejs": "3.1.10",
@@ -51,8 +51,9 @@
     "zod": "3.25.51"
   },
   "peerDependencies": {
+    "inversify": "7.5.0",
     "sharp": "0.34.3",
-    "inversify": "7.5.0"
+    "mongoose": "8.18.0"
   },
   "devDependencies": {
     "@swc/core": "1.11.31",
