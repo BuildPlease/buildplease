@@ -30,7 +30,7 @@
     "reflect-metadata": "0.2.2"
   },
   "peerDependencies": {
-    "inversify": "7.5.0"
+    "inversify": "^7.5.0"
   },
   "devDependencies": {
     "@swc/core": "1.11.31",

@@ -32,7 +32,7 @@
     "reflect-metadata": "0.2.2"
   },
   "peerDependencies": {
-    "inversify": "7.5.0"
+    "inversify": "^7.5.0"
   },
   "devDependencies": {
     "@nuxt/devtools": "2.5.0",

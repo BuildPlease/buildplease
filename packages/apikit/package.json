@@ -51,9 +51,9 @@
     "zod": "3.25.51"
   },
   "peerDependencies": {
-    "inversify": "7.5.0",
-    "sharp": "0.34.3",
-    "mongoose": "8.18.0"
+    "inversify": "^7.5.0",
+    "sharp": "^0.34.3",
+    "mongoose": "^8.18.0"
   },
   "devDependencies": {
     "@swc/core": "1.11.31",

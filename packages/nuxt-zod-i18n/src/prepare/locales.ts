@@ -2,7 +2,6 @@ import { readdir } from 'node:fs/promises';
 
 import type { Nuxt } from '@nuxt/schema';
 import type { LocaleObject, NuxtI18nOptions } from '@nuxtjs/i18n';
-import { isString } from '@intlify/shared';
 
 import type { Zodi18nNuxtContext } from '../context';
 
@@ -47,4 +46,8 @@ function getNormalizedLocales(locales: NuxtI18nOptions['locales']): LocaleObject
     }
   }
   return normalized;
+}
+
+function isString(input: unknown): input is string {
+  return typeof input === 'string';
 }
