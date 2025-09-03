@@ -65,12 +65,12 @@ export class HttpError extends Error {
   public readonly code: HttpErrorOptions['code'];
   public readonly details?: HttpErrorOptions['details'];
 
-  constructor(opts: HttpErrorOptions) {
-    super(opts.message);
+  constructor(options: HttpErrorOptions) {
+    super(options.message);
     this.name = 'HttpError';
-    this.statusCode = opts.statusCode;
-    this.code = opts.code;
-    this.details = opts.details;
+    this.statusCode = options.statusCode;
+    this.code = options.code;
+    this.details = options.details;
   }
 
   /**
@@ -93,5 +93,82 @@ export class HttpError extends Error {
       typeof (value as any).statusCode === 'number' &&
       typeof (value as any).code === 'string'
     );
+  }
+}
+
+export class TimeoutError extends Error {
+  public readonly code = 'TIMEOUT';
+
+  constructor(opts: { message?: string; cause?: unknown } = {}) {
+    const { message = 'Request timeout', cause } = opts;
+    super(message);
+    this.name = 'TimeoutError';
+    if (cause !== undefined) this.cause = cause;
+  }
+
+  public static override [Symbol.hasInstance](v: unknown): boolean {
+    return v instanceof Error && (v as any).name === 'TimeoutError';
+  }
+}
+
+export class NetworkError extends Error {
+  public readonly code = 'NETWORK_ERROR';
+
+  constructor(opts: { message?: string; cause?: unknown } = {}) {
+    const { message = 'Network error', cause } = opts;
+    super(message);
+    this.name = 'NetworkError';
+    if (cause !== undefined) this.cause = cause;
+  }
+
+  public static override [Symbol.hasInstance](v: unknown): boolean {
+    return v instanceof Error && (v as any).name === 'NetworkError';
+  }
+}
+
+export class CanceledError extends Error {
+  public readonly code = 'CANCELED';
+
+  constructor(opts: { message?: string; cause?: unknown } = {}) {
+    const { message = 'Request canceled', cause } = opts;
+    super(message);
+    this.name = 'CanceledError';
+    if (cause !== undefined) this.cause = cause;
+  }
+
+  public static override [Symbol.hasInstance](v: unknown): boolean {
+    return v instanceof Error && (v as any).name === 'CanceledError';
+  }
+}
+
+export class ConversionError extends Error {
+  public readonly code = 'MALFORMED_DATA';
+  public readonly field?: string;
+
+  constructor(opts: { message?: string; field?: string; cause?: unknown } = {}) {
+    const { message = 'Malformed data', field, cause } = opts;
+    super(message);
+    this.name = 'ConversionError';
+    this.field = field;
+    if (cause !== undefined) this.cause = cause;
+  }
+
+  public static override [Symbol.hasInstance](v: unknown): boolean {
+    return v instanceof Error && (v as any).name === 'ConversionError';
+  }
+}
+
+export class UnknownError extends Error {
+  public readonly code = 'UNKNOWN';
+
+  constructor(opts: { message?: string; cause?: unknown } = {}) {
+    const { message = 'Unknown error', cause } = opts;
+    super(message);
+    this.name = 'UnknownError';
+    if (cause !== undefined) this.cause = cause;
+  }
+
+  public static override [Symbol.hasInstance](v: unknown): boolean {
+    return v instanceof Error && (v as any).name === 'UnknownError';
   }
 }
