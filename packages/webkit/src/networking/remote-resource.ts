@@ -3,6 +3,11 @@ import axios from 'axios';
 
 import {
   type AsyncOperation,
+  TimeoutError,
+  NetworkError,
+  CanceledError,
+  ConversionError,
+  UnknownError,
   isNonEmptyString,
   isPlainObject,
   isDefinedAndNotNull,
@@ -16,15 +21,10 @@ import {
   InterceptorSet,
   CookieInterceptor,
   HttpError,
-  TimeoutError,
-  NetworkError,
-  CanceledError,
-  ConversionError,
-  UnknownError,
 } from '@/networking';
 
 const FALLBACK_CODE = 'UNKNOWN_ERROR';
-const FALLBACK_MESSAGE = 'Something went wrong';
+const FALLBACK_MESSAGE = 'Unknown Error';
 
 @injectable()
 export class RemoteResource<Input, Output, Endpoint extends RemoteEndpoint<Input, unknown, Output, unknown>>
