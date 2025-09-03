@@ -3,5 +3,6 @@ export * from './localization';
 export * from './operation';
 export * from './security';
 export * from './di';
+export * from './foundation';
 export * from './utils';
 export * from './device';
