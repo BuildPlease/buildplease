@@ -1,9 +1,5 @@
 import { reactive, type Reactive } from 'vue';
-import type {
-  NavigationGuard,
-  RouteLocationNormalizedLoaded,
-  Router,
-} from 'vue-router';
+import type { NavigationGuard, RouteLocationNormalizedLoaded, Router } from 'vue-router';
 
 import type { Lifecycle } from '../infrastructure/lifecycle';
 import { isSSR, isCSR, isHydrating } from '../infrastructure/environment';
@@ -15,9 +11,7 @@ import { useRouter, useRoute, useNuxtApp } from '#app';
  *
  * @template T Reactive state shape
  */
-export abstract class ViewModel<
-  T extends Record<string, any> = Record<string, any>,
-> implements Lifecycle {
+export abstract class ViewModel<T extends Record<string, any> = Record<string, any>> implements Lifecycle {
   /**
    * Reactive state for the ViewModel.
    * @readonly
@@ -51,9 +45,7 @@ export abstract class ViewModel<
    * @param {S} initialState - Initial state values
    * @returns {Reactive<S>} Reactive state object
    */
-  protected defineState<S extends Record<string, any>>(
-    initialState: S,
-  ): Reactive<S> {
+  protected defineState<S extends Record<string, any>>(initialState: S): Reactive<S> {
     return reactive(initialState);
   }
 
@@ -77,10 +69,7 @@ export abstract class ViewModel<
   } = {}): Promise<void> {
     const nuxtApp = useNuxtApp();
 
-    if (
-      (isSSR() && runOnSSR) ||
-      (isCSR() && runOnCSR && (!isHydrating() || !skipDuringHydration))
-    ) {
+    if ((isSSR() && runOnSSR) || (isCSR() && runOnCSR && (!isHydrating() || !skipDuringHydration))) {
       return await nuxtApp.runWithContext(async () => {
         await this._fetchBeforeRendering();
       });
@@ -142,11 +131,7 @@ export abstract class ViewModel<
    * @param {any} _instance - Component instance
    * @param {string} _instanceinfo - Additional info
    */
-  public async onErrorCaptured(
-    _err: unknown,
-    _instance: any,
-    _instanceinfo: string,
-  ): Promise<void> {}
+  public async onErrorCaptured(_err: unknown, _instance: any, _instanceinfo: string): Promise<void> {}
 
   /** Called when render is tracked. */
   public async onRenderTracked(_e: any): Promise<void> {}

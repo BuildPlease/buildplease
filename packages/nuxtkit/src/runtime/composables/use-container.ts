@@ -1,4 +1,4 @@
-import { Container } from 'inversify';
+import type { Container } from 'inversify';
 
 import { useNuxtApp } from '#app';
 

@@ -1,57 +1,70 @@
-import { injectable } from 'inversify'
-import { sendRedirect } from 'h3'
-import { useNuxtApp } from '#app'
-import { useRuntimeConfig, navigateTo, abortNavigation } from '#imports'
+import { injectable } from 'inversify';
+import { sendRedirect } from 'h3';
 
 import {
-  RemoteResource as WebKitRemoteResource,
   type RemoteEndpoint,
+  type RequestConfig,
+  RemoteResource,
   HttpError,
-} from '@nidavellirx/meowv-webkit'
+} from '@nidavellirx/meowv-webkit';
 
-import { SSRRequestCookiesInterceptor } from './ssr-cookies-interceptor'
-import { LanguageInterceptor } from './language-interceptor'
+import { SSRRequestCookiesInterceptor } from './ssr-cookies-interceptor';
+import { LanguageInterceptor } from './language-interceptor';
+
+import { useRuntimeConfig, navigateTo, abortNavigation, isSSR as isSSRRuntime } from '#imports';
+import { type NuxtApp, useNuxtApp } from '#app';
 
 @injectable()
-export class SecuredRemoteResource<Input, Output> extends WebKitRemoteResource<
+export class SecuredRemoteResource<Input, Output> extends RemoteResource<
   Input,
   Output,
   RemoteEndpoint<Input, any, Output, any>
 > {
-  constructor(endpoint: RemoteEndpoint<Input, any, Output, any>, options?: SecuredOptions) {
-    super(endpoint)
-
+  constructor(endpoint: RemoteEndpoint<Input, any, Output, any>) {
+    super(endpoint);
   }
 
-  override async execute(input: Input): Promise<Output> {
-    const app = useNuxtApp()
+  override async execute(input: Input, options?: RequestConfig): Promise<Output> {
+    const app = useNuxtApp();
+
+    this.use(new SSRRequestCookiesInterceptor(app));
+    this.use(new LanguageInterceptor());
 
     try {
-      return await super.execute(input)
+      return await super.execute(input, options);
     } catch (error) {
       if (this.isUnauthorized(error)) {
-        await this.handleUnauthorized(app)
+        await this.emitUnauthorized(app, error);
       }
-      throw error
+      throw error;
     }
   }
 
   // MARK: - Unauthorized
 
-  private isUnauthorized(error: unknown): boolean {
-    return error instanceof HttpError && this.opts.unauthorizedStatusCodes.includes(error.statusCode)
+  private isUnauthorized(error: unknown): error is HttpError {
+    if (!(error instanceof HttpError)) return false;
+
+    const config = useRuntimeConfig();
+    const codes = config.public.meowvNuxtKit.unauthorizedStatusCodes;
+
+    return codes.includes(error.statusCode);
   }
 
-  private async handleUnauthorized(app: ReturnType<typeof useNuxtApp>): Promise<void> {
-    const target = this.opts.unauthorizedRedirectTo
+  private async emitUnauthorized(app: NuxtApp, error: HttpError): Promise<void> {
+    const isSSR = isSSRRuntime();
 
-    if (import.meta.env.SSR) {
-      const event = app.ssrContext?.event
-      if (!event) return
-      await sendRedirect(event, target)
-      abortNavigation()
-    } else {
-      await navigateTo(target)
-    }
+    const redirect = async (to: string) => {
+      if (isSSR) {
+        const event = app.ssrContext?.event;
+        if (!event) throw new Error('SSR redirect requested without request event.');
+        await sendRedirect(event, to);
+        abortNavigation();
+      } else {
+        await navigateTo(to);
+      }
+    };
+
+    await app.callHook('meowv:unauthorized', { error: error, isSSR: isSSR, redirect: redirect });
   }
 }

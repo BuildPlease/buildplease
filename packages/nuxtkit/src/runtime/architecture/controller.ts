@@ -1,5 +1,6 @@
 import { reactive } from 'vue';
 import type { Router, RouteLocationNormalizedLoaded } from 'vue-router';
+
 import { useRouter, useRoute } from '#app';
 
 /**

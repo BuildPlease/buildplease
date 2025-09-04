@@ -13,11 +13,7 @@ export interface Lifecycle {
   onRenderTriggered(e: DebuggerEvent): void;
 
   // MARK: - Error Handling
-  onErrorCaptured(
-    err: unknown,
-    instance: ComponentPublicInstance | null,
-    info: string,
-  ): void;
+  onErrorCaptured(err: unknown, instance: ComponentPublicInstance | null, info: string): void;
 
   // MARK: - Update Hooks
   onUpdated(): void;

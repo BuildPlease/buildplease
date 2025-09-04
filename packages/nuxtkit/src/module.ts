@@ -66,11 +66,5 @@ declare module '#app' {
 }
 
 declare module '@nuxt/schema' {
-  interface NuxtConfig {
-    [NUXT_CONFIG_KEY]?: Partial<NuxtKitOptions>;
-  }
-  interface NuxtOptions {
-    [NUXT_CONFIG_KEY]: NuxtKitOptions;
-  }
   interface PublicRuntimeConfig extends ModulePublicRuntimeConfig {}
 }
