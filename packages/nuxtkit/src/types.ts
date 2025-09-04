@@ -16,7 +16,7 @@ export interface NuxtKitPublicRuntimeConfig {
    * The error messages used by the application.
    * This object contains localized keys for various types of errors.
    */
-  error: NuxtKitOptions['error'];
+  errors: NuxtKitOptions['errors'];
 }
 
 /**
@@ -32,24 +32,11 @@ export interface NuxtKitOptions {
    */
   unauthorizedStatusCodes: number[];
 
-  /**
-   * The error messages used for various types of errors.
-   * This object contains keys for different error types, each of which can be localized.
-   * It includes:
-   * - `genericErrorKey`: Key for the fallback message in case of generic errors.
-   * - `unauthorizedKey`: Key for the fallback message in case of unauthorized errors.
-   *
-   * @default
-   * {
-   *   "genericErrorKey": "error.generic",
-   *   "unauthorizedKey": "error.unauthorized"
-   * }
-   */
-  error: {
+  errors: {
     /**
      * The fallback key for generic error messages.
      *
-     * @default "error.generic"
+     * @default "errors.generic"
      */
     genericErrorKey: string;
 
@@ -63,7 +50,7 @@ export interface NuxtKitOptions {
     /**
      * The fallback key for unauthorized error messages.
      *
-     * @default "error.unauthorized"
+     * @default "errors.unauthorized"
      */
     unauthorizedKey: string;
 

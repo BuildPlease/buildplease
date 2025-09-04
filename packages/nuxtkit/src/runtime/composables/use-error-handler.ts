@@ -31,13 +31,14 @@ export interface ErrorHandlerOptions {
  */
 export function useErrorHandler(error: unknown, options: ErrorHandlerOptions = {}): string {
   const app = useNuxtApp();
-  const config = useRuntimeConfig().public.meowvNuxtKit.error;
+  const config = useRuntimeConfig().public.meowvNuxtKit;
+  const errors = config.errors;
   const { t, te } = app.$i18n;
 
   // Step 1: Unauthorized error → return unauthorized message
   if (error instanceof UnauthorizedHttpError) {
-    const key = config.unauthorizedKey;
-    return te(key) ? t(key) : config.unauthorizedMessageFallback;
+    const key = errors.unauthorizedKey;
+    return te(key) ? t(key) : errors.unauthorizedMessageFallback;
   }
 
   // Step 2: Other HttpError → custom handler or raw message
@@ -46,7 +47,7 @@ export function useErrorHandler(error: unknown, options: ErrorHandlerOptions = {
   }
 
   // Step 3: Non-HttpError → generic key or fallback
-  const genericKey = config.genericErrorKey;
-  const genericFallback = config.genericMessageFallback;
+  const genericKey = errors.genericErrorKey;
+  const genericFallback = errors.genericMessageFallback;
   return te(genericKey) ? t(genericKey) : genericFallback;
 }

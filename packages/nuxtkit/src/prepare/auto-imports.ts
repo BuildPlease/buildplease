@@ -5,9 +5,18 @@ import type { NuxtKitContext } from '../context';
 
 export async function prepareAutoImports({ resolver }: NuxtKitContext, _nuxt: Nuxt) {
   addImportsDir([resolver.resolve('./runtime/infrastructure')]);
-  addImportsDir([resolver.resolve('./runtime/composables')]);
   addImportsDir([resolver.resolve('./runtime/networking')]);
 
+  addImportsDir([resolver.resolve('./runtime/composables')]);
+
+  addImports([
+    {
+      name: 'ErrorHandlerOptions',
+      as: 'ErrorHandlerOptions',
+      from: resolver.resolve('./runtime/composables/use-error-handler'),
+      type: true,
+    },
+  ]);
   addImports([
     {
       name: 'Controller',

@@ -5,10 +5,10 @@ export const NUXT_CONFIG_KEY = 'meowvNuxtKit';
 
 export const DEFAULT_OPTIONS = {
   unauthorizedStatusCodes: [401],
-  error: {
-    genericErrorKey: 'error.generic',
+  errors: {
+    genericErrorKey: 'errors.generic',
     genericMessageFallback: 'Something went wrong',
-    unauthorizedKey: 'error.unauthorized',
+    unauthorizedKey: 'errors.unauthorized',
     unauthorizedMessageFallback: 'Unauthorized',
   },
 } as const satisfies NuxtKitOptions;
