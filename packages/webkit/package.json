@@ -25,16 +25,15 @@
   },
   "dependencies": {
     "@nidavellirx/meowv-core": "workspace:^",
-    "axios": "1.9.0",
-    "reflect-metadata": "0.2.2",
-    "zod": "3.25.51"
+    "axios": "1.11.0",
+    "reflect-metadata": "0.2.2"
   },
   "peerDependencies": {
-    "inversify": "^7.5.0"
+    "inversify": "^7.9.1"
   },
   "devDependencies": {
-    "@swc/core": "1.11.31",
-    "inversify": "7.5.0",
+    "@swc/core": "1.13.5",
+    "inversify": "7.9.1",
     "tsup": "8.5.0",
     "typescript": "5.9.2"
   }

@@ -12,8 +12,6 @@ export interface NuxtKitContext {
   isDev: boolean;
   isSSR: boolean;
   isPrepare: boolean;
-  isSSG: boolean;
-  isBuild: boolean;
   isTest: boolean;
 }
 
@@ -29,8 +27,6 @@ export function prepareContext(userOptions: NuxtKitOptions, nuxt: Nuxt): NuxtKit
     isDev: nuxt.options.dev,
     isSSR: nuxt.options.ssr,
     isPrepare: nuxt.options._prepare,
-    isSSG: nuxt.options._generate,
-    isBuild: nuxt.options._build,
     isTest: nuxt.options.test,
   };
 }

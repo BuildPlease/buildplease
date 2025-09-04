@@ -5,7 +5,7 @@ export class LanguageInterceptor implements RequestInterceptor {
   order = 0;
 
   hash() {
-    return Symbol.for('meowv.nuxtkit.interceptor.language');
+    return Symbol.for('meowv.nuxtkit.networking.interceptor.language');
   }
   equals(other: unknown) {
     return other instanceof LanguageInterceptor;

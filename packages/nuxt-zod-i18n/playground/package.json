@@ -8,14 +8,14 @@
     "generate": "nuxi generate"
   },
   "dependencies": {
-    "@nuxt/ui": "3.0.0-alpha.10",
-    "zod": "3.24.1"
+    "@nuxt/ui": "3.3.3",
+    "zod": "3.25.51"
   },
   "devDependencies": {
-    "@iconify-json/lucide": "1.2.34",
-    "@iconify-json/flag": "1.2.2",
+    "@iconify-json/flag": "1.2.9",
     "@iconify-json/heroicons": "^1.2.2",
+    "@iconify-json/lucide": "1.2.66",
     "@nuxtjs/i18n": "10.0.6",
-    "nuxt": "3.17.5"
+    "nuxt": "4.1.0"
   }
 }

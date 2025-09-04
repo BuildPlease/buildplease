@@ -26,25 +26,25 @@
     "test:types": "vue-tsc --noEmit && cd playground && vue-tsc --noEmit"
   },
   "dependencies": {
-    "@nuxt/kit": "3.17.5",
+    "@nuxt/kit": "4.1.0",
     "dedupe": "4.0.3",
     "defu": "6.1.4",
     "zod": "3.25.51"
   },
   "peerDependencies": {
-    "vue-i18n": "^11.1.11",
-    "@nuxtjs/i18n": "^10.0.6"
+    "@nuxtjs/i18n": "^10.0.6",
+    "vue-i18n": "^11.1.11"
   },
   "devDependencies": {
-    "@nuxt/devtools": "2.5.0",
-    "@nuxt/module-builder": "1.0.1",
-    "@nuxt/schema": "3.17.5",
+    "@nuxt/devtools": "2.6.3",
+    "@nuxt/module-builder": "1.0.2",
+    "@nuxt/schema": "4.1.0",
     "@nuxtjs/i18n": "10.0.6",
     "@types/node": "latest",
-    "nuxt": "3.17.5",
+    "nuxt": "4.1.0",
     "typescript": "5.9.2",
-    "vitest": "3.2.2",
-    "vue-tsc": "2.2.10",
-    "vue-i18n": "11.1.11"
+    "vitest": "3.2.4",
+    "vue-i18n": "11.1.11",
+    "vue-tsc": "3.0.6"
   }
 }

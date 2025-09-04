@@ -1,4 +1,4 @@
-import { injectable } from 'inversify';
+import { injectable, decorate } from 'inversify';
 import { sendRedirect } from 'h3';
 
 import {
@@ -14,7 +14,6 @@ import { LanguageInterceptor } from './language-interceptor';
 import { useRuntimeConfig, navigateTo, abortNavigation, isSSR as isSSRRuntime } from '#imports';
 import { type NuxtApp, useNuxtApp } from '#app';
 
-@injectable()
 export class SecuredRemoteResource<Input, Output> extends RemoteResource<
   Input,
   Output,
@@ -68,3 +67,5 @@ export class SecuredRemoteResource<Input, Output> extends RemoteResource<
     await app.callHook('meowv:unauthorized', { error: error, isSSR: isSSR, redirect: redirect });
   }
 }
+
+decorate(injectable(), SecuredRemoteResource);

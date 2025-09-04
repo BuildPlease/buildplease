@@ -12,8 +12,6 @@ export interface Zodi18nNuxtContext {
   isDev: boolean;
   isSSR: boolean;
   isPrepare: boolean;
-  isSSG: boolean;
-  isBuild: boolean;
   isTest: boolean;
 }
 
@@ -30,8 +28,6 @@ export function prepareContext(userOptions: NuxtZodi18nOptions, nuxt: Nuxt): Zod
     isDev: nuxt.options.dev,
     isSSR: nuxt.options.ssr,
     isPrepare: nuxt.options._prepare,
-    isSSG: nuxt.options._generate,
-    isBuild: nuxt.options._build,
     isTest: nuxt.options.test,
   };
 }

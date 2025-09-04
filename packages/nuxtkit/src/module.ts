@@ -54,7 +54,7 @@ export default defineNuxtModule<ModuleOptions>({
 export interface ModuleOptions extends NuxtKitOptions {}
 
 export interface ModulePublicRuntimeConfig {
-  [NUXT_CONFIG_KEY]: Partial<NuxtKitPublicRuntimeConfig>;
+  [NUXT_CONFIG_KEY]: NuxtKitPublicRuntimeConfig;
 }
 
 export interface ModuleRuntimeHooks {
