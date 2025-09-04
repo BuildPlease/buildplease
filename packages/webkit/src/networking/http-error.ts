@@ -95,3 +95,20 @@ export class HttpError extends Error {
     );
   }
 }
+
+export class UnauthorizedHttpError extends HttpError {
+  /** Portable duck-type flag for cross-bundle checks */
+  public readonly isUnauthorized = true as const;
+
+  constructor(options: HttpErrorOptions) {
+    super(options);
+    this.name = 'UnauthorizedHttpError';
+  }
+
+  public static override [Symbol.hasInstance](value: unknown): boolean {
+    return (
+      (value instanceof Error && (value as any).name === UnauthorizedHttpError.name) ||
+      (HttpError[Symbol.hasInstance](value) && (value as any).isUnauthorized === true)
+    );
+  }
+}

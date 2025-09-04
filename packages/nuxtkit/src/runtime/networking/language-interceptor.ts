@@ -14,7 +14,7 @@ export class LanguageInterceptor implements RequestInterceptor {
 
   intercept(config: RequestConfig): RequestConfig {
     const i18n = useNuxtApp().$i18n;
-    const locale = i18n?.locale?.value ?? 'en';
+    const locale = i18n.locale.value ?? 'en';
 
     return {
       ...config,

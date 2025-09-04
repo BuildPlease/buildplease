@@ -9,6 +9,6 @@ export class NetworkError extends Error {
   }
 
   public static override [Symbol.hasInstance](v: unknown): boolean {
-    return v instanceof Error && (v as any).name === 'NetworkError';
+    return v instanceof Error && (v as any).name === NetworkError.name;
   }
 }

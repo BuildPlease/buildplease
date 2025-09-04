@@ -9,6 +9,6 @@ export class TimeoutError extends Error {
   }
 
   public static override [Symbol.hasInstance](v: unknown): boolean {
-    return v instanceof Error && (v as any).name === 'TimeoutError';
+    return v instanceof Error && (v as any).name === TimeoutError.name;
   }
 }

@@ -6,6 +6,7 @@ import {
   type RequestConfig,
   RemoteResource,
   HttpError,
+  UnauthorizedHttpError,
 } from '@nidavellirx/meowv-webkit';
 
 import { SSRRequestCookiesInterceptor } from './ssr-cookies-interceptor';
@@ -34,7 +35,15 @@ export class SecuredRemoteResource<Input, Output> extends RemoteResource<
     } catch (error) {
       if (this.isUnauthorized(error)) {
         await this.emitUnauthorized(app, error);
+
+        throw new UnauthorizedHttpError({
+          statusCode: error.statusCode,
+          code: error.code,
+          message: error.message,
+          details: error.details,
+        });
       }
+
       throw error;
     }
   }

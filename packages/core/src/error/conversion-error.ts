@@ -11,6 +11,6 @@ export class ConversionError extends Error {
   }
 
   public static override [Symbol.hasInstance](v: unknown): boolean {
-    return v instanceof Error && (v as any).name === 'ConversionError';
+    return v instanceof Error && (v as any).name === ConversionError.name;
   }
 }

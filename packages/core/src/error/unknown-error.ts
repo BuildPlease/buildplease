@@ -9,6 +9,6 @@ export class UnknownError extends Error {
   }
 
   public static override [Symbol.hasInstance](v: unknown): boolean {
-    return v instanceof Error && (v as any).name === 'UnknownError';
+    return v instanceof Error && (v as any).name === UnknownError.name;
   }
 }
