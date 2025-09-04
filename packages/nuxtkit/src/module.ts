@@ -1,76 +1,67 @@
-import {
-  defineNuxtModule,
-  createResolver,
-  addImportsDir,
-  addImports,
-  addPlugin,
-  type Resolver,
-} from '@nuxt/kit';
-import type { Nuxt } from '@nuxt/schema';
+import { defineNuxtModule } from '@nuxt/kit';
 
-export interface ModuleOptions {}
+import type { NuxtKitOptions, NuxtKitPublicRuntimeConfig } from './types';
+import { NUXT_MODULE_ID, NUXT_CONFIG_KEY, DEFAULT_OPTIONS } from './constants';
+
+import { prepareContext } from './context';
+import { prepareHooks } from './prepare/hooks';
+import { prepareRuntime } from './prepare/runtime';
+import { prepareRuntimeConfig } from './prepare/runtime-config';
+import { prepareValidation } from './prepare/validation';
+import { prepareAutoImports } from './prepare/auto-imports';
 
 export default defineNuxtModule<ModuleOptions>({
   meta: {
-    name: 'meowv-nuxtkit',
-    configKey: 'meowvNuxtkit',
+    name: NUXT_MODULE_ID,
+    configKey: NUXT_CONFIG_KEY,
+    compatibility: {
+      nuxt: '>=3.0.0',
+    },
   },
-  defaults: {},
-  setup(_options, nuxt) {
-    const resolver = createResolver(import.meta.url);
+  defaults: DEFAULT_OPTIONS,
+  async setup(options, nuxt) {
+    const ctx = prepareContext(options, nuxt);
 
-    configureHooks(nuxt, resolver);
-    configureImports(resolver);
-    configurePlugin(resolver);
+    /**
+     * Setup build hooks
+     */
+    prepareHooks(ctx, nuxt);
+
+    /**
+     * Setup runtime config
+     */
+    // for public
+    prepareRuntimeConfig(ctx, nuxt);
+
+    /**
+     * Validate i18n availability
+     */
+    const _i18nOptions = prepareValidation(ctx, nuxt);
+
+    /**
+     * Add plugin and templates
+     */
+    prepareRuntime(ctx, nuxt);
+
+    /**
+     * auto imports
+     */
+    await prepareAutoImports(ctx, nuxt);
   },
 });
 
-function configureHooks(app: Nuxt, resolver: Resolver) {
-  app.options.vite.esbuild = {
-    tsconfigRaw: {
-      compilerOptions: {
-        experimentalDecorators: true,
-      },
-    },
-  };
+export interface ModuleOptions extends NuxtKitOptions {}
 
-  app.hook('nitro:build:before', (nitro) => {
-    nitro.options.moduleSideEffects.push('reflect-metadata');
-  });
-
-  app.options.build.transpile.push(resolver.resolve('./runtime'));
+export interface ModulePublicRuntimeConfig {
+  [NUXT_CONFIG_KEY]: NuxtKitPublicRuntimeConfig;
 }
 
-function configureImports(resolver: Resolver) {
-  addImportsDir([resolver.resolve('./runtime/composables'), resolver.resolve('./runtime/infrastructure')]);
-
-  addImports([
-    {
-      name: 'Controller',
-      as: 'Controller',
-      from: resolver.resolve('./runtime/architecture/controller'),
-      type: true,
-    },
-    {
-      name: 'ControllerImpl',
-      as: 'ControllerImpl',
-      from: resolver.resolve('./runtime/architecture/controller'),
-    },
-  ]);
-
-  addImports([
-    {
-      name: 'ViewModel',
-      as: 'ViewModel',
-      from: resolver.resolve('./runtime/architecture/view-model'),
-    },
-  ]);
-}
-
-function configurePlugin(resolver: Resolver) {
-  addPlugin({
-    src: resolver.resolve('./runtime/plugin'),
-    mode: 'all',
-    order: 0,
-  });
+declare module '@nuxt/schema' {
+  interface NuxtConfig {
+    [NUXT_CONFIG_KEY]?: Partial<NuxtKitOptions>;
+  }
+  interface NuxtOptions {
+    [NUXT_CONFIG_KEY]: NuxtKitOptions;
+  }
+  interface PublicRuntimeConfig extends ModulePublicRuntimeConfig {}
 }

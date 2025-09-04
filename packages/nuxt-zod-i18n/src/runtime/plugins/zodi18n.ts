@@ -1,10 +1,10 @@
 import type { Composer } from 'vue-i18n';
 import { defaultErrorMap, z, ZodIssueCode, ZodParsedType } from 'zod';
+import { defineNuxtPlugin, useRuntimeConfig } from '#app';
 
+import type { NuxtZodi18nOptions } from '#internal-zodi18n-types';
 import { joinValues, jsonStringifyReplacer, getKeyAndValues } from '../utils';
 
-import { defineNuxtPlugin, useRuntimeConfig } from '#app';
-import type { NuxtZodi18nOptions } from '#internal-zodi18n-types';
 export default defineNuxtPlugin({
   name: 'zodi18n:plugin',
   // @ts-expect-error plugin from @nuxt/i18n

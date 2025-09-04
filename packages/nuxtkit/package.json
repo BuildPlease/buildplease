@@ -29,21 +29,26 @@
   },
   "dependencies": {
     "@nuxt/kit": "3.17.5",
+    "defu": "6.1.4",
     "reflect-metadata": "0.2.2"
   },
   "peerDependencies": {
-    "inversify": "^7.5.0"
+    "inversify": "^7.5.0",
+    "vue-i18n": "^11.1.11",
+    "@nuxtjs/i18n": "^10.0.6"
   },
   "devDependencies": {
     "@nuxt/devtools": "2.5.0",
     "@nuxt/module-builder": "1.0.1",
     "@nuxt/schema": "3.17.5",
+    "@nuxtjs/i18n": "10.0.6",
     "@types/node": "latest",
     "changelogen": "0.6.1",
     "inversify": "7.5.0",
     "nuxt": "3.17.5",
-    "typescript": "5.8.3",
+    "typescript": "5.9.2",
     "vitest": "3.2.2",
-    "vue-tsc": "2.2.10"
+    "vue-tsc": "2.2.10",
+    "vue-i18n": "11.1.11"
   }
 }

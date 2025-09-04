@@ -1,5 +1,4 @@
 import type { Nuxt } from '@nuxt/schema';
-
 import { defu } from 'defu';
 
 import type { Zodi18nNuxtContext } from '../context';

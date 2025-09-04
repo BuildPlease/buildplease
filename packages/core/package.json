@@ -37,6 +37,6 @@
     "@types/ms": "2.1.0",
     "inversify": "7.5.0",
     "tsup": "8.5.0",
-    "typescript": "5.8.3"
+    "typescript": "5.9.2"
   }
 }

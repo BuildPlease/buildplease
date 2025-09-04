@@ -8,7 +8,7 @@ export function prepareRuntime(ctx: Zodi18nNuxtContext, nuxt: Nuxt) {
 
   addPlugin(resolver.resolve('./runtime/plugins/zodi18n'));
 
-  // for composables
+  // For composables
   nuxt.options.alias['#internal-zodi18n-types'] = resolver.resolve('./types');
   nuxt.options.build.transpile.push('#internal-zodi18n-types');
 

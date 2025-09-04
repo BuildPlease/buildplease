@@ -1,9 +1,9 @@
 import { defineNuxtModule } from '@nuxt/kit';
 
 import type { NuxtZodi18nOptions, Zodi18nPublicRuntimeConfig } from './types';
-import { NUXT_MODULE_ID, DEFAULT_OPTIONS } from './constants';
-import { createContext } from './context';
+import { NUXT_MODULE_ID, NUXT_CONFIG_KEY, DEFAULT_OPTIONS } from './constants';
 
+import { prepareContext } from './context';
 import { prepareRuntime } from './prepare/runtime';
 import { prepareRuntimeConfig } from './prepare/runtime-config';
 import { prepareValidation } from './prepare/validation';
@@ -14,14 +14,14 @@ import { prepareAutoImports } from './prepare/auto-imports';
 export default defineNuxtModule<ModuleOptions>().with({
   meta: {
     name: NUXT_MODULE_ID,
-    configKey: 'meowvZodi18n',
+    configKey: NUXT_CONFIG_KEY,
     compatibility: {
       nuxt: '>=3.0.0',
     },
   },
   defaults: DEFAULT_OPTIONS,
   async setup(options, nuxt) {
-    const ctx = createContext(options, nuxt);
+    const ctx = prepareContext(options, nuxt);
 
     /**
      * Setup runtime config
@@ -59,15 +59,15 @@ export default defineNuxtModule<ModuleOptions>().with({
 export interface ModuleOptions extends NuxtZodi18nOptions {}
 
 export interface ModulePublicRuntimeConfig {
-  zodi18n: Zodi18nPublicRuntimeConfig;
+  [NUXT_CONFIG_KEY]: Zodi18nPublicRuntimeConfig;
 }
 
 declare module '@nuxt/schema' {
   interface NuxtConfig {
-    ['meowvZodi18n']?: Partial<NuxtZodi18nOptions>;
+    [NUXT_CONFIG_KEY]?: Partial<NuxtZodi18nOptions>;
   }
   interface NuxtOptions {
-    ['meowvZodi18n']: NuxtZodi18nOptions;
+    [NUXT_CONFIG_KEY]: NuxtZodi18nOptions;
   }
   interface PublicRuntimeConfig extends ModulePublicRuntimeConfig {}
 }

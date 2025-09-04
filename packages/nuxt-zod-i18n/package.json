@@ -30,24 +30,23 @@
     "@nuxt/kit": "3.17.5",
     "dedupe": "4.0.3",
     "defu": "6.1.4",
-    "vue-i18n": "11.1.5",
     "zod": "3.25.51"
   },
   "peerDependencies": {
-    "vue-i18n": "^9.0.0",
-    "@nuxtjs/i18n": "^9.0.0"
+    "vue-i18n": "^11.1.11",
+    "@nuxtjs/i18n": "^10.0.6"
   },
   "devDependencies": {
     "@nuxt/devtools": "2.5.0",
     "@nuxt/module-builder": "1.0.1",
     "@nuxt/schema": "3.17.5",
-    "@nuxtjs/i18n": "9.5.5",
+    "@nuxtjs/i18n": "10.0.6",
     "@types/node": "latest",
     "changelogen": "0.6.1",
     "nuxt": "3.17.5",
-    "typescript": "5.8.3",
+    "typescript": "5.9.2",
     "vitest": "3.2.2",
     "vue-tsc": "2.2.10",
-    "vue-i18n": "9.9.0"
+    "vue-i18n": "11.1.11"
   }
 }

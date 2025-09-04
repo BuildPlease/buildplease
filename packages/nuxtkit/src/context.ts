@@ -2,13 +2,13 @@ import { type Resolver, createResolver, useLogger } from '@nuxt/kit';
 import type { Nuxt } from '@nuxt/schema';
 
 import { NUXT_MODULE_ID } from './constants';
-import type { NuxtZodi18nOptions } from './types';
+import type { NuxtKitOptions } from './types';
 
-export interface Zodi18nNuxtContext {
+export interface NuxtKitContext {
   resolver: Resolver;
   logger: ReturnType<typeof useLogger>;
-  userOptions: NuxtZodi18nOptions;
-  options: Required<NuxtZodi18nOptions>;
+  userOptions: NuxtKitOptions;
+  options: Required<NuxtKitOptions>;
   isDev: boolean;
   isSSR: boolean;
   isPrepare: boolean;
@@ -19,9 +19,8 @@ export interface Zodi18nNuxtContext {
 
 const resolver = createResolver(import.meta.url);
 
-export function prepareContext(userOptions: NuxtZodi18nOptions, nuxt: Nuxt): Zodi18nNuxtContext {
-  const options = userOptions as Required<NuxtZodi18nOptions>;
-
+export function prepareContext(userOptions: NuxtKitOptions, nuxt: Nuxt): NuxtKitContext {
+  const options = userOptions as Required<NuxtKitOptions>;
   return {
     resolver,
     logger: useLogger(NUXT_MODULE_ID),
