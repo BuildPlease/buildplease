@@ -21,7 +21,6 @@
     "dev": "nuxi dev playground",
     "dev:build": "nuxi build playground",
     "dev:prepare": "nuxt-module-build build --stub && nuxt-module-build prepare && nuxi prepare playground",
-    "release": "npm run lint && npm run test && npm run prepack && changelogen --release && npm publish && git push --follow-tags",
     "test": "vitest run",
     "test:watch": "vitest watch",
     "test:types": "vue-tsc --noEmit && cd playground && vue-tsc --noEmit"
@@ -42,7 +41,6 @@
     "@nuxt/schema": "3.17.5",
     "@nuxtjs/i18n": "10.0.6",
     "@types/node": "latest",
-    "changelogen": "0.6.1",
     "nuxt": "3.17.5",
     "typescript": "5.9.2",
     "vitest": "3.2.2",

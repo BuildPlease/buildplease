@@ -1,7 +1,7 @@
 {
   "name": "@nidavellirx/meowv-nuxtkit",
   "version": "1.0.0",
-  "description": "A Nuxt Module for MVVM design pattern and Clean Code architecture",
+  "description": "A Nuxt Kit for MVVM design pattern and Clean Code architecture, with foundation for web app",
   "repository": "git@github.com/Nidavellirx/meowv.git",
   "license": "MIT",
   "type": "module",
@@ -21,13 +21,12 @@
     "dev": "nuxi dev playground",
     "dev:build": "nuxi build playground",
     "dev:prepare": "nuxt-module-build build --stub && nuxt-module-build prepare && nuxi prepare playground",
-    "release": "npm run lint && npm run test && npm run prepack && changelogen --release && npm publish && git push --follow-tags",
-    "lint": "eslint .",
     "test": "vitest run",
     "test:watch": "vitest watch",
     "test:types": "vue-tsc --noEmit && cd playground && vue-tsc --noEmit"
   },
   "dependencies": {
+    "@nidavellirx/meowv-webkit": "workspace:^",
     "@nuxt/kit": "3.17.5",
     "defu": "6.1.4",
     "reflect-metadata": "0.2.2"
@@ -43,7 +42,6 @@
     "@nuxt/schema": "3.17.5",
     "@nuxtjs/i18n": "10.0.6",
     "@types/node": "latest",
-    "changelogen": "0.6.1",
     "inversify": "7.5.0",
     "nuxt": "3.17.5",
     "typescript": "5.9.2",

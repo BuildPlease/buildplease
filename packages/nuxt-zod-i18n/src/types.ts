@@ -1,10 +1,9 @@
-export interface Zodi18nPublicRuntimeConfig {
+export interface NuxtZodi18nOptions {
   dateFormat: Intl.DateTimeFormatOptions;
-  localeCodesMapping?: Record<string, string>;
+  useModuleLocale: boolean;
+  localeCodesMapping?: Record<string, string> | null;
 }
 
-export interface NuxtZodi18nOptions {
-  useModuleLocale: boolean;
-  dateFormat: Intl.DateTimeFormatOptions;
-  localeCodesMapping?: Record<string, string>;
+export interface Zodi18nPublicRuntimeConfig {
+  dateFormat: NuxtZodi18nOptions['dateFormat'];
 }

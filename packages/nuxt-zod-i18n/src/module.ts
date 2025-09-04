@@ -61,13 +61,3 @@ export interface ModuleOptions extends NuxtZodi18nOptions {}
 export interface ModulePublicRuntimeConfig {
   [NUXT_CONFIG_KEY]: Zodi18nPublicRuntimeConfig;
 }
-
-declare module '@nuxt/schema' {
-  interface NuxtConfig {
-    [NUXT_CONFIG_KEY]?: Partial<NuxtZodi18nOptions>;
-  }
-  interface NuxtOptions {
-    [NUXT_CONFIG_KEY]: NuxtZodi18nOptions;
-  }
-  interface PublicRuntimeConfig extends ModulePublicRuntimeConfig {}
-}
