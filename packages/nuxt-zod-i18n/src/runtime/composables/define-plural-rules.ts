@@ -86,9 +86,7 @@ type PluralRulesOptions = {
 };
 
 // Generate plural rules dynamically with options
-export function definePluralRules(
-  options: PluralRulesOptions = {},
-): Record<string, PluralizationRule> {
+export function definePluralRules(options: PluralRulesOptions = {}): Record<string, PluralizationRule> {
   const rules: Record<string, PluralizationRule> = {};
 
   Object.entries(localePluralizationRules).forEach(([code, rule]) => {

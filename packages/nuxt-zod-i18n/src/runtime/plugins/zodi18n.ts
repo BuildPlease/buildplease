@@ -1,9 +1,11 @@
 import type { Composer } from 'vue-i18n';
 import { defaultErrorMap, z, ZodIssueCode, ZodParsedType } from 'zod';
+
+import { joinValues, jsonStringifyReplacer, getKeyAndValues } from '../utils';
+
 import { defineNuxtPlugin, useRuntimeConfig } from '#app';
 
 import type { NuxtZodi18nOptions } from '#internal-zodi18n-types';
-import { joinValues, jsonStringifyReplacer, getKeyAndValues } from '../utils';
 
 export default defineNuxtPlugin({
   name: 'zodi18n:plugin',
@@ -11,24 +13,17 @@ export default defineNuxtPlugin({
   dependsOn: ['i18n:plugin'],
   parallel: true,
   setup: (nuxtApp) => {
-    const { dateFormat } = useRuntimeConfig().public
-      .zodi18n as NuxtZodi18nOptions;
+    const { dateFormat } = useRuntimeConfig().public.zodi18n as NuxtZodi18nOptions;
 
     const i18n = nuxtApp.$i18n as Composer;
     const { t, d } = i18n;
 
-    const translate = (
-      key: string,
-      options: Record<string, any> = {},
-      count?: number,
-    ) => {
+    const translate = (key: string, options: Record<string, any> = {}, count?: number) => {
       if (!i18n.te(key)) {
         console.warn(`[zodi18n]: Missing translation key: "${key}"`);
       }
 
-      return typeof count === 'number'
-        ? t(key, { count, ...options })
-        : t(key, options);
+      return typeof count === 'number' ? t(key, { count, ...options }) : t(key, options);
     };
 
     // MARK: - Error Map Definition
@@ -82,31 +77,20 @@ export default defineNuxtPlugin({
               message = translate('zodi18n.errors.invalid_string.regex');
             }
           } else {
-            message = translate(
-              `zodi18n.errors.invalid_string.${error.validation}`,
-              {
-                validation: translate(
-                  `zodi18n.validations.${error.validation}`,
-                ),
-              },
-            );
+            message = translate(`zodi18n.errors.invalid_string.${error.validation}`, {
+              validation: translate(`zodi18n.validations.${error.validation}`),
+            });
           }
           break;
 
         case ZodIssueCode.too_small:
           message = translate(
             `zodi18n.errors.too_small.${error.type}.${
-              error.exact
-                ? 'exact'
-                : error.inclusive
-                  ? 'inclusive'
-                  : 'not_inclusive'
+              error.exact ? 'exact' : error.inclusive ? 'inclusive' : 'not_inclusive'
             }`,
             {
               minimum:
-                error.type === 'date'
-                  ? d(new Date(error.minimum as number), dateFormat)
-                  : error.minimum,
+                error.type === 'date' ? d(new Date(error.minimum as number), dateFormat) : error.minimum,
             },
             Number(error.minimum),
           );
@@ -115,28 +99,18 @@ export default defineNuxtPlugin({
         case ZodIssueCode.too_big:
           message = translate(
             `zodi18n.errors.too_big.${error.type}.${
-              error.exact
-                ? 'exact'
-                : error.inclusive
-                  ? 'inclusive'
-                  : 'not_inclusive'
+              error.exact ? 'exact' : error.inclusive ? 'inclusive' : 'not_inclusive'
             }`,
             {
               maximum:
-                error.type === 'date'
-                  ? d(new Date(error.maximum as number), dateFormat)
-                  : error.maximum,
+                error.type === 'date' ? d(new Date(error.maximum as number), dateFormat) : error.maximum,
             },
             Number(error.maximum),
           );
           break;
 
         case ZodIssueCode.custom:
-          const { key, values } = getKeyAndValues(
-            error.params?.i18n,
-            'zodi18n.errors.custom',
-            i18n,
-          );
+          const { key, values } = getKeyAndValues(error.params?.i18n, 'zodi18n.errors.custom', i18n);
           message = translate(key, values);
           break;
 

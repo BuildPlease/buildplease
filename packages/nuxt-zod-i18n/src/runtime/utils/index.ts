@@ -1,9 +1,7 @@
 import type { Composer } from 'vue-i18n';
 
 export function joinValues<T>(array: T[], separator = ' | '): string {
-  return array
-    .map((val) => (typeof val === 'string' ? `'${val}'` : val))
-    .join(separator);
+  return array.map((val) => (typeof val === 'string' ? `'${val}'` : val)).join(separator);
 }
 
 export function jsonStringifyReplacer<T>(_: string, value: T): T | string {
@@ -42,8 +40,7 @@ export function getKeyAndValues(
   }
 
   if (isRecord(param)) {
-    const key =
-      'key' in param && typeof param.key === 'string' ? param.key : defaultKey;
+    const key = 'key' in param && typeof param.key === 'string' ? param.key : defaultKey;
     const values =
       'values' in param && isRecord(param.values)
         ? Object.entries(param.values).reduce((acc, [key, value]) => {

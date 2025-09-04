@@ -8,10 +8,7 @@ export function prepareI18nRegisterModule(
   nuxt: Nuxt,
   locales: LocaleObject[],
 ) {
-  nuxt.hook('i18n:registerModule', (register) => {
-    register({
-      langDir: resolver.resolve('./runtime/locales'),
-      locales,
-    });
+  nuxt.hooks.hook('i18n:registerModule', (register) => {
+    register({ langDir: resolver.resolve('./runtime/locales'), locales });
   });
 }
