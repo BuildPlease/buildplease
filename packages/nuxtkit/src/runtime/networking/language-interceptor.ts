@@ -1,5 +1,6 @@
-import { useI18n } from 'vue-i18n';
 import type { RequestInterceptor, RequestConfig } from '@nidavellirx/meowv-webkit';
+
+import { useNuxtApp } from '#app';
 
 export class LanguageInterceptor implements RequestInterceptor {
   order = 0;
@@ -12,12 +13,12 @@ export class LanguageInterceptor implements RequestInterceptor {
   }
 
   intercept(config: RequestConfig): RequestConfig {
-    const { locale } = useI18n({ useScope: 'global' });
-    const value = typeof locale === 'string' ? locale : (locale.value ?? 'en');
+    const i18n = useNuxtApp().$i18n;
+    const locale = i18n?.locale?.value ?? 'en';
 
     return {
       ...config,
-      headers: { ...config.headers, 'Accept-Language': value },
+      headers: { ...config.headers, 'Accept-Language': String(locale) },
     };
   }
 }
