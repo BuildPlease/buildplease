@@ -37,9 +37,7 @@ function makeFlag(localeObj: LocaleObject): string | undefined {
 	if (!props.displayFlag) return undefined;
 
 	// MARK: - Priority 1: Use explicitly defined flag
-	if (localeObj.flag) {
-		return `i-flag-${localeObj.flag.toLowerCase()}-4x3`;
-	}
+	if (localeObj.flag) return `i-flag-${(localeObj.flag as any).toLowerCase()}-4x3`;
 
 	// MARK: - Priority 2: Extract from code (safe handling for region or base code)
 	const code = localeObj.code;

@@ -1,8 +1,7 @@
 import { injectable, inject } from 'inversify';
 
-import { Symbols } from '../symbols';
-
-import type { LoginController } from './login-controller';
+import { Symbols } from '@di/symbols';
+import type { LoginController } from '@feature/login/controller';
 
 export interface LoginState {
   username?: string;
@@ -26,7 +25,7 @@ export class LoginViewModel extends ViewModel<LoginState> {
 
     watch(
       () => this.loginController.isLoading,
-      (newStatus) => {
+      (newStatus: boolean) => {
         this.state.isLoading = newStatus;
       },
       { immediate: true },

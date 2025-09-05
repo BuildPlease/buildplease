@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { CalendarDate, DateFormatter, getLocalTimeZone, type DateValue } from '@internationalized/date';
-import { type UserDto, userSchema } from '~/schema';
 import type { FormSubmitEvent } from '#ui/types';
+import { CalendarDate, DateFormatter, getLocalTimeZone, type DateValue } from '@internationalized/date';
+import { type UserDto, userSchema } from '@schema';
 
 const { t } = useI18n();
 

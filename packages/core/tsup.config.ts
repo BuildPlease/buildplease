@@ -1,5 +1,10 @@
 import { defineConfig } from 'tsup';
 
+import pkg from './package.json' assert { type: 'json' };
+
+const workspacePackages = [];
+const peers = Object.keys(pkg.peerDependencies ?? {});
+
 export default defineConfig({
   entry: ['index.ts'],
   minify: true,
@@ -24,9 +29,7 @@ export default defineConfig({
     // Decorator metadata
     'reflect-metadata',
 
-    // External dependencies
-    'inversify',
-    'ms',
-    'date-fns',
+    ...peers,
+    ...workspacePackages,
   ],
 });

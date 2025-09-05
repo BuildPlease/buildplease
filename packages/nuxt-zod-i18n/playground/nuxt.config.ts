@@ -1,7 +1,17 @@
+import { fileURLToPath } from 'node:url';
+
+const r = (p: string) => fileURLToPath(new URL(p, import.meta.url));
+
 export default defineNuxtConfig({
-  modules: ['../src/module', '@nuxtjs/i18n', '@nuxt/ui'],
   devtools: { enabled: true },
+  compatibilityDate: '2025-09-01',
+
+  modules: ['@nidavellirx/meowv-nuxt-zod-i18n', '@nuxtjs/i18n', '@nuxt/ui'],
   css: ['~/assets/css/main.css'],
+
+  alias: {
+    '@schema': r('./schema'),
+  },
 
   ui: {
     // @ts-expect-error see https://ui.nuxt.com/components/icon#dynamic
@@ -9,8 +19,6 @@ export default defineNuxtConfig({
       dynamic: true,
     },
   },
-
-  compatibilityDate: '2024-09-16',
 
   meowvZodi18n: {
     localeCodesMapping: {
@@ -24,7 +32,7 @@ export default defineNuxtConfig({
     defaultDirection: 'ltr',
     defaultLocale: 'en-GB',
     langDir: 'i18n',
-    restructureDir: '.',
+    restructureDir: './app',
     vueI18n: 'i18n.config.ts',
     locales: [
       {

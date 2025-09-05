@@ -1,21 +1,12 @@
-<script setup lang="ts">
-import { LoginViewModel } from '~/feature/login-view-model';
-import { Symbols } from '../symbols';
-
-const vm = useInstance<LoginViewModel>(Symbols.DI.Feature.Login.ViewModel);
-
-await vm.onBeforeMount()
-</script>
-
 <template>
   <div class="login-container">
-    <form class="login-form" @submit.prevent="vm.onLogin()">
+    <form class="login-form" @submit.prevent="viewModel.onLogin()">
       <h1 class="login-title">Login</h1>
 
       <input
         id="username"
         type="text"
-        v-model="vm.state.username"
+        v-model="state.username"
         placeholder="Username"
         class="input"
       />
@@ -23,20 +14,30 @@ await vm.onBeforeMount()
       <input
         id="password"
         type="password"
-        v-model="vm.state.password"
+        v-model="state.password"
         placeholder="Password"
         class="input"
       />
 
-      <button type="submit" :disabled="vm.state.isLoading" class="btn">
-        <span v-if="vm.state.isLoading" class="spinner"></span>
+      <button type="submit" :disabled="state.isLoading" class="btn">
+        <span v-if="state.isLoading" class="spinner"></span>
         <span v-else>Login</span>
       </button>
 
-      <p v-if="vm.state.error" class="label">{{ vm.state.error }}</p>
+      <p v-if="state.error" class="label">{{ state.error }}</p>
     </form>
   </div>
 </template>
+
+<script setup lang="ts">
+import { Symbols } from '@di/symbols';
+import { LoginViewModel } from '@feature/login/view-model';
+
+const viewModel = useInstance<LoginViewModel>(Symbols.DI.Feature.Login.ViewModel);
+const state = viewModel.state
+
+await viewModel.onBeforeMount()
+</script>
 
 <style scoped>
 .login-container {

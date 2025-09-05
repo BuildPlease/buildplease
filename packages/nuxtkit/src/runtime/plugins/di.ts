@@ -1,16 +1,16 @@
-import { Container } from 'inversify';
+import { ScopeController } from '@nidavellirx/meowv-webkit';
 
 import { defineNuxtPlugin } from '#imports';
 
 export default defineNuxtPlugin({
   name: 'nuxtkit:plugin',
   setup(_nuxtApp) {
-    const container = new Container();
+    const scopeController = new ScopeController();
 
     return {
       provide: {
-        container,
-        getInstance: <T>(id: symbol): T => container.get<T>(id),
+        scopeController,
+        getInstance: <T>(id: symbol): T => scopeController.getInstance<T>(id),
       },
     };
   },

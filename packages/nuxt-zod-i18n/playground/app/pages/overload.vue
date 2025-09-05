@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import type { WebsiteDto } from '~/schema';
 import type { FormSubmitEvent } from '#ui/types';
-import { websiteSchema } from '~/schema';
+import { type WebsiteDto, websiteSchema  } from '@schema';
 
 const { t } = useI18n();
 

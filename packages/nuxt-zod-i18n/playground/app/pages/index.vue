@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { type LoginDto, loginSchema } from '~/schema';
 import type { FormSubmitEvent } from '#ui/types';
+import { type LoginDto, loginSchema } from '@schema';
 
 const { t } = useI18n();
 

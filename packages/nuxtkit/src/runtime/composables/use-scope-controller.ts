@@ -1,4 +1,4 @@
-import type { Container } from 'inversify';
+import type { ScopeController } from '@nidavellirx/meowv-webkit';
 
 import { useNuxtApp } from '#app';
 
@@ -11,12 +11,10 @@ import { useNuxtApp } from '#app';
  * const scope = useScope();
  * const myService = scope.getInstance<MyService>(Symbols.MyService);
  */
-export function useContainer(): Container {
-  const { $container } = useNuxtApp();
+export function useScopeController(): ScopeController {
+  const { $scopeController } = useNuxtApp();
 
-  if (!$container) {
-    throw new Error('Failed to resolve Container.');
-  }
+  if (!$scopeController) throw new Error('Failed to resolve Container.');
 
-  return $container;
+  return $scopeController;
 }
