@@ -28,8 +28,7 @@ export class DashboardViewModel extends ViewModel<DashboardState> {
     try {
       await this.unauthorizedOperation.execute();
     } catch (error) {
-      const message = useErrorHandler(error);
-      this.notifications.notify(message, 'warning');
+      useErrorNotifier(error);
     } finally {
       this.state.isLoading = false;
     }

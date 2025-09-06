@@ -1,4 +1,3 @@
-// app/composables/useNotifications.ts
 import { reactive } from 'vue';
 
 export interface Notification {

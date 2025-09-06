@@ -8,8 +8,8 @@ import { useNuxtApp } from '#app';
  * @returns {ScopeController} The scope controller instance.
  *
  * @example
- * const scope = useScope();
- * const myService = scope.getInstance<MyService>(Symbols.MyService);
+ * const scopeController = useScopeController();
+ * const myService = scopeController.getInstance<MyService>(Symbols.MyService);
  */
 export function useScopeController(): ScopeController {
   const { $scopeController } = useNuxtApp();
