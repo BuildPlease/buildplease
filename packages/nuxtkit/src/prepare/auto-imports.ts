@@ -58,5 +58,14 @@ async function prepareComposablesImports(resolver: any) {
       name: 'useScopeController',
       from: resolver.resolve('./runtime/composables/use-scope-controller'),
     },
+    {
+      name: 'UseCurrentLocaleOptions',
+      from: resolver.resolve('./runtime/composables/use-current-locale'),
+      type: true,
+    },
+    {
+      name: 'useCurrentLocale',
+      from: resolver.resolve('./runtime/composables/use-current-locale'),
+    },
   ]);
 }

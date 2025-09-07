@@ -11,6 +11,6 @@
   "devDependencies": {
     "@nidavellirx/meowv-nuxtkit": "workspace:^",
     "@nuxtjs/i18n": "10.0.6",
-    "nuxt": "4.1.0"
+    "nuxt": "4.1.1"
   }
 }

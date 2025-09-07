@@ -1,3 +1,25 @@
+<template>
+  <div>
+    <UDropdownMenu :items="items">
+      <!-- Current locale button -->
+      <UButton
+        variant="outline"
+        color="neutral"
+        trailing-icon="i-heroicons-chevron-down-20-solid"
+      >
+        <UIcon v-if="currentFlag" :name="currentFlag" dynamic />
+        {{ currentLabel }}
+      </UButton>
+
+      <!-- Dropdown items -->
+      <template #item="{ item }">
+        <UIcon v-if="item.icon" :name="item.icon" dynamic />
+        <span class="truncate">{{ item.label }}</span>
+      </template>
+    </UDropdownMenu>
+  </div>
+</template>
+
 <script setup lang="ts">
 import type { LocaleObject } from '@nuxtjs/i18n';
 import type { DropdownMenuItem } from '#ui/types';
@@ -34,7 +56,8 @@ const items = computed<DropdownMenuItem[][]>(() => [
 ]);
 
 function makeFlag(localeObj: LocaleObject): string | undefined {
-	if (!props.displayFlag) return undefined;
+	try {
+		if (!props.displayFlag) return undefined;
 
 	// MARK: - Priority 1: Use explicitly defined flag
 	if (localeObj.flag) return `i-flag-${(localeObj.flag as any).toLowerCase()}-4x3`;
@@ -46,23 +69,8 @@ function makeFlag(localeObj: LocaleObject): string | undefined {
 	const regionCode = parts[1]?.toLowerCase();
 
 	return regionCode ? `i-flag-${regionCode}-4x3` : `i-flag-${baseCode}-4x3`;
+	} catch {
+		return undefined
+	}
 }
 </script>
-
-<template>
-	<div>
-		<UDropdownMenu :items="items">
-			<!-- Current locale button -->
-			<UButton variant="outline" color="neutral" trailing-icon="i-heroicons-chevron-down-20-solid">
-				<UIcon v-if="currentFlag" :name="currentFlag" dynamic />
-				{{ currentLabel }}
-			</UButton>
-
-			<!-- Dropdown items -->
-			<template #item="{ item }">
-				<UIcon v-if="item.icon" :name="item.icon" dynamic />
-				<span class="truncate">{{ item.label }}</span>
-			</template>
-		</UDropdownMenu>
-	</div>
-</template>

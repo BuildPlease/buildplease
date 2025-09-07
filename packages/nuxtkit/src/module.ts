@@ -8,8 +8,8 @@ import { prepareContext } from './context';
 import { prepareHooks } from './prepare/hooks';
 import { prepareRuntime } from './prepare/runtime';
 import { prepareRuntimeConfig } from './prepare/runtime-config';
-import { prepareValidation } from './prepare/validation';
 import { prepareAutoImports } from './prepare/auto-imports';
+import { validateDependencies } from './prepare/dependencies';
 
 export default defineNuxtModule<ModuleOptions>({
   meta: {
@@ -35,9 +35,9 @@ export default defineNuxtModule<ModuleOptions>({
     prepareRuntimeConfig(ctx, nuxt);
 
     /**
-     * Validate i18n availability
+     * Validate dependencies availability
      */
-    const _i18nOptions = prepareValidation(ctx, nuxt);
+    validateDependencies(ctx, nuxt);
 
     /**
      * Add plugin and templates

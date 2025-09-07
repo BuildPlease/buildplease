@@ -1,22 +1,22 @@
+// src/prepare/runtime.ts
 import type { Nuxt } from '@nuxt/schema';
 import { addPlugin } from '@nuxt/kit';
 
 import type { NuxtKitContext } from '../context';
 
+type Entry = Readonly<{ alias: string; path: string }>;
+
 export function prepareRuntime(ctx: NuxtKitContext, nuxt: Nuxt) {
   const { resolver } = ctx;
+  const r = (p: string) => resolver.resolve(p);
 
-  addPlugin({
-    src: resolver.resolve('./runtime/plugins/di'),
-    mode: 'all',
-    order: 0,
-  });
+  addPlugin({ src: r('./runtime/plugins/di'), mode: 'all', order: 0 });
 
-  // For composables
-  nuxt.options.alias['#internal-nuxtkit-types'] = resolver.resolve('./types');
+  const entries: Entry[] = [{ alias: '#nuxtkit', path: './runtime' }];
+  const alias = Object.fromEntries(entries.map(({ alias, path }) => [alias, r(path)]));
 
-  nuxt.options.build.transpile.push('#internal-nuxtkit-types');
-  nuxt.options.build.transpile.push(resolver.resolve('./runtime'));
+  Object.assign(nuxt.options.alias, alias);
+  nuxt.options.build.transpile.push(...Object.values(alias));
 
   nuxt.options.imports.transform ??= {};
   nuxt.options.imports.transform.include ??= [];

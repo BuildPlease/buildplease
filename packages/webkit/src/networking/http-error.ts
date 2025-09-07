@@ -91,7 +91,7 @@ export class HttpError extends Error {
       value instanceof Error &&
       (value as any).name === HttpError.name &&
       typeof (value as any).statusCode === 'number' &&
-      typeof (value as any).code === 'string'
+      (typeof (value as any).code === 'string' || (value as any).code == null)
     );
   }
 }

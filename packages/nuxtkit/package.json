@@ -12,6 +12,9 @@
       "import": "./dist/module.mjs"
     }
   },
+  "imports": {
+    "#nuxtkit/*": "./dist/runtime/*.js"
+  },
   "files": [
     "dist"
   ],
@@ -27,7 +30,7 @@
   },
   "dependencies": {
     "@nidavellirx/meowv-webkit": "workspace:^",
-    "@nuxt/kit": "4.1.0",
+    "@nuxt/kit": "4.1.1",
     "defu": "6.1.4",
     "reflect-metadata": "0.2.2"
   },
@@ -39,14 +42,14 @@
   "devDependencies": {
     "@nuxt/devtools": "2.6.3",
     "@nuxt/module-builder": "1.0.2",
-    "@nuxt/schema": "4.1.0",
+    "@nuxt/schema": "4.1.1",
     "@nuxtjs/i18n": "10.0.6",
     "@types/node": "latest",
     "inversify": "7.9.1",
-    "nuxt": "4.1.0",
+    "nuxt": "4.1.1",
     "typescript": "5.9.2",
     "vitest": "3.2.4",
-    "vue-i18n": "11.1.11",
+    "vue-i18n": "11.1.12",
     "vue-tsc": "3.0.6"
   }
 }

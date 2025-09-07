@@ -1,8 +1,8 @@
 import { reactive, type Reactive } from 'vue';
 import type { NavigationGuard, RouteLocationNormalizedLoaded, Router } from 'vue-router';
 
-import type { Lifecycle } from '../infrastructure/lifecycle';
-import { isSSR, isCSR, isHydrating } from '../infrastructure/environment';
+import type { Lifecycle } from '#nuxtkit/infrastructure/lifecycle';
+import { isSSR, isCSR, isHydrating } from '#nuxtkit/infrastructure/environment';
 
 import { useRouter, useRoute, useNuxtApp } from '#app';
 

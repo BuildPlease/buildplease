@@ -4,12 +4,11 @@
     <p class="login-message">✅ You have successfully logged in.</p>
 
     <div class="actions">
-
-       <button 
-       class="action-button primary"
+      <button
+        class="action-button primary"
         :disabled="state.isLoading"
         @click="onGoHome"
-        >
+      >
         Go Back to Home
       </button>
 
@@ -18,7 +17,7 @@
         :disabled="state.isLoading"
         @click="onTestUnauthorized"
       >
-         <span v-if="state.isLoading" class="spinner"></span>
+        <span v-if="state.isLoading" class="spinner"></span>
         <span v-else>Test Unauthorized Operation</span>
       </button>
     </div>
@@ -80,7 +79,9 @@ async function onTestUnauthorized() {
   font-size: 1rem;
   font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.25s, transform 0.1s;
+  transition:
+    background-color 0.25s,
+    transform 0.1s;
 }
 
 .action-button:hover:not(:disabled) {

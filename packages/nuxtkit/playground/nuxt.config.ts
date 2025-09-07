@@ -27,12 +27,16 @@ export default defineNuxtConfig({
   },
 
   meowvNuxtKit: {
+    debug: true,
     unauthorizedStatusCodes: [401, 403],
     errors: {
       genericErrorKey: 'error.generic',
       genericMessageFallback: 'Error',
       unauthorizedKey: 'error.unauthorized',
       unauthorizedMessageFallback: 'Unauthorized',
+    },
+    zodI18n: {
+      fallback: 'en',
     },
   },
 });

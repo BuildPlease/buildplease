@@ -11,7 +11,9 @@
       role="alert"
     >
       <span>{{ n.message }}</span>
-      <button class="close" @click="remove(n.id)" aria-label="Dismiss">×</button>
+      <button class="close" @click="remove(n.id)" aria-label="Dismiss">
+        ×
+      </button>
     </div>
   </div>
 </template>
@@ -21,13 +23,14 @@ const { items, remove } = useNotifications()
 </script>
 
 <style>
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   height: 100%;
   width: 100%;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   background-color: #0e0e0e;
 }
 
@@ -48,17 +51,25 @@ html, body {
   border-radius: 10px;
   color: #fff;
   background: #222;
-  box-shadow: 0 6px 16px rgba(0,0,0,.2);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  border: 1px solid rgba(255,255,255,.08);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
-.notification.info    { background: #2563eb; }
-.notification.success { background: #16a34a; }
-.notification.warning { background: #d97706; }
-.notification.error   { background: #dc2626; }
+.notification.info {
+  background: #2563eb;
+}
+.notification.success {
+  background: #16a34a;
+}
+.notification.warning {
+  background: #d97706;
+}
+.notification.error {
+  background: #dc2626;
+}
 .notification .close {
   background: transparent;
   border: 0;

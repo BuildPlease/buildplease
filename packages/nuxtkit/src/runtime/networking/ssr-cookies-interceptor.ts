@@ -2,23 +2,25 @@ import type { RequestInterceptor, RequestConfig } from '@nidavellirx/meowv-webki
 
 import { parseCookies } from 'h3';
 
-import { isSSR } from '../infrastructure/environment';
-
 import type { NuxtApp } from '#app';
+import { useNuxtKit } from '#nuxtkit/composables/use-nuxt-kit';
+import { isSSR } from '#nuxtkit/infrastructure/environment';
 
 export class SSRRequestCookiesInterceptor implements RequestInterceptor {
-  order = -20;
-
   constructor(private nuxt: NuxtApp) {}
 
-  hash() {
-    return Symbol.for('meowv.nuxtkit.networking.interceptor.ssr.cookies');
+  public order = -20;
+
+  public hash() {
+    const { makeSymbol } = useNuxtKit();
+    return makeSymbol('networking.ssr.cookies');
   }
-  equals(other: unknown) {
+
+  public equals(other: unknown) {
     return other instanceof SSRRequestCookiesInterceptor;
   }
 
-  intercept(config: RequestConfig): RequestConfig {
+  public intercept(config: RequestConfig): RequestConfig {
     if (!isSSR) return config;
 
     const event = this.nuxt.ssrContext?.event;
@@ -26,6 +28,7 @@ export class SSRRequestCookiesInterceptor implements RequestInterceptor {
 
     // MARK: - Get cookies from the SSR context
     const cookies = parseCookies(event);
+
     // MARK: - Format cookies to a single Cookie header
     const cookieHeader = Object.entries(cookies)
       .map(([k, v]) => `${k}=${v}`)
