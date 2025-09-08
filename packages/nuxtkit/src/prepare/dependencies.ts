@@ -18,6 +18,7 @@ export async function validateDependencies(ctx: NuxtKitContext, nuxt: Nuxt): Pro
     await ensurePeerDepsInstalled(nuxt, ctx.resolver);
     await ensureNuxtMajor(nuxt, 4);
     await ensureNuxtModule(nuxt, ['@nuxtjs/i18n', '@nuxtjs/i18n-edge']);
+    await ensureNuxtModule(nuxt, ['@nuxt/ui']);
   } catch (error) {
     ctx.logger.fatal(error instanceof Error ? error.message : String(error));
   }

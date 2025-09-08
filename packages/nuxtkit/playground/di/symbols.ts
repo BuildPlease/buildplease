@@ -1,3 +1,28 @@
+const Routes = {
+  Root: {
+    name: '/',
+    path: '/',
+  },
+  Login: {
+    name: 'login',
+    path: '/login',
+  },
+  Dashboard: {
+    name: 'dashboard',
+    path: '/dashboard',
+  },
+  Zod: {
+    Overload: {
+      name: 'zod/overload',
+      path: '/zod/overload',
+    },
+    Complex: {
+      name: 'zod/complex',
+      path: '/zod/complex',
+    },
+  },
+};
+
 const DI = {
   Feature: {
     Login: {
@@ -14,5 +39,6 @@ const DI = {
 };
 
 export const Symbols = {
+  Routes: Routes,
   DI: DI,
 };

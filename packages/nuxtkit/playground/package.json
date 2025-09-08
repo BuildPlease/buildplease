@@ -8,8 +8,14 @@
     "build": "nuxi build",
     "generate": "nuxi generate"
   },
+  "dependencies": {
+    "@iconify-json/flag": "1.2.9",
+    "@iconify-json/lucide": "1.2.66",
+    "zod": "4.1.5"
+  },
   "devDependencies": {
     "@nidavellirx/meowv-nuxtkit": "workspace:^",
+    "@nuxt/ui": "3.3.3",
     "@nuxtjs/i18n": "10.0.6",
     "nuxt": "4.1.1"
   }

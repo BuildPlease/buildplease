@@ -1,4 +1,3 @@
-// src/prepare/runtime.ts
 import type { Nuxt } from '@nuxt/schema';
 import { addPlugin } from '@nuxt/kit';
 
@@ -11,6 +10,7 @@ export function prepareRuntime(ctx: NuxtKitContext, nuxt: Nuxt) {
   const r = (p: string) => resolver.resolve(p);
 
   addPlugin({ src: r('./runtime/plugins/di'), mode: 'all', order: 0 });
+  addPlugin({ src: r('./runtime/plugins/zod-i18n'), mode: 'all', order: 1 });
 
   const entries: Entry[] = [{ alias: '#nuxtkit', path: './runtime' }];
   const alias = Object.fromEntries(entries.map(({ alias, path }) => [alias, r(path)]));

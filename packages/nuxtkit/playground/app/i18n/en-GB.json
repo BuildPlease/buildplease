@@ -1,0 +1,38 @@
+{
+  "common": {
+    "email": "Email",
+    "password": "Password",
+    "login": "Login",
+    "copyright": "© {year} Nidavellir © Meowv"
+  },
+  "placeholder": {
+    "email": "Your email",
+    "password": "Your password"
+  },
+  "brand": {
+    "name": "Nuxtkit",
+    "badge": "Playground"
+  },
+  "navigation": {
+    "dashboard": "Dashboard",
+    "complexValidation": "Complex Validation",
+    "overloadValidation": "Overload Validation"
+  },
+  "pages": {
+    "home": {
+      "title": "Welcome",
+      "description": "This is the landing page for the Meowv NuxtKit Playground. Explore MVVM + Clean Architecture with Nuxt UI components."
+    },
+    "login": {
+      "title": "Login",
+      "button": "Login"
+    },
+    "dashboard": {
+      "welcomeBack": "Welcome back!",
+      "loginSuccess": "You have successfully logged in.",
+      "operations": "Operations",
+      "goHome": "Go Back to Home",
+      "testUnauthorized": "Test Unauthorized Operation"
+    }
+  }
+}

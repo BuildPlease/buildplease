@@ -11,6 +11,18 @@ export type NuxtKitPublicRuntimeConfig = DeepRequired<NuxtKitOptions>;
 export interface NuxtKitOptions {
   /** Whether to print debug logs at runtime. */
   debug: boolean;
+
+  /**
+   * Auto-imported components provided by the module.
+   */
+  components: {
+    /**
+     * Optional prefix for all auto-imported components.
+     * @default ""
+     */
+    prefix: string;
+  };
+
   /**
    * HTTP status codes to treat as unauthorized.
    * @default [401]
@@ -58,13 +70,6 @@ export interface NuxtKitOptions {
    */
   zodI18n: {
     /**
-     * Fallback Zod locale id when nothing matches.
-     * @default "en"
-     * @example "en"
-     */
-    fallback?: string;
-
-    /**
      * Base-language remapping (after region is stripped).
      * Use this when Zod lacks a locale and you want to reuse another.
      * @default "{}"
@@ -107,8 +112,8 @@ export type DeepRequired<T> = T extends (...args: unknown[]) => unknown
   ? T
   : T extends Primitive
     ? T
-    : T extends ReadonlyArray<infer U>
-      ? ReadonlyArray<DeepRequired<U>>
+    : T extends Array<infer U>
+      ? Array<DeepRequired<U>>
       : T extends Array<infer U>
         ? Array<DeepRequired<U>>
         : { [K in keyof T]-?: DeepRequired<NonNullable<T[K]>> };

@@ -31,6 +31,7 @@ export function useNuxtKit() {
     debug: logger.enabled,
     config: runtimeConfig,
     isSSR: import.meta.server,
+    isClient: import.meta.client,
     makeSymbol: makeSymbol,
   };
 }

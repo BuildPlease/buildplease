@@ -1,6 +1,6 @@
 import type { RequestInterceptor, RequestConfig } from '@nidavellirx/meowv-webkit';
 
-import { useNuxtApp } from '#imports';
+import { useCurrentLocale } from '#imports';
 import { useNuxtKit } from '#nuxtkit/composables/use-nuxt-kit';
 
 export class LanguageInterceptor implements RequestInterceptor {
@@ -16,15 +16,15 @@ export class LanguageInterceptor implements RequestInterceptor {
   }
 
   intercept(config: RequestConfig): RequestConfig {
-    const app = useNuxtApp();
     const { logger } = useNuxtKit();
-    const locale = String(app.$i18n?.locale?.value ?? 'en');
+    const currentLocale = useCurrentLocale({ withRegion: false });
+    const value = currentLocale.value;
 
-    logger.log('LanguageInterceptor → Accept-Language:', locale);
+    logger.log('LanguageInterceptor → Accept-Language:', value);
 
     return {
       ...config,
-      headers: { ...config.headers, 'Accept-Language': locale },
+      headers: { ...config.headers, 'Accept-Language': value },
     };
   }
 }

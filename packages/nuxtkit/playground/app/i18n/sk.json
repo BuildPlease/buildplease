@@ -1,0 +1,38 @@
+{
+  "common": {
+    "email": "Email",
+    "password": "Heslo",
+    "login": "Prihlásiť sa",
+    "copyright": "© {year} Nidavellir © Meowv"
+  },
+  "placeholder": {
+    "email": "Váš email",
+    "password": "Vaše heslo"
+  },
+  "brand": {
+    "name": "Nuxtkit",
+    "badge": "Playground"
+  },
+  "navigation": {
+    "dashboard": "Prehľad",
+    "complexValidation": "Komplexná validácia",
+    "overloadValidation": "Overload validácia"
+  },
+  "pages": {
+    "home": {
+      "title": "Vitajte",
+      "description": "Toto je úvodná stránka Meowv NuxtKit Playground. Objavujte MVVM + čistú architektúru s komponentmi Nuxt UI."
+    },
+    "login": {
+      "title": "Prihlásenie",
+      "button": "Prihlásiť sa"
+    },
+    "dashboard": {
+      "welcomeBack": "Vitajte späť!",
+      "loginSuccess": "Úspešne ste sa prihlásili.",
+      "operations": "Operácie",
+      "goHome": "Späť na domov",
+      "testUnauthorized": "Otestovať nepovolenú operáciu"
+    }
+  }
+}

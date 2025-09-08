@@ -1,24 +1,37 @@
 import type { Nuxt } from '@nuxt/schema';
-import { addImportsDir, addImports } from '@nuxt/kit';
+import { addImportsDir, addImports, addComponentsDir, type Resolver } from '@nuxt/kit';
 
 import type { NuxtKitContext } from '../context';
 
-export async function prepareAutoImports({ resolver }: NuxtKitContext, _nuxt: Nuxt) {
+export async function prepareAutoImports(ctx: NuxtKitContext, _nuxt: Nuxt) {
+  const resolver = ctx.resolver;
+
+  await prepareComponents(ctx);
   await prepareNetworkingImports(resolver);
   await prepareInfrastructureImports(resolver);
   await prepareArchitectureImports(resolver);
   await prepareComposablesImports(resolver);
 }
 
-async function prepareNetworkingImports(resolver: any) {
+export async function prepareComponents(ctx: NuxtKitContext) {
+  const { resolver, options } = ctx;
+
+  addComponentsDir({
+    path: resolver.resolve('./runtime/components'),
+    prefix: options.components.prefix,
+    pathPrefix: false,
+  });
+}
+
+async function prepareNetworkingImports(resolver: Resolver) {
   addImportsDir([resolver.resolve('./runtime/networking')]);
 }
 
-async function prepareInfrastructureImports(resolver: any) {
+async function prepareInfrastructureImports(resolver: Resolver) {
   addImportsDir([resolver.resolve('./runtime/infrastructure')]);
 }
 
-async function prepareArchitectureImports(resolver: any) {
+async function prepareArchitectureImports(resolver: Resolver) {
   addImports([
     {
       name: 'Controller',
@@ -39,7 +52,7 @@ async function prepareArchitectureImports(resolver: any) {
   ]);
 }
 
-async function prepareComposablesImports(resolver: any) {
+async function prepareComposablesImports(resolver: Resolver) {
   addImports([
     {
       name: 'ErrorHandlerOptions',

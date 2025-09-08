@@ -3,7 +3,7 @@ import { ScopeController } from '@nidavellirx/meowv-webkit';
 import { defineNuxtPlugin } from '#imports';
 
 export default defineNuxtPlugin({
-  name: 'nuxtkit:plugin',
+  name: 'nuxtkit:plugin:di',
   setup(_nuxtApp) {
     const scopeController = new ScopeController();
 

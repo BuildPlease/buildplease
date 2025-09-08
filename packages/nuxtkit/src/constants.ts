@@ -5,6 +5,9 @@ export const NUXT_CONFIG_KEY = 'meowvNuxtKit';
 
 export const DEFAULT_OPTIONS = {
   debug: false,
+  components: {
+    prefix: '',
+  },
   unauthorizedStatusCodes: [401],
   errors: {
     genericErrorKey: 'errors.generic',
@@ -13,7 +16,6 @@ export const DEFAULT_OPTIONS = {
     unauthorizedMessageFallback: 'Unauthorized',
   },
   zodI18n: {
-    fallback: 'en',
     languageAlias: {},
     customLocales: {},
   },

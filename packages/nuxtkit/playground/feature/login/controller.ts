@@ -1,7 +1,6 @@
 import { injectable } from 'inversify';
 
 export interface LoginController extends Controller {
-  defaultUsername: string;
   onLogin(input: string, password: string): Promise<void>;
 }
 
@@ -10,8 +9,6 @@ export class LoginControllerImpl extends ControllerImpl implements LoginControll
   constructor() {
     super();
   }
-
-  public defaultUsername: string = 'username';
 
   public async onLogin(input: string, password: string): Promise<void> {
     this.setStatus('loading');
