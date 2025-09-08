@@ -9,10 +9,6 @@
     "email": "Váš email",
     "password": "Vaše heslo"
   },
-  "brand": {
-    "name": "Nuxtkit",
-    "badge": "Playground"
-  },
   "navigation": {
     "dashboard": "Prehľad",
     "complexValidation": "Komplexná validácia",

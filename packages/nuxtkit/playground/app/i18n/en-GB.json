@@ -9,10 +9,6 @@
     "email": "Your email",
     "password": "Your password"
   },
-  "brand": {
-    "name": "Nuxtkit",
-    "badge": "Playground"
-  },
   "navigation": {
     "dashboard": "Dashboard",
     "complexValidation": "Complex Validation",

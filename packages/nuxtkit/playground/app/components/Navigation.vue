@@ -7,8 +7,8 @@
           :to="localePath({ name: Symbols.Routes.Root.name })"
           class="flex flex-shrink-0 items-end gap-1.5 text-xl font-bold text-gray-900 dark:text-white"
         >
-          {{ t('brand.name') }}
-          <UBadge :label="t('brand.badge')" variant="subtle" class="mb-0.5" />
+          NuxtKit
+          <UBadge label="Playground" variant="subtle" class="mb-0.5" />
         </NuxtLinkLocale>
       </slot>
     </div>

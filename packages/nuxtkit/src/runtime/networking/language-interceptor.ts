@@ -20,7 +20,7 @@ export class LanguageInterceptor implements RequestInterceptor {
     const currentLocale = useCurrentLocale({ withRegion: false });
     const value = currentLocale.value;
 
-    logger.log('LanguageInterceptor → Accept-Language:', value);
+    logger.debug(`LanguageInterceptor → Accept-Language: ${value}`);
 
     return {
       ...config,

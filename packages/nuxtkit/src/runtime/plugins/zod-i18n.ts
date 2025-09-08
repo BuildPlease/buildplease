@@ -1,66 +1,80 @@
-import z, { locales as zodLocales } from 'zod';
+import { z } from 'zod';
 import { watch } from 'vue';
 
 import { defineNuxtPlugin } from '#imports';
 import { useNuxtKit } from '#nuxtkit/composables/use-nuxt-kit';
 import { useCurrentLocale } from '#nuxtkit/composables/use-current-locale';
-import type { ZodLocaleFactory } from '#nuxtkit/types/zod';
+import { locales } from '#nuxtkit/zod/locales/';
+
+const ZOD_NAME = 'Zod';
 
 /**
- * Nuxt plugin: keeps Zod v4 error locale in sync with vue-i18n locale.
+ * Nuxt plugin: handles Zod i18n locale management.
  *
  * @remarks
- * - Uses `useCurrentLocale({ withRegion: false })` for base language.
- * - Supports optional `languageAlias` and `customLocales` from module config.
+ * - Uses `useCurrentLocale({ withRegion: false })` to get the base language.
+ * - Supports customLocales and built-in fallback locales.
  */
-export default defineNuxtPlugin(async () => {
+export default defineNuxtPlugin(async (_nuxt) => {
   const kit = useNuxtKit();
-  const cfg = kit.config.zodI18n;
+  const logger = kit.logger;
+  const config = kit.config.zodI18n;
 
-  const alias: Record<string, string> = cfg?.languageAlias ?? {};
-  const custom: Record<string, string> = cfg?.customLocales ?? {};
+  const alias: Record<string, string> = config?.languageAlias ?? {};
+  const custom: Record<string, string> = config?.customLocales ?? {};
 
-  async function loadZodLocaleFactory(base: string): Promise<ZodLocaleFactory> {
-    const code = alias[base] ?? base;
+  /**
+   * Load the custom locale factory if user provides custom locale paths.
+   * @param {string} locale - The base language code (e.g., 'en', 'sk', 'cs')
+   */
+  async function loadZodLocaleFactory(locale: string) {
+    const code = alias[locale] ?? locale;
 
-    // 0) custom module path
+    // 0) Attempt to load custom locales first
     const customPath = custom[code];
     if (customPath) {
       try {
         const mod = await import(/* @vite-ignore */ customPath);
-        const f = (mod.default ?? mod) as unknown;
-        if (typeof f === 'function') return f as ZodLocaleFactory;
-      } catch {}
+        return mod.default ?? mod;
+      } catch {
+        logger.warn(`${ZOD_NAME}: custom locale for ${code} not found`, { force: true });
+      }
     }
 
-    // 1) built-ins (tree-shakable)
-    const builtin = (zodLocales as Record<string, unknown>)[code];
-    if (typeof builtin === 'function') return builtin as ZodLocaleFactory;
+    // 1) Check if the base locale is part of the internal locales (en, sk, cs, etc.)
+    if (locales[code]) {
+      return locales[code];
+    }
 
-    // 2) dynamic import official locale
+    // 2) Try loading official Zod locales
     try {
       const mod = await import(/* @vite-ignore */ `zod/v4/locales/${code}.js`);
-      return (mod.default ?? mod) as ZodLocaleFactory;
-    } catch {}
+      return mod.default ?? mod;
+    } catch {
+      logger.warn(`${ZOD_NAME}: locale for ${code} not found.`, { force: true });
+    }
 
-    // 3) english fallback
-    const en = await import('zod/v4/locales/en.js');
-    return en.default as ZodLocaleFactory;
+    // 3) Default to English if no locale is found
+    const enLocale = await import('zod/v4/locales/en.js');
+    return enLocale.default;
   }
 
-  async function applyZodLocaleFromComputed(baseLocale: string) {
-    const factory = await loadZodLocaleFactory(baseLocale);
-    z.config(factory());
+  /**
+   * Apply the locale to Zod configuration.
+   * @param locale - The base locale (e.g., 'en', 'sk', 'cs')
+   */
+  async function applyZodLocale(locale: string) {
+    logger.info(`${ZOD_NAME}: locale applied: ${locale}`, { force: true });
+    const localeFactory = await loadZodLocaleFactory(locale);
+    z.config(localeFactory());
   }
 
-  // Initial (SSR + client)
+  // MARK: - Initial locale setup (SSR + client)
   const currentBase = useCurrentLocale({ withRegion: false });
-  await applyZodLocaleFromComputed(currentBase.value);
+  await applyZodLocale(currentBase.value);
 
-  // React to changes (client)
+  // MARK: - React to locale changes on the client
   if (kit.isClient) {
-    watch(currentBase, (val) => {
-      applyZodLocaleFromComputed(val);
-    });
+    watch(currentBase, (val) => applyZodLocale(val));
   }
 });

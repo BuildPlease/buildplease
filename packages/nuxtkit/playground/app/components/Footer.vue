@@ -9,9 +9,6 @@
         <div
           class="justify-self-center text-sm text-gray-500 dark:text-gray-400 flex flex-col items-center gap-2"
         >
-          <div class="font-medium">
-            {{ t('brand.name') }}
-          </div>
           <div>
             {{ t('common.copyright', { year }) }}
           </div>
