@@ -38,31 +38,31 @@ const props = withDefaults(
   },
 );
 
-const cfg = useRuntimeConfig();
-type RawLocale = string | LocaleObject;
-const rawLocales = computed<RawLocale[]>(() => (cfg.public as any)?.i18n?.locales ?? []);
-
-const app = useNuxtApp();
-const switchLocalePath = app.$switchLocalePath as (locale: string) => string;
-
-const currentCodeRaw = useCurrentLocale({ withRegion: true });
-
-const currentCodeFull = computed(() => normalizeLocale(currentCodeRaw.value, { preserveRegion: true }));
-const currentCodeBase = computed(() => normalizeLocale(currentCodeRaw.value, { preserveRegion: false }));
-
-const allLocales = computed<LocaleObject[]>(() =>
-  rawLocales.value.map((l) => (typeof l === 'string' ? { code: l } : l)),
+type RawLocale = string | LocaleObject<string>;
+const config = useRuntimeConfig();
+const rawLocales = computed<RawLocale[]>(() => config.public.i18n?.locales ?? []);
+const locales = computed<LocaleObject[]>(() =>
+  rawLocales.value.map((locale) =>
+    typeof locale === 'string'
+      ? { code: locale, name: locale.toUpperCase(), flag: locale.toLowerCase() }
+      : locale,
+  ),
 );
 
-const currentLocale = computed(
-  () =>
-    allLocales.value.find(
-      (l) => normalizeLocale(l.code, { preserveRegion: true }) === currentCodeFull.value,
+const currentCodeFull = useCurrentLocale({ withRegion: true });
+const currentCodeBase = computed(() => normalizeLocale(currentCodeFull.value, { preserveRegion: false }));
+const currentFlag = computed(() => (props.displayFlag ? makeFlag(currentLocale.value?.code) : undefined));
+
+const currentLocale = computed(() => {
+  return (
+    locales.value.find(
+      (locale) => normalizeLocale(locale.code, { preserveRegion: true }) === currentCodeFull.value,
     ) ??
-    allLocales.value.find(
-      (l) => normalizeLocale(l.code, { preserveRegion: false }) === currentCodeBase.value,
-    ),
-);
+    locales.value.find(
+      (locale) => normalizeLocale(locale.code, { preserveRegion: false }) === currentCodeBase.value,
+    )
+  );
+});
 
 const currentLabel = computed(() =>
   props.labelField === 'name'
@@ -70,24 +70,26 @@ const currentLabel = computed(() =>
     : (currentLocale.value?.code ?? currentCodeFull.value),
 );
 
-const currentFlag = computed(() => (props.displayFlag ? flagFromCode(currentCodeFull.value) : undefined));
-
-const items = computed<DropdownMenuItem[][]>(() => [
-  allLocales.value
-    .filter((l) => normalizeLocale(l.code, { preserveRegion: true }) !== currentCodeFull.value)
-    .map((l) => ({
-      label: props.labelField === 'name' ? (l.name ?? l.code) : l.code,
-      to: switchLocalePath(l.code),
-      icon: props.displayFlag ? flagFromCode(l.code) : undefined,
+const items = computed<DropdownMenuItem[]>(() =>
+  locales.value
+    .filter((locale) => locale.code !== currentLocale.value?.code)
+    .map((locale) => ({
+      label: props.labelField === 'name' ? (locale.name ?? locale.code) : locale.code,
+      to: onSwitchLocale(locale.code),
+      icon: props.displayFlag ? makeFlag(locale.code) : undefined,
     })),
-]);
+);
 
-/** Derive a flag icon name from a locale code (prefer region, else base). */
-function flagFromCode(code: string): string {
-  const full = normalizeLocale(code, { preserveRegion: true }); // e.g. "en-gb"
-  const base = normalizeLocale(code, { preserveRegion: false }); // e.g. "en"
-  const idx = full.indexOf('-');
-  const iso = idx !== -1 ? full.slice(idx + 1) : base;
-  return `i-flag-${iso}-4x3`;
+function makeFlag(code?: string): string | undefined {
+  const locale = locales.value.find((l) => l.code === code);
+  const flag = locale?.flag;
+  return flag ? `i-flag-${flag}-4x3` : undefined;
+}
+
+function onSwitchLocale(localeCode: string): string {
+  const app = useNuxtApp();
+  const switchLocalePath = app.$switchLocalePath as (locale: string) => string;
+
+  return switchLocalePath(localeCode);
 }
 </script>

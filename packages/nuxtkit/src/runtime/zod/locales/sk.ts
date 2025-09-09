@@ -1,17 +1,15 @@
 import { util } from 'zod/v4/core';
 import type { $ZodErrorMap, $ZodStringFormats, $ZodStringFormatIssues } from 'zod/v4/core';
 
-const error: () => $ZodErrorMap = () => {
-  const Sizable: Record<string, { unit: string; verb: string }> = {
-    string: { unit: 'znakov', verb: 'mať' },
-    file: { unit: 'bajtov', verb: 'mať' },
-    array: { unit: 'prvkov', verb: 'mať' },
-    set: { unit: 'prvkov', verb: 'mať' },
-  };
+import { type Sizable, getSizing } from '#nuxtkit/zod/utils';
 
-  function getSizing(origin: string): { unit: string; verb: string } | null {
-    return Sizable[origin] ?? null;
-  }
+const error: () => $ZodErrorMap = () => {
+  const sizable: Sizable = {
+    string: { singular: 'znak', few: 'znaky', many: 'znakov', verb: 'mať' },
+    file: { singular: 'bajt', few: 'bajty', many: 'bajtov', verb: 'mať' },
+    array: { singular: 'prvok', few: 'prvky', many: 'prvkov', verb: 'mať' },
+    set: { singular: 'prvok', few: 'prvky', many: 'prvkov', verb: 'mať' },
+  };
 
   const _parsedType = (data: any): string => {
     const t = typeof data;
@@ -78,7 +76,7 @@ const error: () => $ZodErrorMap = () => {
     switch (issue.code) {
       case 'invalid_type': {
         const received = (issue as any)?.received;
-        if (received === 'undefined' || received === 'null') return 'Vyplňte toto pole.';
+        if (received === undefined || received === null) return 'Toto pole nemôže byť prázdne.';
         return 'Neplatná hodnota.';
       }
 
@@ -88,21 +86,27 @@ const error: () => $ZodErrorMap = () => {
       }
 
       case 'too_big': {
-        const sizing = getSizing(issue.origin);
-        const max = issue.maximum.toString();
+        const max = Number(issue.maximum);
+        const maxString = max.toString();
+        const sizing = getSizing(issue.origin, max, sizable);
         if (sizing) {
-          return issue.inclusive ? `Najviac ${max} ${sizing.unit}.` : `Menej ako ${max} ${sizing.unit}.`;
+          return issue.inclusive
+            ? `Najviac ${maxString} ${sizing.unit}.`
+            : `Menej ako ${maxString} ${sizing.unit}.`;
         }
-        return issue.inclusive ? `Maximálna hodnota je ${max}.` : `Musí byť menšie ako ${max}.`;
+        return issue.inclusive ? `Maximálna hodnota je ${maxString}.` : `Musí byť menšie ako ${maxString}.`;
       }
 
       case 'too_small': {
-        const sizing = getSizing(issue.origin);
-        const min = issue.minimum.toString();
+        const min = Number(issue.minimum);
+        const minString = min.toString();
+        const sizing = getSizing(issue.origin, min, sizable);
         if (sizing) {
-          return issue.inclusive ? `Aspoň ${min} ${sizing.unit}.` : `Viac ako ${min} ${sizing.unit}.`;
+          return issue.inclusive
+            ? `Aspoň ${minString} ${sizing.unit}.`
+            : `Viac ako ${minString} ${sizing.unit}.`;
         }
-        return issue.inclusive ? `Minimálna hodnota je ${min}.` : `Musí byť väčšie ako ${min}.`;
+        return issue.inclusive ? `Minimálna hodnota je ${minString}.` : `Musí byť väčšie ako ${minString}.`;
       }
 
       case 'invalid_format': {
@@ -111,9 +115,7 @@ const error: () => $ZodErrorMap = () => {
         if (_issue.format === 'ends_with') return `Musí končiť „${_issue.suffix}“.`;
         if (_issue.format === 'includes') return `Musí obsahovať „${_issue.includes}“.`;
         if (_issue.format === 'regex') return 'Formát nie je správny.';
-        return Nouns[_issue.format]
-          ? `Neplatný formát: očakáva sa ${Nouns[_issue.format]}.`
-          : 'Formát nie je správny.';
+        return Nouns[_issue.format] ? `Neplatný formát: ${Nouns[_issue.format]}.` : 'Formát nie je správny.';
       }
 
       case 'not_multiple_of':

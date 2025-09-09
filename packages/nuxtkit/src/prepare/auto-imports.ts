@@ -80,5 +80,14 @@ async function prepareComposablesImports(resolver: Resolver) {
       name: 'useCurrentLocale',
       from: resolver.resolve('./runtime/composables/use-current-locale'),
     },
+    {
+      name: 'definePluralRules',
+      from: resolver.resolve('./runtime/composables/define-plural-rules'),
+    },
+    {
+      name: 'PluralRulesOptions',
+      from: resolver.resolve('./runtime/composables/define-plural-rules'),
+      type: true,
+    },
   ]);
 }

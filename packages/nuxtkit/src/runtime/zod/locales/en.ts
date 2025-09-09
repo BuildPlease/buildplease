@@ -1,17 +1,15 @@
 import { util } from 'zod/v4/core';
 import type { $ZodErrorMap, $ZodStringFormats, $ZodStringFormatIssues } from 'zod/v4/core';
 
-const error: () => $ZodErrorMap = () => {
-  const Sizable: Record<string, { unit: string; verb: string }> = {
-    string: { unit: 'characters', verb: 'have' },
-    file: { unit: 'bytes', verb: 'have' },
-    array: { unit: 'items', verb: 'have' },
-    set: { unit: 'items', verb: 'have' },
-  };
+import { type Sizable, getSizing } from '#nuxtkit/zod/utils';
 
-  function getSizing(origin: string): { unit: string; verb: string } | null {
-    return Sizable[origin] ?? null;
-  }
+const error: () => $ZodErrorMap = () => {
+  const sizable: Sizable = {
+    string: { singular: 'character', few: 'characters', many: 'characters', verb: 'have' },
+    file: { singular: 'byte', few: 'bytes', many: 'bytes', verb: 'have' },
+    array: { singular: 'item', few: 'items', many: 'items', verb: 'have' },
+    set: { singular: 'item', few: 'items', many: 'items', verb: 'have' },
+  };
 
   const _parsedType = (data: any): string => {
     const t = typeof data;
@@ -78,8 +76,8 @@ const error: () => $ZodErrorMap = () => {
     switch (issue.code) {
       case 'invalid_type': {
         const received = (issue as any)?.received;
-        if (received === 'undefined' || received === 'null') return 'This field cannot be empty.';
-        return 'Invalid value.';
+        if (received === undefined || received === null) return `This cannot be empty.`;
+        return `Invalid input`;
       }
 
       case 'invalid_value': {
@@ -87,22 +85,28 @@ const error: () => $ZodErrorMap = () => {
         return `Select one of the options: ${util.joinValues(issue.values, ' | ')}.`;
       }
 
-      case 'too_big': {
-        const sizing = getSizing(issue.origin);
-        const max = issue.maximum.toString();
+      case 'too_small': {
+        const min = Number(issue.minimum);
+        const minString = min.toString();
+        const sizing = getSizing(issue.origin, min, sizable);
         if (sizing) {
-          return issue.inclusive ? `At most ${max} ${sizing.unit}.` : `Less than ${max} ${sizing.unit}.`;
+          return issue.inclusive
+            ? `At least ${minString} ${sizing.unit}.`
+            : `Greater than ${minString} ${sizing.unit}.`;
         }
-        return issue.inclusive ? `The maximum value is ${max}.` : `Must be less than ${max}.`;
+        return issue.inclusive ? `The minimum value is ${minString}.` : `Must be greater than ${minString}.`;
       }
 
-      case 'too_small': {
-        const sizing = getSizing(issue.origin);
-        const min = issue.minimum.toString();
+      case 'too_big': {
+        const max = Number(issue.maximum);
+        const maxString = max.toString();
+        const sizing = getSizing(issue.origin, max, sizable);
         if (sizing) {
-          return issue.inclusive ? `At least ${min} ${sizing.unit}.` : `Greater than ${min} ${sizing.unit}.`;
+          return issue.inclusive
+            ? `At most ${maxString} ${sizing.unit}.`
+            : `Less than ${maxString} ${sizing.unit}.`;
         }
-        return issue.inclusive ? `The minimum value is ${min}.` : `Must be greater than ${min}.`;
+        return issue.inclusive ? `The maximum value is ${maxString}.` : `Must be less than ${maxString}.`;
       }
 
       case 'invalid_format': {
@@ -111,7 +115,7 @@ const error: () => $ZodErrorMap = () => {
         if (_issue.format === 'ends_with') return `Must end with “${_issue.suffix}”.`;
         if (_issue.format === 'includes') return `Must contain “${_issue.includes}”.`;
         if (_issue.format === 'regex') return 'Invalid format.';
-        return Nouns[_issue.format] ? `Invalid format: expected ${Nouns[_issue.format]}.` : 'Invalid format.';
+        return Nouns[_issue.format] ? `Invalid ${Nouns[_issue.format]} format.` : 'Invalid format.';
       }
 
       case 'not_multiple_of':

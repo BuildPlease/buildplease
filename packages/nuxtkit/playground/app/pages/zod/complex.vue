@@ -37,6 +37,9 @@
           <UFormField name="username" label="Username">
             <UInput v-model="state.username" class="w-full" />
           </UFormField>
+          <UFormField name="profilename" label="Profilename">
+            <UInput v-model="state.profilename" class="w-full" />
+          </UFormField>
           <UFormField name="email" label="Email">
             <UInput v-model="state.email" type="email" class="w-full" />
           </UFormField>
@@ -203,6 +206,7 @@ const statuses = ['active', 'inactive'];
 
 const state = reactive({
   username: '',
+  profilename: '',
   email: '',
   password: '',
   website: '',
@@ -252,6 +256,7 @@ function onSubmit() {
 function reset() {
   Object.assign(state, {
     username: '',
+    profilename: '',
     email: '',
     password: '',
     website: '',
@@ -276,6 +281,7 @@ function reset() {
 function fillDemo() {
   Object.assign(state, {
     username: 'mew_mew',
+    profilename: 'mew',
     email: 'cat@example.com',
     password: 'hunter42',
     website: 'https://nuxt.com',

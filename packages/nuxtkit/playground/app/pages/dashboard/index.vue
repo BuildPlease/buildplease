@@ -11,7 +11,7 @@
             block
             size="lg"
             color="primary"
-            icon="i-heroicons-arrow-left"
+            icon="i-lucide-arrow-left"
             :disabled="state.isLoading"
             @click="onGoHome"
           >
@@ -31,7 +31,7 @@
             color="info"
             variant="ghost"
             :loading="state.isLoading"
-            icon="i-heroicons-no-symbol"
+            icon="i-lucide-circle-off"
             @click="onTestUnauthorized"
           >
             {{ t('pages.dashboard.testUnauthorized') }}

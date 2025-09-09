@@ -29,7 +29,7 @@ export default defineNuxtConfig({
     components: {
       prefix: 'NuxtKit',
     },
-    unauthorizedStatusCodes: [401, 403],
+    unauthorizedStatusCodes: [401],
     errors: {
       genericErrorKey: 'error.generic',
       genericMessageFallback: 'Error',
@@ -37,9 +37,7 @@ export default defineNuxtConfig({
       unauthorizedMessageFallback: 'Unauthorized',
     },
     zodI18n: {
-      languageAlias: {
-        sk: 'cs',
-      },
+      languageAlias: {},
       customLocales: {},
     },
   },
@@ -60,6 +58,7 @@ export default defineNuxtConfig({
         isCatchallLocale: true,
         language: 'en-GB',
         name: 'English',
+        flag: 'gb',
       },
       {
         code: 'fr-FR',
@@ -67,6 +66,7 @@ export default defineNuxtConfig({
         file: 'fr-FR.json',
         language: 'fr-FR',
         name: 'French',
+        flag: 'fr',
       },
       {
         code: 'sk',
@@ -74,6 +74,7 @@ export default defineNuxtConfig({
         file: 'sk.json',
         language: 'sk-SK',
         name: 'Slovenčina',
+        flag: 'sk',
       },
       {
         code: 'cs',
@@ -81,6 +82,7 @@ export default defineNuxtConfig({
         file: 'cs.json',
         language: 'cs-CZ',
         name: 'Čeština',
+        flag: 'cz',
       },
     ],
   },

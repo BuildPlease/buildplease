@@ -3,9 +3,10 @@ import { z } from 'zod';
 export const ComplexSchema = z.object({
   // basic strings
   username: z.string().min(3).max(20),
-  email: z.string().email(),
+  profilename: z.string().min(1).max(5),
+  email: z.email(),
   password: z.string().min(8),
-  website: z.string().url().optional(),
+  website: z.url().optional(),
 
   // numbers
   age: z.number().int().gte(0).lte(120),
@@ -32,7 +33,7 @@ export const ComplexSchema = z.object({
   // unions
   payment: z.union([
     z.object({ type: z.literal('card'), cardNumber: z.string().length(16) }),
-    z.object({ type: z.literal('paypal'), email: z.string().email() }),
+    z.object({ type: z.literal('paypal'), email: z.email() }),
   ]),
 
   // optionals + nullables
