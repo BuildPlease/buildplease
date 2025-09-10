@@ -87,7 +87,7 @@ const error: () => $ZodErrorMap = () => {
 
       case 'too_big': {
         const max = Number(issue.maximum);
-        const maxString = max.toString();
+        const maxString = issue.maximum.toString();
         const sizing = getSizing(issue.origin, max, sizable);
         if (sizing) {
           return issue.inclusive
@@ -99,7 +99,7 @@ const error: () => $ZodErrorMap = () => {
 
       case 'too_small': {
         const min = Number(issue.minimum);
-        const minString = min.toString();
+        const minString = issue.minimum.toString();
         const sizing = getSizing(issue.origin, min, sizable);
         if (sizing) {
           return issue.inclusive

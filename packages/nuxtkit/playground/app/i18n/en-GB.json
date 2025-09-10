@@ -11,8 +11,7 @@
   },
   "navigation": {
     "dashboard": "Dashboard",
-    "complexValidation": "Complex Validation",
-    "overloadValidation": "Overload Validation"
+    "complexValidation": "Complex Validation"
   },
   "pages": {
     "home": {

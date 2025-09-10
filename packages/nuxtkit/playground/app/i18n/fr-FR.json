@@ -11,8 +11,7 @@
   },
   "navigation": {
     "dashboard": "Tableau de bord",
-    "complexValidation": "Validation complexe",
-    "overloadValidation": "Validation de surcharge"
+    "complexValidation": "Validation complexe"
   },
   "pages": {
     "home": {

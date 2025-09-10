@@ -85,21 +85,9 @@ const error: () => $ZodErrorMap = () => {
         return `Select one of the options: ${util.joinValues(issue.values, ' | ')}.`;
       }
 
-      case 'too_small': {
-        const min = Number(issue.minimum);
-        const minString = min.toString();
-        const sizing = getSizing(issue.origin, min, sizable);
-        if (sizing) {
-          return issue.inclusive
-            ? `At least ${minString} ${sizing.unit}.`
-            : `Greater than ${minString} ${sizing.unit}.`;
-        }
-        return issue.inclusive ? `The minimum value is ${minString}.` : `Must be greater than ${minString}.`;
-      }
-
       case 'too_big': {
         const max = Number(issue.maximum);
-        const maxString = max.toString();
+        const maxString = issue.maximum.toString();
         const sizing = getSizing(issue.origin, max, sizable);
         if (sizing) {
           return issue.inclusive
@@ -107,6 +95,18 @@ const error: () => $ZodErrorMap = () => {
             : `Less than ${maxString} ${sizing.unit}.`;
         }
         return issue.inclusive ? `The maximum value is ${maxString}.` : `Must be less than ${maxString}.`;
+      }
+
+      case 'too_small': {
+        const min = Number(issue.minimum);
+        const minString = issue.minimum.toString();
+        const sizing = getSizing(issue.origin, min, sizable);
+        if (sizing) {
+          return issue.inclusive
+            ? `At least ${minString} ${sizing.unit}.`
+            : `Greater than ${minString} ${sizing.unit}.`;
+        }
+        return issue.inclusive ? `The minimum value is ${minString}.` : `Must be greater than ${minString}.`;
       }
 
       case 'invalid_format': {

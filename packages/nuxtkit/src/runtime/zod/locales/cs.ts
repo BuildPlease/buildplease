@@ -85,21 +85,9 @@ const error: () => $ZodErrorMap = () => {
         return `Vyberte jednu z možností: ${util.joinValues(issue.values, ' | ')}.`;
       }
 
-      case 'too_small': {
-        const min = Number(issue.minimum);
-        const minString = min.toString();
-        const sizing = getSizing(issue.origin, min, sizable);
-        if (sizing) {
-          return issue.inclusive
-            ? `Aspoň ${minString} ${sizing.unit}.`
-            : `Více než ${minString} ${sizing.unit}.`;
-        }
-        return issue.inclusive ? `Minimální hodnota je ${minString}.` : `Musí být větší než ${minString}.`;
-      }
-
       case 'too_big': {
         const max = Number(issue.maximum);
-        const maxString = max.toString();
+        const maxString = issue.maximum.toString();
         const sizing = getSizing(issue.origin, max, sizable);
         if (sizing) {
           return issue.inclusive
@@ -107,6 +95,18 @@ const error: () => $ZodErrorMap = () => {
             : `Méně než ${maxString} ${sizing.unit}.`;
         }
         return issue.inclusive ? `Maximální hodnota je ${maxString}.` : `Musí být menší než ${maxString}.`;
+      }
+
+      case 'too_small': {
+        const min = Number(issue.minimum);
+        const minString = issue.minimum.toString();
+        const sizing = getSizing(issue.origin, min, sizable);
+        if (sizing) {
+          return issue.inclusive
+            ? `Aspoň ${minString} ${sizing.unit}.`
+            : `Více než ${minString} ${sizing.unit}.`;
+        }
+        return issue.inclusive ? `Minimální hodnota je ${minString}.` : `Musí být větší než ${minString}.`;
       }
 
       case 'invalid_format': {

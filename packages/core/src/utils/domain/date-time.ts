@@ -1,13 +1,13 @@
 export * from 'date-fns';
 
 import {
+  type FormatOptions,
+  type FromUnixTimeOptions,
   type Duration,
-  type Locale,
   add,
   sub,
   format as formatDate,
   parseISO,
-  parse,
   differenceInMilliseconds,
   differenceInSeconds,
   differenceInMinutes,
@@ -96,79 +96,30 @@ export class DateTime implements JSONSerializable {
     }
 
     if (input instanceof Date) {
-      if (!isValid(input)) throw new Error('DateTime: Invalid date object');
+      if (!isValid(input)) throw new Error('Invalid date object');
       this.date = input;
       return;
     }
 
     const parsed = parseISO(input);
-    if (!isValid(parsed)) throw new Error('DateTime: Invalid date string');
+    if (!isValid(parsed)) throw new Error('Invalid date string');
+
     this.date = parsed;
   }
 
-  // MARK: - Static Factory Methods
-
   /**
-   * Creates a DateTime from a Date object.
-   *
-   * @param date
-   *   A JavaScript Date instance.
-   * @returns {DateTime | null}
-   *   A new DateTime if valid; otherwise null.
+   * Static method to create a DateTime from a Unix timestamp (seconds).
+   * @param {number} unixTimestamp - The Unix timestamp in seconds.
+   * @param {FromUnixTimeOptions} options
+   * @returns {DateTime}
    */
-  public static fromDate(date: Date): DateTime | null {
-    return isValid(date) ? new DateTime(date) : null;
-  }
-
-  /**
-   * Parses a string into a DateTime instance.
-   *
-   * @param dateString
-   *   The input date string (e.g. "2025-06-05T14:30:00Z" or "06/05/2025").
-   * @param formatString
-   *   An optional format to use for parsing (e.g. one of the `DateFormat` values
-   *   or any custom string). If omitted, ISO parsing is applied.
-   * @param referenceDate
-   *   The reference date (defaults to now) when parsing non-ISO strings.
-   * @returns
-   *   A new `DateTime` if parsing succeeds; otherwise `null`.
-   *
-   * @example
-   * ```ts
-   * // Using a named enum format:
-   * const dt1 = DateTime.fromString("06/05/2025", DateFormat.MM_DD_YYYY);
-   *
-   * // Using a raw format string:
-   * const dt2 = DateTime.fromString("2025/06/05 14:30:00", "yyyy/MM/dd HH:mm:ss");
-   *
-   * // Omitted formatString: tries ISO parsing
-   * const dt3 = DateTime.fromString("2025-06-05T14:30:00Z");
-   * ```
-   */
-  public static fromString(
-    dateString: string,
-    formatString?: DateFormat | string,
-    referenceDate: Date = new Date(),
-  ): DateTime | null {
-    const date = formatString ? parse(dateString, formatString, referenceDate) : parseISO(dateString);
-
-    return isValid(date) ? new DateTime(date) : null;
+  public static fromUnixTimestamp(unixTimestamp: number, options?: FromUnixTimeOptions): DateTime {
+    return new DateTime(fromUnixTime(unixTimestamp, options));
   }
 
   /** @returns The current moment as a DateTime. */
   public static now(): DateTime {
     return new DateTime(new Date());
-  }
-
-  /**
-   * Create a DateTime from a Unix timestamp (seconds).
-   *
-   * @param unixTimestamp
-   *   The Unix timestamp in seconds.
-   * @returns {DateTime}
-   */
-  public static fromUnixTimestamp(unixTimestamp: number): DateTime {
-    return new DateTime(fromUnixTime(unixTimestamp));
   }
 
   /**
@@ -216,7 +167,7 @@ export class DateTime implements JSONSerializable {
    * console.log(dt.format('yyyy/MM/dd HH:mm:ss'));    // "2025/06/05 14:30:00"
    * ```
    */
-  public format(pattern: DateFormat | string, options?: { locale?: Locale }): string {
+  public format(pattern: DateFormat | string, options?: FormatOptions): string {
     return formatDate(this.date, pattern, options);
   }
 

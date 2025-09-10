@@ -11,8 +11,7 @@
   },
   "navigation": {
     "dashboard": "Přehled",
-    "complexValidation": "Komplexní validace",
-    "overloadValidation": "Overload validace"
+    "complexValidation": "Komplexní validace"
   },
   "pages": {
     "home": {

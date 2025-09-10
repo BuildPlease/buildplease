@@ -12,10 +12,6 @@ const Routes = {
     path: '/dashboard',
   },
   Zod: {
-    Overload: {
-      name: 'zod/overload',
-      path: '/zod/overload',
-    },
     Complex: {
       name: 'zod/complex',
       path: '/zod/complex',
