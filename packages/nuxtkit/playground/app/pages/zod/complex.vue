@@ -3,7 +3,7 @@
     <div class="flex flex-col items-center w-full max-w-2xl mb-6">
       <div class="flex items-center justify-between w-full mb-6">
         <div class="flex flex-col items-start w-full">
-          <h1 class="text-xl font-semibold">{{ t('navigation.complexValidation') }}</h1>
+          <h1 class="text-xl font-semibold">Complex Validation</h1>
           <p class="text-sm opacity-70 text-left w-full">
             Strings, numbers, dates, enums, arrays, objects, unions, refine
           </p>
@@ -24,10 +24,12 @@
 
     <UForm
       :schema="schema"
-      :state="state"
+      :state="state as ComplexData"
       class="space-y-8 w-full flex flex-col items-center mt-8"
       @submit="onSubmit"
+      @error="onError"
     >
+      <!-- String Fields Section -->
       <UCard class="w-full max-w-2xl mx-auto mb-4 p-6">
         <template #header>
           <h2 class="text-sm font-medium mb-3 opacity-80">String Fields</h2>
@@ -47,13 +49,38 @@
               placeholder="At least 2 characters"
             />
           </UFormField>
-          <UFormField name="stringFields.stringMin3" label="String Min 3 (min 3 chars)">
+          <UFormField name="stringFields.stringMin5" label="String Min 5 (min 5 chars)">
             <UInput
-              v-model="state.stringFields.stringMin3"
+              v-model="state.stringFields.stringMin5"
               class="w-full"
-              placeholder="At least 3 characters"
+              placeholder="At least 5 characters"
             />
           </UFormField>
+
+          <UFormField name="stringFields.stringMax1" label="String Max 1 (max 1 char)">
+            <UInput
+              v-model="state.stringFields.stringMax1"
+              class="w-full"
+              placeholder="At most 1 character"
+            />
+          </UFormField>
+
+          <UFormField name="stringFields.stringMax2" label="String Max 2 (max 2 chars)">
+            <UInput
+              v-model="state.stringFields.stringMax2"
+              class="w-full"
+              placeholder="At most 2 characters"
+            />
+          </UFormField>
+
+          <UFormField name="stringFields.stringMax5" label="String Max 5 (max 5 chars)">
+            <UInput
+              v-model="state.stringFields.stringMax5"
+              class="w-full"
+              placeholder="At most 5 characters"
+            />
+          </UFormField>
+
           <UFormField name="stringFields.regexLowercased" label="Lowercase Format">
             <UInput
               v-model="state.stringFields.regexLowercased"
@@ -76,20 +103,85 @@
               placeholder="Valid email"
             />
           </UFormField>
-          <UFormField name="stringFields.url" label="URL Format">
-            <UInput v-model="state.stringFields.url" type="url" class="w-full" placeholder="Valid URL" />
+        </div>
+      </UCard>
+
+      <!-- Date Fields Section -->
+      <UCard class="w-full max-w-2xl mx-auto mb-4 p-6">
+        <template #header>
+          <h2 class="text-sm font-medium mb-3 opacity-80">Date Fields</h2>
+        </template>
+        <div class="space-y-4">
+          <!-- Simple Date -->
+          <UFormField name="dates.date" label="Date">
+            <UPopover>
+              <UButton color="neutral" variant="subtle" icon="i-lucide-calendar">
+                {{ dateModel ? dateFormatter.format(dateModel.toDate(getLocalTimeZone())) : 'Select a date' }}
+              </UButton>
+
+              <template #content>
+                <UCalendar v-model="dateModel" class="p-2" />
+              </template>
+            </UPopover>
           </UFormField>
-          <UFormField name="stringFields.date" label="Date Format (YYYY-MM-DD)">
-            <UInput v-model="state.stringFields.date" class="w-full" placeholder="Valid date (YYYY-MM-DD)" />
+
+          <!-- Date with Min -->
+          <UFormField name="dates.dateMin" label="Date With Min (After 2000-01-01)">
+            <UPopover>
+              <UButton color="neutral" variant="subtle" icon="i-lucide-calendar">
+                {{
+                  dateMinModel
+                    ? dateFormatter.format(dateMinModel.toDate(getLocalTimeZone()))
+                    : 'Select a date'
+                }}
+              </UButton>
+
+              <template #content>
+                <UCalendar v-model="dateMinModel" class="p-2" />
+              </template>
+            </UPopover>
+          </UFormField>
+
+          <!-- Date with Max -->
+          <UFormField name="dates.dateMax" label="Date With Max (Before 2030-01-01)">
+            <UPopover>
+              <UButton color="neutral" variant="subtle" icon="i-lucide-calendar">
+                {{
+                  dateMaxModel
+                    ? dateFormatter.format(dateMaxModel.toDate(getLocalTimeZone()))
+                    : 'Select a date'
+                }}
+              </UButton>
+
+              <template #content>
+                <UCalendar v-model="dateMaxModel" class="p-2" />
+              </template>
+            </UPopover>
+          </UFormField>
+
+          <!-- Date Range -->
+          <UFormField
+            name="dates.dateRange"
+            label="Date Range"
+            :error-pattern="/^dates.dateRange\.(start|end)$/"
+          >
+            <UCalendar range v-model="dateRangeModel" class="p-2" selectionMode="range" />
+          </UFormField>
+
+          <!-- ISO Date -->
+          <UFormField name="dates.dateISO" label="ISO Date">
+            <UInput v-model="state.dates.dateISO" class="w-full" placeholder="Valid ISO date (YYYY-MM-DD)" />
           </UFormField>
         </div>
       </UCard>
 
+      <!-- Submit Button -->
       <div class="flex justify-center gap-3 mt-6">
-        <UButton type="submit" color="primary">Validate</UButton>
+        <UButton label="Validate" type="submit" color="primary" />
       </div>
     </UForm>
 
+    <!-- Validation Result -->
     <div v-if="result" class="mt-6 w-full flex flex-col items-center">
       <UAlert v-if="result.ok" color="success" variant="subtle" title="Valid!" class="w-full max-w-sm" />
       <UAlert
@@ -106,75 +198,171 @@
 
 <script setup lang="ts">
 import { reactive, ref, computed } from 'vue';
-import { type ComplexDto, complexSchema } from '@schema/complex';
-import { useI18n } from 'vue-i18n';
+import type { FormSubmitEvent, FormErrorEvent } from '@nuxt/ui';
+import { type ComplexData, type ComplexDto, complexSchema } from '@schema/complex';
+import { type CalendarDate, DateFormatter, parseDate, getLocalTimeZone } from '@internationalized/date';
+import type { DateRange } from 'reka-ui';
 
-const { t } = useI18n();
 const schema = complexSchema;
 const result = ref<{ ok: boolean; errors: any[] } | null>(null);
 const resultPretty = computed(() => (result.value ? JSON.stringify(result.value, null, 2) : ''));
 
-// Initial state to reset to
+const dateFormatter = new DateFormatter('en-US', { dateStyle: 'medium' });
+const timezone = getLocalTimeZone();
+
+const dateModel = computed<CalendarDate | undefined>({
+  get: () => {
+    if (state.dates.date && !isNaN(state.dates.date.getTime())) {
+      return parseDate(state.dates.date.toISOString().slice(0, 10));
+    }
+    return undefined;
+  },
+  set: (d) => {
+    state.dates.date = d?.toDate(timezone) ?? undefined;
+  },
+});
+
+const dateMinModel = computed<CalendarDate | undefined>({
+  get: () => {
+    if (state.dates.dateMin && !isNaN(state.dates.dateMin.getTime())) {
+      return parseDate(state.dates.dateMin.toISOString().slice(0, 10));
+    }
+    return undefined;
+  },
+  set: (d) => {
+    state.dates.dateMin = d?.toDate(timezone) ?? undefined;
+  },
+});
+
+const dateMaxModel = computed<CalendarDate | undefined>({
+  get: () => {
+    if (state.dates.dateMax && !isNaN(state.dates.dateMax.getTime())) {
+      return parseDate(state.dates.dateMax.toISOString().slice(0, 10));
+    }
+    return undefined;
+  },
+  set: (d) => {
+    state.dates.dateMax = d?.toDate(timezone) ?? undefined;
+  },
+});
+
+const dateRangeModel = computed<DateRange>({
+  get() {
+    const { start, end } = state.dates.dateRange;
+    return {
+      start: start ? parseDate(start.toISOString().slice(0, 10)) : undefined,
+      end: end ? parseDate(end.toISOString().slice(0, 10)) : undefined,
+    };
+  },
+  set(value) {
+    state.dates.dateRange.start = value.start ? new Date(value.start.toString()) : undefined;
+    state.dates.dateRange.end = value.end ? new Date(value.end.toString()) : undefined;
+  },
+});
+
 const initialState: ComplexDto = {
   stringFields: {
-    stringMin1: '',
-    stringMin2: '',
-    stringMin3: '',
-    regexLowercased: '',
-    regexUppercased: '',
-    email: '',
-    url: '',
-    date: '',
+    stringMin1: undefined,
+    stringMin2: undefined,
+    stringMin5: undefined,
+    stringMax1: undefined,
+    stringMax2: undefined,
+    stringMax5: undefined,
+    regexLowercased: undefined,
+    regexUppercased: undefined,
+    email: undefined,
+    url: undefined,
+  },
+  dates: {
+    date: undefined,
+    dateMin: undefined,
+    dateMax: undefined,
+    dateRange: {
+      start: undefined,
+      end: undefined,
+    },
+    dateISO: undefined,
   },
 };
 
 const state = reactive<ComplexDto>({ ...initialState });
 
 function fillInvalid() {
-  Object.assign(state, {
+  const invalidState: ComplexDto = {
     stringFields: {
       stringMin1: '',
       stringMin2: 'A',
-      stringMin3: 'AB',
+      stringMin5: 'AB',
+      stringMax1: 'AB',
+      stringMax2: 'ABC',
+      stringMax5: 'ABCDEFG',
       regexLowercased: 'ABC',
       regexUppercased: 'abc',
       email: 'not-an-email',
       url: 'not-a-url',
-      date: '2023-13',
     },
-  });
-  validateForm();
+    dates: {
+      date: undefined,
+      dateMin: new Date('1999-13-01'),
+      dateMax: new Date('3000-13-01'),
+      dateRange: {
+        start: undefined,
+        end: undefined,
+      },
+      dateISO: 'invalid-date',
+    },
+  };
+  Object.assign(state, invalidState);
 }
 
 function fillValid() {
-  Object.assign(state, {
+  const validState: ComplexDto = {
     stringFields: {
       stringMin1: 'A',
       stringMin2: 'AB',
-      stringMin3: 'ABC',
+      stringMin5: 'ABCDE',
+      stringMax1: 'A',
+      stringMax2: 'AB',
+      stringMax5: 'ABCDE',
       regexLowercased: 'abc',
       regexUppercased: 'ABC',
       email: 'test@example.com',
       url: 'https://example.com',
-      date: '2023-01-01',
     },
-  });
-  validateForm();
+    dates: {
+      date: new Date('2024-01-01'),
+      dateMin: new Date('2025-01-01'),
+      dateMax: new Date('2020-01-01'),
+      dateRange: {
+        start: new Date(),
+        end: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+      },
+      dateISO: '2024-01-01',
+    },
+  };
+  Object.assign(state, validState);
 }
 
 function resetForm() {
-  Object.assign(state, { ...initialState });
+  Object.assign(state, initialState);
   result.value = null;
 }
 
-function validateForm() {
-  const parsed = complexSchema.safeParse(state);
+async function onSubmit(event: FormSubmitEvent<ComplexData>) {
+  result.value = null;
+  console.log('parsing even data: ', event.data);
+  const parsed = await complexSchema.safeParseAsync(event.data);
+  console.log('data: ', parsed);
   result.value = parsed.success ? { ok: true, errors: [] } : { ok: false, errors: parsed.error.issues };
 }
 
-function onSubmit() {
-  const parsed = complexSchema.safeParse(state);
-  result.value = parsed.success ? { ok: true, errors: [] } : { ok: false, errors: parsed.error.issues };
+async function onError(event: FormErrorEvent) {
+  console.log('error: ', event.errors);
+  if (event?.errors?.[0]?.id) {
+    const element = document.getElementById(event.errors[0].id);
+    element?.focus();
+    element?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
 }
 
 definePageMeta({ layout: 'logged-in' });

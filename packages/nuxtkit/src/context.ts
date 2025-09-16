@@ -1,8 +1,9 @@
 import { type Resolver, createResolver, useLogger } from '@nuxt/kit';
 import type { Nuxt } from '@nuxt/schema';
+import type { DeepRequired } from '@nidavellirx/meowv-webkit';
 
 import { NUXT_MODULE_ID } from './constants';
-import type { NuxtKitOptions, DeepRequired } from './types';
+import type { NuxtKitOptions } from './types';
 
 export interface NuxtKitContext {
   resolver: Resolver;
@@ -23,7 +24,7 @@ export function prepareContext(userOptions: NuxtKitOptions, nuxt: Nuxt): NuxtKit
   return {
     resolver,
     logger: useLogger(NUXT_MODULE_ID),
-    userOptions,
+    userOptions: userOptions,
     options: options,
     isDev: nuxt.options.dev,
     isSSR: nuxt.options.ssr,

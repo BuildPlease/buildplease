@@ -37,8 +37,7 @@ export default defineNuxtConfig({
       unauthorizedMessageFallback: 'Unauthorized',
     },
     zodI18n: {
-      languageAlias: {},
-      customLocales: {},
+      useModuleLocale: true,
     },
   },
 
@@ -61,14 +60,6 @@ export default defineNuxtConfig({
         flag: 'gb',
       },
       {
-        code: 'fr-FR',
-        dir: 'ltr',
-        file: 'fr-FR.json',
-        language: 'fr-FR',
-        name: 'French',
-        flag: 'fr',
-      },
-      {
         code: 'sk',
         dir: 'ltr',
         file: 'sk.json',
@@ -83,6 +74,14 @@ export default defineNuxtConfig({
         language: 'cs-CZ',
         name: 'Čeština',
         flag: 'cz',
+      },
+      {
+        code: 'fr-FR',
+        dir: 'ltr',
+        file: 'fr-FR.json',
+        language: 'fr-FR',
+        name: 'French',
+        flag: 'fr',
       },
     ],
   },

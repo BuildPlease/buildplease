@@ -13,14 +13,14 @@ import type { NuxtKitContext } from '../context';
  * - required Nuxt module(s) are declared
  * - (optionally) extra packages are installed
  */
-export async function validateDependencies(ctx: NuxtKitContext, nuxt: Nuxt): Promise<void> {
+export async function prepareDependencies(context: NuxtKitContext, nuxt: Nuxt): Promise<void> {
   try {
-    await ensurePeerDepsInstalled(nuxt, ctx.resolver);
+    await ensurePeerDepsInstalled(nuxt, context.resolver);
     await ensureNuxtMajor(nuxt, 4);
     await ensureNuxtModule(nuxt, ['@nuxtjs/i18n', '@nuxtjs/i18n-edge']);
     await ensureNuxtModule(nuxt, ['@nuxt/ui']);
   } catch (error) {
-    ctx.logger.fatal(error instanceof Error ? error.message : String(error));
+    context.logger.fatal(error instanceof Error ? error.message : String(error));
   }
 }
 
@@ -64,16 +64,15 @@ export async function ensurePackagesInstalled(nuxt: Nuxt, names: string[]): Prom
 
   if (missing.length) {
     throw new Error(
-      `Missing dependenc${missing.length > 1 ? 'ies' : 'y'} ${missing.map((n) => `"${n}"`).join(', ')}. ` +
-        `Make sure ${missing.length > 1 ? 'they are' : 'it is'} installed.`,
+      `Missing dependencies: ${missing.map((n) => `"${n}"`).join(', ')}. Make sure they are installed.`,
     );
   }
 }
 
 /** Ensure all non-optional peerDependencies of *this package* are installed in the app. */
 export async function ensurePeerDepsInstalled(nuxt: Nuxt, resolver: Resolver): Promise<void> {
-  const pkgPath = resolver.resolve('../package.json');
-  const raw = await readFile(pkgPath, 'utf8');
+  const packagePath = resolver.resolve('../package.json');
+  const raw = await readFile(packagePath, 'utf8');
   const pkg = JSON.parse(raw) as {
     peerDependencies?: Record<string, string>;
     peerDependenciesMeta?: Record<string, { optional?: boolean }>;

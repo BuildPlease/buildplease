@@ -3,18 +3,18 @@ import { addImportsDir, addImports, addComponentsDir, type Resolver } from '@nux
 
 import type { NuxtKitContext } from '../context';
 
-export async function prepareAutoImports(ctx: NuxtKitContext, _nuxt: Nuxt) {
-  const resolver = ctx.resolver;
+export async function prepareAutoImports(context: NuxtKitContext, _nuxt: Nuxt) {
+  const resolver = context.resolver;
 
-  await prepareComponents(ctx);
+  await prepareComponents(context);
   await prepareNetworkingImports(resolver);
   await prepareInfrastructureImports(resolver);
   await prepareArchitectureImports(resolver);
   await prepareComposablesImports(resolver);
 }
 
-export async function prepareComponents(ctx: NuxtKitContext) {
-  const { resolver, options } = ctx;
+export async function prepareComponents(context: NuxtKitContext) {
+  const { resolver, options } = context;
 
   addComponentsDir({
     path: resolver.resolve('./runtime/components'),

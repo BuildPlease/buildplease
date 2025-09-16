@@ -1,4 +1,4 @@
-import type { HttpError } from '@nidavellirx/meowv-webkit';
+import type { HttpError, DeepRequired } from '@nidavellirx/meowv-webkit';
 
 /**
  * Public runtime config exposed by the NuxtKit module.
@@ -19,6 +19,7 @@ export interface NuxtKitOptions {
     /**
      * Optional prefix for all auto-imported components.
      * @default ""
+     * @example "NuxtKit"
      */
     prefix: string;
   };
@@ -34,11 +35,10 @@ export interface NuxtKitOptions {
    * Error message keys and fallbacks.
    */
   errors: {
-    /** 
-     * i18n key for a generic error. 
-     * @default "errors.generic" 
-     * @example "errors.generic" 
-  
+    /**
+     * i18n key for a generic error.
+     * @default "errors.generic"
+     * @example "errors.generic"
      */
     genericErrorKey?: string;
 
@@ -66,32 +66,79 @@ export interface NuxtKitOptions {
 
   /**
    * Zod i18n integration (keeps Zod’s locale in sync with Nuxt i18n).
-   * Region codes are stripped internally (e.g. "en-GB" → "en").
    */
-  zodI18n: {
-    /**
-     * Base-language remapping (after region is stripped).
-     * Use this when Zod lacks a locale and you want to reuse another.
-     * @default "{}"
-     * @example map Slovak ("sk") to Czech ("cs"): { "sk": "cs" }
-     */
-    languageAlias?: Record<string, string>;
+  zodI18n: ZodI18nOptions;
+}
 
-    /**
-     * Base-language → module path exporting a **custom Zod 4 locale factory**.
-     *
-     * The module MUST export:
-     *   `export default function () { return { localeError } }`
-     *
-     * where `localeError` is a function `(issue) => string` — same shape as Zod’s built-ins
-     * (e.g., `zod/v4/locales/cs.js`).
-     *
-     * Use this to supply real translations for languages Zod doesn’t ship.
-     * @default "{}"
-     * @example { "sk": "~/zod-locales/sk" }
-     */
-    customLocales?: Record<string, string>;
-  };
+/**
+ * Base options shared by Zod i18n variants.
+ */
+export interface ZodI18nOptions {
+  /**
+   * Register module’s built-in locales into @nuxtjs/i18n.
+   * Can be still overriden/extended via own files; i18n merges and later files win.
+   *
+   * - true  → auto-register built-ins for the app’s active locales (recommended default)
+   * - false → do not register; you must provide all strings
+   *
+   * @default true
+   */
+  useModuleLocale?: boolean;
+
+  /**
+   * Region → base language grouping used during locale normalization.
+   * Map a **base** language code to an array of its **region variants**.
+   * This lets the module treat, for example, `en-GB` and `en-US` as `en`
+   * when selecting Zod locales.
+   *
+   * @default
+   * {
+   *   en: ['en-GB', 'en-US'],
+   *   sk: ['sk-SK'],
+   *   cs: ['cs-CZ']
+   * }
+   *
+   * @example
+   * // Group common regioned locales under their base:
+   * {
+   *   en: ['en-GB', 'en-US'],
+   *   pt: ['pt-BR', 'pt-PT'],
+   * }
+   *
+   * @example
+   * // Minimal setup (only base codes used in the app):
+   * {}
+   */
+  languageAlias?: Record<string, string[]>;
+
+  /**
+   * Common key prefix where all Zod error strings live in your i18n files.
+   * We’ll resolve keys like:
+   *   `${keyPrefix}.common.invalid`
+   *   `${keyPrefix}.date.min.inclusive`
+   *   `${keyPrefix}.size.max.exclusive`
+   *   ...
+   *
+   * @default "zod"
+   * @example
+   * // If your translations live under "errors.validation.zod.*":
+   * keyPrefix: "errors.validation.zod"
+   *
+   * // Or a flat namespace like "validation":
+   * keyPrefix: "validation"
+   */
+  keyPrefix?: string;
+
+  /**
+   * Date-time formatting options used when rendering Zod’s date limits
+   * (`z.date().min()/max()` and `exact`) via `i18n.d(value, options)`.
+   * If omitted, the locale’s default `Intl.DateTimeFormat` is used.
+   *
+   * @default { day: "numeric", month: "long", year: "numeric" }
+   * @example
+   * { dateStyle: "medium", timeZone: "Europe/Bratislava" }
+   */
+  dateFormat?: Intl.DateTimeFormatOptions;
 }
 
 /**
@@ -105,15 +152,3 @@ export type UnauthorizedHookContext = {
   /** Redirect helper. */
   redirect: (to: string) => Promise<void>;
 };
-
-type Primitive = string | number | boolean | bigint | symbol | null | undefined;
-
-export type DeepRequired<T> = T extends (...args: unknown[]) => unknown
-  ? T
-  : T extends Primitive
-    ? T
-    : T extends Array<infer U>
-      ? Array<DeepRequired<U>>
-      : T extends Array<infer U>
-        ? Array<DeepRequired<U>>
-        : { [K in keyof T]-?: DeepRequired<NonNullable<T[K]>> };

@@ -3,13 +3,16 @@ import type { HookResult } from '@nuxt/schema';
 
 import type { NuxtKitOptions, NuxtKitPublicRuntimeConfig, UnauthorizedHookContext } from './types';
 import { NUXT_MODULE_ID, NUXT_CONFIG_KEY, DEFAULT_OPTIONS } from './constants';
-
 import { prepareContext } from './context';
-import { prepareHooks } from './prepare/hooks';
-import { prepareRuntime } from './prepare/runtime';
-import { prepareRuntimeConfig } from './prepare/runtime-config';
-import { prepareAutoImports } from './prepare/auto-imports';
-import { validateDependencies } from './prepare/dependencies';
+import {
+  prepareHooks,
+  prepareRuntime,
+  prepareRuntimeConfig,
+  prepareAutoImports,
+  prepareDependencies,
+  prepareI18n,
+  prepareZodLocales,
+} from './prepare';
 
 export default defineNuxtModule<ModuleOptions>({
   meta: {
@@ -21,33 +24,43 @@ export default defineNuxtModule<ModuleOptions>({
   },
   defaults: DEFAULT_OPTIONS,
   async setup(options, nuxt) {
-    const ctx = prepareContext(options, nuxt);
+    const context = prepareContext(options, nuxt);
+
+    /**
+     * Validate dependencies availability
+     */
+    await prepareDependencies(context, nuxt);
 
     /**
      * Setup build hooks
      */
-    prepareHooks(ctx, nuxt);
+    await prepareHooks(context, nuxt);
 
     /**
      * Setup runtime config
      */
     // for public
-    prepareRuntimeConfig(ctx, nuxt);
+    await prepareRuntimeConfig(context, nuxt);
 
     /**
-     * Validate dependencies availability
+     * Validate i18n availability
      */
-    validateDependencies(ctx, nuxt);
+    const i18nOptions = await prepareI18n(context, nuxt);
+
+    /**
+     * Add zod locales based on i18n locales
+     */
+    await prepareZodLocales(context, nuxt, i18nOptions);
 
     /**
      * Add plugin and templates
      */
-    prepareRuntime(ctx, nuxt);
+    await prepareRuntime(context, nuxt);
 
     /**
      * auto imports
      */
-    await prepareAutoImports(ctx, nuxt);
+    await prepareAutoImports(context, nuxt);
   },
 });
 
@@ -58,7 +71,7 @@ export interface ModulePublicRuntimeConfig {
 }
 
 export interface ModuleRuntimeHooks {
-  'meowv:unauthorized': (ctx: UnauthorizedHookContext) => HookResult;
+  'meowv:unauthorized': (context: UnauthorizedHookContext) => HookResult;
 }
 
 declare module '#app' {

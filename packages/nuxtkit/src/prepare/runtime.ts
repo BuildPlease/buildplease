@@ -5,8 +5,8 @@ import type { NuxtKitContext } from '../context';
 
 type Entry = Readonly<{ alias: string; path: string }>;
 
-export function prepareRuntime(ctx: NuxtKitContext, nuxt: Nuxt) {
-  const { resolver } = ctx;
+export async function prepareRuntime(context: NuxtKitContext, nuxt: Nuxt) {
+  const { resolver } = context;
   const r = (p: string) => resolver.resolve(p);
 
   addPlugin({ src: r('./runtime/plugins/di'), mode: 'all', order: 0 });
@@ -14,7 +14,6 @@ export function prepareRuntime(ctx: NuxtKitContext, nuxt: Nuxt) {
 
   const entries: Entry[] = [{ alias: '#nuxtkit', path: './runtime' }];
   const alias = Object.fromEntries(entries.map(({ alias, path }) => [alias, r(path)]));
-
   Object.assign(nuxt.options.alias, alias);
   nuxt.options.build.transpile.push(...Object.values(alias));
 

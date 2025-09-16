@@ -31,7 +31,7 @@
   "dependencies": {
     "@nidavellirx/meowv-webkit": "workspace:^",
     "@nuxt/kit": "4.1.1",
-    "@iconify-json/flag": "^1.2.9",
+    "@iconify-json/flag": "1.2.9",
     "defu": "6.1.4",
     "reflect-metadata": "0.2.2"
   },

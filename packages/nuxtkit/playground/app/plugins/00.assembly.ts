@@ -3,7 +3,7 @@ import { DashboardAssembly } from '@feature/dashboard/assembly';
 
 export default defineNuxtPlugin({
   name: 'assembly-plugin',
-  setup() {
+  setup(_nuxt) {
     const scopeController = useScopeController();
     const container = scopeController.container;
     const assemblies = [new LoginAssembly(), new DashboardAssembly()];

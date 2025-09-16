@@ -2,7 +2,7 @@
   <footer class="border-t border-gray-200/50 dark:border-gray-800/60 text-sm">
     <UContainer class="py-6">
       <div class="grid grid-cols-1 sm:grid-cols-3 items-end">
-        <!-- Left spacer (for balance on desktop) -->
+        <!-- Left -->
         <div class="hidden sm:block"></div>
 
         <!-- Center -->

@@ -142,6 +142,14 @@ export class DateTime implements JSONSerializable {
     return getUnixTime(this.date);
   }
 
+  /**
+   * Returns the time value in milliseconds (similar to getTime() method of Date).
+   * @returns {number} The time in milliseconds.
+   */
+  public getTime(): number {
+    return this.date.getTime();
+  }
+
   /** @returns An ISO‐8601 string. */
   public toISOString(): string {
     return formatISO(this.date);

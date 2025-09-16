@@ -1,6 +1,6 @@
 <template>
-  <UContainer class="pt-10 pb-4">
-    <div class="max-w-md mx-auto space-y-8">
+  <UContainer class="flex pt-10 items-center">
+    <div class="w-full max-w-4xl space-y-8 px-4">
       <!-- Welcome Card -->
       <UCard class="text-center">
         <h1 class="text-2xl font-semibold">{{ t('pages.dashboard.welcomeBack') }}</h1>

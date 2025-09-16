@@ -4,7 +4,9 @@ import { defu } from 'defu';
 import type { NuxtKitPublicRuntimeConfig } from '../types';
 import type { NuxtKitContext } from '../context';
 
-export function prepareRuntimeConfig({ options }: NuxtKitContext, nuxt: Nuxt) {
+export async function prepareRuntimeConfig(context: NuxtKitContext, nuxt: Nuxt) {
+  const options = context.options;
+
   const defaults = {
     debug: options.debug,
     components: options.components,
