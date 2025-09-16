@@ -1,13 +1,13 @@
 <template>
-  <footer class="border-t border-gray-200/50 dark:border-gray-800/60 text-sm">
+  <footer class="border-t border-gray-200/50 text-sm dark:border-gray-800/60">
     <UContainer class="py-6">
-      <div class="grid grid-cols-1 sm:grid-cols-3 items-end">
+      <div class="grid grid-cols-1 items-end sm:grid-cols-3">
         <!-- Left -->
         <div class="hidden sm:block"></div>
 
         <!-- Center -->
         <div
-          class="justify-self-center text-sm text-gray-500 dark:text-gray-400 flex flex-col items-center gap-2"
+          class="flex flex-col items-center gap-2 justify-self-center text-sm text-gray-500 dark:text-gray-400"
         >
           <div>
             {{ t('common.copyright', { year }) }}
@@ -15,7 +15,7 @@
         </div>
 
         <!-- Right -->
-        <div class="justify-self-end self-end mt-4 sm:mt-0">
+        <div class="mt-4 self-end justify-self-end sm:mt-0">
           <NuxtKitLanguageSwitcher />
         </div>
       </div>

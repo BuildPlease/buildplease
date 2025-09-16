@@ -1,6 +1,5 @@
 import { inject, injectable } from 'inversify';
-import type { FastifyInstance, FastifyBaseLogger } from 'fastify';
-import Fastify from 'fastify';
+import Fastify, { type FastifyInstance, type FastifyBaseLogger } from 'fastify';
 
 import Plugins from './plugins';
 

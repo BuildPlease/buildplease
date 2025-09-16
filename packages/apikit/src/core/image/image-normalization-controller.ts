@@ -1,9 +1,7 @@
-import type { Readable } from 'stream';
-import { PassThrough } from 'stream';
+import { type Readable, PassThrough } from 'stream';
 import { pipeline as pipelineAsync } from 'stream/promises';
 
-import type { Sharp } from 'sharp';
-import sharp from 'sharp';
+import sharp, { type Sharp } from 'sharp';
 import { injectable } from 'inversify';
 
 import { FormatType } from '#/formatter';

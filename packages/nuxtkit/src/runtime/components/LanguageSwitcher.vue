@@ -1,12 +1,24 @@
 <template>
   <UDropdownMenu :items="items">
-    <UButton variant="outline" color="neutral" trailing-icon="i-lucide-chevron-down">
-      <UIcon v-if="currentFlag" :name="currentFlag" dynamic />
+    <UButton
+      variant="outline"
+      color="neutral"
+      trailing-icon="i-lucide-chevron-down"
+    >
+      <UIcon
+        v-if="currentFlag"
+        :name="currentFlag"
+        dynamic
+      />
       {{ currentLabel }}
     </UButton>
 
     <template #item="{ item }">
-      <UIcon v-if="item.icon" :name="item.icon" dynamic />
+      <UIcon
+        v-if="item.icon"
+        :name="item.icon"
+        dynamic
+      />
       <span class="truncate">{{ item.label }}</span>
     </template>
   </UDropdownMenu>

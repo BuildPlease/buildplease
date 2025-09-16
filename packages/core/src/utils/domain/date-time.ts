@@ -1,5 +1,3 @@
-export * from 'date-fns';
-
 import {
   type FormatOptions,
   type FromUnixTimeOptions,
@@ -66,6 +64,8 @@ import {
 } from 'date-fns';
 
 import type { JSONSerializable } from '@/utils';
+
+export * from 'date-fns';
 
 /**
  * A date-and-time utility class offering parsing, formatting, and arithmetic.

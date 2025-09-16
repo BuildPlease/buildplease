@@ -1,8 +1,11 @@
 <template>
   <UApp>
     <NuxtLayout class>
-      <div class="min-h-dvh flex flex-col">
-        <NuxtPage class="flex-1 flex flex-col" :transition="{ onBeforeEnter }" />
+      <div class="flex min-h-dvh flex-col">
+        <NuxtPage
+          class="flex flex-1 flex-col"
+          :transition="{ onBeforeEnter }"
+        />
       </div>
 
       <!-- Footer -->
@@ -12,9 +15,21 @@
 
   <!-- Global notifications (unchanged) -->
   <div class="notifications">
-    <div v-for="n in items" :key="n.id" class="notification" :class="n.type" role="alert">
+    <div
+      v-for="n in items"
+      :key="n.id"
+      class="notification"
+      :class="n.type"
+      role="alert"
+    >
       <span>{{ n.message }}</span>
-      <button class="close" @click="remove(n.id)" aria-label="Dismiss">×</button>
+      <button
+        class="close"
+        @click="remove(n.id)"
+        aria-label="Dismiss"
+      >
+        ×
+      </button>
     </div>
   </div>
 </template>

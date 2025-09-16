@@ -1,7 +1,6 @@
 import 'reflect-metadata';
 
-import type { Assembly } from '@nidavellirx/meowv-core';
-import { MEOWV_CORE_INITIALIZE } from '@nidavellirx/meowv-core';
+import { type Assembly, MEOWV_CORE_INITIALIZE } from '@nidavellirx/meowv-core';
 
 // MARK: - Exports
 

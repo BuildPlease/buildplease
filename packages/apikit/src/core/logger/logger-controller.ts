@@ -1,8 +1,7 @@
 import path from 'node:path';
 
 import { injectable, inject } from 'inversify';
-import type { Logger, Level } from 'pino';
-import pino, { type Bindings, type LoggerOptions } from 'pino';
+import pino, { type Logger, type Level, type Bindings, type LoggerOptions } from 'pino';
 
 import { filterObject, isEmptyObject } from '@nidavellirx/meowv-core';
 

@@ -1,21 +1,36 @@
 <template>
-  <UContainer class="flex-1 flex items-center justify-center py-8">
-    <div class="flex flex-col items-center w-full max-w-2xl mb-6">
-      <div class="flex items-center justify-between w-full mb-6">
-        <div class="flex flex-col items-start w-full">
+  <UContainer class="flex flex-1 items-center justify-center py-8">
+    <div class="mb-6 flex w-full max-w-2xl flex-col items-center">
+      <div class="mb-6 flex w-full items-center justify-between">
+        <div class="flex w-full flex-col items-start">
           <h1 class="text-xl font-semibold">Complex Validation</h1>
-          <p class="text-sm opacity-70 text-left w-full">
+          <p class="w-full text-left text-sm opacity-70">
             Strings, numbers, dates, enums, arrays, objects, unions, refine
           </p>
         </div>
         <div class="flex items-center gap-2">
-          <UButton size="xs" variant="soft" class="h-10 w-auto whitespace-nowrap" @click="fillInvalid">
+          <UButton
+            size="xs"
+            variant="soft"
+            class="h-10 w-auto whitespace-nowrap"
+            @click="fillInvalid"
+          >
             Fill Invalid
           </UButton>
-          <UButton size="xs" variant="soft" class="h-10 w-auto whitespace-nowrap" @click="fillValid">
+          <UButton
+            size="xs"
+            variant="soft"
+            class="h-10 w-auto whitespace-nowrap"
+            @click="fillValid"
+          >
             Fill Valid
           </UButton>
-          <UButton size="xs" variant="soft" class="h-10 w-auto whitespace-nowrap" @click="resetForm">
+          <UButton
+            size="xs"
+            variant="soft"
+            class="h-10 w-auto whitespace-nowrap"
+            @click="resetForm"
+          >
             Reset
           </UButton>
         </div>
@@ -25,31 +40,40 @@
     <UForm
       :schema="schema"
       :state="state as ComplexData"
-      class="space-y-8 w-full flex flex-col items-center mt-8"
+      class="mt-8 flex w-full flex-col items-center space-y-8"
       @submit="onSubmit"
       @error="onError"
     >
       <!-- String Fields Section -->
-      <UCard class="w-full max-w-2xl mx-auto mb-4 p-6">
+      <UCard class="mx-auto mb-4 w-full max-w-2xl p-6">
         <template #header>
-          <h2 class="text-sm font-medium mb-3 opacity-80">String Fields</h2>
+          <h2 class="mb-3 text-sm font-medium opacity-80">String Fields</h2>
         </template>
         <div class="space-y-4">
-          <UFormField name="stringFields.stringMin1" label="String Min 1 (min 1 char)">
+          <UFormField
+            name="stringFields.stringMin1"
+            label="String Min 1 (min 1 char)"
+          >
             <UInput
               v-model="state.stringFields.stringMin1"
               class="w-full"
               placeholder="At least 1 character"
             />
           </UFormField>
-          <UFormField name="stringFields.stringMin2" label="String Min 2 (min 2 chars)">
+          <UFormField
+            name="stringFields.stringMin2"
+            label="String Min 2 (min 2 chars)"
+          >
             <UInput
               v-model="state.stringFields.stringMin2"
               class="w-full"
               placeholder="At least 2 characters"
             />
           </UFormField>
-          <UFormField name="stringFields.stringMin5" label="String Min 5 (min 5 chars)">
+          <UFormField
+            name="stringFields.stringMin5"
+            label="String Min 5 (min 5 chars)"
+          >
             <UInput
               v-model="state.stringFields.stringMin5"
               class="w-full"
@@ -57,7 +81,10 @@
             />
           </UFormField>
 
-          <UFormField name="stringFields.stringMax1" label="String Max 1 (max 1 char)">
+          <UFormField
+            name="stringFields.stringMax1"
+            label="String Max 1 (max 1 char)"
+          >
             <UInput
               v-model="state.stringFields.stringMax1"
               class="w-full"
@@ -65,7 +92,10 @@
             />
           </UFormField>
 
-          <UFormField name="stringFields.stringMax2" label="String Max 2 (max 2 chars)">
+          <UFormField
+            name="stringFields.stringMax2"
+            label="String Max 2 (max 2 chars)"
+          >
             <UInput
               v-model="state.stringFields.stringMax2"
               class="w-full"
@@ -73,7 +103,10 @@
             />
           </UFormField>
 
-          <UFormField name="stringFields.stringMax5" label="String Max 5 (max 5 chars)">
+          <UFormField
+            name="stringFields.stringMax5"
+            label="String Max 5 (max 5 chars)"
+          >
             <UInput
               v-model="state.stringFields.stringMax5"
               class="w-full"
@@ -81,21 +114,30 @@
             />
           </UFormField>
 
-          <UFormField name="stringFields.regexLowercased" label="Lowercase Format">
+          <UFormField
+            name="stringFields.regexLowercased"
+            label="Lowercase Format"
+          >
             <UInput
               v-model="state.stringFields.regexLowercased"
               class="w-full"
               placeholder="Lowercase letters only"
             />
           </UFormField>
-          <UFormField name="stringFields.regexUppercased" label="Uppercase Format">
+          <UFormField
+            name="stringFields.regexUppercased"
+            label="Uppercase Format"
+          >
             <UInput
               v-model="state.stringFields.regexUppercased"
               class="w-full"
               placeholder="Uppercase letters only"
             />
           </UFormField>
-          <UFormField name="stringFields.email" label="Email Format">
+          <UFormField
+            name="stringFields.email"
+            label="Email Format"
+          >
             <UInput
               v-model="state.stringFields.email"
               type="email"
@@ -107,28 +149,45 @@
       </UCard>
 
       <!-- Date Fields Section -->
-      <UCard class="w-full max-w-2xl mx-auto mb-4 p-6">
+      <UCard class="mx-auto mb-4 w-full max-w-2xl p-6">
         <template #header>
-          <h2 class="text-sm font-medium mb-3 opacity-80">Date Fields</h2>
+          <h2 class="mb-3 text-sm font-medium opacity-80">Date Fields</h2>
         </template>
         <div class="space-y-4">
           <!-- Simple Date -->
-          <UFormField name="dates.date" label="Date">
+          <UFormField
+            name="dates.date"
+            label="Date"
+          >
             <UPopover>
-              <UButton color="neutral" variant="subtle" icon="i-lucide-calendar">
+              <UButton
+                color="neutral"
+                variant="subtle"
+                icon="i-lucide-calendar"
+              >
                 {{ dateModel ? dateFormatter.format(dateModel.toDate(getLocalTimeZone())) : 'Select a date' }}
               </UButton>
 
               <template #content>
-                <UCalendar v-model="dateModel" class="p-2" />
+                <UCalendar
+                  v-model="dateModel"
+                  class="p-2"
+                />
               </template>
             </UPopover>
           </UFormField>
 
           <!-- Date with Min -->
-          <UFormField name="dates.dateMin" label="Date With Min (After 2000-01-01)">
+          <UFormField
+            name="dates.dateMin"
+            label="Date With Min (After 2000-01-01)"
+          >
             <UPopover>
-              <UButton color="neutral" variant="subtle" icon="i-lucide-calendar">
+              <UButton
+                color="neutral"
+                variant="subtle"
+                icon="i-lucide-calendar"
+              >
                 {{
                   dateMinModel
                     ? dateFormatter.format(dateMinModel.toDate(getLocalTimeZone()))
@@ -137,15 +196,25 @@
               </UButton>
 
               <template #content>
-                <UCalendar v-model="dateMinModel" class="p-2" />
+                <UCalendar
+                  v-model="dateMinModel"
+                  class="p-2"
+                />
               </template>
             </UPopover>
           </UFormField>
 
           <!-- Date with Max -->
-          <UFormField name="dates.dateMax" label="Date With Max (Before 2030-01-01)">
+          <UFormField
+            name="dates.dateMax"
+            label="Date With Max (Before 2030-01-01)"
+          >
             <UPopover>
-              <UButton color="neutral" variant="subtle" icon="i-lucide-calendar">
+              <UButton
+                color="neutral"
+                variant="subtle"
+                icon="i-lucide-calendar"
+              >
                 {{
                   dateMaxModel
                     ? dateFormatter.format(dateMaxModel.toDate(getLocalTimeZone()))
@@ -154,7 +223,10 @@
               </UButton>
 
               <template #content>
-                <UCalendar v-model="dateMaxModel" class="p-2" />
+                <UCalendar
+                  v-model="dateMaxModel"
+                  class="p-2"
+                />
               </template>
             </UPopover>
           </UFormField>
@@ -165,25 +237,50 @@
             label="Date Range"
             :error-pattern="/^dates.dateRange\.(start|end)$/"
           >
-            <UCalendar range v-model="dateRangeModel" class="p-2" selectionMode="range" />
+            <UCalendar
+              range
+              v-model="dateRangeModel"
+              class="p-2"
+              selectionMode="range"
+            />
           </UFormField>
 
           <!-- ISO Date -->
-          <UFormField name="dates.dateISO" label="ISO Date">
-            <UInput v-model="state.dates.dateISO" class="w-full" placeholder="Valid ISO date (YYYY-MM-DD)" />
+          <UFormField
+            name="dates.dateISO"
+            label="ISO Date"
+          >
+            <UInput
+              v-model="state.dates.dateISO"
+              class="w-full"
+              placeholder="Valid ISO date (YYYY-MM-DD)"
+            />
           </UFormField>
         </div>
       </UCard>
 
       <!-- Submit Button -->
-      <div class="flex justify-center gap-3 mt-6">
-        <UButton label="Validate" type="submit" color="primary" />
+      <div class="mt-6 flex justify-center gap-3">
+        <UButton
+          label="Validate"
+          type="submit"
+          color="primary"
+        />
       </div>
     </UForm>
 
     <!-- Validation Result -->
-    <div v-if="result" class="mt-6 w-full flex flex-col items-center">
-      <UAlert v-if="result.ok" color="success" variant="subtle" title="Valid!" class="w-full max-w-sm" />
+    <div
+      v-if="result"
+      class="mt-6 flex w-full flex-col items-center"
+    >
+      <UAlert
+        v-if="result.ok"
+        color="success"
+        variant="subtle"
+        title="Valid!"
+        class="w-full max-w-sm"
+      />
       <UAlert
         v-else
         color="error"
@@ -191,7 +288,7 @@
         :title="`Errors (${result.errors.length})`"
         class="w-full max-w-sm"
       />
-      <pre class="mt-2 text-xs opacity-80 overflow-auto w-full max-w-sm text-left">{{ resultPretty }}</pre>
+      <pre class="mt-2 w-full max-w-sm overflow-auto text-left text-xs opacity-80">{{ resultPretty }}</pre>
     </div>
   </UContainer>
 </template>

@@ -1,7 +1,7 @@
 name: Publish Packages
 
 on:
-  workflow_dispatch: # Manual Trigger Only
+  workflow_dispatch: {} # Manual Trigger Only
 
 jobs:
   publish:
@@ -29,7 +29,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           registry-url: 'https://npm.pkg.github.com'
-          cache: 'pnpm'
+          cache: pnpm
 
       # Install Dependencies
       - name: Install dependencies

@@ -1,5 +1,5 @@
 <template>
-  <UContainer class="flex pt-10 items-center">
+  <UContainer class="flex items-center pt-10">
     <div class="w-full max-w-4xl space-y-8 px-4">
       <!-- Welcome Card -->
       <UCard class="text-center">

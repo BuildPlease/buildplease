@@ -1,37 +1,37 @@
 {
-   "errors":{
-      "common":{
-         "not_found":"Požadovaný obsah sa nenašiel",
-         "already_exists":"Zadaný obsah už existuje"
-      },
-      "server":{
-         "internal":"Vyskytla sa interná chyba na serveri",
-         "unavailable":"Služba je momentálne nedostupná Skúste to neskôr",
-         "dependency_failed":"Zlyhala externá služba alebo závislosť",
-         "timeout":"Uplynul časový limit na odpoveď zo servera"
-      },
-      "limit":{
-         "too_many_requests":"Bolo odoslaných príliš veľa požiadaviek. Skúste to prosím neskôr"
-      },
-      "auth":{
-         "unauthorized":"Nemáte oprávnenie na vykonanie tejto akcie",
-         "forbidden":"K tomuto zdroju nemáte prístup"
-      },
-      "validation":{
-         "bad_request":"Odoslané údaje nie sú platné",
-         "invalid_json_syntax":"Formát JSON nie je správny",
-         "invalid_properties":"Niektoré zadané údaje sú neplatné",
-         "invalid_format":"Zadaný formát nie je platný",
-         "invalid_date_format":"Formát dátumu je nesprávny",
-         "invalid_password":"Zadané heslo je nesprávne",
-         "invalid_password_new_same_as_old":"Nové heslo sa musí líšiť od pôvodného",
-         "invalid_phone_number_format":"Formát telefónneho čísla nie je správny",
-         "invalid_phone_new_same_as_old":"Nové číslo sa musí líšiť od pôvodného",
-         "invalid_email_format":"Formát e-mailu nie je správny",
-         "invalid_email_new_same_as_old":"Nový e-mail sa musí líšiť od aktuálneho"
-      },
-      "format":{
-         "unsupported":"Nepodporovaný formát alebo prípona"
-      }
-   }
+  "errors": {
+    "common": {
+      "not_found": "Požadovaný obsah sa nenašiel",
+      "already_exists": "Zadaný obsah už existuje"
+    },
+    "server": {
+      "internal": "Vyskytla sa interná chyba na serveri",
+      "unavailable": "Služba je momentálne nedostupná Skúste to neskôr",
+      "dependency_failed": "Zlyhala externá služba alebo závislosť",
+      "timeout": "Uplynul časový limit na odpoveď zo servera"
+    },
+    "limit": {
+      "too_many_requests": "Bolo odoslaných príliš veľa požiadaviek. Skúste to prosím neskôr"
+    },
+    "auth": {
+      "unauthorized": "Nemáte oprávnenie na vykonanie tejto akcie",
+      "forbidden": "K tomuto zdroju nemáte prístup"
+    },
+    "validation": {
+      "bad_request": "Odoslané údaje nie sú platné",
+      "invalid_json_syntax": "Formát JSON nie je správny",
+      "invalid_properties": "Niektoré zadané údaje sú neplatné",
+      "invalid_format": "Zadaný formát nie je platný",
+      "invalid_date_format": "Formát dátumu je nesprávny",
+      "invalid_password": "Zadané heslo je nesprávne",
+      "invalid_password_new_same_as_old": "Nové heslo sa musí líšiť od pôvodného",
+      "invalid_phone_number_format": "Formát telefónneho čísla nie je správny",
+      "invalid_phone_new_same_as_old": "Nové číslo sa musí líšiť od pôvodného",
+      "invalid_email_format": "Formát e-mailu nie je správny",
+      "invalid_email_new_same_as_old": "Nový e-mail sa musí líšiť od aktuálneho"
+    },
+    "format": {
+      "unsupported": "Nepodporovaný formát alebo prípona"
+    }
+  }
 }

@@ -1,5 +1,5 @@
 import type sharp from 'sharp';
-import type { Sharp } from 'sharp';
+import { type Sharp } from 'sharp';
 
 /**
  * Shared options applied to every image configuration.

@@ -1,8 +1,7 @@
 import fs from 'node:fs';
 
 import { inject, injectable } from 'inversify';
-import type { InitOptions } from 'i18next';
-import i18next from 'i18next';
+import i18next, { type InitOptions } from 'i18next';
 import merge from 'lodash.merge';
 
 import { ApiKitSymbols } from '#/di';

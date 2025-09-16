@@ -1,15 +1,27 @@
 <template>
-  <UContainer class="flex-1 flex items-center justify-center py-8">
+  <UContainer class="flex flex-1 items-center justify-center py-8">
     <UCard class="w-full max-w-md shadow-lg">
       <template #header>
         <div class="flex items-center justify-center gap-2">
-          <UIcon name="i-lucide-lock" class="h-6 w-6" />
+          <UIcon
+            name="i-lucide-lock"
+            class="h-6 w-6"
+          />
           <h1 class="text-2xl font-semibold">{{ t('pages.login.title') }}</h1>
         </div>
       </template>
 
-      <UForm :schema="loginSchema" :state="state" class="space-y-5 w-full" @submit="onSubmit">
-        <UFormField :label="t('common.email')" name="email" class="w-full">
+      <UForm
+        :schema="loginSchema"
+        :state="state"
+        class="w-full space-y-5"
+        @submit="onSubmit"
+      >
+        <UFormField
+          :label="t('common.email')"
+          name="email"
+          class="w-full"
+        >
           <UInput
             v-model="state.email"
             type="email"
@@ -19,7 +31,11 @@
           />
         </UFormField>
 
-        <UFormField :label="t('common.password')" name="password" class="w-full">
+        <UFormField
+          :label="t('common.password')"
+          name="password"
+          class="w-full"
+        >
           <UInput
             v-model="state.password"
             type="password"
@@ -29,11 +45,22 @@
           />
         </UFormField>
 
-        <UButton type="submit" block size="lg" color="primary" :loading="state.isLoading">
+        <UButton
+          type="submit"
+          block
+          size="lg"
+          color="primary"
+          :loading="state.isLoading"
+        >
           {{ t('pages.login.button') }}
         </UButton>
 
-        <UAlert v-if="state.error" color="error" variant="soft" :title="state.error" />
+        <UAlert
+          v-if="state.error"
+          color="error"
+          variant="soft"
+          :title="state.error"
+        />
       </UForm>
     </UCard>
   </UContainer>
