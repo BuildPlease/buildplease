@@ -81,7 +81,7 @@ export class DtoValidationControllerImpl implements DtoValidationController {
    */
   private handleError(error: unknown): never {
     if (error instanceof ZodError) {
-      const errors = z.treeifyError(error); // your helper; produces { field: string[] }
+      const errors = z.prettifyError(error);
       const details: Record<string, string[]> = {};
 
       for (const [field, msgs] of Object.entries(errors)) {

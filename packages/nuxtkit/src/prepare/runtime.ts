@@ -3,20 +3,19 @@ import { addPlugin } from '@nuxt/kit';
 
 import type { NuxtKitContext } from '../context';
 
-export function prepareRuntime(ctx: NuxtKitContext, nuxt: Nuxt) {
-  const { resolver } = ctx;
+type Entry = Readonly<{ alias: string; path: string }>;
 
-  addPlugin({
-    src: resolver.resolve('./runtime/plugins/di'),
-    mode: 'all',
-    order: 0,
-  });
+export async function prepareRuntime(context: NuxtKitContext, nuxt: Nuxt) {
+  const { resolver } = context;
+  const r = (p: string) => resolver.resolve(p);
 
-  // For composables
-  nuxt.options.alias['#internal-nuxtkit-types'] = resolver.resolve('./types');
+  addPlugin({ src: r('./runtime/plugins/di'), mode: 'all', order: 0 });
+  addPlugin({ src: r('./runtime/plugins/zod-i18n'), mode: 'all', order: 1 });
 
-  nuxt.options.build.transpile.push('#internal-nuxtkit-types');
-  nuxt.options.build.transpile.push(resolver.resolve('./runtime'));
+  const entries: Entry[] = [{ alias: '#nuxtkit', path: './runtime' }];
+  const alias = Object.fromEntries(entries.map(({ alias, path }) => [alias, r(path)]));
+  Object.assign(nuxt.options.alias, alias);
+  nuxt.options.build.transpile.push(...Object.values(alias));
 
   nuxt.options.imports.transform ??= {};
   nuxt.options.imports.transform.include ??= [];

@@ -13,7 +13,7 @@ export type UnauthorizedOperation = AsyncOperation<void, void>;
 @injectable()
 export class UnauthorizedEndpoint implements RemoteEndpoint<void, void, void, void> {
   async makeRequest(_input: void, _options?: RequestConfig): Promise<void> {
-    await delay(2000); // 2s demo delay
+    await delay(2000);
 
     throw new HttpError({
       code: 'unauthorized_error',

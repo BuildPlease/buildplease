@@ -1,0 +1,33 @@
+{
+  "common": {
+    "email": "E-mail",
+    "password": "Mot de passe",
+    "login": "Se connecter",
+    "copyright": "© {year} Nidavellir © Meowv"
+  },
+  "placeholder": {
+    "email": "Votre e-mail",
+    "password": "Votre mot de passe"
+  },
+  "navigation": {
+    "dashboard": "Tableau de bord",
+    "complexValidation": "Validation complexe"
+  },
+  "pages": {
+    "home": {
+      "title": "Bienvenue",
+      "description": "Ceci est la page d’accueil du Meowv NuxtKit Playground. Découvrez MVVM + une architecture propre avec les composants Nuxt UI."
+    },
+    "login": {
+      "title": "Connexion",
+      "button": "Se connecter"
+    },
+    "dashboard": {
+      "welcomeBack": "Bon retour !",
+      "loginSuccess": "Vous vous êtes connecté avec succès.",
+      "operations": "Opérations",
+      "goHome": "Retour à l’accueil",
+      "testUnauthorized": "Tester une opération non autorisée"
+    }
+  }
+}

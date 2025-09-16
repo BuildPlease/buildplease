@@ -1,84 +1,154 @@
-import type { HttpError } from '@nidavellirx/meowv-webkit';
+import type { HttpError, DeepRequired } from '@nidavellirx/meowv-webkit';
 
 /**
- * Configuration for the public runtime settings in the NuxtKit module.
+ * Public runtime config exposed by the NuxtKit module.
  */
-export interface NuxtKitPublicRuntimeConfig {
-  /**
-   * List of status codes that are considered unauthorized.
-   *
-   * @default [401]
-   * @example [401, 403]
-   */
-  unauthorizedStatusCodes: NuxtKitOptions['unauthorizedStatusCodes'];
-
-  /**
-   * The error messages used by the application.
-   * This object contains localized keys for various types of errors.
-   */
-  errors: NuxtKitOptions['errors'];
-}
+export type NuxtKitPublicRuntimeConfig = DeepRequired<NuxtKitOptions>;
 
 /**
- * Options for configuring NuxtKit's error handling and unauthorized status codes.
+ * NuxtKit configuration.
  */
 export interface NuxtKitOptions {
+  /** Whether to print debug logs at runtime. */
+  debug: boolean;
+
   /**
-   * An array of HTTP status codes that indicate unauthorized access.
-   * Typically used for status codes like 401 (Unauthorized) or 403 (Forbidden).
-   *
+   * Auto-imported components provided by the module.
+   */
+  components: {
+    /**
+     * Optional prefix for all auto-imported components.
+     * @default ""
+     * @example "NuxtKit"
+     */
+    prefix: string;
+  };
+
+  /**
+   * HTTP status codes to treat as unauthorized.
    * @default [401]
    * @example [401, 403]
    */
   unauthorizedStatusCodes: number[];
 
+  /**
+   * Error message keys and fallbacks.
+   */
   errors: {
     /**
-     * The fallback key for generic error messages.
-     *
+     * i18n key for a generic error.
      * @default "errors.generic"
+     * @example "errors.generic"
      */
-    genericErrorKey: string;
+    genericErrorKey?: string;
 
     /**
-     * Fallback message for generic errors when no specific message is found in i18n.
-     *
+     * Fallback when the generic key is missing.
      * @default "Something went wrong"
+     * @example "Something went wrong"
      */
-    genericMessageFallback: string;
+    genericMessageFallback?: string;
 
     /**
-     * The fallback key for unauthorized error messages.
-     *
+     * i18n key for an unauthorized error.
      * @default "errors.unauthorized"
+     * @example "errors.unauthorized"
      */
-    unauthorizedKey: string;
+    unauthorizedKey?: string;
 
     /**
-     * Fallback message for unauthorized errors when no specific message is found in i18n.
-     *
+     * Fallback when the unauthorized key is missing.
      * @default "Unauthorized"
+     * @example "Unauthorized"
      */
-    unauthorizedMessageFallback: string;
+    unauthorizedMessageFallback?: string;
   };
+
+  /**
+   * Zod i18n integration (keeps Zod’s locale in sync with Nuxt i18n).
+   */
+  zodI18n: ZodI18nOptions;
 }
 
-export type UnauthorizedHookContext = {
+/**
+ * Base options shared by Zod i18n variants.
+ */
+export interface ZodI18nOptions {
   /**
-   * The HttpError object that caused the unauthorized action.
-   */
-  error: HttpError;
-
-  /**
-   * A boolean indicating if the context is on the server-side (SSR) or client-side.
-   */
-  isSSR: boolean;
-
-  /**
-   * The function that handles redirection after an unauthorized error.
+   * Register module’s built-in locales into @nuxtjs/i18n.
+   * Can be still overriden/extended via own files; i18n merges and later files win.
    *
-   * @param to The path to redirect the user to.
-   * @returns A promise that resolves after the redirection.
+   * - true  → auto-register built-ins for the app’s active locales (recommended default)
+   * - false → do not register; you must provide all strings
+   *
+   * @default true
    */
+  useModuleLocale?: boolean;
+
+  /**
+   * Region → base language grouping used during locale normalization.
+   * Map a **base** language code to an array of its **region variants**.
+   * This lets the module treat, for example, `en-GB` and `en-US` as `en`
+   * when selecting Zod locales.
+   *
+   * @default
+   * {
+   *   en: ['en-GB', 'en-US'],
+   *   sk: ['sk-SK'],
+   *   cs: ['cs-CZ']
+   * }
+   *
+   * @example
+   * // Group common regioned locales under their base:
+   * {
+   *   en: ['en-GB', 'en-US'],
+   *   pt: ['pt-BR', 'pt-PT'],
+   * }
+   *
+   * @example
+   * // Minimal setup (only base codes used in the app):
+   * {}
+   */
+  languageAlias?: Record<string, string[]>;
+
+  /**
+   * Common key prefix where all Zod error strings live in your i18n files.
+   * We’ll resolve keys like:
+   *   `${keyPrefix}.common.invalid`
+   *   `${keyPrefix}.date.min.inclusive`
+   *   `${keyPrefix}.size.max.exclusive`
+   *   ...
+   *
+   * @default "zod"
+   * @example
+   * // If your translations live under "errors.validation.zod.*":
+   * keyPrefix: "errors.validation.zod"
+   *
+   * // Or a flat namespace like "validation":
+   * keyPrefix: "validation"
+   */
+  keyPrefix?: string;
+
+  /**
+   * Date-time formatting options used when rendering Zod’s date limits
+   * (`z.date().min()/max()` and `exact`) via `i18n.d(value, options)`.
+   * If omitted, the locale’s default `Intl.DateTimeFormat` is used.
+   *
+   * @default { day: "numeric", month: "long", year: "numeric" }
+   * @example
+   * { dateStyle: "medium", timeZone: "Europe/Bratislava" }
+   */
+  dateFormat?: Intl.DateTimeFormatOptions;
+}
+
+/**
+ * Context passed to the 'meowv:unauthorized' hook.
+ */
+export type UnauthorizedHookContext = {
+  /** The HttpError that triggered the unauthorized state. */
+  error: HttpError;
+  /** True when running on the server (SSR). */
+  isSSR: boolean;
+  /** Redirect helper. */
   redirect: (to: string) => Promise<void>;
 };

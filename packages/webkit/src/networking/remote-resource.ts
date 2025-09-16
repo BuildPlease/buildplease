@@ -21,6 +21,7 @@ import {
   InterceptorSet,
   CookieInterceptor,
   HttpError,
+  UnauthorizedHttpError,
 } from '@/networking';
 
 const FALLBACK_CODE = 'UNKNOWN_ERROR';
@@ -82,6 +83,7 @@ export class RemoteResource<Input, Output, Endpoint extends RemoteEndpoint<Input
     // MARK: - Keep already-normalized errors
     if (
       error instanceof HttpError ||
+      error instanceof UnauthorizedHttpError ||
       error instanceof TimeoutError ||
       error instanceof NetworkError ||
       error instanceof CanceledError ||

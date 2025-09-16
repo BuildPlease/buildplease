@@ -1,10 +1,11 @@
 import { injectable, inject } from 'inversify';
 
 import { Symbols } from '@di/symbols';
+import type { LoginDto } from '@schema';
 import type { LoginController } from '@feature/login/controller';
 
 export interface LoginState {
-  username?: string;
+  email?: string;
   password?: string;
   error?: string | null;
   isLoading: boolean;
@@ -17,7 +18,7 @@ export class LoginViewModel extends ViewModel<LoginState> {
     private loginController: LoginController,
   ) {
     super({
-      username: loginController.defaultUsername,
+      email: undefined,
       password: undefined,
       error: null,
       isLoading: false,
@@ -32,22 +33,23 @@ export class LoginViewModel extends ViewModel<LoginState> {
     );
   }
 
-  public async onLogin(): Promise<void> {
+  public async onSubmit(data: LoginDto): Promise<void> {
     if (this.loginController.isLoading) return;
 
     this.state.error = null;
-    const { username, password } = this.state;
+    this.state.email = data.email;
+    this.state.password = data.password;
 
-    if (!username || !password) {
-      this.state.error = 'Please provide both username and password.';
+    if (!this.state.email || !this.state.password) {
+      this.state.error = 'Please provide both email and password.';
       return;
     }
 
     try {
-      await this.loginController.onLogin(username, password);
+      await this.loginController.onLogin(this.state.email, this.state.password);
     } catch (error) {
-      this.state.error = 'Login failed. Please try again.';
-      console.error('[LoginViewModel] Error:', error);
+      const message = useErrorHandler(error);
+      useErrorNotifier(message);
     }
   }
 

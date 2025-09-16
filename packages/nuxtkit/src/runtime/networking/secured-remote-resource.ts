@@ -9,17 +9,21 @@ import {
   UnauthorizedHttpError,
 } from '@nidavellirx/meowv-webkit';
 
-import { SSRRequestCookiesInterceptor } from './ssr-cookies-interceptor';
-import { LanguageInterceptor } from './language-interceptor';
-
-import { useRuntimeConfig, navigateTo, abortNavigation, isSSR as isSSRRuntime } from '#imports';
 import { type NuxtApp, useNuxtApp } from '#app';
+import { navigateTo, abortNavigation, isSSR as isSSRRuntime } from '#imports';
+
+import { SSRRequestCookiesInterceptor } from '#nuxtkit/networking/ssr-cookies-interceptor';
+import { LanguageInterceptor } from '#nuxtkit/networking/language-interceptor';
+import { useNuxtKit } from '#nuxtkit/composables/use-nuxt-kit';
 
 export class SecuredRemoteResource<Input, Output> extends RemoteResource<
   Input,
   Output,
   RemoteEndpoint<Input, any, Output, any>
 > {
+  protected readonly name = 'SecuredRemoteResource';
+  private _kit: ReturnType<typeof useNuxtKit> | null = null;
+
   constructor(endpoint: RemoteEndpoint<Input, any, Output, any>) {
     super(endpoint);
   }
@@ -29,12 +33,22 @@ export class SecuredRemoteResource<Input, Output> extends RemoteResource<
   override async execute(input: Input, options?: RequestConfig): Promise<Output> {
     const app = useNuxtApp();
 
-    this.use(new SSRRequestCookiesInterceptor(app));
     this.use(new LanguageInterceptor());
+    this.use(new SSRRequestCookiesInterceptor(app));
 
     try {
-      return await super.execute(input, options);
+      this.kit.logger.debug(`[${this.name}] -> Input: ${input}`);
+      const output = await super.execute(input, options);
+      this.kit.logger.debug(`[${this.name}] -> Output: ${output}`);
+      return output;
     } catch (error) {
+      this.kit.logger.error(`${this.name} -> Error: ${error}`);
+
+      if (this.isUnauthorizedError(error)) {
+        await this.emitUnauthorized(app, error);
+        throw error;
+      }
+
       if (!this.isHttpError(error)) {
         throw error;
       }
@@ -56,17 +70,24 @@ export class SecuredRemoteResource<Input, Output> extends RemoteResource<
 
   // MARK: - Private
 
+  private get kit() {
+    return (this._kit ??= useNuxtKit());
+  }
+
   private isHttpError(error: unknown): error is HttpError {
     return error instanceof HttpError;
   }
 
-  private isUnauthorized(error: HttpError): boolean {
-    if (error instanceof UnauthorizedHttpError) return true;
-    const codes = useRuntimeConfig().public.meowvNuxtKit.unauthorizedStatusCodes;
+  private isUnauthorizedError(error: unknown): error is UnauthorizedHttpError {
+    return error instanceof UnauthorizedHttpError;
+  }
+
+  private isUnauthorized(error: HttpError | UnauthorizedHttpError): boolean {
+    const codes = this.kit.config.unauthorizedStatusCodes;
     return codes.includes(error.statusCode);
   }
 
-  private async emitUnauthorized(app: NuxtApp, error: HttpError): Promise<void> {
+  private async emitUnauthorized(app: NuxtApp, error: HttpError | UnauthorizedHttpError): Promise<void> {
     const isSSR = isSSRRuntime();
     const redirect = (to: string) => this.redirect(app, to, isSSR);
     await app.callHook('meowv:unauthorized', { error, isSSR, redirect });

@@ -2,7 +2,7 @@ import type { Nuxt } from '@nuxt/schema';
 
 import type { NuxtKitContext } from '../context';
 
-export function prepareHooks(_ctx: NuxtKitContext, nuxt: Nuxt) {
+export async function prepareHooks(_context: NuxtKitContext, nuxt: Nuxt) {
   nuxt.options.vite.esbuild = {
     tsconfigRaw: {
       compilerOptions: {
