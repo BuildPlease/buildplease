@@ -31,5 +31,5 @@
     "typescript": "5.9.2",
     "vue-eslint-parser": "10.2.0"
   },
-  "packageManager": "pnpm@10.15.0"
+  "packageManager": "pnpm@10.16.1"
 }

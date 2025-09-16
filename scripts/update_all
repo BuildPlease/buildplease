@@ -1,35 +1,77 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# 1) Loop through each workspace path returned by Lerna
-for WS in $(lerna ls --all --parseable); do
-  # 2) Extract the package name from that workspace's package.json
-  pkg_name=$(grep -m1 '"name"' "$WS/package.json" | sed -E 's/.*"name": *"([^"]+)".*/\1/')
+bold() { printf "\033[1m%s\033[0m" "$*"; }
+
+require() { command -v "$1" >/dev/null || { echo "Missing required tool: $1"; exit 1; }; }
+require lerna
+require pnpm
+require node
+
+# npm-check-updates via pnpm dlx; mute npm noise
+ncu() {
+  NPM_CONFIG_USERCONFIG=/dev/null \
+  NPM_CONFIG_LOGLEVEL=error \
+  pnpm dlx npm-check-updates@latest "$@"
+}
+
+# Prompt from a TTY even when STDIN is not a TTY (e.g. pnpm scripts)
+prompt_yn() {
+  local msg="$1" reply=""
+  if [ -t 0 ]; then
+    read -r -p "$msg" reply
+  else
+    # shellcheck disable=SC2162
+    read -r -p "$msg" reply < /dev/tty || reply=""
+  fi
+  [[ $reply =~ ^[Yy]$ ]]
+}
+
+while IFS= read -r WS; do
+  [ -f "$WS/package.json" ] || continue
+  pkg_name=$(node -e 'try{process.stdout.write(require(process.argv[1]).name||"")}catch{process.stdout.write("")}' "$WS/package.json")
+  pkg_name=${pkg_name:-$WS}
 
   echo
-  echo "— $pkg_name —"
+  echo "— $(bold "$pkg_name") —"
   echo
 
-  # 3) Show "pnpm outdated" for that package (ignore exit code)
   (
     cd "$WS"
-    pnpm outdated || true
+
+    echo "▶ Outdated (dependencies):"
+    pnpm outdated --prod || true
+    echo
+
+    echo "▶ Outdated (devDependencies):"
+    pnpm outdated --dev || true
+    echo
+
+    echo "▶ Potential updates (peerDependencies):"
+    ncu --dep peer || true
+    echo
+
+    if prompt_yn "Update $pkg_name to latest (prod/dev/optional/peer)? [y/N] "; then
+      echo "→ Updating version ranges in package.json (ncu)…"
+      ncu -u --target latest --dep prod,dev,optional,peer || true
+
+      echo "→ Installing latest (pnpm up -L)…"
+      pnpm up -L
+
+      echo "→ Finalize lock & dedupe…"
+      pnpm install
+      pnpm dedupe || true
+
+      echo "→ Post-check (remaining outdated):"
+      pnpm outdated || true
+
+      echo "✔ Updated $pkg_name"
+    else
+      echo "→ Skipping $pkg_name"
+    fi
   )
 
-  echo
-  # 4) Prompt whether to update to latest
-  read -r -p "Update $pkg_name to latest? [y/N] " answer
-  if [[ $answer =~ ^[Yy]$ ]]; then
-    echo "→ Updating $pkg_name to latest versions..."
-    (
-      cd "$WS"
-      pnpm update --latest
-    )
-    echo "✔ Updated $pkg_name"
-  else
-    echo "→ Skipping $pkg_name"
-  fi
-done
+done < <(lerna ls --all --parseable)
 
 echo
 echo "🎉 Done. All workspaces processed."
