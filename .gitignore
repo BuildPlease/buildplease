@@ -151,3 +151,7 @@ dist
 
 # ApiKit build / generated output
 .apikit
+
+# Ignore generated files and directories
+**/generated/*
+*generated*

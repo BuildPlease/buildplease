@@ -2,9 +2,10 @@
   "name": "@nidavellirx/meowv-nuxtkit",
   "version": "1.0.0",
   "description": "A Nuxt Kit for MVVM design pattern and Clean Code architecture, with foundation for web app",
-  "repository": "git@github.com/Nidavellirx/meowv.git",
-  "license": "MIT",
   "type": "module",
+  "author": "Simon Rastislav Kovačič",
+  "license": "UNLICENSED",
+  "repository": "git@github.com/Nidavellirx/meowv.git",
   "main": "./dist/module.mjs",
   "exports": {
     ".": {

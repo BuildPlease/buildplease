@@ -1,12 +1,13 @@
 {
   "name": "meowv",
+  "version": "1.0.0",
+  "description": "",
   "private": true,
   "type": "module",
-  "repository": "git@github.com:Nidavellirx/meowv.git",
+  "keywords": [],
   "author": "Simon Rastislav Kovačič",
-  "workspaces": [
-    "packages/*"
-  ],
+  "license": "UNLICENSED",
+  "repository": "git@github.com:Nidavellirx/meowv.git",
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "update:check": "./scripts/update_check",

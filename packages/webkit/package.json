@@ -2,10 +2,10 @@
   "name": "@nidavellirx/meowv-webkit",
   "version": "1.0.0",
   "description": "",
-  "keywords": [],
-  "author": "Simon Kovačič",
-  "license": "ISC",
   "type": "module",
+  "keywords": [],
+  "author": "Simon Rastislav Kovačič",
+  "license": "UNLICENSED",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
