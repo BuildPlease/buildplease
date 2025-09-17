@@ -10,9 +10,9 @@ export const DEFAULT_OPTIONS = {
   },
   unauthorizedStatusCodes: [401],
   errors: {
-    genericErrorKey: 'errors.generic',
+    genericErrorKey: 'error.generic',
     genericMessageFallback: 'Something went wrong',
-    unauthorizedKey: 'errors.unauthorized',
+    unauthorizedKey: 'error.unauthorized',
     unauthorizedMessageFallback: 'Unauthorized',
   },
   zodI18n: {
