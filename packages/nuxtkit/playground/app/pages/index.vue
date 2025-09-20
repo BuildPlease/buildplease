@@ -14,7 +14,7 @@
           block
           size="lg"
           color="primary"
-          :to="localePath({ name: Symbols.Routes.Login.name })"
+          :to="localePath(Symbols.Routes.Login.path)"
           :label="t('common.login')"
         />
       </template>

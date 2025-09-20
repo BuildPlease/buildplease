@@ -9,12 +9,13 @@ import {
   UnauthorizedHttpError,
 } from '@nidavellirx/meowv-webkit';
 
-import { type NuxtApp, useNuxtApp } from '#app';
+import { type NuxtApp, useNuxtApp, useRouter } from '#app';
 import { navigateTo, abortNavigation, isSSR as isSSRRuntime } from '#imports';
 
 import { SSRRequestCookiesInterceptor } from '#nuxtkit/networking/ssr-cookies-interceptor';
 import { LanguageInterceptor } from '#nuxtkit/networking/language-interceptor';
 import { useNuxtKit } from '#nuxtkit/composables/use-nuxt-kit';
+import type { UnauthorizedRedirectOptions } from '#nuxtkit/types';
 
 export class SecuredRemoteResource<Input, Output> extends RemoteResource<
   Input,
@@ -89,19 +90,36 @@ export class SecuredRemoteResource<Input, Output> extends RemoteResource<
 
   private async emitUnauthorized(app: NuxtApp, error: HttpError | UnauthorizedHttpError): Promise<void> {
     const isSSR = isSSRRuntime();
-    const redirect = (to: string) => this.redirect(app, to, isSSR);
+    const defaultRedirectOptions: Required<UnauthorizedRedirectOptions> = {
+      replace: false,
+    };
+
+    const redirect = (to: string, options?: UnauthorizedRedirectOptions) =>
+      this.redirect(app, to, isSSR, { ...defaultRedirectOptions, ...options });
+
     await app.callHook('meowv:unauthorized', { error, isSSR, redirect });
   }
 
-  private async redirect(app: NuxtApp, to: string, isSSR: boolean): Promise<void> {
+  private async redirect(
+    app: NuxtApp,
+    to: string,
+    isSSR: boolean,
+    opts: Required<UnauthorizedRedirectOptions>,
+  ): Promise<void> {
     if (isSSR) {
       const event = app.ssrContext?.event;
       if (!event) throw new Error('SSR redirect requested without request event.');
-      await sendRedirect(event, to);
+      await sendRedirect(event, to, 302);
       abortNavigation();
       return;
     }
-    await navigateTo(to);
+
+    if (opts.replace) {
+      const router = useRouter();
+      await router.replace(to);
+    } else {
+      await navigateTo(to);
+    }
   }
 }
 

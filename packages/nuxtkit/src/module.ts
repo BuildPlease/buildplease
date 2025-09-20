@@ -1,7 +1,8 @@
 import { defineNuxtModule } from '@nuxt/kit';
 import type { HookResult } from '@nuxt/schema';
 
-import type { NuxtKitOptions, NuxtKitPublicRuntimeConfig, UnauthorizedHookContext } from './types';
+import type { NuxtKitOptions, NuxtKitPublicRuntimeConfig } from './types';
+import type { UnauthorizedHookContext } from './runtime/types';
 import { NUXT_MODULE_ID, NUXT_CONFIG_KEY, DEFAULT_OPTIONS } from './constants';
 import { prepareContext } from './context';
 import {

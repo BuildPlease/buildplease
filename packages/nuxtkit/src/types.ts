@@ -1,4 +1,4 @@
-import type { HttpError, DeepRequired } from '@nidavellirx/meowv-webkit';
+import type { DeepRequired } from '@nidavellirx/meowv-webkit';
 
 /**
  * Public runtime config exposed by the NuxtKit module.
@@ -140,15 +140,3 @@ export interface ZodI18nOptions {
    */
   dateFormat?: Intl.DateTimeFormatOptions;
 }
-
-/**
- * Context passed to the 'meowv:unauthorized' hook.
- */
-export type UnauthorizedHookContext = {
-  /** The HttpError that triggered the unauthorized state. */
-  error: HttpError;
-  /** True when running on the server (SSR). */
-  isSSR: boolean;
-  /** Redirect helper. */
-  redirect: (to: string) => Promise<void>;
-};
