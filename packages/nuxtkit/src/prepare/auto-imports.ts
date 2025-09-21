@@ -64,6 +64,10 @@ async function prepareComposablesImports(resolver: Resolver) {
       from: resolver.resolve('./runtime/composables/use-error-handler'),
     },
     {
+      name: 'useBindViewModel',
+      from: resolver.resolve('./runtime/composables/use-bind-view-model'),
+    },
+    {
       name: 'useInstance',
       from: resolver.resolve('./runtime/composables/use-instance'),
     },

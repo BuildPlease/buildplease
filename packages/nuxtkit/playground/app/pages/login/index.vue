@@ -77,8 +77,7 @@ const { t } = useI18n();
 
 const viewModel = useInstance<LoginViewModel>(Symbols.DI.Feature.Login.ViewModel);
 const state = viewModel.state;
-
-await viewModel.onBeforeMount();
+useBindViewModel(viewModel);
 
 async function onSubmit(event: FormSubmitEvent<LoginDto>) {
   await viewModel.onSubmit(event.data);
