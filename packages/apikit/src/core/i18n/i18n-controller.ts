@@ -14,88 +14,166 @@ type ResourceEntry = {
   path: string;
 };
 
+export interface ParseLocaleOptions {
+  /**
+   * If true, always ignore region (e.g., "en-GB" → "en").
+   * Useful when you only ship base locales.
+   * @default true
+   */
+  ignoreRegion?: boolean;
+}
+
 export interface I18nController {
   /** Initializes i18next with merged built-in and app-provided translations. */
   prepare(): Promise<void>;
 
   /**
-   * Determines the client’s preferred base language from an Accept-Language header,
+   * Determines the client’s preferred language from an Accept-Language header,
    * honoring quality values (q=) and falling back to the configured default language.
    *
-   * @param input - Full Accept-Language header, e.g. `"fr-CA,fr;q=0.8,en-US;q=0.6,en;q=0.4"`
-   * @returns The best matching base language code (e.g. `"fr"`, `"en"`)
+   * Matching strategy:
+   *  - When `ignoreRegion` is false (default false → see ParseLocaleOptions): prefer exact region (e.g., "en-gb"),
+   *    then fall back to base ("en").
+   *  - When `ignoreRegion` is true (default true): always match by base only ("en-gb" → "en").
+   *
+   * @param input   Full Accept-Language header, e.g. "fr-CA,fr;q=0.8,en-US;q=0.6,en;q=0.4".
+   * @param options Matching behavior (e.g., ignoreRegion).
+   * @returns       Best matching language code (e.g., "fr", "en", or "en-gb" if supported).
    */
-  parseLocale(input?: string): string | undefined;
+  parseLocale(input?: string, options?: ParseLocaleOptions): string;
 }
 
 @injectable()
 export class I18nControllerImpl implements I18nController {
   constructor(
     @inject(ApiKitSymbols.DI.Configuration.Controller)
-    private readonly configuration: ApiKitController,
+    private readonly configurationController: ApiKitController,
   ) {}
 
   public async prepare(): Promise<void> {
-    const cfg = this.prepareConfig();
-    const resources = this.makeResources(cfg);
+    const config = this.prepareConfig();
+    const resources = this.makeResources(config);
 
     const initOptions: InitOptions = {
-      lng: cfg.defaultLanguage,
-      fallbackLng: cfg.fallbackLanguages,
-      supportedLngs: cfg.supportedLanguages,
-      load: cfg.load,
-      nonExplicitSupportedLngs: cfg.nonExplicitSupportedLngs,
-      preload: cfg.preload,
-      lowerCaseLng: cfg.lowerCaseLng,
-      cleanCode: cfg.cleanCode,
+      lng: config.defaultLanguage,
+      fallbackLng: config.fallbackLanguages,
+      supportedLngs: config.supportedLanguages,
+      load: config.load,
+      nonExplicitSupportedLngs: config.nonExplicitSupportedLngs,
+      preload: config.preload,
+      lowerCaseLng: config.lowerCaseLng,
+      cleanCode: config.cleanCode,
 
-      ns: cfg.namespaces,
-      defaultNS: cfg.defaultNamespace,
+      ns: config.namespaces,
+      defaultNS: config.defaultNamespace,
 
-      keySeparator: cfg.keySeparator,
-      nsSeparator: cfg.nsSeparator,
-      pluralSeparator: cfg.pluralSeparator,
-      contextSeparator: cfg.contextSeparator,
+      keySeparator: config.keySeparator,
+      nsSeparator: config.nsSeparator,
+      pluralSeparator: config.pluralSeparator,
+      contextSeparator: config.contextSeparator,
 
-      debug: cfg.debug,
+      debug: config.debug,
       resources,
     };
 
     await i18next.init(initOptions);
   }
 
-  public parseLocale(input?: string): string {
+  /**
+   * Choose the best language from an Accept-Language header.
+   *
+   * Behavior:
+   * - Honors q-values (quality weights).
+   * - When `ignoreRegion` is false, prefers exact region (e.g., "en-gb") then base ("en").
+   * - When `ignoreRegion` is true (default), always matches by base only.
+   * - Falls back to configured default if nothing matches.
+   *
+   * @param input   Full Accept-Language header (e.g., "fr-CA,fr;q=0.8,en-US;q=0.6,en;q=0.4").
+   * @param options Matching behavior (see ParseLocaleOptions).
+   * @returns       Best matching language code (e.g., "en" or "en-gb" if region matching enabled).
+   */
+  public parseLocale(input?: string, options: ParseLocaleOptions = {}): string {
     const { supportedLanguages, defaultLanguage } = this.prepareConfig();
+    const { ignoreRegion = true } = options;
 
-    if (!input) {
-      return defaultLanguage;
-    }
+    /** Early exit: empty or missing header → default language. */
+    if (!input || !input.trim()) return defaultLanguage;
 
-    // MARK: 1 - parse and normalize into [{ lang, q }]
-    const candidates = input.split(',').map((part) => {
-      const [rawLang = '', qStr] = part.trim().split(';q=');
-      const lang = rawLang.toLowerCase();
-      const q = qStr !== undefined ? parseFloat(qStr) : 1;
-      return { lang, q };
-    });
+    /** Normalize supported languages to lowercase for stable comparisons. */
+    const supported = new Set(supportedLanguages.map((s) => s.toLowerCase()));
 
-    // MARK: 2 - sort by quality descending
-    candidates.sort((a, b) => b.q - a.q);
+    /** Helper: normalize a language tag (lowercase, "_"→"-", trim). */
+    const norm = (s: string) => s.toLowerCase().replace(/_/g, '-').trim();
 
-    // MARK: 3 - pick the first supported base language
-    for (const { lang } of candidates) {
-      const [base = ''] = lang.split('-');
-      if (supportedLanguages.includes(base)) {
-        return base;
+    /** Track the best exact-region and best base matches as we scan. */
+    type Best = { code: string; q: number; idx: number };
+    let bestExact: Best | undefined;
+    let bestBase: Best | undefined;
+
+    /** Scan header items left→right, computing q and base, updating best candidates. */
+    let idx = 0;
+    for (const part of input.split(',')) {
+      const trimmed = part.trim();
+      if (!trimmed) {
+        idx++;
+        continue;
       }
+
+      /** Extract primary tag and optional params (e.g., ";q=0.8"). */
+      const pieces = trimmed.split(';');
+      const raw = pieces[0] ?? '';
+      const lang = norm(raw);
+      if (!lang || lang === '*') {
+        idx++;
+        continue;
+      }
+
+      /** Parse q-value (defaults to 1). Clamp to [0,1]. Robust to malformed numbers. */
+      let q = 1;
+      const qToken = pieces.find((t) => t.startsWith('q='));
+      if (qToken) {
+        const n = parseFloat(qToken.slice(2).replace(',', '.'));
+        if (Number.isFinite(n)) q = Math.max(0, Math.min(1, n));
+      }
+      if (q === 0) {
+        idx++;
+        continue;
+      } // explicitly unacceptable
+
+      /** Compute base (e.g., "en-gb" → "en"). Skip if empty. */
+      const base = lang.split('-')[0] || '';
+      if (!base) {
+        idx++;
+        continue;
+      }
+
+      /** If region matching enabled, consider exact-region candidate. */
+      if (!ignoreRegion && supported.has(lang)) {
+        if (!bestExact || q > bestExact.q || (q === bestExact.q && idx < bestExact.idx)) {
+          bestExact = { code: lang, q, idx };
+        }
+      }
+
+      /** Always consider base candidate (works for base-only setups). */
+      if (supported.has(base)) {
+        if (!bestBase || q > bestBase.q || (q === bestBase.q && idx < bestBase.idx)) {
+          bestBase = { code: base, q, idx };
+        }
+      }
+
+      idx++;
     }
 
-    // MARK: 4 - fallback
+    /** Prefer exact-region when enabled; otherwise return best base; else fallback. */
+    if (bestExact) return bestExact.code;
+    if (bestBase) return bestBase.code;
     return defaultLanguage;
   }
 
+  // MARK: - Private
+
   private prepareConfig(): Required<I18nConfig> {
-    const ext = this.configuration.i18n ?? {};
+    const ext = this.configurationController.i18n ?? {};
 
     // default namespace
     const defaultNS = typeof ext.defaultNamespace === 'string' ? ext.defaultNamespace : 'translation';
@@ -127,8 +205,8 @@ export class I18nControllerImpl implements I18nController {
       load: ext.load ?? 'languageOnly',
       nonExplicitSupportedLngs: ext.nonExplicitSupportedLngs ?? true,
       preload: ext.preload ?? false,
-      lowerCaseLng: ext.lowerCaseLng ?? false,
-      cleanCode: ext.cleanCode ?? false,
+      lowerCaseLng: ext.lowerCaseLng ?? true,
+      cleanCode: ext.cleanCode ?? true,
 
       namespaces: Array.from(nsSet),
       defaultNamespace: defaultNS,
@@ -159,10 +237,10 @@ export class I18nControllerImpl implements I18nController {
     return resources;
   }
 
-  private collectBuiltinEntries(cfg: Required<I18nConfig>): ResourceEntry[] {
+  private collectBuiltinEntries(config: Required<I18nConfig>): ResourceEntry[] {
     const dir = {
       path: resolvePath(import.meta.url, './locales'),
-      namespace: cfg.defaultNamespace,
+      namespace: config.defaultNamespace,
     };
     return this.resolveLocalesFromDir(dir.path).map((f) => ({
       locale: f.locale,
@@ -171,10 +249,10 @@ export class I18nControllerImpl implements I18nController {
     }));
   }
 
-  private collectDirectoryEntries(cfg: Required<I18nConfig>): ResourceEntry[] {
+  private collectDirectoryEntries(config: Required<I18nConfig>): ResourceEntry[] {
     const out: ResourceEntry[] = [];
-    for (const dir of cfg.directories) {
-      const namespace = dir.namespace ?? cfg.defaultNamespace;
+    for (const dir of config.directories) {
+      const namespace = dir.namespace ?? config.defaultNamespace;
       for (const f of this.resolveLocalesFromDir(resolvePath(process.cwd(), dir.path))) {
         out.push({ locale: f.locale, ns: namespace, path: f.path });
       }
@@ -182,10 +260,10 @@ export class I18nControllerImpl implements I18nController {
     return out;
   }
 
-  private collectFileEntries(cfg: Required<I18nConfig>): ResourceEntry[] {
-    return cfg.files.map((f) => ({
+  private collectFileEntries(config: Required<I18nConfig>): ResourceEntry[] {
+    return config.files.map((f) => ({
       locale: f.locale,
-      ns: f.namespace ?? cfg.defaultNamespace,
+      ns: f.namespace ?? config.defaultNamespace,
       path: resolvePath(process.cwd(), f.path),
     }));
   }
