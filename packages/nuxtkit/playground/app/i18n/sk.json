@@ -13,7 +13,7 @@
     "dashboard": "Prehľad",
     "complexValidation": "Komplexná validácia"
   },
-  "pages": {
+  "page": {
     "home": {
       "title": "Vitajte",
       "description": "Toto je úvodná stránka Meowv NuxtKit Playground. Objavujte MVVM + čistú architektúru s komponentmi Nuxt UI."
@@ -27,7 +27,8 @@
       "loginSuccess": "Úspešne ste sa prihlásili.",
       "operations": "Operácie",
       "goHome": "Späť na domov",
-      "testUnauthorized": "Otestovať nepovolenú operáciu"
+      "testUnauthorized": "Otestovať nepovolenú operáciu",
+      "testErrorNotifier": "Otestovať chybové hlásenie"
     }
   }
 }

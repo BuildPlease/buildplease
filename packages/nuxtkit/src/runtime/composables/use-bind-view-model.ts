@@ -11,8 +11,10 @@ import {
   onRenderTriggered,
   onErrorCaptured,
   onServerPrefetch,
+  getCurrentInstance,
+  hasInjectionContext,
 } from 'vue';
-import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router';
+import { onBeforeRouteLeave, onBeforeRouteUpdate, useRoute } from 'vue-router';
 
 import type { ViewModel } from '#nuxtkit/architecture/view-model';
 
@@ -61,24 +63,26 @@ export function useBindViewModel<T extends Record<string, any>>(viewModel: ViewM
   });
 
   // MARK: - Router Guards
-  // Must call `next(...)`; resolve sync/async VM results uniformly.
-  onBeforeRouteLeave((to, from, next) => {
-    Promise.resolve(viewModel.beforeRouteLeave(to, from))
-      .then((result) => next(result === false ? false : undefined))
-      .catch((error) => {
-        viewModel.onError(error, 'beforeRouteLeave');
-        next(false);
-      });
-  });
+  // Only register if this component is actually inside a <router-view>.
+  if (isRoutedComponent()) {
+    onBeforeRouteLeave((to, from, next) => {
+      Promise.resolve(viewModel.beforeRouteLeave(to, from))
+        .then((result) => next(result === false ? false : undefined))
+        .catch((error) => {
+          viewModel.onError(error, 'beforeRouteLeave');
+          next(false);
+        });
+    });
 
-  onBeforeRouteUpdate((to, from, next) => {
-    Promise.resolve(viewModel.beforeRouteUpdate(to, from))
-      .then((result) => next(result === false ? false : undefined))
-      .catch((error) => {
-        viewModel.onError(error, 'beforeRouteUpdate');
-        next(false);
-      });
-  });
+    onBeforeRouteUpdate((to, from, next) => {
+      Promise.resolve(viewModel.beforeRouteUpdate(to, from))
+        .then((result) => next(result === false ? false : undefined))
+        .catch((error) => {
+          viewModel.onError(error, 'beforeRouteUpdate');
+          next(false);
+        });
+    });
+  }
 
   // MARK: - SSR
   // Nuxt/Vue will await this on the server; on the client it’s ignored.
@@ -86,4 +90,28 @@ export function useBindViewModel<T extends Record<string, any>>(viewModel: ViewM
 
   // MARK: - Return
   return viewModel;
+}
+
+/**
+ * Internal utility: checks if the current component is rendered inside a `<router-view>`.
+ *
+ * This prevents Vue Router warnings when trying to register route guards
+ * (`onBeforeRouteLeave` / `onBeforeRouteUpdate`) in components that are not
+ * part of the routing tree (e.g. `App.vue`).
+ *
+ * @remarks
+ * - Uses `hasInjectionContext()` to ensure we’re inside a valid setup context.
+ * - Compares the current component instance against the active `route.matched` records.
+ *
+ * @returns {boolean} `true` if the component is matched by the current route
+ *   (i.e. rendered inside `<router-view>`); otherwise `false`.
+ */
+function isRoutedComponent(): boolean {
+  if (!hasInjectionContext()) return false;
+
+  const instance = getCurrentInstance();
+  if (!instance?.type) return false;
+
+  const route = useRoute();
+  return route.matched.some((record) => record.components?.default === instance.type);
 }

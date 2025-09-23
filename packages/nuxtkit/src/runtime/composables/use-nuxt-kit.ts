@@ -1,3 +1,5 @@
+import { isObject } from '@nidavellirx/meowv-webkit';
+
 import { useRuntimeConfig } from '#imports';
 
 const MODULE_NAME = 'NuxtKit';
@@ -22,7 +24,12 @@ function makeSymbol(key: string): symbol {
   return Symbol.for(`${MODULE_NAME}.${key}`);
 }
 
-type ConsoleLevel = 'log' | 'info' | 'warn' | 'error';
+export enum LogLevel {
+  LOG = 'log',
+  INFO = 'info',
+  WARN = 'warn',
+  ERROR = 'error',
+}
 
 interface LoggerOptions {
   force?: boolean;
@@ -40,33 +47,58 @@ export class Logger {
     return options?.force || this.isDebugEnabled;
   }
 
-  log(message: string, options?: LoggerOptions) {
-    this._log('log', message, options);
+  log(input: unknown, options?: LoggerOptions) {
+    this._log(LogLevel.LOG, input, options);
   }
 
-  info(message: string, options?: LoggerOptions) {
-    this._log('info', message, options);
+  info(input: unknown, options?: LoggerOptions) {
+    this._log(LogLevel.INFO, input, options);
   }
 
-  warn(message: string, options?: LoggerOptions) {
-    this._log('warn', message, options);
+  warn(input: unknown, options?: LoggerOptions) {
+    this._log(LogLevel.WARN, input, options);
   }
 
-  error(message: string, options?: LoggerOptions) {
-    this._log('error', message, options);
+  error(input: unknown, options?: LoggerOptions) {
+    this._log(LogLevel.ERROR, input, options);
   }
 
-  debug(message: string, options?: LoggerOptions) {
-    this._log('log', message, options);
+  debug(input: unknown, options?: LoggerOptions) {
+    this._log(LogLevel.LOG, input, options);
   }
 
-  private _log(level: ConsoleLevel, message: string, options?: LoggerOptions) {
-    const shouldLog = this.shouldLog(options);
-    if (!shouldLog) return;
+  // MARK: - Private
 
-    const addContext = options?.context !== false;
-    const logMessage = `${MODULE_NAME}: ${addContext ? (import.meta.server ? '[SSR]' : '[CSR]') + ' ' : ''}${message}`;
+  private _log(level: LogLevel, input: unknown, options?: LoggerOptions) {
+    if (!this.shouldLog(options)) return;
 
+    if (input instanceof Error) {
+      this._logError(level, input, options);
+    } else if (isObject(input)) {
+      this._logObject(level, input, options);
+    } else {
+      this._logString(level, String(input), options);
+    }
+  }
+
+  private _logString(level: LogLevel, message: string, options?: LoggerOptions) {
+    const logMessage = this._withPrefix(message, options);
     console[level](logMessage);
+  }
+
+  private _logObject(level: LogLevel, obj: object, options?: LoggerOptions) {
+    const logMessage = this._withPrefix(JSON.stringify(obj, null, 2), options);
+    console[level](logMessage);
+  }
+
+  private _logError(level: LogLevel, error: Error, options?: LoggerOptions) {
+    const logMessage = this._withPrefix(`${error.name}: ${error.message}`, options);
+    console[level](logMessage);
+  }
+
+  private _withPrefix(message: string, options?: LoggerOptions): string {
+    const addContext = options?.context !== false;
+    const context = addContext ? (import.meta.server ? '[SSR]' : '[CSR]') + ' ' : '';
+    return `${MODULE_NAME}: ${context}${message}`;
   }
 }

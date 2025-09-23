@@ -5,6 +5,10 @@ import type { RouteLocationNormalizedLoaded } from 'vue-router';
  * Lifecycle contract for ViewModels.
  */
 export interface Lifecycle {
+  /* ---------------------------------------------------
+   * Component Lifecycle
+   * --------------------------------------------------- */
+
   /**
    * Called after the component is mounted.
    * @returns {void | Promise<void>} Nothing; may perform async side effects.
@@ -53,6 +57,10 @@ export interface Lifecycle {
    */
   onDeactivated(): Awaitable<void>;
 
+  /* ---------------------------------------------------
+   * Debug & Error Handling
+   * --------------------------------------------------- */
+
   /**
    * Debug hook: called when reactive dependencies are tracked.
    * @param {unknown} input Arbitrary debug payload from the renderer.
@@ -75,6 +83,10 @@ export interface Lifecycle {
    * @returns {void} Nothing.
    */
   onError(error: unknown, info?: string): void;
+
+  /* ---------------------------------------------------
+   * Router Guards
+   * --------------------------------------------------- */
 
   /**
    * Router guard: called before leaving the current route.
@@ -99,6 +111,10 @@ export interface Lifecycle {
     to: RouteLocationNormalizedLoaded,
     from: RouteLocationNormalizedLoaded,
   ): Awaitable<boolean | void>;
+
+  /* ---------------------------------------------------
+   * Server-Side Rendering
+   * --------------------------------------------------- */
 
   /**
    * Server-side prefetch hook (Nuxt/Vue SSR).

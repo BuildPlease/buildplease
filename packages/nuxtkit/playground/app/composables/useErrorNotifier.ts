@@ -1,15 +1,25 @@
-import { useNotifications } from './useNotifications';
-
 export interface ErrorNotifierOptions {
   handle?: ErrorHandlerOptions['handle'];
 }
 
 export function useErrorNotifier(error: unknown, options: ErrorNotifierOptions = {}): string {
   const { handle } = options;
-  const notifications = useNotifications();
-  const message = useErrorHandler(error, { handle });
+  const toast = useToast();
 
-  notifications.notify(message, 'warning');
+  // DONT USE IN PRODUCTION !
+  let message: string;
+  if (error instanceof Error) {
+    message = error.message;
+  } else {
+    message = useErrorHandler(error, { handle });
+  }
+
+  toast.add({
+    title: message,
+    description: undefined,
+    color: 'error',
+    icon: 'i-lucide-alert-circle',
+  });
 
   return message;
 }

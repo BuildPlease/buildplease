@@ -2,11 +2,11 @@
   <UContainer class="flex items-center justify-center">
     <UCard class="w-full max-w-md space-y-6 text-center">
       <template #header>
-        <h1 class="text-2xl font-semibold">{{ t('pages.home.title') }}</h1>
+        <h1 class="text-2xl font-semibold">{{ t('page.home.title') }}</h1>
       </template>
 
       <p class="text-gray-600">
-        {{ t('pages.home.description') }}
+        {{ t('page.home.description') }}
       </p>
 
       <template #footer>

@@ -1,6 +1,8 @@
 <template>
-  <UApp>
-    <NuxtLayout class>
+  <UApp :toaster="appConfig.toaster">
+    <NuxtLoadingIndicator />
+
+    <NuxtLayout>
       <div class="flex min-h-dvh flex-col">
         <NuxtPage
           class="flex flex-1 flex-col"
@@ -8,34 +10,13 @@
         />
       </div>
 
-      <!-- Footer -->
       <Footer />
     </NuxtLayout>
   </UApp>
-
-  <!-- Global notifications (unchanged) -->
-  <div class="notifications">
-    <div
-      v-for="n in items"
-      :key="n.id"
-      class="notification"
-      :class="n.type"
-      role="alert"
-    >
-      <span>{{ n.message }}</span>
-      <button
-        class="close"
-        @click="remove(n.id)"
-        aria-label="Dismiss"
-      >
-        ×
-      </button>
-    </div>
-  </div>
 </template>
 
 <script setup lang="ts">
-const { items, remove } = useNotifications();
+const appConfig = useAppConfig();
 const { finalizePendingLocaleChange } = useI18n();
 
 async function onBeforeEnter() {

@@ -13,7 +13,7 @@
     "dashboard": "Dashboard",
     "complexValidation": "Complex Validation"
   },
-  "pages": {
+  "page": {
     "home": {
       "title": "Welcome",
       "description": "This is the landing page for the Meowv NuxtKit Playground. Explore MVVM + Clean Architecture with Nuxt UI components."
@@ -27,7 +27,8 @@
       "loginSuccess": "You have successfully logged in.",
       "operations": "Operations",
       "goHome": "Go Back to Home",
-      "testUnauthorized": "Test Unauthorized Operation"
+      "testUnauthorized": "Test Unauthorized Operation",
+      "testErrorNotifier": "Test error notifier"
     }
   }
 }

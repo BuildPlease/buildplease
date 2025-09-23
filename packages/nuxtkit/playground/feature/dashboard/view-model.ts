@@ -9,8 +9,6 @@ export interface DashboardState {
 
 @injectable()
 export class DashboardViewModel extends ViewModel<DashboardState> {
-  private readonly notifications = useNotifications();
-
   constructor(
     @inject(Symbols.DI.Operation.Unauthorized)
     private unauthorizedOperation: UnauthorizedOperation,

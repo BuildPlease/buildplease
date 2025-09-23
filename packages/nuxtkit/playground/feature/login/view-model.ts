@@ -48,8 +48,7 @@ export class LoginViewModel extends ViewModel<LoginState> {
     try {
       await this.loginController.onLogin(this.state.email, this.state.password);
     } catch (error) {
-      const message = useErrorHandler(error);
-      useErrorNotifier(message);
+      useErrorNotifier(error);
     }
   }
 

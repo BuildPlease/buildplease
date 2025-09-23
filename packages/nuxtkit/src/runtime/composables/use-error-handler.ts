@@ -1,53 +1,87 @@
 import { HttpError, UnauthorizedHttpError } from '@nidavellirx/meowv-webkit';
 
 import { useNuxtApp, useRuntimeConfig } from '#app';
+import { useNuxtKit } from '#nuxtkit/composables/use-nuxt-kit';
 
 export interface ErrorHandlerOptions {
-  /** Custom renderer for non-unauthorized HttpError */
-  handle?: (error: HttpError) => string;
+  /**
+   * Full override: if provided, all errors are passed here
+   * and no default localization/fallback logic is used.
+   *
+   * @param error - The error object (could be any value).
+   * @returns A localized or user-friendly error string.
+   *
+   * @default undefined
+   */
+  handle?: (error: unknown) => string;
+
+  /**
+   * Whether to log the error via NuxtKit logger.
+   *
+   * @default false
+   */
+  log?: boolean;
 }
 
 /**
  * Resolve any error into a localized, user-facing message.
  *
  * Steps:
- * 1. If the error is an `UnauthorizedHttpError`, return the unauthorized i18n key or fallback.
- * 2. If the error is a `HttpError`, return a custom handler result (if provided) or the raw message.
- * 3. Otherwise, return the generic i18n key or fallback.
+ * 1. If `options.handle` is provided, its result is returned (full override).
+ * 2. If the error is an `UnauthorizedHttpError`, return the i18n key or fallback.
+ * 3. If the error is a `HttpError`, return its message.
+ * 4. If the error is a generic `Error`, return its message.
+ * 5. Otherwise, return the generic i18n key or fallback.
  *
- * @param error   - Error object to handle (may be `HttpError`, `UnauthorizedHttpError`, or generic).
- * @param options - Optional configuration (e.g., custom handler for `HttpError`).
- * @returns Localized error message string.
+ * @param error - The error object to handle (may be `HttpError`, `UnauthorizedHttpError`, `Error`, or anything).
+ * @param options - Optional configuration for custom handling and logging.
+ * @returns A localized string suitable for user-facing display.
  *
  * @example
  * try {
- *   await resource.execute(input);
- * } catch (err) {
- *   const message = useErrorHandler(err, {
- *     handle: (e) => `Custom: ${e.code}`,
- *   });
- *   console.error(message);
+ *   await resource.execute(input)
+ * } catch (error) {
+ *   const message = useErrorHandler(error, {
+ *     handle: (e) => `Custom: ${String(e)}`,
+ *     log: true
+ *   })
+ *   console.error(message)
  * }
  */
-export function useErrorHandler(error: unknown, options: ErrorHandlerOptions = {}): string {
+export function useErrorHandler(error: unknown, options: ErrorHandlerOptions = DEFAULTS): string {
   const app = useNuxtApp();
+  const kit = useNuxtKit();
   const config = useRuntimeConfig().public.meowvNuxtKit;
   const errors = config.errors;
   const { t, te } = app.$i18n;
 
-  // Step 1: Unauthorized error → return unauthorized message
+  if (options.log) {
+    kit.logger.error(error, { force: true });
+  }
+
+  // Step 1: custom override
+  if (options.handle) {
+    return options.handle(error);
+  }
+
+  // Step 2: Unauthorized
   if (error instanceof UnauthorizedHttpError) {
     const key = errors.unauthorizedKey;
     return te(key) ? t(key) : errors.unauthorizedMessageFallback;
   }
 
-  // Step 2: Other HttpError → custom handler or raw message
+  // Step 3: HttpError
   if (error instanceof HttpError) {
-    return options.handle ? options.handle(error) : error.message;
+    return error.message;
   }
 
-  // Step 3: Non-HttpError → generic key or fallback
+  // Step 4: Fallback
   const genericKey = errors.genericErrorKey;
   const genericFallback = errors.genericMessageFallback;
   return te(genericKey) ? t(genericKey) : genericFallback;
 }
+
+const DEFAULTS: ErrorHandlerOptions = {
+  handle: undefined,
+  log: true,
+};

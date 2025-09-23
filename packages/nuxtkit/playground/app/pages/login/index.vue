@@ -7,7 +7,7 @@
             name="i-lucide-lock"
             class="h-6 w-6"
           />
-          <h1 class="text-2xl font-semibold">{{ t('pages.login.title') }}</h1>
+          <h1 class="text-2xl font-semibold">{{ t('page.login.title') }}</h1>
         </div>
       </template>
 
@@ -52,7 +52,7 @@
           color="primary"
           :loading="state.isLoading"
         >
-          {{ t('pages.login.button') }}
+          {{ t('page.login.button') }}
         </UButton>
 
         <UAlert
