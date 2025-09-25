@@ -10,7 +10,7 @@ import { ApiKitSymbols } from '#/di';
 import { resolvePath } from '#/file';
 import type { EmailTemplate } from '#/email';
 import type { LoggerController } from '#/logger';
-import type { ApiKitController } from '#/configuration';
+import type { ApiKitController, EmailTemplateGlobalDefaults } from '#/configuration';
 
 export interface EmailController {
   sendEmail(template: EmailTemplate): Promise<void>;
@@ -109,7 +109,7 @@ export class EmailControllerImpl implements EmailController {
   private makeGlobals() {
     const clientDefined = this.configuration.email.globals ?? {};
 
-    const runtimeDefaults = {
+    const runtimeDefaults: EmailTemplateGlobalDefaults = {
       generatedDate: new Date().toISOString().replace('T', ' ').substring(0, 16) + ' UTC',
     };
 
