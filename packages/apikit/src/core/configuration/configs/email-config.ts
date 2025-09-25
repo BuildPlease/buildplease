@@ -18,4 +18,14 @@ export interface EmailConfig {
    * resolvePath(process.cwd(), './src/templates')
    */
   templatesPath?: string;
+
+  /**
+   * @property {Record<string, unknown>} [globals]
+   * Global values automatically injected into every email template.
+   *
+   * The framework also injects runtime defaults (e.g. `generatedDate`).
+   * These defaults are merged first, and then overridden by client-defined
+   * values from this config.
+   */
+  globals?: Record<string, unknown>;
 }

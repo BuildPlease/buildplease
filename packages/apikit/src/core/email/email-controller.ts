@@ -100,19 +100,22 @@ export class EmailControllerImpl implements EmailController {
 
     const templateString = await fs.readFile(templateFullPath, 'utf-8');
 
-    const genericData = this.makeGenericData();
-    const data = { ...template.data, generic: genericData };
+    const globals = this.makeGlobals();
+    const data = { ...template.data, generic: globals };
 
     return ejs.render(templateString, data);
   }
 
-  private makeGenericData() {
+  private makeGlobals() {
+    const clientDefined = this.configuration.email.globals ?? {};
+
+    const runtimeDefaults = {
+      generatedDate: new Date().toISOString().replace('T', ' ').substring(0, 16) + ' UTC',
+    };
+
     return {
-      organizationName: 'Peyvee',
-      supportEmail: 'support@peyvee.com',
-      copyright: `© ${new Date().getFullYear()} Peyvee.`,
-      generatedDate: new Date().toLocaleString(),
-      logoUrl: 'https://www.peyvee.com/wp-content/uploads/2024/07/peyvee-logo-site.png',
+      ...runtimeDefaults,
+      ...clientDefined,
     };
   }
 
