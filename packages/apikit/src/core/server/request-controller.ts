@@ -13,8 +13,6 @@ import { type HttpResponse } from '#/http';
 type HttpReplyPromise = (request: FastifyRequest, options: object) => Promise<HttpResponse>;
 type HttpOrVoidReplyPromise = (request: FastifyRequest, options?: object) => Promise<HttpResponse | void>;
 
-export type RequestWithParams<TParams extends Record<string, string>> = FastifyRequest<{ Params: TParams }>;
-
 export interface RequestController {
   handler(
     controllerFn: HttpReplyPromise,
