@@ -1,6 +1,6 @@
-import type { SchemaExample } from '#/schema';
+import type { OpenAPISchemaExample } from '#/openapi';
 
-export type MediaType =
+export type OpenAPIMediaType =
   | 'application/json'
   | 'application/xml'
   | 'application/x-www-form-urlencoded'
@@ -16,7 +16,7 @@ export type MediaType =
   | 'application/vnd.github.v3.diff'
   | 'image/vnd.djvu';
 
-export interface SchemaMediaType {
+export interface OpenAPISchemaMediaType {
   schema: any;
-  examples?: Record<string, SchemaExample>;
+  examples?: Record<string, OpenAPISchemaExample>;
 }

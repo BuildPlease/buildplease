@@ -10,7 +10,7 @@ export * from './i18n';
 export * from './image';
 export * from './logger';
 export * from './normalization';
-export * from './schema';
+export * from './openapi';
 export * from './request';
 export * from './security';
 export * from './server';

@@ -1,5 +1,5 @@
 /* MARK: - Error Response */
-export const ErrorResponseSchema = {
+const ErrorResponseSchema = {
   $id: 'ErrorResponse',
   type: 'object',
   properties: {
@@ -21,7 +21,7 @@ export const ErrorResponseSchema = {
 };
 
 /* MARK: - Localizable Text */
-export const LocalizableTextSchema = {
+const LocalizableTextSchema = {
   $id: 'LocalizableText',
   type: 'object',
   additionalProperties: { type: 'string' },
@@ -33,7 +33,7 @@ export const LocalizableTextSchema = {
 };
 
 /* MARK: - Device */
-export const DeviceSchema = {
+const DeviceSchema = {
   $id: 'Device',
   type: 'object',
   required: ['deviceId'],
@@ -77,7 +77,7 @@ export const DeviceSchema = {
     },
   },
 };
-export const OSTypeSchema = {
+const OSTypeSchema = {
   $id: 'OSType',
   type: 'string',
   // Enums in JSON Schema (and thus in OpenAPI) are case-sensitive.
@@ -85,7 +85,7 @@ export const OSTypeSchema = {
   description: 'Operating system of the device',
   example: 'ios',
 };
-export const DeviceTypeSchema = {
+const DeviceTypeSchema = {
   $id: 'DeviceType',
   type: 'string',
   // Enums in JSON Schema (and thus in OpenAPI) are case-sensitive.
@@ -93,7 +93,7 @@ export const DeviceTypeSchema = {
   description: 'Type of the device',
   example: 'mobile',
 };
-export const PushNotificationStatusSchema = {
+const PushNotificationStatusSchema = {
   $id: 'PushNotificationStatus',
   type: 'string',
   enum: ['UNKNOWN', 'ON', 'OFF'],
@@ -102,7 +102,7 @@ export const PushNotificationStatusSchema = {
 };
 
 /* MARK: - Email */
-export const EmailSchema = {
+const EmailSchema = {
   $id: 'Email',
   type: 'object',
   properties: {
@@ -113,7 +113,7 @@ export const EmailSchema = {
 };
 
 /* MARK: - Phone */
-export const PhoneSchema = {
+const PhoneSchema = {
   $id: 'Phone',
   type: 'object',
   properties: {
@@ -124,7 +124,7 @@ export const PhoneSchema = {
 };
 
 /* MARK: - Opening Hour */
-export const OpeningHourSchema = {
+const OpeningHourSchema = {
   $id: 'OpeningHour',
   type: 'object',
   properties: {
@@ -156,7 +156,7 @@ export const OpeningHourSchema = {
 };
 
 /* MARK: - The GeoJSON Format (RFC 7946) */
-export const GeometrySchema = {
+const GeometrySchema = {
   $id: 'Geometry',
   type: 'object',
   required: ['type', 'coordinates'],
@@ -314,7 +314,7 @@ export const GeometrySchema = {
     },
   ],
 };
-export const PolygonSchema = {
+const PolygonSchema = {
   $id: 'Polygon',
   type: 'array',
   minItems: 1,
@@ -343,7 +343,20 @@ export const PolygonSchema = {
   ],
 };
 
-export const ApiKitSchemas = {
+/* MARK: - Contacts */
+export const ContactsSchema = {
+  $id: 'Contacts',
+  type: 'object',
+  properties: {
+    email: { type: 'string', format: 'email', example: 'example@example.com', nullable: true },
+    fb: { type: 'string', example: 'example_facebook', nullable: true },
+    ig: { type: 'string', example: '@example_instagram', nullable: true },
+    phone: { type: 'string', example: '+421 123 456 789', nullable: true },
+  },
+  additionalProperties: false,
+};
+
+export const OpenAPISchemas = {
   ErrorResponse: ErrorResponseSchema,
   LocalizableText: LocalizableTextSchema,
   Device: DeviceSchema,
@@ -355,4 +368,5 @@ export const ApiKitSchemas = {
   OpeningHour: OpeningHourSchema,
   Geometry: GeometrySchema,
   Polygon: PolygonSchema,
+  Contacts: ContactsSchema,
 };

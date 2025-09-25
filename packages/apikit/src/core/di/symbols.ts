@@ -23,8 +23,8 @@ const Validation = {
   DtoController: Symbol.for(`${prefix}.Validation.DtoController`),
 };
 
-const Schema = {
-  Controller: Symbol.for(`${prefix}.Schema.DtoController`),
+const OpenAPI = {
+  SchemaController: Symbol.for(`${prefix}.OpenAPI.SchemaController`),
 };
 
 const I18n = {
@@ -64,7 +64,7 @@ export const ApiKitSymbols = {
     Email,
     File,
     Validation,
-    Schema,
+    OpenAPI,
     I18n,
     Normalization,
     Formatter,
