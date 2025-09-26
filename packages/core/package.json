@@ -33,7 +33,7 @@
     "inversify": "^7.10.0"
   },
   "devDependencies": {
-    "@swc/core": "1.13.5",
+    "@swc/core": "1.13.19",
     "@types/ms": "2.1.0",
     "inversify": "7.10.0",
     "tsup": "8.5.0",

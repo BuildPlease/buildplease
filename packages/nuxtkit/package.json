@@ -37,17 +37,17 @@
     "reflect-metadata": "0.2.2"
   },
   "peerDependencies": {
-    "@nuxt/ui": "^3.3.4",
+    "@nuxt/ui": "^4.0.0",
     "@nuxtjs/i18n": "^10.1.0",
     "inversify": "^7.10.0",
     "vue-i18n": "^11.1.12",
-    "zod": "^4.1.9"
+    "zod": "^4.1.11"
   },
   "devDependencies": {
-    "@nuxt/devtools": "2.6.3",
+    "@nuxt/devtools": "2.6.5",
     "@nuxt/module-builder": "1.0.2",
     "@nuxt/schema": "4.1.2",
-    "@nuxt/ui": "3.3.4",
+    "@nuxt/ui": "4.0.0",
     "@nuxtjs/i18n": "10.1.0",
     "@types/node": "latest",
     "inversify": "7.10.0",
@@ -55,6 +55,6 @@
     "typescript": "5.9.2",
     "vitest": "3.2.4",
     "vue-i18n": "11.1.12",
-    "vue-tsc": "3.0.7"
+    "vue-tsc": "3.0.8"
   }
 }

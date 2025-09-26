@@ -32,7 +32,7 @@
     "inversify": "^7.10.0"
   },
   "devDependencies": {
-    "@swc/core": "1.13.5",
+    "@swc/core": "1.13.19",
     "inversify": "7.10.0",
     "tsup": "8.5.0",
     "typescript": "5.9.2"

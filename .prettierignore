@@ -33,3 +33,4 @@ package-lock.json
 
 # Generated directories and files
 generated
+/.nx/workspace-data
