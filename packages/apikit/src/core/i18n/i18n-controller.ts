@@ -4,6 +4,8 @@ import { inject, injectable } from 'inversify';
 import i18next, { type InitOptions } from 'i18next';
 import merge from 'lodash.merge';
 
+import { normalizeLocale, splitBaseRegion } from './utils';
+
 import { ApiKitSymbols } from '#/di';
 import { resolvePath, ensureDirectory } from '#/file';
 import type { ApiKitController, I18nConfig, I18nFileEntry } from '#/configuration';
@@ -102,9 +104,6 @@ export class I18nControllerImpl implements I18nController {
     /** Normalize supported languages to lowercase for stable comparisons. */
     const supported = new Set(supportedLanguages.map((s) => s.toLowerCase()));
 
-    /** Helper: normalize a language tag (lowercase, "_"→"-", trim). */
-    const norm = (s: string) => s.toLowerCase().replace(/_/g, '-').trim();
-
     /** Track the best exact-region and best base matches as we scan. */
     type Best = { code: string; q: number; idx: number };
     let bestExact: Best | undefined;
@@ -122,7 +121,7 @@ export class I18nControllerImpl implements I18nController {
       /** Extract primary tag and optional params (e.g., ";q=0.8"). */
       const pieces = trimmed.split(';');
       const raw = pieces[0] ?? '';
-      const lang = norm(raw);
+      const lang = normalizeLocale(raw);
       if (!lang || lang === '*') {
         idx++;
         continue;
@@ -141,7 +140,7 @@ export class I18nControllerImpl implements I18nController {
       } // explicitly unacceptable
 
       /** Compute base (e.g., "en-gb" → "en"). Skip if empty. */
-      const base = lang.split('-')[0] || '';
+      const { base } = splitBaseRegion(lang);
       if (!base) {
         idx++;
         continue;

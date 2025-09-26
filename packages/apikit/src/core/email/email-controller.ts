@@ -46,6 +46,8 @@ export class EmailControllerImpl implements EmailController {
     }
   }
 
+  // MARK: - Public
+
   async sendEmail(template: EmailTemplate): Promise<void> {
     try {
       if (!this.isEnabled) {
@@ -76,6 +78,8 @@ export class EmailControllerImpl implements EmailController {
     }
   }
 
+  // MARK: - Private
+
   private getOrCreateTransporter(): nodemailer.Transporter {
     if (!this.transporter) {
       this.transporter = nodemailer.createTransport({
@@ -91,21 +95,28 @@ export class EmailControllerImpl implements EmailController {
   }
 
   private async renderTemplate<T>(template: EmailTemplate<T>): Promise<string> {
-    const sanitizedTemplatePath = this.sanitizeTemplatePath(template.templatePath);
-    const templateFullPath = path.join(this.templatesPath, sanitizedTemplatePath);
+    try {
+      const filePath = this.makeFilePath(template.templatePath, template.fallbackPath);
 
-    if (!existsSync(templateFullPath)) {
-      throw new Error(`Email template not found: ${templateFullPath}`);
+      const templateString = await fs.readFile(filePath, 'utf-8');
+      const data = { globals: this.makeGlobals(), ...template.data };
+      return ejs.render(templateString, data);
+    } catch (error) {
+      throw error;
     }
-
-    const templateString = await fs.readFile(templateFullPath, 'utf-8');
-
-    const globals = this.makeGlobals();
-    const data = { ...template.data, generic: globals };
-
-    return ejs.render(templateString, data);
   }
 
+  private makeFilePath(templatePath: string, fallbackPath?: string): string {
+    const primary = path.join(this.templatesPath, this.sanitizeTemplatePath(templatePath));
+    if (existsSync(primary)) return primary;
+
+    if (fallbackPath) {
+      const fallback = path.join(this.templatesPath, this.sanitizeTemplatePath(fallbackPath));
+      if (existsSync(fallback)) return fallback;
+    }
+
+    throw new Error(`Email template not found: ${primary}${fallbackPath ? ` or ${fallbackPath}` : ''}`);
+  }
   private makeGlobals() {
     const clientDefined = this.configuration.email.globals ?? {};
 
