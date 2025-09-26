@@ -32,3 +32,15 @@ export function isNonEmptyString(value: string): boolean {
 export function isNullOrEmpty(value: string | null | undefined): boolean {
   return value === null || value === undefined || value.trim().length === 0;
 }
+
+/**
+ * Capitalizes the first character of a string and returns the new string.
+ * If the string is null, undefined, or empty (after trimming), it returns `null`.
+ *
+ * @param {string | null | undefined} value - The string to capitalize.
+ * @returns {string | null} - Returns the capitalized string, or `null` if input is invalid.
+ */
+export function capitalized(value: string | null | undefined): string | null {
+  if (isNullOrEmpty(value)) return null;
+  return value!.charAt(0).toUpperCase() + value!.slice(1);
+}
