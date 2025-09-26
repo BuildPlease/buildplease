@@ -5,127 +5,132 @@ import {
   type Geometry,
   Coordinates,
   Point,
+  MultiPoint,
+  LineString,
+  MultiLineString,
   Polygon,
   MultiPolygon,
-  Contacts,
   OpeningHour,
+  Contacts,
 } from '@nidavellirx/meowv-core';
 
-/**
- * Longitude ∈ [−180, 180]
- */
+/* MARK: - Primitives: Longitude & Latitude */
 const LongitudeSchema = z.number().min(-180).max(180);
-
-/**
- * Latitude ∈ [−90, 90]
- */
 const LatitudeSchema = z.number().min(-90).max(90);
 
-/**
- * Zod schema for {@link Coordinates}
- *
- * @returns {Coordinates} Instance created from [longitude, latitude]
- */
+/* MARK: - Coordinates */
 const CoordinatesSchema: z.ZodType<Coordinates> = z
   .tuple([LongitudeSchema, LatitudeSchema])
   .transform(([lon, lat]) => new Coordinates([lon, lat]));
 
-/**
- * Zod schema for GeoJSON Point
- *
- * @returns {Point} Instance of Point with validated Coordinates
- */
+/* MARK: - BBox (2D or 3D) */
+const BBoxSchema = z.union([
+  z.tuple([z.number(), z.number(), z.number(), z.number()]), // 2D
+  z.tuple([z.number(), z.number(), z.number(), z.number(), z.number(), z.number()]), // 3D
+]);
+
+/* MARK: - Geometry: Point */
 const PointGeometrySchema: z.ZodType<Point> = z
   .object({
     type: z.literal('Point'),
     coordinates: CoordinatesSchema,
+    bbox: BBoxSchema.optional(),
   })
-  .transform((object) => new Point(object.coordinates));
+  .transform((o) => new Point(o.coordinates, o.bbox));
 
-/**
- * Zod schema for GeoJSON Polygon
- *
- * @returns {Polygon} Instance of Polygon with validated rings
- */
+/* MARK: - Geometry: MultiPoint */
+const MultiPointGeometrySchema: z.ZodType<MultiPoint> = z
+  .object({
+    type: z.literal('MultiPoint'),
+    coordinates: z.array(CoordinatesSchema).nonempty(),
+    bbox: BBoxSchema.optional(),
+  })
+  .transform((o) => new MultiPoint(o.coordinates, o.bbox));
+
+/* MARK: - Geometry: LineString */
+const LineStringGeometrySchema: z.ZodType<LineString> = z
+  .object({
+    type: z.literal('LineString'),
+    coordinates: z.array(CoordinatesSchema).min(2),
+    bbox: BBoxSchema.optional(),
+  })
+  .transform((o) => new LineString(o.coordinates, o.bbox));
+
+/* MARK: - Geometry: MultiLineString */
+const MultiLineStringGeometrySchema: z.ZodType<MultiLineString> = z
+  .object({
+    type: z.literal('MultiLineString'),
+    coordinates: z.array(z.array(CoordinatesSchema).min(2)).nonempty(),
+    bbox: BBoxSchema.optional(),
+  })
+  .transform((o) => new MultiLineString(o.coordinates, o.bbox));
+
+/* MARK: - Geometry: Polygon */
 const PolygonGeometrySchema: z.ZodType<Polygon> = z
   .object({
     type: z.literal('Polygon'),
     coordinates: z.array(z.array(CoordinatesSchema).min(4)).min(1),
+    bbox: BBoxSchema.optional(),
   })
-  .transform((object) => new Polygon(object.coordinates));
+  .transform((o) => new Polygon(o.coordinates, o.bbox));
 
-/**
- * Zod schema for GeoJSON MultiPolygon
- *
- * @returns {MultiPolygon} Instance of MultiPolygon with validated polygons
- */
+/* MARK: - Geometry: MultiPolygon */
 const MultiPolygonGeometrySchema: z.ZodType<MultiPolygon> = z
   .object({
     type: z.literal('MultiPolygon'),
     coordinates: z.array(z.array(z.array(CoordinatesSchema).min(4)).min(1)).min(1),
+    bbox: BBoxSchema.optional(),
   })
-  .transform((object) => new MultiPolygon(object.coordinates));
+  .transform((o) => new MultiPolygon(o.coordinates, o.bbox));
 
-/**
- * Union schema for GeoJSON Geometry
- *
- * @returns {Geometry} One of Point | Polygon | MultiPolygon
- */
+/* MARK: - Geometry Union */
 const GeometrySchema: z.ZodType<Geometry> = z.union([
   PointGeometrySchema,
+  MultiPointGeometrySchema,
+  LineStringGeometrySchema,
+  MultiLineStringGeometrySchema,
   PolygonGeometrySchema,
   MultiPolygonGeometrySchema,
 ]);
 
-/**
- * Zod schema for {@link OpeningHourInterval}
- *
- * @returns {OpeningHourInterval} Validated interval with open/close strings
- */
+/* MARK: - Opening Hours */
 const OpeningHourIntervalSchema: z.ZodType<OpeningHourInterval> = z.object({
   open: z.string().min(1),
   close: z.string().min(1),
 });
 
-/**
- * Zod schema for {@link OpeningHour}
- *
- * @returns {OpeningHour} Instance with day (0–6) and non-empty intervals
- */
 const OpeningHourSchema: z.ZodType<OpeningHour> = z
   .object({
     day: z.number().min(0).max(6),
     intervals: z.array(OpeningHourIntervalSchema).nonempty(),
   })
-  .transform((object) => new OpeningHour(object.day, object.intervals));
+  .transform((o) => new OpeningHour(o.day, o.intervals));
 
-/**
- * Zod schema for an array of {@link OpeningHour}
- *
- * @returns {OpeningHour[]} List of opening hours
- */
 const OpeningHoursSchema = z.array(OpeningHourSchema);
 
-/**
- * Zod schema for {@link Contacts}
- *
- * @returns {Contacts} Instance with optional email, facebook, instagram, phone
- */
+/* MARK: - Contacts */
 const ContactsSchema: z.ZodType<Contacts> = z
   .object({
-    email: z.email().optional(),
-    facebook: z.string().optional(),
-    instagram: z.string().optional(),
+    email: z.string().email().optional(),
+    fb: z.string().optional(),
+    ig: z.string().optional(),
     phone: z.string().optional(),
   })
-  .transform((object) => new Contacts(object));
+  .transform((o) => new Contacts(o));
 
+/* MARK: - Export */
 export const ValidationSchemas = {
-  // GeoJSON
+  // Coordinates
   Longitude: LongitudeSchema,
   Latitude: LatitudeSchema,
   Coordinates: CoordinatesSchema,
+  BBox: BBoxSchema,
+
+  // Geometry
   PointGeometry: PointGeometrySchema,
+  MultiPointGeometry: MultiPointGeometrySchema,
+  LineStringGeometry: LineStringGeometrySchema,
+  MultiLineStringGeometry: MultiLineStringGeometrySchema,
   PolygonGeometry: PolygonGeometrySchema,
   MultiPolygonGeometry: MultiPolygonGeometrySchema,
   Geometry: GeometrySchema,

@@ -20,6 +20,229 @@ const ErrorResponseSchema = {
   required: ['code', 'message'],
 };
 
+/* MARK: - Coordinates */
+const CoordinatesSchema = {
+  $id: 'Coordinates',
+  type: 'array',
+  items: { type: 'number' },
+  minItems: 2,
+  maxItems: 2,
+  description: 'A coordinate pair [longitude, latitude]',
+  example: [16.464199756272475, 44.9152491664187],
+};
+
+/* MARK: - BBox */
+const BBoxSchema = {
+  $id: 'BBox',
+  oneOf: [
+    {
+      type: 'array',
+      minItems: 4,
+      maxItems: 4,
+      items: { type: 'number' },
+      description: '2D bounding box [west, south, east, north]',
+    },
+    {
+      type: 'array',
+      minItems: 6,
+      maxItems: 6,
+      items: { type: 'number' },
+      description: '3D bounding box [west, south, minZ, east, north, maxZ]',
+    },
+  ],
+  example: [16.46, 44.91, 21.16, 51.07],
+};
+
+/* MARK: - Point */
+const PointGeometrySchema = {
+  $id: 'PointGeometry',
+  type: 'object',
+  required: ['type', 'coordinates'],
+  properties: {
+    type: { type: 'string', enum: ['Point'] },
+    coordinates: { $ref: 'Coordinates#' },
+    bbox: { oneOf: [{ $ref: 'BBox#' }, { type: 'null' }] },
+  },
+  example: {
+    type: 'Point',
+    coordinates: [16.46, 44.91],
+  },
+};
+
+/* MARK: - MultiPoint */
+const MultiPointGeometrySchema = {
+  $id: 'MultiPointGeometry',
+  type: 'object',
+  required: ['type', 'coordinates'],
+  properties: {
+    type: { type: 'string', enum: ['MultiPoint'] },
+    coordinates: {
+      type: 'array',
+      items: { $ref: 'Coordinates#' },
+    },
+    bbox: { oneOf: [{ $ref: 'BBox#' }, { type: 'null' }] },
+  },
+  example: {
+    type: 'MultiPoint',
+    coordinates: [
+      [16.46, 44.91],
+      [21.16, 44.91],
+    ],
+  },
+};
+
+/* MARK: - LineString */
+const LineStringGeometrySchema = {
+  $id: 'LineStringGeometry',
+  type: 'object',
+  required: ['type', 'coordinates'],
+  properties: {
+    type: { type: 'string', enum: ['LineString'] },
+    coordinates: {
+      type: 'array',
+      minItems: 2,
+      items: { $ref: 'Coordinates#' },
+    },
+    bbox: { oneOf: [{ $ref: 'BBox#' }, { type: 'null' }] },
+  },
+  example: {
+    type: 'LineString',
+    coordinates: [
+      [16.46, 44.91],
+      [21.16, 51.07],
+    ],
+  },
+};
+
+/* MARK: - MultiLineString */
+const MultiLineStringGeometrySchema = {
+  $id: 'MultiLineStringGeometry',
+  type: 'object',
+  required: ['type', 'coordinates'],
+  properties: {
+    type: { type: 'string', enum: ['MultiLineString'] },
+    coordinates: {
+      type: 'array',
+      items: {
+        type: 'array',
+        minItems: 2,
+        items: { $ref: 'Coordinates#' },
+      },
+    },
+    bbox: { oneOf: [{ $ref: 'BBox#' }, { type: 'null' }] },
+  },
+  example: {
+    type: 'MultiLineString',
+    coordinates: [
+      [
+        [16.46, 44.91],
+        [21.16, 44.91],
+      ],
+      [
+        [18.46, 46.91],
+        [22.16, 48.91],
+      ],
+    ],
+  },
+};
+
+/* MARK: - Polygon */
+const PolygonGeometrySchema = {
+  $id: 'PolygonGeometry',
+  type: 'object',
+  required: ['type', 'coordinates'],
+  properties: {
+    type: { type: 'string', enum: ['Polygon'] },
+    coordinates: {
+      type: 'array',
+      minItems: 1,
+      items: {
+        type: 'array',
+        minItems: 4,
+        items: { $ref: 'Coordinates#' },
+      },
+    },
+    bbox: { oneOf: [{ $ref: 'BBox#' }, { type: 'null' }] },
+  },
+  example: {
+    type: 'Polygon',
+    coordinates: [
+      [
+        [16.46, 44.91],
+        [21.16, 44.91],
+        [21.16, 51.07],
+        [16.46, 51.07],
+        [16.46, 44.91],
+      ],
+    ],
+  },
+};
+
+/* MARK: - MultiPolygon */
+const MultiPolygonGeometrySchema = {
+  $id: 'MultiPolygonGeometry',
+  type: 'object',
+  required: ['type', 'coordinates'],
+  properties: {
+    type: { type: 'string', enum: ['MultiPolygon'] },
+    coordinates: {
+      type: 'array',
+      items: {
+        type: 'array',
+        minItems: 1,
+        items: {
+          type: 'array',
+          minItems: 4,
+          items: { $ref: 'Coordinates#' },
+        },
+      },
+    },
+    bbox: { oneOf: [{ $ref: 'BBox#' }, { type: 'null' }] },
+  },
+  example: {
+    type: 'MultiPolygon',
+    coordinates: [
+      [
+        [
+          [16.46, 44.91],
+          [21.16, 44.91],
+          [21.16, 51.07],
+          [16.46, 51.07],
+          [16.46, 44.91],
+        ],
+      ],
+      [
+        [
+          [17.46, 45.91],
+          [22.16, 45.91],
+          [22.16, 52.07],
+          [17.46, 52.07],
+          [17.46, 45.91],
+        ],
+      ],
+    ],
+  },
+};
+
+/* MARK: - Union Geometry */
+const GeometrySchema = {
+  $id: 'Geometry',
+  oneOf: [
+    { $ref: 'PointGeometry#' },
+    { $ref: 'MultiPointGeometry#' },
+    { $ref: 'LineStringGeometry#' },
+    { $ref: 'MultiLineStringGeometry#' },
+    { $ref: 'PolygonGeometry#' },
+    { $ref: 'MultiPolygonGeometry#' },
+  ],
+  description: `
+    GeoJSON Geometry object (Point, MultiPoint, LineString, MultiLineString, Polygon, MultiPolygon) as defined in RFC 7946.
+    The "type" property defines the type of geometry, while "coordinates" provides the geometric coordinates.
+    Supported geometry types include Point, MultiPoint, LineString, MultiLineString, Polygon, and MultiPolygon.
+    All coordinates should follow the [longitude, latitude] order, in compliance with GeoJSON standards.
+  `,
+};
+
 /* MARK: - Localizable Text */
 const LocalizableTextSchema = {
   $id: 'LocalizableText',
@@ -77,22 +300,21 @@ const DeviceSchema = {
     },
   },
 };
+
 const OSTypeSchema = {
   $id: 'OSType',
   type: 'string',
-  // Enums in JSON Schema (and thus in OpenAPI) are case-sensitive.
-  // enum: ['ios', 'android', 'windows', 'macos', 'linux', 'unknown'],
   description: 'Operating system of the device',
   example: 'ios',
 };
+
 const DeviceTypeSchema = {
   $id: 'DeviceType',
   type: 'string',
-  // Enums in JSON Schema (and thus in OpenAPI) are case-sensitive.
-  // enum: ['mobile', 'desktop', 'web', 'tablet', 'unknown'],
   description: 'Type of the device',
   example: 'mobile',
 };
+
 const PushNotificationStatusSchema = {
   $id: 'PushNotificationStatus',
   type: 'string',
@@ -155,209 +377,32 @@ const OpeningHourSchema = {
   },
 };
 
-/* MARK: - The GeoJSON Format (RFC 7946) */
-const GeometrySchema = {
-  $id: 'Geometry',
-  type: 'object',
-  required: ['type', 'coordinates'],
-  properties: {
-    type: {
-      type: 'string',
-      enum: ['Point', 'MultiPoint', 'LineString', 'MultiLineString', 'Polygon', 'MultiPolygon'],
-      description: 'Specifies the type of GeoJSON object.',
-    },
-    coordinates: {
-      oneOf: [
-        {
-          // Point: A single coordinate pair [longitude, latitude]
-          type: 'array',
-          minItems: 2,
-          maxItems: 2,
-          items: { type: 'number' },
-          description: 'A single coordinate pair for a Point geometry.',
-        },
-        {
-          // MultiPoint: An array of coordinate pairs for multiple points
-          type: 'array',
-          items: {
-            type: 'array',
-            minItems: 2,
-            maxItems: 2,
-            items: { type: 'number' },
-          },
-          description: 'An array of coordinate pairs for a MultiPoint geometry.',
-        },
-        {
-          // LineString: An array of coordinate pairs representing a line
-          type: 'array',
-          minItems: 2,
-          items: {
-            type: 'array',
-            minItems: 2,
-            maxItems: 2,
-            items: { type: 'number' },
-          },
-          description: 'An array of coordinate pairs representing a LineString geometry.',
-        },
-        {
-          // MultiLineString: An array of LineStrings
-          type: 'array',
-          items: {
-            type: 'array',
-            minItems: 2,
-            items: {
-              type: 'array',
-              minItems: 2,
-              maxItems: 2,
-              items: { type: 'number' },
-            },
-          },
-          description: 'An array of arrays, each representing a LineString in a MultiLineString geometry.',
-        },
-        {
-          // Polygon: An array of linear ring coordinate arrays, first array as outer boundary, others as holes
-          type: 'array',
-          minItems: 1,
-          items: {
-            type: 'array',
-            minItems: 4,
-            items: {
-              type: 'array',
-              minItems: 2,
-              maxItems: 2,
-              items: { type: 'number' },
-            },
-          },
-          description: 'A Polygon geometry with an outer boundary and optional inner holes.',
-        },
-        {
-          // MultiPolygon: An array of Polygons
-          type: 'array',
-          items: {
-            type: 'array',
-            minItems: 1,
-            items: {
-              type: 'array',
-              minItems: 4,
-              items: {
-                type: 'array',
-                minItems: 2,
-                maxItems: 2,
-                items: { type: 'number' },
-              },
-            },
-          },
-          description: 'An array of Polygons for a MultiPolygon geometry.',
-        },
-      ],
-    },
-  },
-  description: `
-    A GeoJSON Geometry object as defined in RFC 7946.
-    The "type" property defines the type of geometry, while "coordinates" provides the geometric coordinates.
-    Supported geometry types include Point, MultiPoint, LineString, MultiLineString, Polygon, and MultiPolygon.
-    All coordinates should follow the [longitude, latitude] order, in compliance with GeoJSON standards.
-  `,
-  example: [
-    {
-      type: 'Point',
-      coordinates: [16.464199756272475, 44.9152491664187],
-    },
-    {
-      type: 'MultiPoint',
-      coordinates: [
-        [16.464199756272475, 44.9152491664187],
-        [21.165095541202245, 44.9152491664187],
-      ],
-    },
-    {
-      type: 'LineString',
-      coordinates: [
-        [16.464199756272475, 44.9152491664187],
-        [21.165095541202245, 51.073426435525455],
-      ],
-    },
-    {
-      type: 'Polygon',
-      coordinates: [
-        [
-          [16.464199756272475, 44.9152491664187],
-          [21.165095541202245, 44.9152491664187],
-          [21.165095541202245, 51.073426435525455],
-          [16.464199756272475, 51.073426435525455],
-          [16.464199756272475, 44.9152491664187],
-        ],
-      ],
-    },
-    {
-      type: 'MultiPolygon',
-      coordinates: [
-        [
-          [
-            [16.464199756272475, 44.9152491664187],
-            [21.165095541202245, 44.9152491664187],
-            [21.165095541202245, 51.073426435525455],
-            [16.464199756272475, 51.073426435525455],
-            [16.464199756272475, 44.9152491664187],
-          ],
-        ],
-        [
-          [
-            [17.464199756272475, 45.9152491664187],
-            [22.165095541202245, 45.9152491664187],
-            [22.165095541202245, 52.073426435525455],
-            [17.464199756272475, 52.073426435525455],
-            [17.464199756272475, 45.9152491664187],
-          ],
-        ],
-      ],
-    },
-  ],
-};
-const PolygonSchema = {
-  $id: 'Polygon',
-  type: 'array',
-  minItems: 1,
-  items: {
-    type: 'array',
-    minItems: 4,
-    items: {
-      type: 'array',
-      minItems: 2,
-      maxItems: 2,
-      items: { type: 'number' },
-    },
-  },
-  description: `
-    A Polygon as per GeoJSON RFC 7946.
-    Coordinates should represent an outer boundary (first array) and optional holes (subsequent arrays).
-  `,
-  example: [
-    [
-      [16.464199756272475, 44.9152491664187],
-      [21.165095541202245, 44.9152491664187],
-      [21.165095541202245, 51.073426435525455],
-      [16.464199756272475, 51.073426435525455],
-      [16.464199756272475, 44.9152491664187],
-    ],
-  ],
-};
-
 /* MARK: - Contacts */
 export const ContactsSchema = {
   $id: 'Contacts',
   type: 'object',
   properties: {
-    email: { type: 'string', format: 'email', example: 'example@example.com', nullable: true },
-    fb: { type: 'string', example: 'example_facebook', nullable: true },
-    ig: { type: 'string', example: '@example_instagram', nullable: true },
-    phone: { type: 'string', example: '+421 123 456 789', nullable: true },
+    email: { type: ['string', 'null'], format: 'email', example: 'example@example.com' },
+    fb: { type: ['string', 'null'], example: 'example_facebook' },
+    ig: { type: ['string', 'null'], example: '@example_instagram' },
+    phone: { type: ['string', 'null'], example: '+421 123 456 789' },
   },
   additionalProperties: false,
 };
 
 export const OpenAPISchemas = {
   ErrorResponse: ErrorResponseSchema,
+
+  Coordinates: CoordinatesSchema,
+  BBox: BBoxSchema,
+  PointGeometry: PointGeometrySchema,
+  MultiPointGeometry: MultiPointGeometrySchema,
+  LineStringGeometry: LineStringGeometrySchema,
+  MultiLineStringGeometry: MultiLineStringGeometrySchema,
+  PolygonGeometry: PolygonGeometrySchema,
+  MultiPolygonGeometry: MultiPolygonGeometrySchema,
+  Geometry: GeometrySchema,
+
   LocalizableText: LocalizableTextSchema,
   Device: DeviceSchema,
   OSType: OSTypeSchema,
@@ -366,7 +411,5 @@ export const OpenAPISchemas = {
   Email: EmailSchema,
   Phone: PhoneSchema,
   OpeningHour: OpeningHourSchema,
-  Geometry: GeometrySchema,
-  Polygon: PolygonSchema,
   Contacts: ContactsSchema,
 };
