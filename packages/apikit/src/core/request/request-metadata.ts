@@ -9,5 +9,5 @@ export interface RequestMetadata {
   params: any;
   ip: string;
   headers: HttpHeaders;
-  locale?: string;
+  locale: string;
 }

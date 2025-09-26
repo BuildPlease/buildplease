@@ -25,7 +25,7 @@ const requestScopePlugin: FastifyPluginAsync<ServerPluginOptions> = async (fasti
   fastify.addHook('onRequest', (request, _reply, done) => {
     const metadata = request.metadata;
 
-    RequestScope.run({ metadata }, () => {
+    RequestScope.run({ metadata: metadata }, () => {
       done();
     });
   });

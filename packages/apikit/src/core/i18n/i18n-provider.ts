@@ -2,15 +2,7 @@ import i18next, { type TOptions } from 'i18next';
 
 import { RequestScope } from '#/request';
 
-export interface I18nOptions extends TOptions {
-  /**
-   * If true (default), will use the locale from RequestScope if available.
-   * This can be overridden by specifying `lng` explicitly.
-   *
-   * @default true
-   */
-  scoped?: boolean;
-}
+export interface I18nOptions extends TOptions {}
 
 export class I18nProvider {
   /**
@@ -19,11 +11,15 @@ export class I18nProvider {
    * @param key - Translation key (e.g., 'errors.INVALID_EMAIL')
    * @param options - Optional interpolation and config
    */
-  public static t(key: string, options: I18nOptions = {}): string {
-    const { scoped = true, lng, ...i18nOptions } = options;
+  static t(key: string, options: TOptions = {}): string {
+    const locale = RequestScope.locale;
+    return i18next.t(key, { ...options, lng: locale });
+  }
 
-    const locale = lng ?? (scoped ? RequestScope.locale : undefined) ?? i18next.language;
-
-    return i18next.t(key, { lng: locale, ...i18nOptions });
+  /**
+   * Returns the current effective locale.
+   */
+  public static currentLocale(): string {
+    return RequestScope.locale;
   }
 }

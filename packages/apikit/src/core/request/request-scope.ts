@@ -8,7 +8,7 @@ export interface RequestScopeData {
 
 export interface IRequestScope {
   readonly metadata: RequestMetadata;
-  readonly locale: string | undefined;
+  readonly locale: string;
   readonly requestId: string;
 
   run<T>(data: RequestScopeData, callback: () => T): T;
@@ -36,7 +36,7 @@ export const RequestScope: IRequestScope = {
     return this.metadata.requestId;
   },
 
-  get locale(): string | undefined {
+  get locale(): string {
     return this.metadata.locale;
   },
 };
