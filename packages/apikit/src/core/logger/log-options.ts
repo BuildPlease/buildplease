@@ -3,7 +3,7 @@ import type { RequestMetadata } from '#/request';
 
 export interface LogOptions {
   flag?: LogFlag;
-  details?: object;
+  details?: unknown;
   error?: Error | unknown;
   metadata?: Partial<RequestMetadata>;
 }

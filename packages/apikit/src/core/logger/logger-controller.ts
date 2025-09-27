@@ -3,7 +3,7 @@ import path from 'node:path';
 import { injectable, inject } from 'inversify';
 import pino, { type Logger, type Level, type Bindings, type LoggerOptions } from 'pino';
 
-import { filterObject, isEmptyObject } from '@nidavellirx/meowv-core';
+import { isError, isObject, isEmptyObject, isPrimitive, filterObject } from '@nidavellirx/meowv-core';
 
 import { ApiKitSymbols } from '#/di';
 import type {
@@ -39,9 +39,11 @@ export class LoggerControllerImpl implements LoggerController {
     const transports = this.configuration.logger.transports;
     const level = this.resolveGlobalLogLevel(transports);
 
-    const options: LoggerOptions = { level };
+    const options: LoggerOptions = {
+      level: level,
+    };
 
-    // only supply a transport block if user actually configured any transports
+    // MARK: - Only supply a transport block if user configured any transports
     if (transports.length > 0) {
       options.transport = { targets: this.makeTransportTargets(transports) };
     }
@@ -101,20 +103,18 @@ export class LoggerControllerImpl implements LoggerController {
     this.instance[level]({ msg: title, ...logData });
   }
 
+  /**
+   * Specialized formatter for errors, built on top of `formatUnknown`.
+   */
   private formatError(error: unknown): unknown {
-    // MARK: no-op, error objects are handled by Pino.
-    return error;
+    return this.formatUnknown(error);
   }
 
+  /**
+   * Specialized formatter for miscellaneous details, built on top of `formatUnknown`.
+   */
   private formatDetails(details: unknown): unknown {
-    if (Buffer.isBuffer(details)) {
-      return '[Buffer]';
-    }
-    if (details && typeof (details as any).pipe === 'function') {
-      return '[Stream]';
-    }
-
-    return details;
+    return this.formatUnknown(details);
   }
 
   private formatMetadata(metadata: Partial<RequestMetadata>): object | undefined {
@@ -146,6 +146,57 @@ export class LoggerControllerImpl implements LoggerController {
     });
 
     return isEmptyObject(filtered) ? undefined : filtered;
+  }
+
+  /**
+   * Normalizes arbitrary values into JSON-safe structures.
+   *
+   * - Error instances → { type, message, stack, ...extras }
+   * - Buffer → "[Buffer]"
+   * - Stream → "[Stream]"
+   * - Plain object → deep-cloned JSON
+   * - Primitive → { type, value }
+   * - Fallback → { type, value: String(value) }
+   */
+  private formatUnknown(value: unknown): unknown {
+    // Errors
+    if (isError(value)) {
+      const base = {
+        type: value.constructor.name,
+        message: value.message,
+        stack: value.stack,
+      };
+
+      const extras: Record<string, unknown> = {};
+      for (const key of Object.keys(value)) {
+        if (!(key in base)) {
+          extras[key] = (value as any)[key];
+        }
+      }
+
+      return Object.keys(extras).length > 0 ? { ...base, ...extras } : base;
+    }
+
+    // Buffers
+    if (Buffer.isBuffer(value)) return '[Buffer]';
+
+    // Streams
+    if (value && typeof (value as any).pipe === 'function') return '[Stream]';
+
+    // Plain objects
+    if (isObject(value)) {
+      try {
+        return JSON.parse(JSON.stringify(value));
+      } catch {
+        return { type: 'NonSerializableObject' };
+      }
+    }
+
+    // Primitives
+    if (isPrimitive(value)) return value;
+
+    // Fallback
+    return String(value);
   }
 
   // MARK: - Private: Configuration
@@ -209,6 +260,25 @@ export class LoggerControllerImpl implements LoggerController {
     };
   }
 
+  /**
+   * Resolves the most permissive (lowest) log level across all transports.
+   *
+   * Ensures the global logger does not filter out entries that any transport
+   * is configured to accept.
+   *
+   * @param {TransportOptions[]} transports
+   *   Configured log transport definitions.
+   * @returns {Level}
+   *   The effective global log level (defaults to `"info"` when unset).
+   *
+   * @example
+   * // Console wants "debug", file wants "warn" → result is "debug"
+   * const level = resolveGlobalLogLevel([
+   *   { type: 'console', level: 'debug', target: 'pino-pretty', pretty: {} },
+   *   { type: 'file',    level: 'warn',  path: './logs/app.log' }
+   * ]);
+   * // level === 'debug'
+   */
   private resolveGlobalLogLevel(transports: TransportOptions[]): Level {
     const fallback: Level = 'info';
     const weights: Record<Level, number> = {
