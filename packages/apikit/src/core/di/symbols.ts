@@ -37,6 +37,7 @@ const Normalization = {
 
 const Formatter = {
   Controller: Symbol.for(`${prefix}.Formatter.Controller`),
+  MultipartController: Symbol.for(`${prefix}.Formatter.MultipartController`),
 };
 
 const Image = {
