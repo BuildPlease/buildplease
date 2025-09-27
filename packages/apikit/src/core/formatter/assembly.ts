@@ -4,9 +4,9 @@ import type { Assembly } from '@nidavellirx/meowv-core';
 import { ApiKitSymbols } from '#/di';
 import {
   type FormatterController,
-  type MultipartFormatter,
+  type MultipartFormatterController,
   FormatterControllerImpl,
-  MultipartFormatterImpl,
+  MultipartFormatterControllerImpl,
 } from '#/formatter';
 
 export class FormatterAssembly implements Assembly {
@@ -14,7 +14,7 @@ export class FormatterAssembly implements Assembly {
     container.bind<FormatterController>(ApiKitSymbols.DI.Formatter.Controller).to(FormatterControllerImpl);
 
     container
-      .bind<MultipartFormatter>(ApiKitSymbols.DI.Formatter.MultipartController)
-      .to(MultipartFormatterImpl);
+      .bind<MultipartFormatterController>(ApiKitSymbols.DI.Formatter.MultipartController)
+      .to(MultipartFormatterControllerImpl);
   }
 }

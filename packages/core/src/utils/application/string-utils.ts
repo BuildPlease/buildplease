@@ -1,46 +1,36 @@
 /**
+ * Checks if the value is a string and non-empty after trimming.
+ *
+ * @param value The value to check.
+ * @returns True if value is a non-empty string.
+ */
+export function isNonEmptyString(value: unknown): value is string {
+  return typeof value === 'string' && value.trim().length > 0;
+}
+
+/**
+ * Checks if the value is null, undefined, or an empty string after trimming.
+ *
+ * @param value The value to check.
+ * @returns True if value is null, undefined, or empty string.
+ */
+export function isNullOrEmpty(value: unknown): value is null | undefined | '' {
+  return value === null || value === undefined || (typeof value === 'string' && value.trim().length === 0);
+}
+
+/**
  * Transforms an empty string or undefined to `null`. Otherwise, returns the string as is.
- * This is useful when you want to ensure that database entries do not store empty strings or undefined.
- *
- * @param {string | null | undefined} value - The string to transform.
- * @returns {string | null} - Returns `null` if the input is an empty string or undefined, otherwise returns the input string.
  */
-export function emptyOrUndefinedStringToNull(value: string | null | undefined): string | null {
-  return value === '' || value === undefined ? null : value;
+export function emptyOrUndefinedStringToNull(value: unknown): string | null {
+  if (typeof value !== 'string') return null;
+  return value === '' ? null : value;
 }
 
 /**
- * Validates if a given string is non-empty after trimming whitespace.
- * This function is typically used to ensure that essential string fields
- * do not contain only whitespace before saving to a database.
- *
- * @param {string} value - The string to validate.
- * @returns {boolean} - Returns `true` if the string is non-empty after trimming, otherwise `false`.
+ * Capitalizes the first character of a string.
+ * Returns `null` if the input is not a valid non-empty string.
  */
-export function isNonEmptyString(value: string): boolean {
-  return value.trim().length > 0;
-}
-
-/**
- * Checks if a given string is null, undefined, or empty after trimming whitespace.
- * This function is typically used to ensure that essential string fields
- * are not empty or only contain whitespace before processing.
- *
- * @param {string | null | undefined} value - The string to check.
- * @returns {boolean} - Returns `true` if the string is null, undefined, or empty after trimming, otherwise `false`.
- */
-export function isNullOrEmpty(value: string | null | undefined): boolean {
-  return value === null || value === undefined || value.trim().length === 0;
-}
-
-/**
- * Capitalizes the first character of a string and returns the new string.
- * If the string is null, undefined, or empty (after trimming), it returns `null`.
- *
- * @param {string | null | undefined} value - The string to capitalize.
- * @returns {string | null} - Returns the capitalized string, or `null` if input is invalid.
- */
-export function capitalized(value: string | null | undefined): string | null {
-  if (isNullOrEmpty(value)) return null;
-  return value!.charAt(0).toUpperCase() + value!.slice(1);
+export function capitalized(value: unknown): string | null {
+  if (typeof value !== 'string' || value.trim().length === 0) return null;
+  return value.charAt(0).toUpperCase() + value.slice(1);
 }

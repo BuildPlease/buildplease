@@ -1,6 +1,7 @@
+import { isDefinedAndNotNull, isNonEmptyString } from '@nidavellirx/meowv-core';
 import { injectable } from 'inversify';
 
-export interface MultipartFormatter {
+export interface MultipartFormatterController {
   /**
    * Normalize multipart fields into JSON-compatible values.
    *
@@ -9,35 +10,30 @@ export interface MultipartFormatter {
    * - Valid JSON → parsed
    * - Fallback → plain string
    *
-   * @param fields Raw multipart fields as { [key: string]: unknown }
+   * @param input Raw multipart fields as { [key: string]: unknown }
    * @returns Normalized fields as { [key: string]: unknown }
    */
-  normalizeParts(fields: Record<string, unknown>): Record<string, unknown>;
+
+  normalizeFields(input: Record<string, unknown>): Record<string, unknown>;
 }
 
 @injectable()
-export class MultipartFormatterImpl implements MultipartFormatter {
-  public normalizeParts(fields: Record<string, unknown>): Record<string, unknown> {
+export class MultipartFormatterControllerImpl implements MultipartFormatterController {
+  public normalizeFields(input: Record<string, unknown>): Record<string, unknown> {
     const result: Record<string, unknown> = {};
-
-    for (const [key, raw] of Object.entries(fields)) {
+    for (const [key, raw] of Object.entries(input)) {
       result[key] = this.normalizeValue(raw, key);
     }
-
     return result;
   }
 
   // MARK: - Private helpers
 
-  private normalizeValue(raw: unknown, _key: string): unknown {
-    if (raw == null) return undefined;
+  private normalizeValue(input: unknown, _key: string): unknown {
+    if (!isDefinedAndNotNull(input)) return undefined;
+    if (!isNonEmptyString(input)) return input; // Already formatter
 
-    if (typeof raw !== 'string') {
-      // Already normalized, passthrough
-      return raw;
-    }
-
-    const trimmed = raw.trim();
+    const trimmed = input.trim();
 
     // Boolean coercion
     if (trimmed === 'true') return true;
@@ -52,7 +48,7 @@ export class MultipartFormatterImpl implements MultipartFormatter {
     try {
       return JSON.parse(trimmed);
     } catch {
-      return raw;
+      return input;
     }
   }
 }
