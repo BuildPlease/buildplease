@@ -82,49 +82,39 @@ export class LoggerControllerImpl implements LoggerController {
   // MARK: - Private: Log
 
   private log(level: pino.Level, title: string, options?: LogOptions) {
-    const logObject: {
-      flag?: string;
-      details?: object;
-      error?: object;
-      metadata?: object;
-    } = {};
+    const logData: Record<string, unknown> = {};
 
     if (options?.flag) {
-      logObject.flag = options.flag;
+      logData.flag = options.flag;
     }
     if (options?.details) {
-      logObject.details = options.details;
+      logData.details = this.formatDetails(options.details);
     }
     if (options?.error) {
-      logObject.error = this.formatError(options.error);
+      logData.error = this.formatError(options.error);
     }
     if (options?.metadata) {
       const formatted = this.formatMetadata(options.metadata);
-      if (formatted) logObject.metadata = formatted;
+      if (formatted) logData.metadata = formatted;
     }
 
-    this.instance[level]({ msg: title, ...logObject });
+    this.instance[level]({ msg: title, ...logData });
   }
 
-  private formatError(error: unknown): object {
-    if (error instanceof Error) {
-      return {
-        name: error.name,
-        message: error.message,
-        stack: error.stack,
-      };
+  private formatError(error: unknown): unknown {
+    // MARK: no-op, error objects are handled by Pino.
+    return error;
+  }
+
+  private formatDetails(details: unknown): unknown {
+    if (Buffer.isBuffer(details)) {
+      return '[Buffer]';
+    }
+    if (details && typeof (details as any).pipe === 'function') {
+      return '[Stream]';
     }
 
-    if (typeof error === 'object' && error !== null) {
-      const fallbackMessage = 'No specific error message provided';
-      const errorMessage = (error as { message?: string }).message;
-      return { ...error, message: errorMessage || fallbackMessage };
-    }
-
-    return {
-      message: `Non-Error type thrown: ${String(error)}`,
-      value: error,
-    };
+    return details;
   }
 
   private formatMetadata(metadata: Partial<RequestMetadata>): object | undefined {

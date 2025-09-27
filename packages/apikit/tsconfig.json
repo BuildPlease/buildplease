@@ -45,6 +45,6 @@
       "#/*": ["src/core/*"]
     }
   },
-  "include": ["index.ts", "src", "types", "tests"],
-  "exclude": ["node_modules", "dist", ".apikit"]
+  "include": ["index.ts", "src", "types"],
+  "exclude": ["node_modules", "dist", "tests", ".apikit"]
 }

@@ -1,4 +1,15 @@
 /**
+ * Excludes `undefined` from the given type `T`.
+ *
+ * @template T - The type to evaluate.
+ * @example
+ * type A = NonUndefined<string | undefined>; // string
+ * type B = NonUndefined<number | null | undefined>; // number | null
+ * type C = NonUndefined<undefined>; // never
+ */
+export type NonUndefined<T> = T extends undefined ? never : T;
+
+/**
  * A type that represents a value that can be null or undefined.
  *
  * @template T
@@ -153,7 +164,7 @@ export function optional<T>(value: T | null | undefined): Optional<T> {
  * @returns {boolean}
  *   True if the value is not `undefined`.
  */
-export function isDefined<T>(value: OptionalValue<T>): value is T {
+export function isDefined<T>(value: OptionalValue<T>): value is NonUndefined<T> {
   return value !== undefined;
 }
 
@@ -166,7 +177,7 @@ export function isDefined<T>(value: OptionalValue<T>): value is T {
  * @returns {boolean}
  *   True if the value is not `null`.
  */
-export function isNotNull<T>(value: OptionalValue<T>): value is T {
+export function isNotNull<T>(value: OptionalValue<T>): value is NonNullable<T> {
   return value !== null;
 }
 
@@ -179,8 +190,8 @@ export function isNotNull<T>(value: OptionalValue<T>): value is T {
  * @returns {boolean}
  *   True if the value is neither `undefined` nor `null`.
  */
-export function isDefinedAndNotNull<T>(value: OptionalValue<T>): value is T {
-  return isDefined(value) && isNotNull(value);
+export function isDefinedAndNotNull<T>(value: OptionalValue<T>): value is NonNullable<T> {
+  return value !== null && value !== undefined;
 }
 
 /**

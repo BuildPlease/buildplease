@@ -1,16 +1,14 @@
 import fp from 'fastify-plugin';
 import type { FastifyPluginAsync } from 'fastify';
 
-import { ignoreError, isNullOrEmpty } from '@nidavellirx/meowv-core';
+import { isNullOrEmpty } from '@nidavellirx/meowv-core';
 
 import type { RequestMetadata } from '#/request';
 import type { ServerPluginOptions } from '#/server';
 
 const requestMetadataPlugin: FastifyPluginAsync<ServerPluginOptions> = async (fastify, options) => {
-  const logger = options.loggerController;
   const i18n = options.i18nController;
 
-  // MARK: - onRequest
   fastify.addHook('onRequest', async (request) => {
     const metadata: RequestMetadata = {
       requestId: request.id,
@@ -25,23 +23,6 @@ const requestMetadataPlugin: FastifyPluginAsync<ServerPluginOptions> = async (fa
     };
 
     request.metadata = metadata;
-
-    ignoreError(() => logger.info('Incoming Request', { metadata: request.metadata }));
-  });
-
-  // MARK: - onResponse
-  fastify.addHook('onResponse', async (request, reply) => {
-    ignoreError(() => {
-      logger.info('Sending Response', {
-        metadata: {
-          requestId: request.metadata.requestId,
-        },
-        details: {
-          elapsedTime: reply.elapsedTime,
-          statusCode: reply.statusCode,
-        },
-      });
-    });
   });
 };
 

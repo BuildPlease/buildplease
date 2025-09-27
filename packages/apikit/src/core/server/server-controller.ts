@@ -9,6 +9,8 @@ import { type LoggerController, LogFlag } from '#/logger';
 import { ApiError, ApiErrorFactory } from '#/error';
 import type { ApiKitController } from '#/configuration';
 
+const LOG_PREFIX = '[Server]';
+
 // MARK: - Plugins Options
 export interface ServerPluginBaseOptions {
   i18nController: I18nController;
@@ -65,16 +67,22 @@ export class ServerControllerImpl implements ServerController {
       apikitController: this.configuration,
     };
 
-    // MARK: - 1. Core internal plugins (must run before external)
-    const earlyInternalPlugins = [Plugins.cookie, Plugins.ip, Plugins.metadata, Plugins.scope];
+    // MARK: 1. Core internal plugins (must run before external)
+    const earlyInternalPlugins = [
+      Plugins.cookie,
+      Plugins.ip,
+      Plugins.metadata,
+      Plugins.scope,
+      Plugins.logger,
+    ];
     for (const plugin of earlyInternalPlugins) {
       await this.server.register(plugin, options);
     }
 
-    // MARK: - 2. External app-specific plugins (e.g., CORS, Auth, etc.)
+    // MARK: 2. External app-specific plugins (e.g., CORS, Auth, etc.)
     await registerExternal(this.server);
 
-    // MARK: - 3. UI/static late plugins (can run after external)
+    // MARK: 3. UI/static late plugins (can run after external)
     const lateInternalPlugins = [Plugins.staticFiles, Plugins.view];
     for (const plugin of lateInternalPlugins) {
       await this.server.register(plugin, options);
@@ -103,7 +111,8 @@ export class ServerControllerImpl implements ServerController {
     await this.server.ready();
     await this.server.listen({ port, host });
 
-    this.logger.info(`Server started on ${host}:${port}`);
+    this.logger.info(`${LOG_PREFIX} Debug mode ${this.configuration.debug ? 'ON' : 'OFF'}`);
+    this.logger.info(`${LOG_PREFIX} Started on ${host}:${port}`);
   }
 
   // MARK: - Private
@@ -114,8 +123,8 @@ export class ServerControllerImpl implements ServerController {
       const isInternalError = !error.statusCode || error.statusCode === 500;
       const internalError = ApiErrorFactory.make('Server.INTERNAL_SERVER_ERROR');
 
-      if (!this.configuration.debug) {
-        this.logger.debug('Error:', { flag: LogFlag.Notice, error: error });
+      if (this.configuration.debug) {
+        this.logger.debug(`${LOG_PREFIX} Error Handler:`, { error: error });
       }
 
       const handleApiError = (apiError: ApiError) => {
@@ -135,7 +144,8 @@ export class ServerControllerImpl implements ServerController {
       };
 
       const handleInternalError = () => {
-        this.logger.error('Internal Server Error', {
+        this.logger.error(`${LOG_PREFIX} Internal Server Error`, {
+          flag: LogFlag.Critical,
           metadata: { requestId: request.metadata.requestId },
           error: error,
         });
@@ -171,25 +181,25 @@ export class ServerControllerImpl implements ServerController {
     type ShutdownEvent = ShutdownSignal | ShutdownErrorEvent;
 
     const shutdown = async (reason: ShutdownEvent, error?: unknown) => {
-      this.logger.warn(`⛔ Shutdown: ${reason}`);
+      this.logger.warn(`⛔ ${LOG_PREFIX} Shutdown: ${reason}`);
 
       if (hook) {
         try {
           await hook();
-        } catch (err) {
-          this.logger.error('⚠️ Shutdown hook failed', { error: err });
+        } catch (error) {
+          this.logger.error(`⚠️ ${LOG_PREFIX} Shutdown hook failed`, { error: error });
         }
       }
 
       try {
         await this.server.close();
-        this.logger.info('✅ Server closed');
+        this.logger.info(`✅ ${LOG_PREFIX} Closed`);
       } catch (err) {
-        this.logger.error('❌ Server close failed', { error: err });
+        this.logger.error(`❌ ${LOG_PREFIX} Close failed`, { error: err });
       }
 
       if (error) {
-        this.logger.error('🚨 Fatal error during shutdown', { error });
+        this.logger.error(`🚨 ${LOG_PREFIX} Fatal error during shutdown`, { error });
       }
 
       process.exit(error ? 1 : 0);

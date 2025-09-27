@@ -7,14 +7,7 @@ const ErrorResponseSchema = {
     message: { type: 'string', example: 'Authorization failed' },
     details: {
       type: 'object',
-      additionalProperties: {
-        type: 'array',
-        items: { type: 'string' },
-      },
-      example: {
-        deviceId: ['Required'],
-        password: ['Must be at least 8 chars'],
-      },
+      additionalProperties: true,
     },
   },
   required: ['code', 'message'],
