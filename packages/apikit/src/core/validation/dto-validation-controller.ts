@@ -1,7 +1,10 @@
-import { injectable } from 'inversify';
+import { injectable, inject } from 'inversify';
 import { z, type ZodType, ZodError } from 'zod';
 
+import { ApiKitSymbols } from '#/di';
 import { ApiErrorFactory } from '#/error';
+import type { LoggerController } from '#/logger';
+import type { ApiKitController } from '#/configuration';
 
 export interface DtoValidationController {
   /**
@@ -56,6 +59,13 @@ export interface DtoValidationController {
 
 @injectable()
 export class DtoValidationControllerImpl implements DtoValidationController {
+  constructor(
+    @inject(ApiKitSymbols.DI.Configuration.Controller)
+    private configuration: ApiKitController,
+    @inject(ApiKitSymbols.DI.Logger.Controller)
+    private logger: LoggerController,
+  ) {}
+
   public validate<Output>(schema: ZodType<Output, any, any>, data: unknown): Output {
     try {
       return schema.parse(data);
@@ -72,23 +82,15 @@ export class DtoValidationControllerImpl implements DtoValidationController {
     }
   }
 
-  /**
-   * Convert a ZodError into your standardized ApiError.
-   *
-   * - Collects messages per field and throws:
-   *   ApiErrorFactory.make("Validation.INVALID_PROPERTIES", { details })
-   * - Non-Zod errors are rethrown unchanged.
-   */
   private handleError(error: unknown): never {
     if (error instanceof ZodError) {
-      const details = {
-        summary: z.prettifyError(error),
-        issues: error.issues,
-        messageTree: z.treeifyError(error),
-      };
+      if (this.configuration.debug) {
+        this.logger.debug('Dto validation failed', { details: error.issues });
+      }
 
-      throw ApiErrorFactory.make('Validation.INVALID_PROPERTIES', { details });
+      throw ApiErrorFactory.make('Validation.INVALID_PROPERTIES', { details: z.treeifyError(error) });
     }
+
     throw error;
   }
 }
