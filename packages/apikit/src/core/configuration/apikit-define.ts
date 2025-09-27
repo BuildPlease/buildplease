@@ -19,6 +19,7 @@ type EnvironmentNames<T extends readonly EnvironmentConfig[]> = T extends readon
   : never;
 
 interface ApiKitConfigInput<Environments extends readonly EnvironmentConfig[]> {
+  debug?: boolean;
   outDir?: string;
   environments: Environments;
   server: { [K in EnvironmentNames<Environments>]: ServerConfig };
@@ -51,5 +52,19 @@ export function defineApikitConfig<const Environments extends readonly Environme
     throw new Error('Server identifiers must be unique');
   }
 
-  return config;
+  return {
+    debug: config.debug ?? ApiKitConfigDefaults.debug,
+    outDir: config.outDir ?? ApiKitConfigDefaults.outDir,
+    environments: config.environments,
+    server: config.server,
+    logger: config.logger,
+    email: config.email,
+    i18n: config.i18n,
+    staticFiles: config.staticFiles,
+  };
 }
+
+export const ApiKitConfigDefaults: Required<Pick<ApiKitConfig, 'debug' | 'outDir'>> = {
+  debug: false,
+  outDir: '.apikit',
+};

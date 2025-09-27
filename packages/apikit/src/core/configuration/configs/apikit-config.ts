@@ -9,11 +9,21 @@ import type {
 
 export interface ApiKitConfig {
   /**
+   * Enables verbose debug mode for ApiKit.
+   *
+   * When set to true, additional diagnostic information may be logged
+   * or included in responses to assist with development and troubleshooting.
+   *
+   * @default false
+   */
+  debug: boolean;
+
+  /**
    * The output directory where the generated API files will be stored.
    *
    * @default ".apikit"
    */
-  outDir?: string;
+  outDir: string;
 
   /**
    * A list of environment configurations.

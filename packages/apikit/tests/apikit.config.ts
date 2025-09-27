@@ -1,6 +1,8 @@
 import { defineApikitConfig } from '../src/core/configuration/apikit-define';
 
 export default defineApikitConfig({
+  debug: true,
+  outDir: '.apikit',
   environments: [
     {
       name: 'development',

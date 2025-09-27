@@ -32,26 +32,25 @@ export interface MakeApikitContextOptions {
 }
 
 /**
- * Initializes the ApiKit context for the given environment and configuration.
- * Loads configuration files, sets environment variables, and registers logger,
- * server, email, i18n, and static files settings on the global `apikit` context.
+ * Initializes the ApiKit context.
  *
- * @param {MakeApikitContextOptions} options
- *   The options to configure the context.
- * @param {string} options.environment
- *   The environment name to initialize the context for.
- * @param {string} [options.configDir=process.cwd()]
- *   The directory where configuration files are located.
- * @param {string} [options.configName='apikit.config']
- *   The name of the configuration file.
+ * Loads the configuration file, resolves the selected environment,
+ * and registers context settings (logger, server, email, i18n, static files).
  *
- * @returns {Promise<void>}
+ * @param options - Options for initializing the context.
+ * @param options.environment - The target environment to load.
+ * @param options.configDir - The directory containing the configuration file.
+ *   @default process.cwd()
+ * @param options.configName - The base name of the configuration file.
+ *   @default "apikit.config"
+ *
+ * @returns A promise that resolves once the context is created.
+ *
+ * @throws {Error} If the config file, environment, or required sections are missing.
  */
-export async function makeApikitContext({
-  environment,
-  configDir,
-  configName,
-}: MakeApikitContextOptions): Promise<void> {
+export async function makeApikitContext(options: MakeApikitContextOptions): Promise<void> {
+  const { environment, configDir, configName } = options;
+
   const config = await loadConfig(configDir, configName);
   const environmentConfig = await initializeEnvironment(config, environment);
   const loggerConfig = await initializeLogger(config, environmentConfig);
@@ -61,6 +60,7 @@ export async function makeApikitContext({
   const staticFilesConfig = await initializeStaticFiles(config);
 
   global.apikit = {
+    debug: config.debug,
     environmentConfig,
     loggerConfig,
     serverConfig,

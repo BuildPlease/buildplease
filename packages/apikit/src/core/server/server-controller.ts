@@ -5,7 +5,7 @@ import Plugins from './plugins';
 
 import { ApiKitSymbols } from '#/di';
 import type { I18nController } from '#/i18n';
-import type { LoggerController } from '#/logger';
+import { type LoggerController, LogFlag } from '#/logger';
 import { ApiError, ApiErrorFactory } from '#/error';
 import type { ApiKitController } from '#/configuration';
 
@@ -113,6 +113,10 @@ export class ServerControllerImpl implements ServerController {
       const isValidationError = Array.isArray(error.validation);
       const isInternalError = !error.statusCode || error.statusCode === 500;
       const internalError = ApiErrorFactory.make('Server.INTERNAL_SERVER_ERROR');
+
+      if (!this.configuration.debug) {
+        this.logger.debug('Error:', { flag: LogFlag.Notice, error: error });
+      }
 
       const handleApiError = (apiError: ApiError) => {
         reply.status(apiError.statusCode).send(apiError.toJSON());

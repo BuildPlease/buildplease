@@ -81,14 +81,11 @@ export class DtoValidationControllerImpl implements DtoValidationController {
    */
   private handleError(error: unknown): never {
     if (error instanceof ZodError) {
-      const errors = z.prettifyError(error);
-      const details: Record<string, string[]> = {};
-
-      for (const [field, msgs] of Object.entries(errors)) {
-        if (Array.isArray(msgs) && msgs.length > 0) {
-          details[field] = msgs;
-        }
-      }
+      const details = {
+        summary: z.prettifyError(error),
+        issues: error.issues,
+        messageTree: z.treeifyError(error),
+      };
 
       throw ApiErrorFactory.make('Validation.INVALID_PROPERTIES', { details });
     }

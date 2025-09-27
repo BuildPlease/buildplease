@@ -9,6 +9,7 @@ import type {
 
 declare global {
   var apikit: {
+    debug: boolean;
     environmentConfig: EnvironmentConfig;
     loggerConfig: LoggerConfig;
     serverConfig: ServerConfig;

@@ -6,8 +6,7 @@ import type { ApiKitConfig } from '#/configuration';
 import { resolvePath, removePath, createDirectory, createFile } from '#/file';
 
 export async function generate(config: ApiKitConfig): Promise<void> {
-  const defaultOutputPath = '.apikit';
-  const outputPath = await prepareGeneratedDirectory(config.outDir ?? defaultOutputPath);
+  const outputPath = await prepareGeneratedDirectory(config.outDir);
 
   const generatedBases: string[] = [];
 

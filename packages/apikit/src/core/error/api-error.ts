@@ -1,6 +1,6 @@
 import { type JSONSerializable, filterObject } from '@nidavellirx/meowv-core';
 
-export type ApiErrorDetails = string | string[] | Record<string, string[]>;
+export type ApiErrorDetails = unknown;
 
 export interface ApiErrorProperties {
   code: string;
@@ -61,20 +61,22 @@ export class ApiError extends Error implements ApiErrorProperties, JSONSerializa
     });
   }
 
-  private formatDetails(details?: ApiErrorDetails): Record<string, string[]> | undefined {
-    if (!details) return undefined;
+  private formatDetails(details?: unknown): unknown {
+    if (details === undefined || details === null) {
+      return undefined;
+    }
 
-    // MARK: - Single string
+    // MARK: Wrap plain string
     if (typeof details === 'string') {
       return { _error: [details] };
     }
 
-    // MARK: - Array of strings
-    if (Array.isArray(details)) {
+    // MARK: Wrap array of strings
+    if (Array.isArray(details) && details.every((d) => typeof d === 'string')) {
       return { _errors: details };
     }
 
-    // MARK: - Already formatted
+    // MARK: For everything else, leave all other structures as-is
     return details;
   }
 }
