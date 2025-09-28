@@ -22,7 +22,7 @@ export interface MongoDbQueryFormatter {
 }
 
 @injectable()
-export class MongoDbQueryControllerImpl implements MongoDbQueryFormatter {
+export class MongoDbQueryFormatterImpl implements MongoDbQueryFormatter {
   /**
    * Flattens the provided query object into a single-level map.
    *

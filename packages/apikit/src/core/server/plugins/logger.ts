@@ -9,7 +9,7 @@ import type { ServerPluginOptions } from '#/server';
 
 const loggerPlugin: FastifyPluginAsync<ServerPluginOptions> = async (fastify, options) => {
   const logger = options.loggerController;
-  const debug = options.apikitController.debug;
+  const debug = options.apikitController.isDebug;
 
   /* Fastify lifecycle (simplified for logging):
      onRequest     → body not parsed yet (only raw stream).

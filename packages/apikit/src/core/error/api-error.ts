@@ -39,13 +39,6 @@ export class ApiError extends Error implements ApiErrorProperties, JSONSerializa
     return this._details;
   }
 
-  static with(properties: ApiErrorProperties, customMessage?: string): ApiError {
-    return new ApiError({
-      ...properties,
-      message: customMessage ?? properties.message,
-    });
-  }
-
   public toJSON(): any {
     const json = {
       code: this._code,

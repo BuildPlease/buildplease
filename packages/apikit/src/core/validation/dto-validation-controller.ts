@@ -84,7 +84,7 @@ export class DtoValidationControllerImpl implements DtoValidationController {
 
   private handleError(error: unknown): never {
     if (error instanceof ZodError) {
-      if (this.configuration.debug) {
+      if (this.configuration.isDebug) {
         this.logger.debug('Dto validation failed', { details: error.issues });
       }
 

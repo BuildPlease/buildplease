@@ -7,6 +7,7 @@ const Configuration = {
 const Database = {
   MongoDB: {
     QueryFormatter: Symbol.for(`${prefix}.Database.MongoDB.QueryFormatter`),
+    GeoJSONFormatter: Symbol.for(`${prefix}.Database.MongoDB.GeoJSONFormatter`),
   },
 };
 

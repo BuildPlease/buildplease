@@ -10,7 +10,7 @@ import type {
 } from '#/configuration';
 
 export interface ApiKitController {
-  get debug(): boolean;
+  get isDebug(): boolean;
   get environment(): EnvironmentConfig;
   get logger(): LoggerConfig;
   get server(): ServerConfig;
@@ -21,7 +21,7 @@ export interface ApiKitController {
 
 @injectable()
 export class ApiKitControllerImpl implements ApiKitController {
-  private readonly _debug: boolean;
+  private readonly _isDebug: boolean;
   private readonly _environment: EnvironmentConfig;
   private readonly _logger: LoggerConfig;
   private readonly _server: ServerConfig;
@@ -30,7 +30,7 @@ export class ApiKitControllerImpl implements ApiKitController {
   private readonly _staticFiles?: StaticFilesConfig;
 
   constructor() {
-    this._debug = this.loadDebug();
+    this._isDebug = this.loadDebug();
     this._environment = this.loadEnvironmentConfig();
     this._logger = this.loadLoggerConfig();
     this._server = this.loadServerConfig();
@@ -39,8 +39,8 @@ export class ApiKitControllerImpl implements ApiKitController {
     this._staticFiles = this.loadStaticFilesConfig();
   }
 
-  get debug(): boolean {
-    return this._debug;
+  get isDebug(): boolean {
+    return this._isDebug;
   }
 
   get environment(): EnvironmentConfig {

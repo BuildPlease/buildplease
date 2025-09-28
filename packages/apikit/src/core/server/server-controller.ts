@@ -111,7 +111,7 @@ export class ServerControllerImpl implements ServerController {
     await this.server.ready();
     await this.server.listen({ port, host });
 
-    this.logger.info(`${LOG_PREFIX} Debug mode ${this.configuration.debug ? 'ON' : 'OFF'}`);
+    this.logger.info(`${LOG_PREFIX} Debug mode ${this.configuration.isDebug ? 'ON' : 'OFF'}`);
     this.logger.info(`${LOG_PREFIX} Started on ${host}:${port}`);
   }
 
@@ -123,7 +123,7 @@ export class ServerControllerImpl implements ServerController {
       const isInternalError = !error.statusCode || error.statusCode === 500;
       const internalError = ApiErrorFactory.make('Server.INTERNAL_SERVER_ERROR');
 
-      if (this.configuration.debug) {
+      if (this.configuration.isDebug) {
         this.logger.debug(`${LOG_PREFIX} Error Handler:`, { error: error });
       }
 
@@ -134,18 +134,18 @@ export class ServerControllerImpl implements ServerController {
       const handleValidationError = () => {
         const validationError = ApiErrorFactory.make('Validation.BAD_REQUEST');
         const statusCode = error.statusCode || validationError.statusCode;
-        const response = ApiError.with({
+        const response = new ApiError({
           statusCode: statusCode,
           code: validationError.code,
           message: error.message,
-        }).toJSON();
+        });
 
-        reply.status(statusCode).send(response);
+        reply.status(statusCode).send(response.toJSON());
       };
 
       const handleInternalError = () => {
         this.logger.error(`${LOG_PREFIX} Internal Server Error`, {
-          flag: LogFlag.Critical,
+          flag: LogFlag.Important,
           metadata: { requestId: request.metadata.requestId },
           error: error,
         });
@@ -154,13 +154,13 @@ export class ServerControllerImpl implements ServerController {
 
       const handleError = () => {
         const statusCode = error.statusCode || 500;
-        const response = ApiError.with({
+        const response = new ApiError({
           statusCode: statusCode,
           code: error.code || error.name || internalError.code,
           message: error.message || internalError.message,
-        }).toJSON();
+        });
 
-        reply.status(statusCode).send(response);
+        reply.status(statusCode).send(response.toJSON());
       };
 
       if (error instanceof ApiError) {

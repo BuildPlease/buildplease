@@ -1,5 +1,3 @@
-import { isNotNull } from '@/utils/application';
-
 export interface ObjectFilterOptions {
   filterNull?: boolean;
   filterUndefined?: boolean;
@@ -13,7 +11,12 @@ export interface ObjectFilterOptions {
  *
  * @template T - The type of the object to filter.
  * @param {T} obj - The object to filter.
- * @param {FilterOptions} [options={}] - Options that determine which properties to filter out.
+ * @param {ObjectFilterOptions} [options={}] - Options that determine which properties to filter out.
+ * @param {boolean} [options.filterNull=true] - If true, properties with null values will be filtered out.
+ * @param {boolean} [options.filterUndefined=true] - If true, properties with undefined values will be filtered out.
+ * @param {boolean} [options.filterEmptyString=false] - If true, properties with empty string values will be filtered out.
+ * @param {boolean} [options.filterEmptyObject=false] - If true, properties with empty object values will be filtered out.
+ * @param {boolean} [options.filterEmptyArray=false] - If true, properties with empty array values will be filtered out.
  * @returns {Partial<T>} - A new object with the filtered properties.
  */
 export function filterObject<T extends object | null | undefined>(
@@ -44,7 +47,7 @@ export function filterObject<T extends object | null | undefined>(
     }
 
     if (
-      (filterNull && !isNotNull(value)) ||
+      (filterNull && value === null) ||
       (filterUndefined && value === undefined) ||
       (filterEmptyString && value === '') ||
       (filterEmptyObject && isEmptyObject(value)) ||

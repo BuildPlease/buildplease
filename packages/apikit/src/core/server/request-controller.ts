@@ -5,7 +5,7 @@ import type { FastifyReply, FastifyRequest } from 'fastify';
 import { ignoreErrorAsync } from '@nidavellirx/meowv-core';
 
 import { ApiKitSymbols } from '#/di';
-import type { LoggerController } from '#/logger';
+import { LogFlag, type LoggerController } from '#/logger';
 import { ApiError } from '#/error';
 import type { ResponseController } from '#/server';
 import { type HttpResponse } from '#/http';
@@ -63,14 +63,16 @@ export class RequestControllerImpl implements RequestController {
 
   private async logError(request: FastifyRequest, error: unknown): Promise<void> {
     await ignoreErrorAsync(() => {
-      const metadata = request.metadata;
+      const requestId = request.metadata.requestId;
+
       if (error instanceof ApiError) {
-        this.logger.info('Api Error Response', {
-          error: { code: error.code, message: error.message },
-          metadata: { requestId: metadata.requestId },
-        });
+        this.logger.info('Api Error Response', { error: error, metadata: { requestId: requestId } });
       } else {
-        this.logger.error('Unexpected Error', { error, metadata: { requestId: metadata.requestId } });
+        this.logger.error('Unexpected Error', {
+          flag: LogFlag.Important,
+          error: error,
+          metadata: { requestId: requestId },
+        });
       }
     });
   }

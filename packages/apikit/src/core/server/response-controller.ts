@@ -64,10 +64,9 @@ export class ResponseControllerImpl implements ResponseController {
         return reply.sendFile(response.filePath);
       }
     } catch (error) {
-      this.logger.error('Error sending file response', {
-        metadata: { requestId: request.metadata.requestId },
-        error: error,
-      });
+      const requestId = request.metadata.requestId;
+      this.logger.error('Error sending file response', { error: error, metadata: { requestId: requestId } });
+
       throw error;
     }
   }
