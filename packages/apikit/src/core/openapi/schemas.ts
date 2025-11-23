@@ -54,7 +54,7 @@ const PointGeometrySchema = {
   properties: {
     type: { type: 'string', enum: ['Point'] },
     coordinates: { $ref: 'Coordinates#' },
-    bbox: { oneOf: [{ $ref: 'BBox#' }, { type: 'null' }] },
+    bbox: { $ref: 'BBox#' },
   },
   example: {
     type: 'Point',
@@ -73,7 +73,7 @@ const MultiPointGeometrySchema = {
       type: 'array',
       items: { $ref: 'Coordinates#' },
     },
-    bbox: { oneOf: [{ $ref: 'BBox#' }, { type: 'null' }] },
+    bbox: { $ref: 'BBox#' },
   },
   example: {
     type: 'MultiPoint',
@@ -96,7 +96,7 @@ const LineStringGeometrySchema = {
       minItems: 2,
       items: { $ref: 'Coordinates#' },
     },
-    bbox: { oneOf: [{ $ref: 'BBox#' }, { type: 'null' }] },
+    bbox: { $ref: 'BBox#' },
   },
   example: {
     type: 'LineString',
@@ -122,7 +122,7 @@ const MultiLineStringGeometrySchema = {
         items: { $ref: 'Coordinates#' },
       },
     },
-    bbox: { oneOf: [{ $ref: 'BBox#' }, { type: 'null' }] },
+    bbox: { $ref: 'BBox#' },
   },
   example: {
     type: 'MultiLineString',
@@ -155,7 +155,7 @@ const PolygonGeometrySchema = {
         items: { $ref: 'Coordinates#' },
       },
     },
-    bbox: { oneOf: [{ $ref: 'BBox#' }, { type: 'null' }] },
+    bbox: { $ref: 'BBox#' },
   },
   example: {
     type: 'Polygon',
@@ -190,7 +190,7 @@ const MultiPolygonGeometrySchema = {
         },
       },
     },
-    bbox: { oneOf: [{ $ref: 'BBox#' }, { type: 'null' }] },
+    bbox: { $ref: 'BBox#' },
   },
   example: {
     type: 'MultiPolygon',
@@ -375,10 +375,27 @@ export const ContactsSchema = {
   $id: 'Contacts',
   type: 'object',
   properties: {
-    email: { type: ['string', 'null'], format: 'email', example: 'example@example.com' },
-    fb: { type: ['string', 'null'], example: 'example_facebook' },
-    ig: { type: ['string', 'null'], example: '@example_instagram' },
-    phone: { type: ['string', 'null'], example: '+421 123 456 789' },
+    email: {
+      type: 'string',
+      nullable: true,
+      format: 'email',
+      example: 'example@example.com',
+    },
+    fb: {
+      type: 'string',
+      nullable: true,
+      example: 'example_facebook',
+    },
+    ig: {
+      type: 'string',
+      nullable: true,
+      example: '@example_instagram',
+    },
+    phone: {
+      type: 'string',
+      nullable: true,
+      example: '+421 123 456 789',
+    },
   },
   additionalProperties: false,
 };
