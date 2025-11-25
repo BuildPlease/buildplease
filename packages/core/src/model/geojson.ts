@@ -9,7 +9,7 @@ import type { JSONSerializable } from '@/utils/domain';
  * @throws {Error} If longitude or latitude are out of range.
  */
 export class Coordinates implements JSONSerializable {
-  private readonly _value: [number, number];
+  readonly value: [number, number];
 
   constructor([longitude, latitude]: [number, number]) {
     if (longitude < -180 || longitude > 180) {
@@ -18,28 +18,21 @@ export class Coordinates implements JSONSerializable {
     if (latitude < -90 || latitude > 90) {
       throw new Error('Latitude must be between -90 and 90.');
     }
-    this._value = [longitude, latitude];
+    this.value = [longitude, latitude];
   }
 
   /**
    * @returns {number} The longitude.
    */
   get longitude(): number {
-    return this._value[0];
+    return this.value[0];
   }
 
   /**
    * @returns {number} The latitude.
    */
   get latitude(): number {
-    return this._value[1];
-  }
-
-  /**
-   * @returns {[number, number]} The raw coordinate tuple.
-   */
-  get value(): [number, number] {
-    return this._value;
+    return this.value[1];
   }
 
   /**
@@ -48,7 +41,7 @@ export class Coordinates implements JSONSerializable {
    * @returns {[number, number]} Plain tuple [lon, lat]
    */
   public toJSON(): [number, number] {
-    return this._value;
+    return this.value;
   }
 }
 
