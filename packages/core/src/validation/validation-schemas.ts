@@ -12,7 +12,7 @@ import {
   MultiPolygon,
   OpeningHour,
   Contacts,
-} from '@nidavellirx/meowv-core';
+} from '@/model';
 
 /* MARK: - Primitives: Longitude & Latitude */
 const LongitudeSchema = z.number().min(-180).max(180);
