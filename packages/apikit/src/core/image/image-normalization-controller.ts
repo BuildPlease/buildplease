@@ -62,10 +62,18 @@ export class ImageNormalizationControllerImpl implements ImageNormalizationContr
   ): Promise<{ processed: Sharp; type: FormatType }> {
     const options = inputOptions ?? this.makeDefaultOptions();
 
-    const meta = await imageIn.metadata();
+    let meta: sharp.Metadata;
+
+    try {
+      meta = await imageIn.metadata();
+    } catch (error) {
+      throw ApiErrorFactory.make('Format.UNSUPPORTED_FORMAT', {
+        details: 'Invalid or unsupported image file',
+      });
+    }
 
     this.validateMaximumSize(meta.size, options.maximumSize);
-    this.validateInputFormat(meta.format as keyof sharp.FormatEnum | undefined);
+    this.validateInputFormat(meta.format, options.allowedInputFormats);
 
     let instance = await this.applyNormalization(imageIn, meta, options);
 
@@ -82,10 +90,20 @@ export class ImageNormalizationControllerImpl implements ImageNormalizationContr
     return { processed: instance, type };
   }
 
-  private validateInputFormat(format: keyof sharp.FormatEnum | undefined) {
+  private validateInputFormat(
+    format: keyof sharp.FormatEnum | undefined,
+    allowed?: (keyof sharp.FormatEnum)[],
+  ) {
     if (!format || !sharp.format[format]?.input) {
-      const message = `Unsupported input format: ${format}`;
-      throw ApiErrorFactory.make('Format.UNSUPPORTED_FORMAT', { details: message });
+      throw ApiErrorFactory.make('Format.UNSUPPORTED_FORMAT', {
+        details: `Unsupported input format: ${format}`,
+      });
+    }
+
+    if (allowed && !allowed.includes(format)) {
+      throw ApiErrorFactory.make('Format.UNSUPPORTED_FORMAT', {
+        details: `Format not allowed: ${format}`,
+      });
     }
   }
 

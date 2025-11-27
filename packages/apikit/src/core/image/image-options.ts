@@ -6,6 +6,7 @@ import { type Sharp } from 'sharp';
  */
 type Base = {
   maximumSize?: number;
+  allowedInputFormats?: (keyof sharp.FormatEnum)[];
 
   /**
    * Direct passthrough for Sharp configuration.
