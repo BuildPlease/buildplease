@@ -124,8 +124,8 @@ const AddressSchema = z
   .object({
     streetLine1: z.string().min(1),
     streetLine2: z.string().optional().nullable(),
-    city: z.string().min(1),
     postalCode: z.string().optional().nullable(),
+    city: z.string().optional().nullable(),
     state: z.string().optional().nullable(),
     country: z.string().min(1),
     countryCode: z.string().optional().nullable(),
@@ -134,12 +134,12 @@ const AddressSchema = z
     (value) =>
       new Address({
         streetLine1: value.streetLine1,
-        streetLine2: value.streetLine2 ?? null,
+        streetLine2: value.streetLine2,
+        postalCode: value.postalCode,
+        state: value.state,
         city: value.city,
-        postalCode: value.postalCode ?? null,
-        state: value.state ?? null,
         country: value.country,
-        countryCode: value.countryCode ?? null,
+        countryCode: value.countryCode,
       }),
   );
 

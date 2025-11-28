@@ -1,6 +1,10 @@
 export * from './assembly';
+
 export * from './address-eo';
 export * from './geometry-eo';
+export * from './email-eo';
+export * from './phone-eo';
+
 export * from './object-id';
 export * from './mongodb-query';
 

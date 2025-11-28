@@ -12,20 +12,20 @@ export class AddressEo {
   streetLine1!: string;
 
   @prop({ required: false, type: () => String })
-  streetLine2?: string;
+  streetLine2?: string | null;
+
+  @prop({ required: false, type: () => String })
+  postalCode?: string | null;
+
+  @prop({ required: false, type: () => String })
+  state?: string | null;
 
   @prop({ required: true, type: () => String })
-  city!: string;
-
-  @prop({ required: false, type: () => String })
-  postalCode?: string;
-
-  @prop({ required: false, type: () => String })
-  state?: string;
+  city?: string | null;
 
   @prop({ required: true, type: () => String })
   country!: string;
 
   @prop({ required: false, type: () => String })
-  countryCode?: string;
+  countryCode?: string | null;
 }
