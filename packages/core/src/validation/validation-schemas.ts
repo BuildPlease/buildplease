@@ -3,6 +3,7 @@ import { z } from 'zod';
 import {
   type OpeningHourInterval,
   type Geometry,
+  Address,
   Coordinates,
   Point,
   MultiPoint,
@@ -26,14 +27,7 @@ const CoordinatesSchema = z
 /* MARK: - BBox (2D or 3D) */
 const BBoxSchema = z.union([
   z.tuple([z.number(), z.number(), z.number(), z.number()]), // 2D
-  z.tuple([
-    z.number(),
-    z.number(),
-    z.number(),
-    z.number(),
-    z.number(),
-    z.number(),
-  ]), // 3D
+  z.tuple([z.number(), z.number(), z.number(), z.number(), z.number(), z.number()]), // 3D
 ]);
 
 /* MARK: - Geometry: Point */
@@ -85,9 +79,7 @@ const PolygonGeometrySchema = z
 const MultiPolygonGeometrySchema = z
   .object({
     type: z.literal('MultiPolygon'),
-    coordinates: z
-      .array(z.array(z.array(CoordinatesSchema).min(4)).min(1))
-      .min(1),
+    coordinates: z.array(z.array(z.array(CoordinatesSchema).min(4)).min(1)).min(1),
     bbox: BBoxSchema.optional(),
   })
   .transform((value) => new MultiPolygon(value.coordinates, value.bbox));
@@ -113,9 +105,7 @@ const OpeningHourSchema = z
     day: z.number().min(0).max(6),
     intervals: z.array(OpeningHourIntervalSchema).nonempty(),
   })
-  .transform(
-    (value) => new OpeningHour(value.day, value.intervals),
-  );
+  .transform((value) => new OpeningHour(value.day, value.intervals));
 
 const OpeningHoursSchema = z.array(OpeningHourSchema);
 
@@ -128,6 +118,30 @@ const ContactsSchema = z
     phone: z.string().optional(),
   })
   .transform((value) => new Contacts(value));
+
+/* MARK: - Address */
+const AddressSchema = z
+  .object({
+    streetLine1: z.string().min(1),
+    streetLine2: z.string().optional().nullable(),
+    city: z.string().min(1),
+    postalCode: z.string().optional().nullable(),
+    state: z.string().optional().nullable(),
+    country: z.string().min(1),
+    countryCode: z.string().optional().nullable(),
+  })
+  .transform(
+    (value) =>
+      new Address({
+        streetLine1: value.streetLine1,
+        streetLine2: value.streetLine2 ?? null,
+        city: value.city,
+        postalCode: value.postalCode ?? null,
+        state: value.state ?? null,
+        country: value.country,
+        countryCode: value.countryCode ?? null,
+      }),
+  );
 
 /* MARK: - Export */
 export const ValidationSchemas = {
@@ -150,4 +164,5 @@ export const ValidationSchemas = {
   OpeningHour: OpeningHourSchema,
   OpeningHours: OpeningHoursSchema,
   Contacts: ContactsSchema,
+  Address: AddressSchema,
 };

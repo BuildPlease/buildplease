@@ -400,6 +400,55 @@ export const ContactsSchema = {
   additionalProperties: false,
 };
 
+/* MARK: - Address */
+export const AddressSchema = {
+  $id: 'Address',
+  type: 'object',
+  properties: {
+    streetLine1: {
+      type: 'string',
+      description: 'Primary street line (street and house number)',
+      example: '1 Infinite Loop',
+    },
+    streetLine2: {
+      type: 'string',
+      nullable: true,
+      description: 'Secondary street line (apartment, suite, etc.)',
+      example: 'Suite 500',
+    },
+    city: {
+      type: 'string',
+      description: 'City or locality',
+      example: 'Cupertino',
+    },
+    postalCode: {
+      type: 'string',
+      nullable: true,
+      description: 'Postal or ZIP code',
+      example: '95014',
+    },
+    state: {
+      type: 'string',
+      nullable: true,
+      description: 'State, province or region',
+      example: 'CA',
+    },
+    country: {
+      type: 'string',
+      description: 'Country name',
+      example: 'United States',
+    },
+    countryCode: {
+      type: 'string',
+      nullable: true,
+      description: 'ISO 3166-1 alpha-2 country code',
+      example: 'US',
+    },
+  },
+  required: ['streetLine1', 'city', 'country'],
+  additionalProperties: false,
+};
+
 export const OpenAPISchemas = {
   ErrorResponse: ErrorResponseSchema,
 
@@ -422,4 +471,5 @@ export const OpenAPISchemas = {
   Phone: PhoneSchema,
   OpeningHour: OpeningHourSchema,
   Contacts: ContactsSchema,
+  Address: AddressSchema,
 };

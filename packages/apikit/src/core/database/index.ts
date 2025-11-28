@@ -1,4 +1,5 @@
 export * from './assembly';
+export * from './address-eo';
 export * from './geometry-eo';
 export * from './object-id';
 export * from './mongodb-query';
