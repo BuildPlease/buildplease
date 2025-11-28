@@ -111,7 +111,7 @@ const OpeningHoursSchema = z.array(OpeningHourSchema);
 /* MARK: - Contacts */
 const ContactsSchema: z.ZodType<Contacts> = z
   .object({
-    email: z.string().email().optional(),
+    email: z.email().optional(),
     fb: z.string().optional(),
     ig: z.string().optional(),
     phone: z.string().optional(),
