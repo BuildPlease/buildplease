@@ -19,104 +19,115 @@ const LongitudeSchema = z.number().min(-180).max(180);
 const LatitudeSchema = z.number().min(-90).max(90);
 
 /* MARK: - Coordinates */
-const CoordinatesSchema: z.ZodType<Coordinates> = z
+const CoordinatesSchema = z
   .tuple([LongitudeSchema, LatitudeSchema])
-  .transform(([lon, lat]) => new Coordinates([lon, lat]));
+  .transform(([longitude, latitude]) => new Coordinates([longitude, latitude]));
 
 /* MARK: - BBox (2D or 3D) */
 const BBoxSchema = z.union([
   z.tuple([z.number(), z.number(), z.number(), z.number()]), // 2D
-  z.tuple([z.number(), z.number(), z.number(), z.number(), z.number(), z.number()]), // 3D
+  z.tuple([
+    z.number(),
+    z.number(),
+    z.number(),
+    z.number(),
+    z.number(),
+    z.number(),
+  ]), // 3D
 ]);
 
 /* MARK: - Geometry: Point */
-const PointGeometrySchema: z.ZodType<Point> = z
+const PointGeometrySchema = z
   .object({
     type: z.literal('Point'),
     coordinates: CoordinatesSchema,
     bbox: BBoxSchema.optional(),
   })
-  .transform((o) => new Point(o.coordinates, o.bbox));
+  .transform((value) => new Point(value.coordinates, value.bbox));
 
 /* MARK: - Geometry: MultiPoint */
-const MultiPointGeometrySchema: z.ZodType<MultiPoint> = z
+const MultiPointGeometrySchema = z
   .object({
     type: z.literal('MultiPoint'),
     coordinates: z.array(CoordinatesSchema).nonempty(),
     bbox: BBoxSchema.optional(),
   })
-  .transform((o) => new MultiPoint(o.coordinates, o.bbox));
+  .transform((value) => new MultiPoint(value.coordinates, value.bbox));
 
 /* MARK: - Geometry: LineString */
-const LineStringGeometrySchema: z.ZodType<LineString> = z
+const LineStringGeometrySchema = z
   .object({
     type: z.literal('LineString'),
     coordinates: z.array(CoordinatesSchema).min(2),
     bbox: BBoxSchema.optional(),
   })
-  .transform((o) => new LineString(o.coordinates, o.bbox));
+  .transform((value) => new LineString(value.coordinates, value.bbox));
 
 /* MARK: - Geometry: MultiLineString */
-const MultiLineStringGeometrySchema: z.ZodType<MultiLineString> = z
+const MultiLineStringGeometrySchema = z
   .object({
     type: z.literal('MultiLineString'),
     coordinates: z.array(z.array(CoordinatesSchema).min(2)).nonempty(),
     bbox: BBoxSchema.optional(),
   })
-  .transform((o) => new MultiLineString(o.coordinates, o.bbox));
+  .transform((value) => new MultiLineString(value.coordinates, value.bbox));
 
 /* MARK: - Geometry: Polygon */
-const PolygonGeometrySchema: z.ZodType<Polygon> = z
+const PolygonGeometrySchema = z
   .object({
     type: z.literal('Polygon'),
     coordinates: z.array(z.array(CoordinatesSchema).min(4)).min(1),
     bbox: BBoxSchema.optional(),
   })
-  .transform((o) => new Polygon(o.coordinates, o.bbox));
+  .transform((value) => new Polygon(value.coordinates, value.bbox));
 
 /* MARK: - Geometry: MultiPolygon */
-const MultiPolygonGeometrySchema: z.ZodType<MultiPolygon> = z
+const MultiPolygonGeometrySchema = z
   .object({
     type: z.literal('MultiPolygon'),
-    coordinates: z.array(z.array(z.array(CoordinatesSchema).min(4)).min(1)).min(1),
+    coordinates: z
+      .array(z.array(z.array(CoordinatesSchema).min(4)).min(1))
+      .min(1),
     bbox: BBoxSchema.optional(),
   })
-  .transform((o) => new MultiPolygon(o.coordinates, o.bbox));
+  .transform((value) => new MultiPolygon(value.coordinates, value.bbox));
 
 /* MARK: - Geometry Union */
-const GeometrySchema: z.ZodType<Geometry> = z.union([
+const GeometrySchema = z.union([
   PointGeometrySchema,
   MultiPointGeometrySchema,
   LineStringGeometrySchema,
   MultiLineStringGeometrySchema,
   PolygonGeometrySchema,
   MultiPolygonGeometrySchema,
-]);
+]) satisfies z.ZodType<Geometry>;
 
 /* MARK: - Opening Hours */
-const OpeningHourIntervalSchema: z.ZodType<OpeningHourInterval> = z.object({
+const OpeningHourIntervalSchema = z.object({
   open: z.string().min(1),
   close: z.string().min(1),
-});
+}) satisfies z.ZodType<OpeningHourInterval>;
 
-const OpeningHourSchema: z.ZodType<OpeningHour> = z
+const OpeningHourSchema = z
   .object({
     day: z.number().min(0).max(6),
     intervals: z.array(OpeningHourIntervalSchema).nonempty(),
   })
-  .transform((o) => new OpeningHour(o.day, o.intervals));
+  .transform(
+    (value) => new OpeningHour(value.day, value.intervals),
+  );
 
 const OpeningHoursSchema = z.array(OpeningHourSchema);
 
 /* MARK: - Contacts */
-const ContactsSchema: z.ZodType<Contacts> = z
+const ContactsSchema = z
   .object({
     email: z.email().optional(),
     fb: z.string().optional(),
     ig: z.string().optional(),
     phone: z.string().optional(),
   })
-  .transform((o) => new Contacts(o));
+  .transform((value) => new Contacts(value));
 
 /* MARK: - Export */
 export const ValidationSchemas = {
