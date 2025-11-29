@@ -1,10 +1,10 @@
 import { filterObject, type JSONSerializable } from '@/utils';
 
 export class Contacts implements JSONSerializable {
-  email?: string;
-  facebook?: string;
-  instagram?: string;
-  phone?: string;
+  email?: string | null;
+  facebook?: string | null;
+  instagram?: string | null;
+  phone?: string | null;
 
   constructor({
     email,
@@ -12,10 +12,10 @@ export class Contacts implements JSONSerializable {
     instagram,
     phone,
   }: {
-    email?: string;
-    facebook?: string;
-    instagram?: string;
-    phone?: string;
+    email?: string | null;
+    facebook?: string | null;
+    instagram?: string | null;
+    phone?: string | null;
   }) {
     this.email = email;
     this.facebook = facebook;
