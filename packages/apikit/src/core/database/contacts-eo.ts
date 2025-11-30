@@ -26,27 +26,31 @@ export class ContactsEo {
 }
 
 export class ContactsEoConverter {
-  static toDomain(input: ContactsEo): Contacts {
+  static toDomain(input?: ContactsEo | null): Contacts | null {
+    if (!input) return null;
+
     return new Contacts({
-      email: input.email,
-      facebook: input.fb,
-      instagram: input.ig,
-      phone: input.phone,
-      web: input.web,
+      email: input.email ?? null,
+      facebook: input.fb ?? null,
+      instagram: input.ig ?? null,
+      web: input.web ?? null,
+      phone: input.phone ?? null,
     });
   }
 
-  static toEo(input: Contacts): ContactsEo {
+  static toEo(input?: Contacts | null): ContactsEo | undefined {
+    if (!input) return undefined;
+
     return Object.assign(new ContactsEo(), {
-      email: input.email,
-      fb: input.facebook,
-      ig: input.instagram,
-      phone: input.phone,
-      web: input.web,
+      email: input.email ?? null,
+      fb: input.facebook ?? null,
+      ig: input.instagram ?? null,
+      web: input.web ?? null,
+      phone: input.phone ?? null,
     });
   }
 
-  static toPartialEo(input: DeepPartial<Contacts> | undefined): DeepPartial<ContactsEo> | undefined {
+  static toPartialEo(input?: DeepPartial<Contacts> | null): DeepPartial<ContactsEo> | undefined {
     if (!input) return undefined;
 
     const output: DeepPartial<ContactsEo> = {
