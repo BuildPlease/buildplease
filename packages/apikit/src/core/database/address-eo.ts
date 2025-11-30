@@ -56,9 +56,7 @@ export class AddressEoConverter {
     });
   }
 
-  static toPartialEo(
-    input: DeepPartial<Address> | undefined,
-  ): DeepPartial<AddressEo> | undefined {
+  static toPartialEo(input: DeepPartial<Address> | undefined): DeepPartial<AddressEo> | undefined {
     if (!input) return undefined;
 
     const output: DeepPartial<AddressEo> = {

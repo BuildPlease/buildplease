@@ -396,6 +396,11 @@ export const ContactsSchema = {
       nullable: true,
       example: '+421 123 456 789',
     },
+    web: {
+      type: 'string',
+      nullable: true,
+      example: 'https://example.org',
+    },
   },
   additionalProperties: false,
 };
