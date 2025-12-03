@@ -31,10 +31,10 @@ export class ContactsEoConverter {
 
     return new Contacts({
       email: input.email ?? null,
-      facebook: input.fb ?? null,
-      instagram: input.ig ?? null,
-      web: input.web ?? null,
+      fb: input.fb ?? null,
+      ig: input.ig ?? null,
       phone: input.phone ?? null,
+      web: input.web ?? null,
     });
   }
 
@@ -43,10 +43,10 @@ export class ContactsEoConverter {
 
     return Object.assign(new ContactsEo(), {
       email: input.email ?? null,
-      fb: input.facebook ?? null,
-      ig: input.instagram ?? null,
-      web: input.web ?? null,
+      fb: input.fb ?? null,
+      ig: input.ig ?? null,
       phone: input.phone ?? null,
+      web: input.web ?? null,
     });
   }
 
@@ -55,10 +55,10 @@ export class ContactsEoConverter {
 
     const output: DeepPartial<ContactsEo> = {
       email: input.email,
-      fb: input.facebook,
-      ig: input.instagram,
-      web: input.web,
+      fb: input.fb,
+      ig: input.ig,
       phone: input.phone,
+      web: input.web,
     };
 
     return output;

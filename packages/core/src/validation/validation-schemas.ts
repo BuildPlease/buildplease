@@ -112,12 +112,22 @@ const OpeningHoursSchema = z.array(OpeningHourSchema);
 /* MARK: - Contacts */
 const ContactsSchema = z
   .object({
-    email: z.email().optional(),
-    fb: z.string().optional(),
-    ig: z.string().optional(),
-    phone: z.string().optional(),
+    email: z.email().optional().nullable(),
+    fb: z.string().optional().nullable(),
+    ig: z.string().optional().nullable(),
+    phone: z.string().optional().nullable(),
+    web: z.string().optional().nullable(),
   })
-  .transform((value) => new Contacts(value));
+  .transform(
+    (value) =>
+      new Contacts({
+        email: value.email,
+        fb: value.fb,
+        ig: value.ig,
+        phone: value.phone,
+        web: value.web,
+      }),
+  );
 
 /* MARK: - Address */
 const AddressSchema = z

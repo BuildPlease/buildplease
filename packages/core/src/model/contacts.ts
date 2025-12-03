@@ -2,27 +2,27 @@ import { filterObject, type JSONSerializable } from '@/utils';
 
 export class Contacts implements JSONSerializable {
   email?: string | null;
-  facebook?: string | null;
-  instagram?: string | null;
+  fb?: string | null;
+  ig?: string | null;
   phone?: string | null;
   web?: string | null;
 
   constructor({
     email,
-    facebook,
-    instagram,
+    fb,
+    ig,
     phone,
     web,
   }: {
     email?: string | null;
-    facebook?: string | null;
-    instagram?: string | null;
+    fb?: string | null;
+    ig?: string | null;
     phone?: string | null;
     web?: string | null;
   }) {
     this.email = email;
-    this.facebook = facebook;
-    this.instagram = instagram;
+    this.fb = fb;
+    this.ig = ig;
     this.phone = phone;
     this.web = web;
   }
@@ -30,8 +30,8 @@ export class Contacts implements JSONSerializable {
   public toJSON(): any {
     const json = {
       email: this.email,
-      fb: this.facebook,
-      ig: this.instagram,
+      fb: this.fb,
+      ig: this.ig,
       phone: this.phone,
       web: this.web,
     };
