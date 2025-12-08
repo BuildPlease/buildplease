@@ -102,8 +102,8 @@ const OpeningHourIntervalSchema = z.object({
 
 const OpeningHourSchema = z
   .object({
-    day: z.number().min(0).max(6),
-    intervals: z.array(OpeningHourIntervalSchema).nonempty(),
+    day: z.number().int().min(1).max(7),
+    intervals: z.array(OpeningHourIntervalSchema).default([]),
   })
   .transform((value) => new OpeningHour(value.day, value.intervals));
 
