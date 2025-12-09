@@ -1,4 +1,4 @@
-import { isDefinedAndNotNull, isNonEmptyString } from '@nidavellirx/meowv-core';
+import { isNonEmptyString } from '@nidavellirx/meowv-core';
 import { injectable } from 'inversify';
 
 export interface MultipartFormatterController {
@@ -30,21 +30,18 @@ export class MultipartFormatterControllerImpl implements MultipartFormatterContr
   // MARK: - Private helpers
 
   private normalizeValue(input: unknown, _key: string): unknown {
-    if (!isDefinedAndNotNull(input)) return undefined;
-    if (!isNonEmptyString(input)) return input; // Already formatter
+    if (input === undefined) return undefined;
+    if (input === null) return null;
+    if (!isNonEmptyString(input)) return input;
 
     const trimmed = input.trim();
 
-    // Boolean coercion
+    if (trimmed === '') return input;
+    if (trimmed === 'null') return null;
     if (trimmed === 'true') return true;
     if (trimmed === 'false') return false;
+    if (!Number.isNaN(Number(trimmed))) return Number(trimmed);
 
-    // Numeric coercion
-    if (!Number.isNaN(Number(trimmed)) && trimmed !== '') {
-      return Number(trimmed);
-    }
-
-    // JSON parse attempt
     try {
       return JSON.parse(trimmed);
     } catch {
