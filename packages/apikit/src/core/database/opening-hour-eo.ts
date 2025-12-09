@@ -32,6 +32,8 @@ export class OpeningHourEo {
 }
 
 export class OpeningHourEoConverter {
+  // MARK: - Single
+
   static toDomain(input: OpeningHourEo): OpeningHour {
     const intervals: OpeningHourInterval[] =
       input.intervals?.map((item) => ({
@@ -54,7 +56,7 @@ export class OpeningHourEoConverter {
     });
   }
 
-  static toPartialEo(input: DeepPartial<OpeningHour> | undefined): DeepPartial<OpeningHourEo> | undefined {
+  static toPartial(input: DeepPartial<OpeningHour> | undefined): DeepPartial<OpeningHourEo> | undefined {
     if (!input) return undefined;
 
     const output: DeepPartial<OpeningHourEo> = {
@@ -66,5 +68,35 @@ export class OpeningHourEoConverter {
     };
 
     return output;
+  }
+
+  // MARK: - List
+
+  static toDomainList(input?: OpeningHourEo[] | null): OpeningHour[] | null | undefined {
+    if (input === undefined || input === null) {
+      return input;
+    }
+
+    return input.map((item) => OpeningHourEoConverter.toDomain(item));
+  }
+
+  static toEoList(input?: OpeningHour[] | null): OpeningHourEo[] | null | undefined {
+    if (input === undefined || input === null) {
+      return input;
+    }
+
+    return input.map((item) => OpeningHourEoConverter.toEo(item));
+  }
+
+  static toPartialList(
+    input?: DeepPartial<OpeningHour>[] | null,
+  ): DeepPartial<OpeningHourEo>[] | null | undefined {
+    if (input === undefined || input === null) {
+      return input;
+    }
+
+    return input
+      .map((item) => OpeningHourEoConverter.toPartial(item))
+      .filter((item): item is DeepPartial<OpeningHourEo> => item !== undefined);
   }
 }
