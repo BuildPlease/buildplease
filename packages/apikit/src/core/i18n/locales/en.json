@@ -32,6 +32,9 @@
     },
     "format": {
       "unsupported": "Unsupported format"
+    },
+    "image": {
+      "max_size_exceeded": "Image is too large. Maximum allowed size is {maxSize} MB."
     }
   }
 }

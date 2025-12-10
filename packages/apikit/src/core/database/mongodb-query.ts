@@ -67,4 +67,36 @@ export interface MongoDbUpdateOptions {
    * Example: `{ name: 1, email: 1 }` or `{ password: 0 }`
    */
   projection?: Record<string, 0 | 1>;
+
+  /**
+   * Controls how unknown fields are handled.
+   * - `true`: strip unknown fields (default mongoose behavior)
+   * - `false`: allow unknown fields
+   * - `'throw'`: raise an error on unknown fields
+   */
+  strict?: boolean | 'throw';
+
+  /**
+   * When used with `upsert: true`, applies schema defaults
+   * to newly inserted documents.
+   */
+  setDefaultsOnInsert?: boolean;
+
+  /**
+   * Overrides schema-level timestamps for this operation.
+   * Set to `false` to skip updating `updatedAt` / `createdAt`.
+   */
+  timestamps?: boolean;
+
+  /**
+   * If true, returns the raw MongoDB result object
+   * instead of the mapped document.
+   */
+  rawResult?: boolean;
+
+  /**
+   * Maximum time in milliseconds the server should spend
+   * processing this update before aborting.
+   */
+  maxTimeMS?: number;
 }

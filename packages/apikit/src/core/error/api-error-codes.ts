@@ -149,6 +149,19 @@ export const FormatErrors = defineErrors({
     key: 'errors.format.unsupported',
     statusCode: 400,
   },
+  MAX_SIZE_EXCEEDED: {
+    code: 'MAX_SIZE_EXCEEDED',
+    key: 'errors.format.max_size_exceeded',
+    statusCode: 413,
+  },
+});
+
+export const ImageErrors = defineErrors({
+  MAX_SIZE_EXCEEDED: {
+    code: 'IMAGE_MAX_SIZE_EXCEEDED',
+    key: 'errors.image.max_size_exceeded',
+    statusCode: 413,
+  },
 });
 
 export const ApiErrorCodes = {
@@ -158,4 +171,5 @@ export const ApiErrorCodes = {
   Authorization: AuthorizationErrors,
   Validation: ValidationErrors,
   Format: FormatErrors,
+  Image: ImageErrors,
 } as const;

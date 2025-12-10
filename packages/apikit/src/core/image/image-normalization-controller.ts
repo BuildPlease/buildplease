@@ -108,9 +108,15 @@ export class ImageNormalizationControllerImpl implements ImageNormalizationContr
   }
 
   private validateMaximumSize(currentSize: number | undefined, maxSize: number | undefined): void {
-    if (maxSize && currentSize && currentSize > maxSize) {
-      const message = `Image size ${currentSize} exceeds maximum allowed size of ${maxSize}`;
-      throw ApiErrorFactory.make('Validation.INVALID_PROPERTIES', { details: message });
+    if (!maxSize || !currentSize) return;
+
+    if (currentSize > maxSize) {
+      const maxSizeMB = maxSize / (1024 * 1024);
+
+      throw ApiErrorFactory.make('Image.MAX_SIZE_EXCEEDED', {
+        maxSize: Math.round(maxSizeMB),
+        details: { currentSize: currentSize, maxSize: maxSize },
+      });
     }
   }
 

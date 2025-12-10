@@ -32,6 +32,9 @@
     },
     "format": {
       "unsupported": "Nepodporovaný formát"
+    },
+    "image": {
+      "max_size_exceeded": "Obrázok je príliš veľký. Maximálna povolená veľkosť je {maxSize} MB."
     }
   }
 }

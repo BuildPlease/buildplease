@@ -72,11 +72,13 @@ export class ApiErrorFactory {
     const def = getErrorByPath(ApiErrorCodes, key);
     if (!def) throw new Error(`Invalid error key: ${key}`);
 
+    const { message, details, ...i18nOptions } = opts;
+
     return new ApiError({
       code: def.code,
       statusCode: def.statusCode,
-      message: opts.message ?? I18nProvider.t(def.key, opts),
-      details: opts.details,
+      message: message ?? I18nProvider.t(def.key, i18nOptions),
+      details,
     });
   }
 
