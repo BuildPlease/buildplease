@@ -2,7 +2,9 @@ import { type Readable, PassThrough } from 'stream';
 import { pipeline as pipelineAsync } from 'stream/promises';
 
 import sharp, { type Sharp } from 'sharp';
-import { injectable } from 'inversify';
+import { injectable, inject } from 'inversify';
+
+import { type UnitFormatterController, ByteUnit, CoreSymbols } from '@nidavellirx/meowv-core';
 
 import { FormatType } from '#/formatter';
 import type { ImageOptions } from '#/image';
@@ -26,6 +28,11 @@ export interface ImageNormalizationController {
 
 @injectable()
 export class ImageNormalizationControllerImpl implements ImageNormalizationController {
+  constructor(
+    @inject(CoreSymbols.DI.Formatter.UnitController)
+    private readonly formatter: UnitFormatterController,
+  ) {}
+
   async processBufferToBuffer(input: Buffer, options?: ImageOptions) {
     const { processed, type } = await this.transform(sharp(input), options);
     const buffer = await processed.toBuffer();
@@ -111,11 +118,17 @@ export class ImageNormalizationControllerImpl implements ImageNormalizationContr
     if (!maxSize || !currentSize) return;
 
     if (currentSize > maxSize) {
-      const maxSizeMB = maxSize / (1024 * 1024);
+      const formatted = this.formatter.formatBytes(maxSize, {
+        inputUnit: ByteUnit.Byte,
+        outputUnit: 'auto',
+        decimals: 1,
+      });
 
       throw ApiErrorFactory.make('Image.MAX_SIZE_EXCEEDED', {
-        maxSize: Math.round(maxSizeMB),
-        details: { currentSize: currentSize, maxSize: maxSize },
+        i18n: {
+          specs: { maxSize: formatted.value, unit: formatted.unit },
+        },
+        details: `current=${currentSize}B, max=${maxSize}B, exceeded=${currentSize - maxSize}B`,
       });
     }
   }

@@ -1,4 +1,4 @@
-const prefix = 'ApiKit.DI';
+const prefix = 'Meowv.ApiKit.DI';
 
 const Configuration = {
   Controller: Symbol.for(`${prefix}.Configuration.Controller`),

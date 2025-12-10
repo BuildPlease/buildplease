@@ -29,17 +29,20 @@
     "experimentalDecorators": true,
 
     /* Output Control */
-    "noEmit": true,
     "declaration": true,
     "emitDeclarationOnly": true,
+    "skipLibCheck": true,
+    "sourceMap": false,
 
     /* Paths */
+    "rootDir": "./",
     "outDir": "./dist",
+    "declarationDir": "dist/types",
     "baseUrl": "./",
     "paths": {
       "@/*": ["src/*"]
     }
   },
-  "include": ["index.ts", "src/**/*"],
+  "include": ["index.ts", "src"],
   "exclude": ["node_modules", "dist", "test"]
 }

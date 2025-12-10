@@ -9,7 +9,7 @@ import {
   DtoValidationControllerImpl,
 } from '#/validation';
 
-export class ValidationAssembly implements Assembly {
+export class ApiKit_ValidationAssembly implements Assembly {
   public assemble(container: Container): void {
     container.bind<ValidationController>(ApiKitSymbols.DI.Validation.Controller).to(ValidationControllerImpl);
 

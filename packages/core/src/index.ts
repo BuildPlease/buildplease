@@ -2,6 +2,7 @@ export * from './converter';
 export * from './device';
 export * from './di';
 export * from './error';
+export * from './formatter';
 export * from './foundation';
 export * from './localization';
 export * from './model';

@@ -8,7 +8,7 @@ import { resolvePath } from './src/core/file';
 import pkg from './package.json' assert { type: 'json' };
 
 const outDir = 'dist/src';
-const workspacePackages = ['@nidavellirx/meowv-core'];
+const workspacePackages: string[] = ['@nidavellirx/meowv-core'];
 const peers = Object.keys(pkg.peerDependencies ?? {});
 
 export default defineConfig({

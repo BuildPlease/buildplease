@@ -34,7 +34,7 @@
       "unsupported": "Nepodporovaný formát"
     },
     "image": {
-      "max_size_exceeded": "Obrázek je příliš velký. Maximální povolená velikost je {maxSize} MB."
+      "max_size_exceeded": "Obrázek je příliš velký. Maximální povolená velikost je {{specs.maxSize}} {{specs.unit}}."
     }
   }
 }

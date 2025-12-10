@@ -3,19 +3,19 @@ import 'reflect-metadata';
 import { type Assembly, MEOWV_CORE_INITIALIZE } from '@nidavellirx/meowv-core';
 
 import {
-  ConfigurationAssembly,
-  DatabaseAssembly,
-  EmailAssembly,
-  FileAssembly,
-  FormatterAssembly,
-  ImageAssembly,
-  I18nAssembly,
-  LoggerAssembly,
-  NormalizationAssembly,
-  OpenAPIAssembly,
-  SecurityAssembly,
-  ServerAssembly,
-  ValidationAssembly,
+  ApiKit_ConfigurationAssembly,
+  ApiKit_DatabaseAssembly,
+  ApiKit_EmailAssembly,
+  ApiKit_FileAssembly,
+  ApiKit_FormatterAssembly,
+  ApiKit_ImageAssembly,
+  ApiKit_I18nAssembly,
+  ApiKit_LoggerAssembly,
+  ApiKit_NormalizationAssembly,
+  ApiKit_OpenAPIAssembly,
+  ApiKit_SecurityAssembly,
+  ApiKit_ServerAssembly,
+  ApiKit_ValidationAssembly,
 } from '@/core';
 
 // MARK: - Exports
@@ -34,18 +34,18 @@ export function MEOWV_APIKIT_INITIALIZE(): Assembly[] {
 
 function makeAssemblies(): Assembly[] {
   return [
-    new ConfigurationAssembly(),
-    new LoggerAssembly(),
-    new I18nAssembly(),
-    new DatabaseAssembly(),
-    new EmailAssembly(),
-    new FileAssembly(),
-    new FormatterAssembly(),
-    new ImageAssembly(),
-    new NormalizationAssembly(),
-    new OpenAPIAssembly(),
-    new SecurityAssembly(),
-    new ValidationAssembly(),
-    new ServerAssembly(),
+    new ApiKit_ConfigurationAssembly(),
+    new ApiKit_LoggerAssembly(),
+    new ApiKit_I18nAssembly(),
+    new ApiKit_DatabaseAssembly(),
+    new ApiKit_EmailAssembly(),
+    new ApiKit_FileAssembly(),
+    new ApiKit_FormatterAssembly(),
+    new ApiKit_ImageAssembly(),
+    new ApiKit_NormalizationAssembly(),
+    new ApiKit_OpenAPIAssembly(),
+    new ApiKit_SecurityAssembly(),
+    new ApiKit_ValidationAssembly(),
+    new ApiKit_ServerAssembly(),
   ];
 }

@@ -1,4 +1,4 @@
-const _prefix = 'WebKit.DI';
+const _prefix = 'Meowv.WebKit.DI';
 
 const DI = {};
 

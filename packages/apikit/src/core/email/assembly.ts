@@ -4,7 +4,7 @@ import type { Assembly } from '@nidavellirx/meowv-core';
 import { ApiKitSymbols } from '#/di';
 import { type EmailController, EmailControllerImpl } from '#/email';
 
-export class EmailAssembly implements Assembly {
+export class ApiKit_EmailAssembly implements Assembly {
   public assemble(container: Container): void {
     container
       .bind<EmailController>(ApiKitSymbols.DI.Email.Controller)

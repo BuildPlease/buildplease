@@ -12,7 +12,7 @@ import {
   ResponseControllerImpl,
 } from '#/server';
 
-export class ServerAssembly implements Assembly {
+export class ApiKit_ServerAssembly implements Assembly {
   public assemble(container: Container): void {
     container
       .bind<ServerController>(ApiKitSymbols.DI.Server.Controller)

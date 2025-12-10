@@ -3,21 +3,26 @@ import { defineConfig } from 'tsup';
 import pkg from './package.json' assert { type: 'json' };
 
 const peers = Object.keys(pkg.peerDependencies ?? {});
-const workspacePackages = ['@nidavellirx/meowv-core'];
+const workspacePackages: string[] = ['@nidavellirx/meowv-core'];
 
 export default defineConfig({
-  entry: ['index.ts'],
   outDir: 'dist',
   clean: true,
-  dts: true,
+
+  entry: ['index.ts'],
+
   minify: true,
   bundle: true,
+  shims: false,
   splitting: true,
   sourcemap: false,
   treeshake: true,
-  format: ['cjs', 'esm'],
-  target: 'esnext',
-  platform: 'browser',
+  dts: true,
+
   tsconfig: 'tsconfig.json',
+  platform: 'browser',
+  target: 'esnext',
+  format: ['cjs', 'esm'],
+
   external: ['reflect-metadata', ...peers, ...workspacePackages],
 });

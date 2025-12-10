@@ -9,7 +9,7 @@ import {
   MongoDbGeoJSONFormatterImpl,
 } from '#/database';
 
-export class DatabaseAssembly implements Assembly {
+export class ApiKit_DatabaseAssembly implements Assembly {
   public assemble(container: Container): void {
     container
       .bind<MongoDbQueryFormatter>(ApiKitSymbols.DI.Database.MongoDB.QueryFormatter)

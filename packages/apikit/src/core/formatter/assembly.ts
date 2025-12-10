@@ -9,7 +9,7 @@ import {
   MultipartFormatterControllerImpl,
 } from '#/formatter';
 
-export class FormatterAssembly implements Assembly {
+export class ApiKit_FormatterAssembly implements Assembly {
   public assemble(container: Container): void {
     container.bind<FormatterController>(ApiKitSymbols.DI.Formatter.Controller).to(FormatterControllerImpl);
 

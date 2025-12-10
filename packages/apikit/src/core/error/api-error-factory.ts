@@ -12,14 +12,17 @@ import { type I18nOptions, I18nProvider } from '#/i18n';
 /**
  * Options for creating a localized API error.
  *
- * @property {string} [message]
+ * @property {string} [overrideMessage]
  *   Override for translated error message.
  * @property {string} [details]
  *   Technical details for debugging or logging.
+ * @property {i18n} [i18n]
+ *   Interpolation and i18next config
  */
-export interface ApiErrorFactoryOptions extends I18nOptions {
-  message?: string;
+export interface ApiErrorFactoryOptions {
+  overrideMessage?: string;
   details?: ApiErrorDetails;
+  i18n?: I18nOptions;
 }
 
 /**
@@ -59,7 +62,7 @@ export class ApiErrorFactory {
    *
    * @param {BuiltInKeys} key
    *   Dot-separated path to error definition (e.g. 'Validation.INVALID_EMAIL').
-   * @param {ApiErrorFactoryOptions} [opts]
+   * @param {ApiErrorFactoryOptions} [options]
    *   Options for message override, details, or locale.
    *
    * @returns {ApiError}
@@ -68,17 +71,18 @@ export class ApiErrorFactory {
    * @throws {Error}
    *   If the key path is invalid.
    */
-  static make(key: BuiltInKeys, opts: ApiErrorFactoryOptions = {}): ApiError {
-    const def = getErrorByPath(ApiErrorCodes, key);
-    if (!def) throw new Error(`Invalid error key: ${key}`);
+  static make(key: BuiltInKeys, options: ApiErrorFactoryOptions = {}): ApiError {
+    const error = getErrorByPath(ApiErrorCodes, key);
+    if (!error) throw new Error(`Invalid error key: ${key}`);
 
-    const { message, details, ...i18nOptions } = opts;
+    const { overrideMessage, details, i18n } = options;
+    const message = overrideMessage ?? I18nProvider.t(error.key, i18n);
 
     return new ApiError({
-      code: def.code,
-      statusCode: def.statusCode,
-      message: message ?? I18nProvider.t(def.key, i18nOptions),
-      details,
+      code: error.code,
+      statusCode: error.statusCode,
+      message: message,
+      details: details,
     });
   }
 
@@ -121,7 +125,7 @@ export class ApiErrorFactory {
        *
        * @param {Flatten<typeof mergedCodes>} key
        *   Dot-separated path in combined error hierarchy.
-       * @param {ApiErrorFactoryOptions} [opts]
+       * @param {ApiErrorFactoryOptions} [options]
        *   Options for message override, details, or locale.
        *
        * @returns {ApiError}
@@ -130,17 +134,18 @@ export class ApiErrorFactory {
        * @throws {Error}
        *   If the key path is invalid.
        */
-      static make(key: Flatten<typeof mergedCodes>, opts: ApiErrorFactoryOptions = {}): ApiError {
-        const def = getErrorByPath(this.codes, key);
-        if (!def) {
-          throw new Error(`Invalid extended error key: ${key}`);
-        }
+      static make(key: Flatten<typeof mergedCodes>, options: ApiErrorFactoryOptions = {}): ApiError {
+        const error = getErrorByPath(this.codes, key);
+        if (!error) throw new Error(`Invalid extended error key: ${key}`);
+
+        const { overrideMessage, details, i18n } = options;
+        const message = overrideMessage ?? I18nProvider.t(error.key, i18n);
 
         return new ApiError({
-          code: def.code,
-          statusCode: def.statusCode,
-          message: opts.message ?? I18nProvider.t(def.key, opts),
-          details: opts.details,
+          code: error.code,
+          statusCode: error.statusCode,
+          message: message,
+          details: details,
         });
       }
 
