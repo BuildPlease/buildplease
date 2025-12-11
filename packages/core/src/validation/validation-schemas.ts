@@ -19,16 +19,23 @@ import {
 const LongitudeSchema = z.number().min(-180).max(180);
 const LatitudeSchema = z.number().min(-90).max(90);
 
+export type LongitudeDto = z.input<typeof LongitudeSchema>;
+export type LatitudeDto = z.input<typeof LatitudeSchema>;
+
 /* MARK: - Coordinates */
 const CoordinatesSchema = z
   .tuple([LongitudeSchema, LatitudeSchema])
   .transform(([longitude, latitude]) => new Coordinates([longitude, latitude]));
+
+export type CoordinatesDto = z.input<typeof CoordinatesSchema>;
 
 /* MARK: - BBox (2D or 3D) */
 const BBoxSchema = z.union([
   z.tuple([z.number(), z.number(), z.number(), z.number()]), // 2D
   z.tuple([z.number(), z.number(), z.number(), z.number(), z.number(), z.number()]), // 3D
 ]);
+
+export type BBoxDto = z.input<typeof BBoxSchema>;
 
 /* MARK: - Geometry: Point */
 const PointGeometrySchema = z
@@ -39,6 +46,8 @@ const PointGeometrySchema = z
   })
   .transform((value) => new Point(value.coordinates, value.bbox));
 
+export type PointGeometryDto = z.input<typeof PointGeometrySchema>;
+
 /* MARK: - Geometry: MultiPoint */
 const MultiPointGeometrySchema = z
   .object({
@@ -47,6 +56,8 @@ const MultiPointGeometrySchema = z
     bbox: BBoxSchema.optional(),
   })
   .transform((value) => new MultiPoint(value.coordinates, value.bbox));
+
+export type MultiPointGeometryDto = z.input<typeof MultiPointGeometrySchema>;
 
 /* MARK: - Geometry: LineString */
 const LineStringGeometrySchema = z
@@ -57,6 +68,8 @@ const LineStringGeometrySchema = z
   })
   .transform((value) => new LineString(value.coordinates, value.bbox));
 
+export type LineStringGeometryDto = z.input<typeof LineStringGeometrySchema>;
+
 /* MARK: - Geometry: MultiLineString */
 const MultiLineStringGeometrySchema = z
   .object({
@@ -65,6 +78,8 @@ const MultiLineStringGeometrySchema = z
     bbox: BBoxSchema.optional(),
   })
   .transform((value) => new MultiLineString(value.coordinates, value.bbox));
+
+export type MultiLineStringGeometryDto = z.input<typeof MultiLineStringGeometrySchema>;
 
 /* MARK: - Geometry: Polygon */
 const PolygonGeometrySchema = z
@@ -75,6 +90,8 @@ const PolygonGeometrySchema = z
   })
   .transform((value) => new Polygon(value.coordinates, value.bbox));
 
+export type PolygonGeometryDto = z.input<typeof PolygonGeometrySchema>;
+
 /* MARK: - Geometry: MultiPolygon */
 const MultiPolygonGeometrySchema = z
   .object({
@@ -83,6 +100,8 @@ const MultiPolygonGeometrySchema = z
     bbox: BBoxSchema.optional(),
   })
   .transform((value) => new MultiPolygon(value.coordinates, value.bbox));
+
+export type MultiPolygonGeometryDto = z.input<typeof MultiPolygonGeometrySchema>;
 
 /* MARK: - Geometry Union */
 const GeometrySchema = z.union([
@@ -93,6 +112,8 @@ const GeometrySchema = z.union([
   PolygonGeometrySchema,
   MultiPolygonGeometrySchema,
 ]) satisfies z.ZodType<Geometry>;
+
+export type GeometryDto = z.input<typeof GeometrySchema>;
 
 /* MARK: - Opening Hours */
 const OpeningHourIntervalSchema = z.object({
@@ -108,6 +129,10 @@ const OpeningHourSchema = z
   .transform((value) => new OpeningHour(value.day, value.intervals));
 
 const OpeningHoursSchema = z.array(OpeningHourSchema);
+
+export type OpeningHourIntervalDto = z.input<typeof OpeningHourIntervalSchema>;
+export type OpeningHourDto = z.input<typeof OpeningHourSchema>;
+export type OpeningHoursDto = z.input<typeof OpeningHoursSchema>;
 
 /* MARK: - Contacts */
 const ContactsSchema = z
@@ -128,6 +153,8 @@ const ContactsSchema = z
         web: value.web,
       }),
   );
+
+export type ContactsDto = z.input<typeof ContactsSchema>;
 
 /* MARK: - Address */
 const AddressSchema = z
@@ -152,6 +179,8 @@ const AddressSchema = z
         countryCode: value.countryCode,
       }),
   );
+
+export type AddressDto = z.input<typeof AddressSchema>;
 
 /* MARK: - Export */
 export const ValidationSchemas = {
