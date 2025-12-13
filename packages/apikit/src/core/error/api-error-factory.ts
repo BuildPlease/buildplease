@@ -20,7 +20,7 @@ import { type I18nOptions, I18nProvider } from '#/i18n';
  *   Interpolation and i18next config
  */
 export interface ApiErrorFactoryOptions {
-  overrideMessage?: string;
+  overrideMessage?: string | null;
   details?: ApiErrorDetails;
   i18n?: I18nOptions;
 }

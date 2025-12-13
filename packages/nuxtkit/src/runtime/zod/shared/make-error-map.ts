@@ -1,6 +1,8 @@
 import type { Composer } from 'vue-i18n';
 import { type $ZodErrorMap, type $ZodStringFormats, util } from 'zod/v4/core';
 
+import type { ValidationSchemaI18nParams } from '@nidavellirx/meowv-webkit';
+
 import { useNuxtKit } from '#nuxtkit/composables/use-nuxt-kit';
 import { getSizing, type Sizable, type SizableUnit } from '#nuxtkit/zod/shared';
 
@@ -117,8 +119,16 @@ export function makeErrorMap(i18n: Composer): $ZodErrorMap {
       case 'invalid_element':
         return t(makeKey('invalid_element'), { origin: issue.origin });
 
-      case 'custom':
-        return issue.message ?? t(makeKey('invalid'));
+      case 'custom': {
+        const params = issue.params as ValidationSchemaI18nParams | undefined;
+
+        if (params?.i18n?.key) {
+          const { key, values } = params.i18n;
+          return values ? t(key, values) : t(key);
+        }
+
+        return t(makeKey('invalid'));
+      }
 
       default:
         return t(makeKey('invalid'));

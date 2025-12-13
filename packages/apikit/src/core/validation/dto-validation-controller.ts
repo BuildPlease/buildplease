@@ -1,7 +1,10 @@
 import { injectable, inject } from 'inversify';
 import { z, type ZodType, ZodError } from 'zod';
 
+import type { ValidationSchemaI18nParams } from '@nidavellirx/meowv-core';
+
 import { ApiKitSymbols } from '#/di';
+import { I18nProvider } from '#/i18n';
 import { ApiErrorFactory } from '#/error';
 import type { LoggerController } from '#/logger';
 import type { ApiKitController } from '#/configuration';
@@ -88,9 +91,29 @@ export class DtoValidationControllerImpl implements DtoValidationController {
         this.logger.debug('Dto validation failed', { details: error.issues });
       }
 
-      throw ApiErrorFactory.make('Validation.INVALID_PROPERTIES', { details: z.treeifyError(error) });
+      const details = z.treeifyError(error);
+      const overrideMessage = this.buildValidationMessage(error);
+
+      throw ApiErrorFactory.make('Validation.INVALID_PROPERTIES', {
+        details: details,
+        overrideMessage: overrideMessage,
+      });
     }
 
     throw error;
+  }
+
+  private buildValidationMessage(error: ZodError): string | null {
+    for (const issue of error.issues) {
+      if (issue.code !== 'custom' || !issue.params) continue;
+
+      const params = issue.params as ValidationSchemaI18nParams | undefined;
+      if (!params?.i18n?.key) continue;
+
+      const { key, values } = params.i18n;
+      return values ? I18nProvider.t(key, values) : I18nProvider.t(key);
+    }
+
+    return null;
   }
 }

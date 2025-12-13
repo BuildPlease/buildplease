@@ -35,6 +35,10 @@
     },
     "image": {
       "max_size_exceeded": "Image is too large. Maximum allowed size is {{specs.maxSize}} {{specs.unit}}."
+    },
+    "opening_hours": {
+      "time_required": "Please specify both opening and closing time, or remove the interval.",
+      "time_range_incomplete": "This interval is incomplete. Please fill in both opening and closing time."
     }
   }
 }

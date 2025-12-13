@@ -14,6 +14,7 @@ import {
   OpeningHour,
   Contacts,
 } from '@/model';
+import type { ValidationSchemaI18nParams } from '@/validation';
 
 /* MARK: - Primitives: Longitude & Latitude */
 const LongitudeSchema = z.number().min(-180).max(180);
@@ -116,10 +117,43 @@ const GeometrySchema = z.union([
 export type GeometryDto = z.input<typeof GeometrySchema>;
 
 /* MARK: - Opening Hours */
-const OpeningHourIntervalSchema = z.object({
-  open: z.string().min(1),
-  close: z.string().min(1),
-}) satisfies z.ZodType<OpeningHourInterval>;
+const OpeningHourIntervalSchema = z
+  .object({
+    open: z.string(),
+    close: z.string(),
+  })
+  .superRefine((value, context) => {
+    const openValue = value.open.trim();
+    const closeValue = value.close.trim();
+
+    const hasOpen = openValue.length > 0;
+    const hasClose = closeValue.length > 0;
+
+    const addIssue = (key: string, path: (string | number)[], values?: Record<string, unknown>) => {
+      const params: ValidationSchemaI18nParams = {
+        i18n: {
+          key: key,
+          values: values,
+        },
+      };
+
+      context.addIssue({
+        code: 'custom',
+        path: path,
+        params: params,
+      });
+    };
+
+    if (!hasOpen && !hasClose) {
+      addIssue('errors.opening_hours.time_required', ['open']);
+      return;
+    }
+
+    if (hasOpen !== hasClose) {
+      const missingPath = hasOpen ? ['close'] : ['open'];
+      addIssue('errors.opening_hours.time_range_incomplete', missingPath);
+    }
+  }) satisfies z.ZodType<OpeningHourInterval>;
 
 const OpeningHourSchema = z
   .object({
