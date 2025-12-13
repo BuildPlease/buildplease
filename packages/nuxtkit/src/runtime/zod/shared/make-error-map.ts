@@ -9,7 +9,7 @@ import { getSizing, type Sizable, type SizableUnit } from '#nuxtkit/zod/shared';
 export function makeErrorMap(i18n: Composer): $ZodErrorMap {
   const { config } = useNuxtKit();
   const keyPrefix = config.zodI18n.keyPrefix;
-  const dateFormat = config.zodI18n.dateFormat;
+  const dateFormat = config.zodI18n.dateFormat as Intl.DateTimeFormatOptions | undefined;
 
   const { t } = i18n;
   const makeKey = (x: string) => `${keyPrefix}.${x}`;
@@ -60,30 +60,55 @@ export function makeErrorMap(i18n: Composer): $ZodErrorMap {
       }
 
       case 'too_small': {
-        if (issue.exact) {
-          if (issue.origin === 'date') {
-            return t(makeKey('date.exact'), { date: formatDate(i18n, issue.minimum, dateFormat) });
-          }
-          if (hasSizeUnits(issue.origin)) {
-            const unit = unitFor(i18n, makeKey, issue.origin, Number(issue.minimum));
-            return t(makeKey('size.exact'), { count: String(issue.minimum), unit });
-          }
-          return t(makeKey('value.exact'), { count: String(issue.minimum) });
+        // MARK: - Required string: z.string().min(1) / .nonempty()
+        const isRequiredNonemptyString = issue.origin === 'string' && issue.minimum === 1;
+        if (isRequiredNonemptyString) {
+          return t(makeKey('common.empty'));
         }
 
+        // MARK: - Date: min / exact
         if (issue.origin === 'date') {
-          return t(makeKey(issue.inclusive ? 'date.min.inclusive' : 'date.min.exclusive'), {
+          if (issue.exact) {
+            return t(makeKey('date.exact'), {
+              date: formatDate(i18n, issue.minimum, dateFormat),
+            });
+          }
+
+          const key = issue.inclusive ? 'date.min.inclusive' : 'date.min.exclusive';
+          return t(makeKey(key), {
             date: formatDate(i18n, issue.minimum, dateFormat),
           });
         }
+
+        // MARK: - Exact size/value (non-date)
+        if (issue.exact) {
+          if (hasSizeUnits(issue.origin)) {
+            const unit = unitFor(i18n, makeKey, issue.origin, Number(issue.minimum));
+            return t(makeKey('size.exact'), {
+              count: String(issue.minimum),
+              unit,
+            });
+          }
+
+          return t(makeKey('value.exact'), {
+            count: String(issue.minimum),
+          });
+        }
+
+        // MARK: - Min size/value (non-date)
         if (hasSizeUnits(issue.origin)) {
           const unit = unitFor(i18n, makeKey, issue.origin, Number(issue.minimum));
-          return t(makeKey(issue.inclusive ? 'size.min.inclusive' : 'size.min.exclusive'), {
+          const key = issue.inclusive ? 'size.min.inclusive' : 'size.min.exclusive';
+
+          return t(makeKey(key), {
             count: String(issue.minimum),
             unit,
           });
         }
-        return t(makeKey(issue.inclusive ? 'value.min.inclusive' : 'value.min.exclusive'), {
+
+        const key = issue.inclusive ? 'value.min.inclusive' : 'value.min.exclusive';
+
+        return t(makeKey(key), {
           count: String(issue.minimum),
         });
       }

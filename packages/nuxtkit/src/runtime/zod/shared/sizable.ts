@@ -29,7 +29,7 @@ export function getSizing(
   const locale = useCurrentLocale({ withRegion: false }).value;
   const state = getPluralState(count, locale);
 
-  // Return the correct pluralized unit and verb
+  // Return the pluralized unit and verb
   switch (state) {
     case PluralState.Singular:
       return { unit: sizing.singular, verb: sizing.verb };

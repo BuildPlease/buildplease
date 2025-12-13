@@ -102,7 +102,7 @@
       "ends_with": "Musí končit „{suffix}“.",
       "includes": "Musí obsahovat „{includes}“.",
       "regex": "Neplatný formát.",
-      "generic": "Neplatný formát {noun}."
+      "generic": "Neplatný formát: {noun}."
     },
     "multiple_of": "Musí být násobkem {divisor}.",
     "unrecognized_keys": "Neznámé položky: {keys}.",
