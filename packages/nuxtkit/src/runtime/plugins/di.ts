@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import { ScopeController } from '@nidavellirx/meowv-webkit';
 
 import { defineNuxtPlugin } from '#imports';
@@ -9,7 +10,7 @@ export default defineNuxtPlugin({
 
     return {
       provide: {
-        scopeController,
+        scopeController: scopeController,
         getInstance: <T>(id: symbol): T => scopeController.getInstance<T>(id),
       },
     };

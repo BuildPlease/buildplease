@@ -1,8 +1,8 @@
 import type { Identity } from '@nidavellirx/meowv-core';
 
-import type { RequestConfig, RequestInterceptor } from '@/networking';
+import type { RemoteRequestConfig, RemoteRequestInterceptor } from '@/networking';
 
-export class CookieInterceptor implements RequestInterceptor {
+export class CookieInterceptor implements RemoteRequestInterceptor {
   order = -10;
 
   hash(): Identity {
@@ -13,7 +13,7 @@ export class CookieInterceptor implements RequestInterceptor {
     return other instanceof CookieInterceptor;
   }
 
-  intercept(config: RequestConfig): RequestConfig {
+  intercept(config: RemoteRequestConfig): RemoteRequestConfig {
     return { ...config, withCredentials: true };
   }
 }

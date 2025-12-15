@@ -14,7 +14,7 @@ import { useNuxtApp } from '#app';
 export function useScopeController(): ScopeController {
   const { $scopeController } = useNuxtApp();
 
-  if (!$scopeController) throw new Error('Failed to resolve Container.');
+  if (!$scopeController) throw new Error('Failed to resolve Scope & Container.');
 
   return $scopeController;
 }

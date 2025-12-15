@@ -73,7 +73,7 @@ export class ImageNormalizationControllerImpl implements ImageNormalizationContr
 
     try {
       meta = await imageIn.metadata();
-    } catch (error) {
+    } catch {
       throw ApiErrorFactory.make('Format.UNSUPPORTED_FORMAT', {
         details: 'Invalid or unsupported image file',
       });

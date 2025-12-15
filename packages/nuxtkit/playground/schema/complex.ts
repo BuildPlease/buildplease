@@ -2,16 +2,22 @@ import type { OptionalPartial } from '@nidavellirx/meowv-webkit';
 import { z } from 'zod';
 
 const stringSchema = z.object({
-  stringMin1: z.string().min(1), // Min length 1
-  stringMin2: z.string().min(2), // Min length 2
-  stringMin5: z.string().min(5), // Min length 5
+  stringMin1: z.string().trim().min(1), // Min length 1
+  stringMin2: z.string().trim().min(2), // Min length 2
+  stringMin5: z.string().trim().min(5), // Min length 5
 
-  stringMax1: z.string().max(1), // Max length 1
-  stringMax2: z.string().max(2), // Max length 2
-  stringMax5: z.string().max(5), // Max length 5
+  stringMax1: z.string().trim().max(1), // Max length 1
+  stringMax2: z.string().trim().max(2), // Max length 2
+  stringMax5: z.string().trim().max(5), // Max length 5
 
-  regexLowercased: z.string().regex(/^[a-z]+$/), // Lowercase letters
-  regexUppercased: z.string().regex(/^[A-Z]+$/), // Uppercase letters
+  regexLowercased: z
+    .string()
+    .trim()
+    .regex(/^[a-z]+$/), // Lowercase letters
+  regexUppercased: z
+    .string()
+    .trim()
+    .regex(/^[A-Z]+$/), // Uppercase letters
 
   email: z.email(), // Email format
   url: z.url(), // URL format

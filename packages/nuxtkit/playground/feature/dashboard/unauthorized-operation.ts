@@ -2,17 +2,17 @@ import { injectable, inject } from 'inversify';
 
 import {
   type AsyncOperation,
-  type RequestConfig,
+  type RemoteRequestConfig,
   type RemoteEndpoint,
-  delay,
   HttpError,
+  delay,
 } from '@nidavellirx/meowv-webkit';
 
 export type UnauthorizedOperation = AsyncOperation<void, void>;
 
 @injectable()
 export class UnauthorizedEndpoint implements RemoteEndpoint<void, void, void, void> {
-  async makeRequest(_input: void, _options?: RequestConfig): Promise<void> {
+  async makeRequest(_input: void, _options?: RemoteRequestConfig): Promise<void> {
     await delay(2000);
 
     throw new HttpError({

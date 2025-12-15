@@ -1,5 +1,5 @@
 import { prop, modelOptions } from '@typegoose/typegoose';
-import { Contacts, DeepPartial } from '@nidavellirx/meowv-core';
+import { Contacts, type DeepPartial } from '@nidavellirx/meowv-core';
 
 @modelOptions({
   schemaOptions: {

@@ -447,14 +447,11 @@ function resetForm() {
 
 async function onSubmit(event: FormSubmitEvent<ComplexData>) {
   result.value = null;
-  console.log('parsing even data: ', event.data);
   const parsed = await complexSchema.safeParseAsync(event.data);
-  console.log('data: ', parsed);
   result.value = parsed.success ? { ok: true, errors: [] } : { ok: false, errors: parsed.error.issues };
 }
 
 async function onError(event: FormErrorEvent) {
-  console.log('error: ', event.errors);
   if (event?.errors?.[0]?.id) {
     const element = document.getElementById(event.errors[0].id);
     element?.focus();

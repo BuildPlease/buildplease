@@ -30,31 +30,30 @@
     "test:types": "vue-tsc --noEmit && cd playground && vue-tsc --noEmit"
   },
   "dependencies": {
-    "@iconify-json/flag": "1.2.9",
+    "@iconify-json/flag": "1.2.10",
     "@nidavellirx/meowv-webkit": "workspace:^",
-    "@nuxt/kit": "4.1.2",
+    "@nuxt/kit": "4.2.2",
     "defu": "6.1.4",
     "reflect-metadata": "0.2.2"
   },
   "peerDependencies": {
-    "@nuxt/ui": "^4.0.0",
-    "@nuxtjs/i18n": "^10.1.0",
-    "inversify": "^7.10.0",
-    "vue-i18n": "^11.1.12",
-    "zod": "^4.1.11"
+    "@nuxt/ui": "^4.2.1",
+    "@nuxtjs/i18n": "^10.2.1",
+    "inversify": "^7.10.6",
+    "vue-i18n": "^11.2.2",
+    "zod": "^4.2.0"
   },
   "devDependencies": {
-    "@nuxt/devtools": "2.6.5",
+    "@nuxt/devtools": "3.1.1",
     "@nuxt/module-builder": "1.0.2",
-    "@nuxt/schema": "4.1.2",
+    "@nuxt/schema": "4.2.2",
     "@nuxt/ui": "4.0.0",
     "@nuxtjs/i18n": "10.1.0",
-    "@types/node": "latest",
     "inversify": "7.10.0",
-    "nuxt": "4.1.2",
-    "typescript": "5.9.2",
-    "vitest": "3.2.4",
+    "nuxt": "4.2.2",
+    "typescript": "5.9.3",
+    "vitest": "4.0.15",
     "vue-i18n": "11.1.12",
-    "vue-tsc": "3.0.8"
+    "vue-tsc": "3.1.8"
   }
 }

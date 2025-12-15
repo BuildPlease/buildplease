@@ -118,59 +118,65 @@ export class ServerControllerImpl implements ServerController {
   // MARK: - Private
 
   private async configureErrorHandler(): Promise<void> {
-    this.server.setErrorHandler(async (error, request, reply) => {
+    this.server.setErrorHandler<{
+      statusCode?: number;
+      code?: string;
+      validation?: unknown[];
+      validationContext?: unknown;
+      name?: string;
+      message?: string;
+    }>(async (error, request, reply) => {
       const isValidationError = Array.isArray(error.validation);
       const isInternalError = !error.statusCode || error.statusCode === 500;
       const internalError = ApiErrorFactory.make('Server.INTERNAL_SERVER_ERROR');
 
       if (this.configuration.isDebug) {
-        this.logger.debug(`${LOG_PREFIX} Error Handler:`, { error: error });
+        this.logger.debug(`${LOG_PREFIX} Error Handler:`, { error });
       }
 
-      const handleApiError = (apiError: ApiError) => {
-        reply.status(apiError.statusCode).send(apiError.toJSON());
-      };
+      switch (true) {
+        // MARK: - ApiError (domain/business)
+        case error instanceof ApiError: {
+          return reply.status(error.statusCode).send(error.toJSON());
+        }
 
-      const handleValidationError = () => {
-        const validationError = ApiErrorFactory.make('Validation.BAD_REQUEST');
-        const statusCode = error.statusCode || validationError.statusCode;
-        const response = new ApiError({
-          statusCode: statusCode,
-          code: validationError.code,
-          message: error.message,
-        });
+        // MARK: - Validation (AJV/Fastify)
+        case isValidationError: {
+          const validationError = ApiErrorFactory.make('Validation.BAD_REQUEST');
+          const statusCode = error.statusCode || validationError.statusCode;
 
-        reply.status(statusCode).send(response.toJSON());
-      };
+          const response = new ApiError({
+            statusCode: statusCode,
+            code: validationError.code,
+            message: validationError.message,
+          });
 
-      const handleInternalError = () => {
-        this.logger.error(`${LOG_PREFIX} Internal Server Error`, {
-          flag: LogFlag.Important,
-          metadata: { requestId: request.metadata.requestId },
-          error: error,
-        });
-        reply.status(500).send(internalError);
-      };
+          return reply.status(statusCode).send(response.toJSON());
+        }
 
-      const handleError = () => {
-        const statusCode = error.statusCode || 500;
-        const response = new ApiError({
-          statusCode: statusCode,
-          code: error.code || error.name || internalError.code,
-          message: error.message || internalError.message,
-        });
+        // MARK: - Internal (500 / missing statusCode)
+        case isInternalError: {
+          this.logger.error(`${LOG_PREFIX} Internal Server Error`, {
+            flag: LogFlag.Important,
+            metadata: { requestId: request.metadata.requestId },
+            error: error,
+          });
 
-        reply.status(statusCode).send(response.toJSON());
-      };
+          return reply.status(500).send(internalError.toJSON());
+        }
 
-      if (error instanceof ApiError) {
-        return handleApiError(error);
-      } else if (isValidationError) {
-        return handleValidationError();
-      } else if (isInternalError) {
-        return handleInternalError();
-      } else {
-        return handleError();
+        // MARK: - Generic
+        default: {
+          const statusCode = error.statusCode || 500;
+
+          const response = new ApiError({
+            statusCode: statusCode,
+            code: error.code || error.name || internalError.code,
+            message: error.message || internalError.message,
+          });
+
+          return reply.status(statusCode).send(response.toJSON());
+        }
       }
     });
   }

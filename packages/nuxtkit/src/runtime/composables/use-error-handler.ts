@@ -1,4 +1,4 @@
-import { HttpError, UnauthorizedHttpError } from '@nidavellirx/meowv-webkit';
+import { HttpError, CanceledError } from '@nidavellirx/meowv-webkit';
 
 import { useNuxtApp, useRuntimeConfig } from '#app';
 import { useNuxtKit } from '#nuxtkit/composables/use-nuxt-kit';
@@ -13,7 +13,7 @@ export interface ErrorHandlerOptions {
    *
    * @default undefined
    */
-  handle?: (error: unknown) => string;
+  handle?: (error: unknown) => string | null;
 
   /**
    * Whether to log the error via NuxtKit logger.
@@ -28,7 +28,7 @@ export interface ErrorHandlerOptions {
  *
  * Steps:
  * 1. If `options.handle` is provided, its result is returned (full override).
- * 2. If the error is an `UnauthorizedHttpError`, return the i18n key or fallback.
+ * 2. If the error is an `CanceledError`, return null.
  * 3. If the error is a `HttpError`, return its message.
  * 4. If the error is a generic `Error`, return its message.
  * 5. Otherwise, return the generic i18n key or fallback.
@@ -48,13 +48,10 @@ export interface ErrorHandlerOptions {
  *   console.error(message)
  * }
  */
-export function useErrorHandler(error: unknown, options: ErrorHandlerOptions = DEFAULTS): string {
-  const app = useNuxtApp();
-  const kit = useNuxtKit();
-  const config = useRuntimeConfig().public.meowvNuxtKit;
-  const errors = config.errors;
-  const { t, te } = app.$i18n;
+export function useErrorHandler(error: unknown, options: ErrorHandlerOptions = DEFAULTS): string | null {
+  if (error instanceof CanceledError) return null;
 
+  const kit = useNuxtKit();
   if (options.log) {
     kit.logger.error(error, { force: true });
   }
@@ -64,18 +61,17 @@ export function useErrorHandler(error: unknown, options: ErrorHandlerOptions = D
     return options.handle(error);
   }
 
-  // Step 2: Unauthorized
-  if (error instanceof UnauthorizedHttpError) {
-    const key = errors.unauthorizedKey;
-    return te(key) ? t(key) : errors.unauthorizedMessageFallback;
-  }
-
-  // Step 3: HttpError
+  // Step 2: HttpError
   if (error instanceof HttpError) {
     return error.message;
   }
 
-  // Step 4: Fallback
+  // Step 3: Fallback
+  const app = useNuxtApp();
+  const config = useRuntimeConfig().public.meowvNuxtKit;
+  const errors = config.errors;
+  const { t, te } = app.$i18n;
+
   const genericKey = errors.genericErrorKey;
   const genericFallback = errors.genericMessageFallback;
   return te(genericKey) ? t(genericKey) : genericFallback;
@@ -83,5 +79,5 @@ export function useErrorHandler(error: unknown, options: ErrorHandlerOptions = D
 
 const DEFAULTS: ErrorHandlerOptions = {
   handle: undefined,
-  log: true,
+  log: false,
 };

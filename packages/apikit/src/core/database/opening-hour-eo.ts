@@ -1,5 +1,5 @@
 import { prop, modelOptions } from '@typegoose/typegoose';
-import { DeepPartial, OpeningHour, type OpeningHourInterval } from '@nidavellirx/meowv-core';
+import { type DeepPartial, OpeningHour, type OpeningHourInterval } from '@nidavellirx/meowv-core';
 
 @modelOptions({
   schemaOptions: {

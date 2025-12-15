@@ -12,7 +12,6 @@ export default defineNuxtConfig({
     '@di': r('./di'),
     '@schema': r('./schema'),
     '@feature': r('./feature'),
-    '@networking': r('./networking'),
   },
 
   typescript: {

@@ -74,9 +74,9 @@ import type { LoginViewModel } from '@feature/login/view-model';
 import type { FormSubmitEvent } from '#ui/types';
 
 const { t } = useI18n();
-
 const viewModel = useInstance<LoginViewModel>(Symbols.DI.Feature.Login.ViewModel);
 const state = viewModel.state;
+
 useBindViewModel(viewModel);
 
 async function onSubmit(event: FormSubmitEvent<LoginDto>) {

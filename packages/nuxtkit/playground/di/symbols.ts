@@ -30,6 +30,7 @@ const DI = {
     },
   },
   Operation: {
+    Test: Symbol.for('DI.Operation.Test.Operation'),
     Unauthorized: Symbol.for('DI.Operation.Unauthorized.Operation'),
   },
 };

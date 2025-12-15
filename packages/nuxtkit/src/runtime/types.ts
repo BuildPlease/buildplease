@@ -1,11 +1,9 @@
-import type { HttpError } from '@nidavellirx/meowv-webkit';
-
 /**
  * Context passed to the 'meowv:unauthorized' hook.
  */
 export type UnauthorizedHookContext = {
-  /** The HttpError that triggered the unauthorized state. */
-  error: HttpError;
+  /** The Error that triggered the unauthorized state. */
+  error: unknown;
   /** True when running on the server (SSR). */
   isSSR: boolean;
   /** Redirect helper. */

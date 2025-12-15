@@ -1,4 +1,4 @@
-import { injectable } from 'inversify';
+import { injectable, unmanaged } from 'inversify';
 import axios from 'axios';
 
 import {
@@ -16,53 +16,58 @@ import {
 
 import {
   type RemoteEndpoint,
-  type RequestConfig,
-  type RequestInterceptor,
+  type RemoteRequestConfig,
+  type RemoteRequestInterceptor,
+  type HttpErrorOptions,
+  HttpError,
   InterceptorSet,
   CookieInterceptor,
-  HttpError,
-  UnauthorizedHttpError,
 } from '@/networking';
 
 const FALLBACK_CODE = 'UNKNOWN_ERROR';
 const FALLBACK_MESSAGE = 'Unknown Error';
 
 @injectable()
-export class RemoteResource<Input, Output, Endpoint extends RemoteEndpoint<Input, unknown, Output, unknown>>
-  implements AsyncOperation<Input, Output>
-{
+export abstract class BaseRemoteResource<
+  Input,
+  Output,
+  Endpoint extends RemoteEndpoint<Input, unknown, Output, unknown>,
+> implements AsyncOperation<Input, Output> {
   protected readonly interceptors = new InterceptorSet();
 
-  constructor(protected readonly endpoint: Endpoint) {
+  constructor(
+    @unmanaged()
+    protected readonly endpoint: Endpoint,
+  ) {
     this.use(new CookieInterceptor());
   }
 
   // MARK: - Interceptors
 
-  public use(...items: RequestInterceptor[]): this {
+  protected use(...items: RemoteRequestInterceptor[]): this {
     this.interceptors.add(...items);
     return this;
   }
 
-  public removeInterceptor(item: RequestInterceptor): this {
+  protected removeInterceptor(item: RemoteRequestInterceptor): this {
     this.interceptors.remove(item);
     return this;
   }
 
-  public clearInterceptors(): this {
+  protected clearInterceptors(): this {
     this.interceptors.clear();
     return this;
   }
 
   // MARK: - Execution
 
-  public async execute(input: Input, options?: RequestConfig): Promise<Output> {
+  public async execute(input: Input, options?: RemoteRequestConfig): Promise<Output> {
     try {
       // 1) Convert input
       const inputDto = await this.convertOrThrow(() => this.endpoint.convertInput(input));
 
       // 2) Apply interceptors
-      let config: RequestConfig = { ...options };
+      let config: RemoteRequestConfig = { ...options };
       for (const interceptor of this.interceptors.list()) {
         config = interceptor.intercept(config);
       }
@@ -83,14 +88,14 @@ export class RemoteResource<Input, Output, Endpoint extends RemoteEndpoint<Input
     // MARK: - Keep already-normalized errors
     if (
       error instanceof HttpError ||
-      error instanceof UnauthorizedHttpError ||
       error instanceof TimeoutError ||
       error instanceof NetworkError ||
       error instanceof CanceledError ||
       error instanceof ConversionError ||
       error instanceof UnknownError
-    )
+    ) {
       return error;
+    }
 
     // MARK: - Canceled (ERR_CANCELED)
     if (
@@ -120,13 +125,8 @@ export class RemoteResource<Input, Output, Endpoint extends RemoteEndpoint<Input
       }
 
       const details = this.isStringArrayRecord(payload.details) ? payload.details : undefined;
-
-      return new HttpError({
-        statusCode: status,
-        code: isNonEmptyString(payload?.code) ? payload.code : FALLBACK_CODE,
-        message: isNonEmptyString(payload?.message) ? payload.message : FALLBACK_MESSAGE,
-        details: details,
-      });
+      const options: HttpErrorOptions = this.buildHttpErrorOptions(status, payload, details);
+      return new HttpError(options);
     }
 
     // Fallback: Unknown
@@ -142,9 +142,23 @@ export class RemoteResource<Input, Output, Endpoint extends RemoteEndpoint<Input
     }
   }
 
+  // MARK: - Private
+
   private isStringArrayRecord(value: unknown): value is Record<string, string[]> {
     if (!isDefinedAndNotNull(value) || !isPlainObject(value)) return false;
+    return Object.values(value).every((v) => Array.isArray(v) && v.every((i) => typeof i === 'string'));
+  }
 
-    return Object.values(value).every((arr) => Array.isArray(arr) && arr.every((v) => typeof v === 'string'));
+  private buildHttpErrorOptions(
+    statusCode: number,
+    payload: any,
+    details?: Record<string, string[]>,
+  ): HttpErrorOptions {
+    return {
+      statusCode: statusCode,
+      code: isNonEmptyString(payload?.code) ? payload.code : FALLBACK_CODE,
+      message: isNonEmptyString(payload?.message) ? payload.message : FALLBACK_MESSAGE,
+      details: details,
+    };
   }
 }

@@ -1,4 +1,4 @@
-import { ByteUnit } from '@/model';
+import { type ByteUnit } from '@/model';
 
 export interface FormatBytesOptions {
   inputUnit?: ByteUnit;

@@ -1,5 +1,5 @@
 import { prop, modelOptions } from '@typegoose/typegoose';
-import { DeepPartial, Address } from '@nidavellirx/meowv-core';
+import { type DeepPartial, Address } from '@nidavellirx/meowv-core';
 
 @modelOptions({
   schemaOptions: {

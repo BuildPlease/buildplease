@@ -6,6 +6,7 @@ export * from './formatter';
 export * from './foundation';
 export * from './localization';
 export * from './model';
+export * from './mutex';
 export * from './operation';
 export * from './security';
 export * from './utils';

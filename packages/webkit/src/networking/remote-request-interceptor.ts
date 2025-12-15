@@ -1,16 +1,16 @@
 import type { Equatable, Hashable, Identity } from '@nidavellirx/meowv-core';
 
-import type { RequestConfig } from '@/networking';
+import type { RemoteRequestConfig } from '@/networking';
 
-export interface RequestInterceptor extends Equatable, Hashable {
+export interface RemoteRequestInterceptor extends Equatable, Hashable {
   order: number;
-  intercept(config: RequestConfig): RequestConfig;
+  intercept(config: RemoteRequestConfig): RemoteRequestConfig;
 }
 
 export class InterceptorSet {
-  private map = new Map<Identity, RequestInterceptor>();
+  private map = new Map<Identity, RemoteRequestInterceptor>();
 
-  add(...items: RequestInterceptor[]): this {
+  add(...items: RemoteRequestInterceptor[]): this {
     for (const it of items) {
       const id = it.hash();
       const existing = this.map.get(id);
@@ -25,7 +25,7 @@ export class InterceptorSet {
     return this;
   }
 
-  remove(item: RequestInterceptor): this {
+  remove(item: RemoteRequestInterceptor): this {
     this.map.delete(item.hash());
     return this;
   }
@@ -35,7 +35,7 @@ export class InterceptorSet {
     return this;
   }
 
-  list(): RequestInterceptor[] {
+  list(): RemoteRequestInterceptor[] {
     return [...this.map.values()].sort((a, b) => a.order - b.order);
   }
 }

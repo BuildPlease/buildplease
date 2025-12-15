@@ -1,9 +1,9 @@
-import type { RequestInterceptor, RequestConfig } from '@nidavellirx/meowv-webkit';
+import type { RemoteRequestInterceptor, RemoteRequestConfig } from '@nidavellirx/meowv-webkit';
 
 import { useCurrentLocale } from '#imports';
 import { useNuxtKit } from '#nuxtkit/composables/use-nuxt-kit';
 
-export class LanguageInterceptor implements RequestInterceptor {
+export class LanguageInterceptor implements RemoteRequestInterceptor {
   order = 0;
 
   hash() {
@@ -15,7 +15,7 @@ export class LanguageInterceptor implements RequestInterceptor {
     return other instanceof LanguageInterceptor;
   }
 
-  intercept(config: RequestConfig): RequestConfig {
+  intercept(config: RemoteRequestConfig): RemoteRequestConfig {
     const { logger } = useNuxtKit();
     const currentLocale = useCurrentLocale({ withRegion: false });
     const value = currentLocale.value;

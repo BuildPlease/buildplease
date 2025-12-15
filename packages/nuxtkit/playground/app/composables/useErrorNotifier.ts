@@ -2,17 +2,13 @@ export interface ErrorNotifierOptions {
   handle?: ErrorHandlerOptions['handle'];
 }
 
-export function useErrorNotifier(error: unknown, options: ErrorNotifierOptions = {}): string {
+export function useErrorNotifier(error: unknown, options: ErrorNotifierOptions = {}): void {
   const { handle } = options;
   const toast = useToast();
 
   // DONT USE IN PRODUCTION !
-  let message: string;
-  if (error instanceof Error) {
-    message = error.message;
-  } else {
-    message = useErrorHandler(error, { handle });
-  }
+  const message = useErrorHandler(error, { handle, log: true });
+  if (!message) return;
 
   toast.add({
     title: message,
@@ -21,5 +17,5 @@ export function useErrorNotifier(error: unknown, options: ErrorNotifierOptions =
     icon: 'i-lucide-alert-circle',
   });
 
-  return message;
+  return;
 }
