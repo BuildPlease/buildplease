@@ -3,32 +3,82 @@
     "email": "E-mail",
     "password": "Mot de passe",
     "login": "Se connecter",
+    "add": "Ajouter",
+    "clear": "Effacer",
+    "run": "Lancer",
     "copyright": "© {year} Nidavellir © Meowv"
   },
+
   "placeholder": {
     "email": "Votre e-mail",
     "password": "Votre mot de passe"
   },
+
   "navigation": {
     "dashboard": "Tableau de bord",
     "complexValidation": "Validation complexe"
   },
+
+  "operation": {
+    "label": {
+      "operations": "Opérations",
+      "queueTest": "Test de file d’opérations"
+    },
+
+    "description": {
+      "queueTest": "Configurez les opérations, exécutez-les via une file sécurisée et observez les annulations."
+    },
+
+    "input": {
+      "delayMs": "Délai (ms)"
+    },
+
+    "action": {
+      "runQueue": "Lancer la file",
+      "testUnauthorized": "Tester une opération non autorisée (redirection)",
+      "testErrorNotifier": "Tester la notification d’erreur"
+    },
+
+    "status": {
+      "idle": "Inactif",
+      "running": "En cours",
+      "success": "Succès",
+      "error": "Erreur",
+      "canceled": "Annulé"
+    },
+
+    "mode": {
+      "success": "Succès",
+      "unauthorized": "Non autorisé",
+      "error": "Erreur"
+    },
+
+    "count": {
+      "empty": "Aucune opération",
+      "value": "{count} opération | {count} opérations"
+    }
+  },
+
   "page": {
     "home": {
       "title": "Bienvenue",
-      "description": "Ceci est la page d’accueil du Meowv NuxtKit Playground. Découvrez MVVM + une architecture propre avec les composants Nuxt UI."
+      "description": "Ceci est la page d’accueil du Meowv NuxtKit Playground. Découvrez MVVM et une architecture propre avec les composants Nuxt UI."
     },
+
     "login": {
       "title": "Connexion",
       "button": "Se connecter"
     },
+
     "dashboard": {
       "welcomeBack": "Bon retour !",
       "loginSuccess": "Vous vous êtes connecté avec succès.",
-      "operations": "Opérations",
       "goHome": "Retour à l’accueil",
-      "testUnauthorized": "Tester une opération non autorisée",
-      "testErrorNotifier": "Tester le notificateur d'erreurs"
+
+      "sections": {
+        "basicOperations": "Opérations de base",
+        "queueTest": "Test de file"
+      }
     }
   }
 }

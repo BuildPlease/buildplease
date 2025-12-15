@@ -1,7 +1,7 @@
 import type { NuxtKitOptions } from './types';
 
-export const NUXT_MODULE_ID = '@meowv/nuxtkit';
-export const NUXT_CONFIG_KEY = 'meowvNuxtKit';
+export const MODULE_NAME = '@meowv/nuxtkit';
+export const CONFIG_KEY_NAME = 'meowvNuxtKit';
 
 export const DEFAULT_OPTIONS = {
   debug: false,

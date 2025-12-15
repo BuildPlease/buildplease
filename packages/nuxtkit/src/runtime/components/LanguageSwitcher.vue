@@ -30,7 +30,7 @@ import type { DropdownMenuItem } from '@nuxt/ui';
 import type { LocaleObject } from '@nuxtjs/i18n';
 
 import { useNuxtApp, useRuntimeConfig } from '#app';
-import { useCurrentLocale, normalizeLocale } from '#nuxtkit/composables/use-current-locale';
+import { useCurrentLocale, normalizeLocale } from '#nuxtkit/composables';
 
 /**
  * Language switcher (KISS).

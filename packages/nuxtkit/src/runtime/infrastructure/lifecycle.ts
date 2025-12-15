@@ -1,5 +1,5 @@
-import type { Awaitable } from '@nidavellirx/meowv-core';
 import type { RouteLocationNormalizedLoaded } from 'vue-router';
+import type { Awaitable } from '@nidavellirx/meowv-core';
 
 /**
  * Lifecycle contract for ViewModels.

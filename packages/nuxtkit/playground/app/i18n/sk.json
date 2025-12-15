@@ -3,32 +3,82 @@
     "email": "Email",
     "password": "Heslo",
     "login": "Prihlásiť sa",
+    "add": "Pridať",
+    "clear": "Vymazať",
+    "run": "Spustiť",
     "copyright": "© {year} Nidavellir © Meowv"
   },
+
   "placeholder": {
     "email": "Váš email",
     "password": "Vaše heslo"
   },
+
   "navigation": {
     "dashboard": "Prehľad",
     "complexValidation": "Komplexná validácia"
   },
+
+  "operation": {
+    "label": {
+      "operations": "Operácie",
+      "queueTest": "Test fronty operácií"
+    },
+
+    "description": {
+      "queueTest": "Nastavte operácie, spustite ich cez zabezpečenú frontu a sledujte rušenia."
+    },
+
+    "input": {
+      "delayMs": "Oneskorenie (ms)"
+    },
+
+    "action": {
+      "runQueue": "Spustiť frontu",
+      "testUnauthorized": "Otestovať nepovolenú operáciu (presmerovanie)",
+      "testErrorNotifier": "Otestovať chybové hlásenie"
+    },
+
+    "status": {
+      "idle": "Nečinné",
+      "running": "Prebieha",
+      "success": "Úspešné",
+      "error": "Chyba",
+      "canceled": "Zrušené"
+    },
+
+    "mode": {
+      "success": "Úspech",
+      "unauthorized": "Nepovolené",
+      "error": "Chyba"
+    },
+
+    "count": {
+      "empty": "Žiadne operácie",
+      "value": "{count} operácia | {count} operácie | {count} operácií"
+    }
+  },
+
   "page": {
     "home": {
       "title": "Vitajte",
       "description": "Toto je úvodná stránka Meowv NuxtKit Playground. Objavujte MVVM + čistú architektúru s komponentmi Nuxt UI."
     },
+
     "login": {
       "title": "Prihlásenie",
       "button": "Prihlásiť sa"
     },
+
     "dashboard": {
       "welcomeBack": "Vitajte späť!",
       "loginSuccess": "Úspešne ste sa prihlásili.",
-      "operations": "Operácie",
       "goHome": "Späť na domov",
-      "testUnauthorized": "Otestovať nepovolenú operáciu",
-      "testErrorNotifier": "Otestovať chybové hlásenie"
+
+      "sections": {
+        "basicOperations": "Základné operácie",
+        "queueTest": "Test fronty"
+      }
     }
   }
 }

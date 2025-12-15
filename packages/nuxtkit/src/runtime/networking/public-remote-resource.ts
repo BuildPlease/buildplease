@@ -1,14 +1,10 @@
 import { decorate, injectable } from 'inversify';
+import { type RemoteEndpoint, type RemoteRequestConfig } from '@nidavellirx/meowv-webkit';
 
-import { type RemoteEndpoint, type RemoteRequestConfig, BaseRemoteResource } from '@nidavellirx/meowv-webkit';
+import { useOperationQueue } from '#nuxtkit/composables';
+import { NuxtKitRemoteResource } from '#nuxtkit/networking';
 
-import { useOperationQueue } from '#nuxtkit/composables/use-operation-queue';
-
-export class PublicRemoteResource<Input, Output> extends BaseRemoteResource<
-  Input,
-  Output,
-  RemoteEndpoint<Input, any, Output, any>
-> {
+export class PublicRemoteResource<Input, Output> extends NuxtKitRemoteResource<Input, Output> {
   constructor(endpoint: RemoteEndpoint<Input, any, Output, any>) {
     super(endpoint);
   }

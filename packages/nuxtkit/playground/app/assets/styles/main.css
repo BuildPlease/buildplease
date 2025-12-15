@@ -1,0 +1,11 @@
+@import 'tailwindcss';
+@import '@nuxt/ui';
+
+:root {
+  --navigation-bar-height: 60px;
+  --ui-radius: 0.5rem;
+}
+
+html {
+  @apply scroll-smooth;
+}

@@ -3,32 +3,82 @@
     "email": "Email",
     "password": "Password",
     "login": "Login",
+    "add": "Add",
+    "clear": "Clear",
+    "run": "Run",
     "copyright": "© {year} Nidavellir © Meowv"
   },
+
   "placeholder": {
     "email": "Your email",
     "password": "Your password"
   },
+
   "navigation": {
     "dashboard": "Dashboard",
     "complexValidation": "Complex Validation"
   },
+
+  "operation": {
+    "label": {
+      "operations": "Operations",
+      "queueTest": "Operation queue test"
+    },
+
+    "description": {
+      "queueTest": "Configure operations, run them through secured queue and observe cancellations."
+    },
+
+    "input": {
+      "delayMs": "Delay (ms)"
+    },
+
+    "action": {
+      "runQueue": "Run queue",
+      "testUnauthorized": "Test unauthorized (real redirect)",
+      "testErrorNotifier": "Test error notifier"
+    },
+
+    "status": {
+      "idle": "Idle",
+      "running": "Running",
+      "success": "Success",
+      "error": "Error",
+      "canceled": "Canceled"
+    },
+
+    "mode": {
+      "success": "Success",
+      "unauthorized": "Unauthorized",
+      "error": "Error"
+    },
+
+    "count": {
+      "empty": "No operations",
+      "value": "{count} operation | {count} operations"
+    }
+  },
+
   "page": {
     "home": {
       "title": "Welcome",
       "description": "This is the landing page for the Meowv NuxtKit Playground. Explore MVVM + Clean Architecture with Nuxt UI components."
     },
+
     "login": {
       "title": "Login",
       "button": "Login"
     },
+
     "dashboard": {
       "welcomeBack": "Welcome back!",
       "loginSuccess": "You have successfully logged in.",
-      "operations": "Operations",
       "goHome": "Go Back to Home",
-      "testUnauthorized": "Test Unauthorized Operation",
-      "testErrorNotifier": "Test error notifier"
+
+      "sections": {
+        "basicOperations": "Basic operations",
+        "queueTest": "Queue test"
+      }
     }
   }
 }

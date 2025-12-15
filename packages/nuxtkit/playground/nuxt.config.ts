@@ -6,7 +6,7 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   compatibilityDate: '2025-09-01',
   modules: ['@nidavellirx/meowv-nuxtkit', '@nuxtjs/i18n', '@nuxt/ui'],
-  css: ['~/assets/css/main.css'],
+  css: ['~/assets/styles/main.css'],
 
   alias: {
     '@di': r('./di'),
@@ -41,13 +41,13 @@ export default defineNuxtConfig({
   },
 
   i18n: {
+    vueI18n: r('./i18n.config.ts'),
     types: 'composition',
-    strategy: 'prefix_except_default',
-    defaultDirection: 'ltr',
     defaultLocale: 'en-GB',
+    defaultDirection: 'ltr',
+    strategy: 'prefix_except_default',
     langDir: 'i18n',
     restructureDir: './app',
-    vueI18n: 'i18n.config.ts',
     locales: [
       {
         code: 'en-GB',

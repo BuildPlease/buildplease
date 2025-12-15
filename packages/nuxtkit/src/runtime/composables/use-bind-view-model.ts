@@ -16,7 +16,7 @@ import {
 } from 'vue';
 import { onBeforeRouteLeave, onBeforeRouteUpdate, useRoute } from 'vue-router';
 
-import type { ViewModel } from '#nuxtkit/architecture/view-model';
+import type { ViewModel } from '#nuxtkit/architecture';
 
 /**
  * Attach a ViewModel's lifecycle to Vue/Nuxt hooks.

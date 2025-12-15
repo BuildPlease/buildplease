@@ -11,10 +11,15 @@
     ".": {
       "types": "./dist/types.d.mts",
       "import": "./dist/module.mjs"
+    },
+    "./shared": {
+      "types": "./dist/shared/index.d.ts",
+      "import": "./dist/shared/index.js"
     }
   },
   "imports": {
-    "#nuxtkit/*": "./dist/runtime/*.js"
+    "#nuxtkit/*": "./dist/runtime/*.js",
+    "#shared/*": "./dist/shared/*.js"
   },
   "files": [
     "dist"

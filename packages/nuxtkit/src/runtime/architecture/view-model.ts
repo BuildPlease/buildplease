@@ -2,10 +2,8 @@ import { reactive, type Reactive } from 'vue';
 import type { RouteLocationNormalizedLoaded, Router } from 'vue-router';
 import type { Awaitable } from '@nidavellirx/meowv-webkit';
 
-import type { Lifecycle } from '#nuxtkit/infrastructure/lifecycle';
-import { isSSR, isCSR, isHydrating } from '#nuxtkit/infrastructure/environment';
-
 import { useRouter, useRoute, useNuxtApp } from '#app';
+import { type Lifecycle, isSSR, isCSR, isHydrating } from '#nuxtkit/infrastructure';
 
 /**
  * Base class for managing reactive state and lifecycle logic in UI view models.
@@ -70,7 +68,7 @@ export abstract class ViewModel<T extends Record<string, any> = Record<string, a
   } = {}): Promise<void> {
     const nuxtApp = useNuxtApp();
 
-    if ((isSSR() && runOnSSR) || (isCSR() && runOnCSR && (!isHydrating() || !skipDuringHydration))) {
+    if ((isSSR && runOnSSR) || (isCSR && runOnCSR && (!isHydrating() || !skipDuringHydration))) {
       return await nuxtApp.runWithContext(async () => {
         await this._fetchBeforeRendering();
       });

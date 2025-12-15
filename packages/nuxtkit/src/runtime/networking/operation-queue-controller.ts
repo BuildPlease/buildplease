@@ -1,9 +1,9 @@
 import { decorate, injectable } from 'inversify';
-import { Mutex, CanceledError } from '@nidavellirx/meowv-webkit';
+import { Mutex, type HttpError, CanceledError } from '@nidavellirx/meowv-webkit';
 
 export type RunOptions = {
-  isUnauthorized?: (error: unknown) => boolean;
-  onUnauthorized?: (error: unknown) => Promise<void>;
+  isUnauthorized?: (error: unknown) => HttpError | false;
+  onUnauthorized?: (error: HttpError) => Promise<void>;
 };
 
 export interface OperationQueueController {
@@ -23,11 +23,13 @@ export class OperationQueueControllerImpl implements OperationQueueController {
       try {
         return await task();
       } catch (error) {
-        const isUnauthorized = options?.isUnauthorized?.(error) ?? false;
-        if (isUnauthorized && options?.onUnauthorized) {
-          await this.handleUnauthorizedOnce(error, options.onUnauthorized);
-          throw new CanceledError({ cause: error });
+        const unauthorized = options?.isUnauthorized?.(error) ?? false;
+
+        if (unauthorized && options?.onUnauthorized) {
+          await this.handleUnauthorizedOnce(unauthorized, options.onUnauthorized);
+          throw new CanceledError({ cause: unauthorized });
         }
+
         throw error;
       }
     });
@@ -50,8 +52,8 @@ export class OperationQueueControllerImpl implements OperationQueueController {
   }
 
   private async handleUnauthorizedOnce(
-    error: unknown,
-    onUnauthorized: (error: unknown) => Promise<void>,
+    error: HttpError,
+    onUnauthorized: (error: HttpError) => Promise<void>,
   ): Promise<void> {
     if (this.unauthorizedFlow) {
       await this.unauthorizedFlow;

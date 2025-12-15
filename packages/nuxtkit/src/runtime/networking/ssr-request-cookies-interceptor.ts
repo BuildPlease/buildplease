@@ -1,14 +1,11 @@
+import { parseCookies } from 'h3';
 import type { RemoteRequestInterceptor, RemoteRequestConfig } from '@nidavellirx/meowv-webkit';
 
-import { parseCookies } from 'h3';
-
-import type { NuxtApp } from '#app';
-import { useNuxtKit } from '#nuxtkit/composables/use-nuxt-kit';
-import { isSSR } from '#nuxtkit/infrastructure/environment';
+import { useNuxtApp } from '#app';
+import { useNuxtKit } from '#nuxtkit-internal/composables';
+import { isSSR } from '#nuxtkit/infrastructure';
 
 export class SSRRequestCookiesInterceptor implements RemoteRequestInterceptor {
-  constructor(private nuxt: NuxtApp) {}
-
   public order = -20;
 
   public hash() {
@@ -23,7 +20,8 @@ export class SSRRequestCookiesInterceptor implements RemoteRequestInterceptor {
   public intercept(config: RemoteRequestConfig): RemoteRequestConfig {
     if (!isSSR) return config;
 
-    const event = this.nuxt.ssrContext?.event;
+    const app = useNuxtApp();
+    const event = app.ssrContext?.event;
     if (!event) return config;
 
     // MARK: - Get cookies from the SSR context

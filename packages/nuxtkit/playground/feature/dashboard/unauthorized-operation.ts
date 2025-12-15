@@ -18,7 +18,7 @@ export class UnauthorizedEndpoint implements RemoteEndpoint<void, void, void, vo
     throw new HttpError({
       code: 'unauthorized_error',
       statusCode: 401,
-      message: 'Unauthorized Message',
+      message: 'Unauthorized message from server',
     });
   }
 

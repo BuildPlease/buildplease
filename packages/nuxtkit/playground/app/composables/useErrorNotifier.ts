@@ -6,7 +6,6 @@ export function useErrorNotifier(error: unknown, options: ErrorNotifierOptions =
   const { handle } = options;
   const toast = useToast();
 
-  // DONT USE IN PRODUCTION !
   const message = useErrorHandler(error, { handle, log: true });
   if (!message) return;
 

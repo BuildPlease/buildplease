@@ -3,7 +3,7 @@ import type { HookResult } from '@nuxt/schema';
 
 import type { NuxtKitOptions, NuxtKitPublicRuntimeConfig } from './types';
 import type { UnauthorizedHookContext } from './runtime/types';
-import { NUXT_MODULE_ID, NUXT_CONFIG_KEY, DEFAULT_OPTIONS } from './constants';
+import { MODULE_NAME, CONFIG_KEY_NAME, DEFAULT_OPTIONS } from './constants';
 import { prepareContext } from './context';
 import {
   prepareHooks,
@@ -17,8 +17,8 @@ import {
 
 export default defineNuxtModule<ModuleOptions>({
   meta: {
-    name: NUXT_MODULE_ID,
-    configKey: NUXT_CONFIG_KEY,
+    name: MODULE_NAME,
+    configKey: CONFIG_KEY_NAME,
     compatibility: {
       nuxt: '>=4.0.0',
     },
@@ -68,7 +68,7 @@ export default defineNuxtModule<ModuleOptions>({
 export interface ModuleOptions extends NuxtKitOptions {}
 
 export interface ModulePublicRuntimeConfig {
-  [NUXT_CONFIG_KEY]: NuxtKitPublicRuntimeConfig;
+  [CONFIG_KEY_NAME]: NuxtKitPublicRuntimeConfig;
 }
 
 export interface ModuleRuntimeHooks {

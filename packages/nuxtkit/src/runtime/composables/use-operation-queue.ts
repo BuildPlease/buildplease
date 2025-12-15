@@ -1,5 +1,5 @@
-import { OperationQueueControllerImpl } from '#nuxtkit/networking/operation-queue-controller';
-import { isSSR } from '#imports';
+import { OperationQueueControllerImpl } from '#nuxtkit/networking';
+import { isSSR } from '#nuxtkit/infrastructure';
 
 let clientQueue: OperationQueueControllerImpl | null = null;
 
@@ -10,6 +10,6 @@ let clientQueue: OperationQueueControllerImpl | null = null;
  * - CSR: returns a singleton queue to coordinate requests across the whole app session.
  */
 export function useOperationQueue(): OperationQueueControllerImpl {
-  if (isSSR()) return new OperationQueueControllerImpl();
+  if (isSSR) return new OperationQueueControllerImpl();
   return (clientQueue ??= new OperationQueueControllerImpl());
 }
