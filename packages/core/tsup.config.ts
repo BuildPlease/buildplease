@@ -1,9 +1,24 @@
 import { defineConfig } from 'tsup';
-
 import pkg from './package.json' assert { type: 'json' };
 
-const workspacePackages: string[] = [];
-const peers = Object.keys(pkg.peerDependencies ?? {});
+type PackageJson = {
+  dependencies?: Record<string, string>;
+  peerDependencies?: Record<string, string>;
+};
+
+const bundledDependencies: string[] = []; /* Bundled dependencies */
+const packageJson = pkg as PackageJson;
+const peers = Object.keys(packageJson.peerDependencies ?? {});
+const deps = Object.keys(packageJson.dependencies ?? {});
+const depsToExternalize = deps.filter((name) => !bundledDependencies.includes(name));
+
+const externals = [
+  ...peers,
+  ...peers.map((name) => `${name}/*`),
+
+  ...depsToExternalize,
+  ...depsToExternalize.map((name) => `${name}/*`),
+];
 
 export default defineConfig({
   outDir: 'dist',
@@ -24,16 +39,5 @@ export default defineConfig({
   target: 'esnext',
   format: ['cjs', 'esm'],
 
-  external: [
-    // Node built-ins
-    'fs',
-    'path',
-    'node:*',
-
-    // Decorator metadata
-    'reflect-metadata',
-
-    ...peers,
-    ...workspacePackages,
-  ],
+  external: externals,
 });

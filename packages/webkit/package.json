@@ -25,10 +25,10 @@
   },
   "dependencies": {
     "@nidavellirx/meowv-core": "workspace:^",
-    "axios": "1.13.2",
-    "reflect-metadata": "0.2.2"
+    "axios": "1.13.2"
   },
   "peerDependencies": {
+    "reflect-metadata": "^0.2.2",
     "inversify": "^7.10.6",
     "zod": "^4.2.0"
   },

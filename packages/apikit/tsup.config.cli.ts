@@ -1,6 +1,10 @@
+import { builtinModules } from 'node:module';
 import { defineConfig } from 'tsup';
 
 const outDir = 'dist/cli';
+
+const builtins = new Set([...builtinModules, ...builtinModules.map((name) => `node:${name}`), 'node:*']);
+const externals = [...builtins]
 
 export default defineConfig({
   outDir: outDir,
@@ -13,7 +17,7 @@ export default defineConfig({
   minify: true,
   bundle: true,
   shims: false,
-  splitting: true,
+  splitting: false,
   sourcemap: false,
   treeshake: true,
   dts: false,
@@ -23,15 +27,6 @@ export default defineConfig({
   platform: 'node',
   target: 'esnext',
   format: ['esm'],
-  external: [
-    // Node built-ins
-    'fs',
-    'path',
-    'node:*',
 
-    // CLI utilities
-    'citty',
-    'jiti',
-    '@dotenvx/dotenvx',
-  ],
+  external: externals,
 });

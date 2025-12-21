@@ -1,15 +1,34 @@
+import pkg from './package.json' assert { type: 'json' };
 import fs from 'node:fs';
 import path from 'node:path';
-
+import { builtinModules } from 'node:module';
 import { defineConfig } from 'tsup';
 
 import { resolvePath } from './src/core/file';
 
-import pkg from './package.json' assert { type: 'json' };
+type PackageJson = {
+  dependencies?: Record<string, string>;
+  peerDependencies?: Record<string, string>;
+};
 
 const outDir = 'dist/src';
-const workspacePackages: string[] = ['@nidavellirx/meowv-core'];
-const peers = Object.keys(pkg.peerDependencies ?? {});
+
+const bundledDependencies: string[] = []; /* Bundled dependencies */
+const packageJson = pkg as PackageJson;
+const peers = Object.keys(packageJson.peerDependencies ?? {});
+const deps = Object.keys(packageJson.dependencies ?? {});
+const depsToExternalize = deps.filter((name) => !bundledDependencies.includes(name));
+const builtins = new Set([...builtinModules, ...builtinModules.map((name) => `node:${name}`), 'node:*']);
+
+const externals = [
+  ...builtins,
+
+  ...peers,
+  ...peers.map((name) => `${name}/*`),
+
+  ...depsToExternalize,
+  ...depsToExternalize.map((name) => `${name}/*`),
+];
 
 export default defineConfig({
   outDir: outDir,
@@ -32,7 +51,7 @@ export default defineConfig({
   target: 'esnext',
   format: ['cjs', 'esm'],
 
-  external: ['node:*', 'reflect-metadata', ...peers, ...workspacePackages],
+  external: externals,
 
   onSuccess: async () => {
     await copyLocales();
@@ -52,26 +71,28 @@ async function copyLocales(): Promise<void> {
 
     if (entry.isDirectory()) {
       await copyRecursive(srcPath, destPath);
-    } else {
-      await fs.promises.copyFile(srcPath, destPath);
+      continue;
     }
+
+    await fs.promises.copyFile(srcPath, destPath);
   }
 
   console.log('✅ Copied localization files to:', destLocalesDir);
 }
 
-async function copyRecursive(src: string, dest: string): Promise<void> {
-  const entries = await fs.promises.readdir(src, { withFileTypes: true });
-  await fs.promises.mkdir(dest, { recursive: true });
+async function copyRecursive(sourcePath: string, destinationPath: string): Promise<void> {
+  const entries = await fs.promises.readdir(sourcePath, { withFileTypes: true });
+  await fs.promises.mkdir(destinationPath, { recursive: true });
 
   for (const entry of entries) {
-    const srcPath = path.join(src, entry.name);
-    const destPath = path.join(dest, entry.name);
+    const entrySourcePath = path.join(sourcePath, entry.name);
+    const entryDestinationPath = path.join(destinationPath, entry.name);
 
     if (entry.isDirectory()) {
-      await copyRecursive(srcPath, destPath);
-    } else {
-      await fs.promises.copyFile(srcPath, destPath);
+      await copyRecursive(entrySourcePath, entryDestinationPath);
+      continue;
     }
+
+    await fs.promises.copyFile(entrySourcePath, entryDestinationPath);
   }
 }

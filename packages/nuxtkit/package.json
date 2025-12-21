@@ -38,12 +38,12 @@
     "@iconify-json/flag": "1.2.10",
     "@nidavellirx/meowv-webkit": "workspace:^",
     "@nuxt/kit": "4.2.2",
-    "defu": "6.1.4",
-    "reflect-metadata": "0.2.2"
+    "defu": "6.1.4"
   },
   "peerDependencies": {
     "@nuxt/ui": "^4.2.1",
     "@nuxtjs/i18n": "^10.2.1",
+    "reflect-metadata": "^0.2.2",
     "inversify": "^7.10.6",
     "vue-i18n": "^11.2.2",
     "zod": "^4.2.0"
@@ -52,13 +52,9 @@
     "@nuxt/devtools": "3.1.1",
     "@nuxt/module-builder": "1.0.2",
     "@nuxt/schema": "4.2.2",
-    "@nuxt/ui": "4.0.0",
-    "@nuxtjs/i18n": "10.1.0",
-    "inversify": "7.10.0",
     "nuxt": "4.2.2",
     "typescript": "5.9.3",
     "vitest": "4.0.15",
-    "vue-i18n": "11.1.12",
     "vue-tsc": "3.1.8"
   }
 }
