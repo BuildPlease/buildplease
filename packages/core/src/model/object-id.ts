@@ -38,6 +38,23 @@ export class ObjectId implements JSONSerializable {
   }
 
   /**
+   * Shorthand alias for {@link ObjectId.value}.
+   *
+   * Value as string semantic clarity.
+   *
+   * @returns Raw id string.
+   *
+   * @example
+   * ```ts
+   * const id = new ObjectId("abc");
+   * id.asString; // "abc"
+   * ```
+   */
+  public get asString(): string {
+    return this.value;
+  }
+
+  /**
    * Checks value equality.
    *
    * @param other Another id or raw string.

@@ -20,7 +20,7 @@ import {
 
 // MARK: - Exports
 
-export * from '@/index';
+export * from '@/core';
 export * from '@/fastify';
 export * from '@nidavellirx/meowv-core';
 
