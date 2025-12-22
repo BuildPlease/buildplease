@@ -2,6 +2,8 @@
   "errors": {
     "common": {
       "not_found": "The requested resource was not found",
+      "unable_to_process_request": "We’re unable to process your request.",
+      "unknown_error": "An unknown error occurred. Please try again later.",
       "already_exists": "The resource already exists"
     },
     "server": {

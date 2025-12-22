@@ -115,6 +115,7 @@ async function main() {
   logSummaryHeader('Summary ✅');
   logOk(`Deleted: ${totalDeleted}`);
   logSkip(`Skipped: ${totalSkipped}`);
+  logSpacer();
 }
 
 await main();

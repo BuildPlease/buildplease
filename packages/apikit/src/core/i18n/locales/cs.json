@@ -2,6 +2,8 @@
   "errors": {
     "common": {
       "not_found": "Požadovaný zdroj nebyl nalezen",
+      "unable_to_process_request": "Vaši žádost se nepodařilo zpracovat.",
+      "unknown_error": "Došlo k neznámé chybě. Zkuste to prosím později.",
       "already_exists": "Zdroj již existuje"
     },
     "server": {

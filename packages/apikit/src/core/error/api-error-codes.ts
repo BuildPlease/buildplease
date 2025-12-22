@@ -34,6 +34,16 @@ export const CommonErrors = defineErrors({
     key: 'errors.common.not_found',
     statusCode: 404,
   },
+  UNKNOWN_ERROR: {
+    code: 'UNKNOWN_ERROR',
+    key: 'error.generic.unknown_error',
+    statusCode: 500,
+  },
+  UNABLE_TO_PROCESS_REQUEST: {
+    code: 'UNABLE_TO_PROCESS_REQUEST',
+    key: 'error.generic.unable_to_process_request',
+    statusCode: 500,
+  },
   RESOURCE_ALREADY_EXISTS: {
     code: 'RESOURCE_ALREADY_EXISTS',
     key: 'errors.common.already_exists',
