@@ -3,6 +3,7 @@ export * from './contacts';
 export * from './date-time';
 export * from './zoned-date-time';
 export * from './geojson';
+export * from './object-id';
 export * from './opening-hour';
 export * from './time-interval';
 export * from './unit';
