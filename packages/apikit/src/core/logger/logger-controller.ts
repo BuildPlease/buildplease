@@ -161,11 +161,14 @@ export class LoggerControllerImpl implements LoggerController {
   private formatUnknown(value: unknown): unknown {
     // Errors
     if (isError(value)) {
-      const base = {
+      const base: Record<string, unknown> = {
         type: value.constructor.name,
         message: value.message,
-        stack: value.stack,
       };
+
+      if (this.configuration.isDebug && value.stack) {
+        base.stack = value.stack;
+      }
 
       const extras: Record<string, unknown> = {};
       for (const key of Object.keys(value)) {
