@@ -25,7 +25,7 @@ export default defineConfig({
   tsconfig: 'tsconfig.json',
   platform: 'browser',
   target: 'esnext',
-  format: ['cjs', 'esm'],
+  format: ['esm'],
 
   outDir: 'dist',
   clean: true,
@@ -35,7 +35,7 @@ export default defineConfig({
   bundle: true,
   shims: false,
   sourcemap: false,
-  splitting: true,
+  splitting: false,
   treeshake: true,
 
   external: externals,

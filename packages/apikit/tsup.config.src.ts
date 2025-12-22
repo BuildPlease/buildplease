@@ -47,7 +47,7 @@ export default defineConfig({
   bundle: true,
   shims: false,
   sourcemap: false,
-  splitting: true,
+  splitting: false,
   treeshake: true,
 
   external: externals,
