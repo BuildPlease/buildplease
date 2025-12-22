@@ -31,11 +31,5 @@
     "reflect-metadata": "^0.2.2",
     "inversify": "^7.10.6",
     "zod": "^4.2.0"
-  },
-  "devDependencies": {
-    "@swc/core": "1.15.5",
-    "inversify": "7.10.0",
-    "tsup": "8.5.1",
-    "typescript": "5.9.3"
   }
 }

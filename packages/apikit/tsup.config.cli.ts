@@ -4,7 +4,7 @@ import { defineConfig } from 'tsup';
 const outDir = 'dist/cli';
 
 const builtins = new Set([...builtinModules, ...builtinModules.map((name) => `node:${name}`), 'node:*']);
-const externals = [...builtins]
+const externals = [...builtins];
 
 export default defineConfig({
   outDir: outDir,
