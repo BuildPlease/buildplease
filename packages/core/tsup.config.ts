@@ -1,5 +1,5 @@
-import { defineConfig } from 'tsup';
 import pkg from './package.json' assert { type: 'json' };
+import { defineConfig } from 'tsup';
 
 type PackageJson = {
   dependencies?: Record<string, string>;
@@ -21,23 +21,22 @@ const externals = [
 ];
 
 export default defineConfig({
-  outDir: 'dist',
-  clean: true,
-
   entry: ['index.ts'],
-
-  minify: true,
-  bundle: true,
-  shims: false,
-  splitting: true,
-  sourcemap: false,
-  treeshake: true,
-  dts: true,
-
   tsconfig: 'tsconfig.json',
   platform: 'neutral',
   target: 'esnext',
   format: ['cjs', 'esm'],
+
+  outDir: 'dist',
+  clean: true,
+
+  dts: true,
+  minify: true,
+  bundle: true,
+  shims: false,
+  sourcemap: false,
+  splitting: true,
+  treeshake: true,
 
   external: externals,
 });

@@ -7,26 +7,25 @@ const builtins = new Set([...builtinModules, ...builtinModules.map((name) => `no
 const externals = [...builtins];
 
 export default defineConfig({
-  outDir: outDir,
-  clean: [outDir],
-
   entry: {
     index: 'src/cli/index.ts',
   },
+  tsconfig: 'tsconfig.json',
+  platform: 'node',
+  target: 'esnext',
+  format: ['esm'],
+
+  outDir: outDir,
+  clean: [outDir],
+
+  dts: false,
 
   minify: true,
   bundle: true,
   shims: false,
-  splitting: false,
   sourcemap: false,
+  splitting: false,
   treeshake: true,
-  dts: false,
-
-  tsconfig: 'tsconfig.json',
-
-  platform: 'node',
-  target: 'esnext',
-  format: ['esm'],
 
   external: externals,
 });

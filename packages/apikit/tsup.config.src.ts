@@ -31,25 +31,24 @@ const externals = [
 ];
 
 export default defineConfig({
-  outDir: outDir,
-  clean: [outDir],
-
   entry: {
     index: 'index.ts',
   },
-
-  minify: true,
-  bundle: true,
-  shims: false,
-  splitting: true,
-  sourcemap: false,
-  treeshake: true,
-  dts: true,
-
   tsconfig: 'tsconfig.json',
   platform: 'node',
   target: 'esnext',
   format: ['cjs', 'esm'],
+
+  outDir: outDir,
+  clean: [outDir],
+
+  dts: true,
+  minify: true,
+  bundle: true,
+  shims: false,
+  sourcemap: false,
+  splitting: true,
+  treeshake: true,
 
   external: externals,
 
