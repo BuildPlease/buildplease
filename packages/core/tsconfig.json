@@ -17,6 +17,7 @@
     "noImplicitOverride": true,
     "noImplicitAny": true,
     "noImplicitThis": true,
+    "verbatimModuleSyntax": true,
 
     /* Module Handling */
     "esModuleInterop": true,
