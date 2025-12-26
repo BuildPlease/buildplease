@@ -1,5 +1,8 @@
 import type { Container } from 'inversify';
 
+export type { Container } from 'inversify';
+export type AssemblyContainer = Container;
+
 export interface Assembly {
-  assemble(container: Container): void;
+  assemble(container: AssemblyContainer): void;
 }

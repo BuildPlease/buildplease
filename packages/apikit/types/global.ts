@@ -5,7 +5,7 @@ import type {
   ServerConfig,
   I18nConfig,
   StaticFilesConfig,
-} from '@nidavellirx/meowv-apikit';
+} from '#/configuration';
 
 declare global {
   var apikit: {
@@ -18,3 +18,5 @@ declare global {
     staticFilesConfig?: StaticFilesConfig;
   };
 }
+
+export {};

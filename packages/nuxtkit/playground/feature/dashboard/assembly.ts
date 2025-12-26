@@ -1,4 +1,4 @@
-import type { Container } from 'inversify';
+import type { Assembly, AssemblyContainer } from '@nidavellirx/meowv-webkit';
 
 import { Symbols } from '@di/symbols';
 
@@ -10,8 +10,8 @@ import {
   UnauthorizedEndpoint,
 } from '@feature/dashboard/unauthorized-operation';
 
-export class DashboardAssembly {
-  public assemble(container: Container): void {
+export class DashboardAssembly implements Assembly {
+  public assemble(container: AssemblyContainer): void {
     container.bind<DashboardViewModel>(Symbols.DI.Feature.Dashboard.ViewModel).to(DashboardViewModel);
 
     container.bind(TestEndpoint).toSelf();

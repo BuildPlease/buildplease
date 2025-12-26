@@ -1,6 +1,4 @@
-import type { Container } from 'inversify';
-
-import type { Assembly } from '@nidavellirx/meowv-core';
+import type { Assembly, AssemblyContainer } from '@nidavellirx/meowv-core';
 
 import { ApiKitSymbols } from '#/di';
 import {
@@ -13,7 +11,7 @@ import {
 } from '#/server';
 
 export class ApiKit_ServerAssembly implements Assembly {
-  public assemble(container: Container): void {
+  public assemble(container: AssemblyContainer): void {
     container
       .bind<ServerController>(ApiKitSymbols.DI.Server.Controller)
       .to(ServerControllerImpl)

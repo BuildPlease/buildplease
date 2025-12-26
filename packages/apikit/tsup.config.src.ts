@@ -32,7 +32,8 @@ const externals = [
 
 export default defineConfig({
   entry: {
-    index: 'index.ts',
+    index: './index.ts',
+    'types/index': './types/index.ts',
   },
   tsconfig: 'tsconfig.json',
   platform: 'node',

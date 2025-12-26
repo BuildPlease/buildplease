@@ -1,5 +1,4 @@
-import type { Container } from 'inversify';
-import type { Assembly } from '@nidavellirx/meowv-core';
+import type { Assembly, AssemblyContainer } from '@nidavellirx/meowv-core';
 
 import { ApiKitSymbols } from '#/di';
 import {
@@ -10,7 +9,7 @@ import {
 } from '#/formatter';
 
 export class ApiKit_FormatterAssembly implements Assembly {
-  public assemble(container: Container): void {
+  public assemble(container: AssemblyContainer): void {
     container.bind<FormatterController>(ApiKitSymbols.DI.Formatter.Controller).to(FormatterControllerImpl);
 
     container

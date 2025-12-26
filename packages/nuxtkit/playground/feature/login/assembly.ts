@@ -1,12 +1,12 @@
-import type { Container } from 'inversify';
+import type { Assembly, AssemblyContainer } from '@nidavellirx/meowv-webkit';
 
 import { Symbols } from '@di/symbols';
 
 import { LoginViewModel } from '@feature/login/view-model';
 import { type LoginController, LoginControllerImpl } from '@feature/login/controller';
 
-export class LoginAssembly {
-  public assemble(container: Container): void {
+export class LoginAssembly implements Assembly {
+  public assemble(container: AssemblyContainer): void {
     container.bind<LoginViewModel>(Symbols.DI.Feature.Login.ViewModel).to(LoginViewModel);
 
     container.bind<LoginController>(Symbols.DI.Feature.Login.Controller).to(LoginControllerImpl);

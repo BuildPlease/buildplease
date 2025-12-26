@@ -1,7 +1,7 @@
 import 'reflect-metadata';
-
 import { type Assembly, MEOWV_CORE_INITIALIZE } from '@nidavellirx/meowv-core';
 
+import './types';
 import {
   ApiKit_ConfigurationAssembly,
   ApiKit_DatabaseAssembly,

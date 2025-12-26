@@ -40,12 +40,11 @@
     "outDir": "dist",
     "declarationDir": "dist/types",
     "baseUrl": "./",
-    "typeRoots": ["node_modules/@types", "src/types"],
     "paths": {
       "@/*": ["src/*"],
       "#/*": ["src/core/*"]
     }
   },
-  "include": ["index.ts", "src"],
+  "include": ["index.ts", "src", "types"],
   "exclude": ["node_modules", "dist", "tests", ".apikit"]
 }
