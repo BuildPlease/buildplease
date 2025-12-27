@@ -21,7 +21,6 @@ import {
 // MARK: - Exports
 
 export * from '@/core';
-export * from '@/fastify';
 export * from '@nidavellirx/meowv-core';
 
 export function MEOWV_APIKIT_INITIALIZE(): Assembly[] {
