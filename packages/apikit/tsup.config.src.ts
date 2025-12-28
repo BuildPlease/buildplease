@@ -71,7 +71,7 @@ export default defineConfig([
     outDir: outDir,
     clean: false,
 
-    dts: true,
+    dts: { only: true },
     bundle: false,
     minify: false,
     sourcemap: false,
