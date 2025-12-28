@@ -32,5 +32,5 @@ const requestScopePlugin: FastifyPluginAsync<ServerPluginOptions> = async (fasti
 };
 
 export default fp(requestScopePlugin, {
-  name: 'apikit-scope',
+  name: 'apikit_scope',
 });

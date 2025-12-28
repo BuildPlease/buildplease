@@ -27,5 +27,5 @@ const requestMetadataPlugin: FastifyPluginAsync<ServerPluginOptions> = async (fa
 };
 
 export default fp(requestMetadataPlugin, {
-  name: 'apikit-request-metadata',
+  name: 'apikit_request-metadata',
 });

@@ -12,5 +12,5 @@ const viewPlugin: FastifyPluginAsync = async (fastify) => {
 };
 
 export default fp(viewPlugin, {
-  name: 'apikit-@fastify/view',
+  name: 'apikit_@fastify/view',
 });

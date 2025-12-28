@@ -1,7 +1,7 @@
 import { inject, injectable } from 'inversify';
 import Fastify, { type FastifyInstance, type FastifyBaseLogger } from 'fastify';
 
-import Plugins from './plugins';
+import { FastifyPlugins } from './plugins';
 
 import { ApiKitSymbols } from '#/di';
 import type { I18nController } from '#/i18n';
@@ -67,23 +67,23 @@ export class ServerControllerImpl implements ServerController {
       apikitController: this.configuration,
     };
 
-    // MARK: 1. Core internal plugins (must run before external)
+    // MARK: 1. Internal plugins (must run before external)
     const earlyInternalPlugins = [
-      Plugins.cookie,
-      Plugins.ip,
-      Plugins.metadata,
-      Plugins.scope,
-      Plugins.logger,
+      FastifyPlugins.cookie,
+      FastifyPlugins.ip,
+      FastifyPlugins.metadata,
+      FastifyPlugins.scope,
+      FastifyPlugins.logger,
     ];
     for (const plugin of earlyInternalPlugins) {
       await this.server.register(plugin, options);
     }
 
-    // MARK: 2. External app-specific plugins (e.g., CORS, Auth, etc.)
+    // MARK: 2. External plugins (e.g., CORS, Rate-Limit, etc.)
     await registerExternal(this.server);
 
-    // MARK: 3. UI/static late plugins (can run after external)
-    const lateInternalPlugins = [Plugins.staticFiles, Plugins.view];
+    // MARK: 3. Internal late plugins (can run after external)
+    const lateInternalPlugins = [FastifyPlugins.staticFiles, FastifyPlugins.view];
     for (const plugin of lateInternalPlugins) {
       await this.server.register(plugin, options);
     }

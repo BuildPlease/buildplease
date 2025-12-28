@@ -1,27 +1,26 @@
-import cookie from './cookie';
-import ip from './ip';
-import logger from './logger';
-import metadata from './metadata';
-import scope from './scope';
-import staticFiles from './static';
-import view from './view';
+import fpCookie from './cookie';
+import fpIp from './ip';
+import fpLogger from './logger';
+import fpMetadata from './metadata';
+import fpScope from './scope';
+import fpStaticFiles from './static';
+import fpView from './view';
 
 /**
- * ApiKit-built-in Fastify plugins.
+ * Built-in Fastify plugins.
  *
- * Use these when you need explicit control over plugin registration order/encapsulation.
  */
-const Plugins = {
-  cookie,
-  ip,
-  logger,
-  metadata,
-  scope,
-  staticFiles,
-  view,
-};
+export const FastifyPlugins = {
+  cookie: fpCookie,
+  ip: fpIp,
+  logger: fpLogger,
+  metadata: fpMetadata,
+  scope: fpScope,
+  staticFiles: fpStaticFiles,
+  view: fpView,
+} as const;
 
-export default Plugins;
+export { fpCookie, fpIp, fpLogger, fpMetadata, fpScope, fpStaticFiles, fpView };
 
 /**
  * Fastify helpers and upstream plugin re-exports.
@@ -38,4 +37,4 @@ export { default as fastifyStatic } from '@fastify/static';
 export type { FastifyStaticOptions } from '@fastify/static';
 
 export { default as fastifyView } from '@fastify/view';
-export type { PointOfViewOptions } from '@fastify/view';
+export type { FastifyViewOptions } from '@fastify/view';

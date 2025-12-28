@@ -30,33 +30,57 @@ const externals = [
   ...depsToExternalize.map((name) => `${name}/*`),
 ];
 
-export default defineConfig({
-  entry: {
-    index: './index.ts',
-    'types/index': './types/index.ts',
+export default defineConfig([
+  // MARK: - Main
+  {
+    entry: {
+      index: './index.ts',
+    },
+    tsconfig: 'tsconfig.json',
+    platform: 'node',
+    target: 'esnext',
+    format: ['cjs', 'esm'],
+
+    outDir: outDir,
+    clean: [outDir],
+
+    dts: true,
+    minify: true,
+    bundle: true,
+    shims: false,
+    sourcemap: false,
+    splitting: false,
+    treeshake: true,
+
+    external: externals,
+
+    onSuccess: async () => {
+      await copyLocales();
+    },
   },
-  tsconfig: 'tsconfig.json',
-  platform: 'node',
-  target: 'esnext',
-  format: ['cjs', 'esm'],
+  // MARK: - Type agumentation only
+  {
+    entry: {
+      'types/index': './types/index.ts',
+    },
+    tsconfig: 'tsconfig.json',
+    platform: 'node',
+    target: 'esnext',
+    format: ['esm'],
 
-  outDir: outDir,
-  clean: [outDir],
+    outDir: outDir,
+    clean: false,
 
-  dts: true,
-  minify: true,
-  bundle: true,
-  shims: false,
-  sourcemap: false,
-  splitting: false,
-  treeshake: true,
+    dts: true,
+    bundle: false,
+    minify: false,
+    sourcemap: false,
+    splitting: false,
+    treeshake: true,
 
-  external: externals,
-
-  onSuccess: async () => {
-    await copyLocales();
+    external: externals,
   },
-});
+]);
 
 async function copyLocales(): Promise<void> {
   const sourceLocalesDir = resolvePath(import.meta.url, './src/core/i18n/locales');

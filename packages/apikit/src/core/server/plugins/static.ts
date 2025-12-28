@@ -7,7 +7,7 @@ import type { FastifyPluginAsync } from 'fastify';
 import { resolvePath, ensureDirectory } from '#/file';
 import type { ServerPluginOptions } from '#/server';
 
-const pluginName = 'apikit-@fastify/static';
+const pluginName = 'apikit_@fastify/static';
 
 const staticFilesPlugin: FastifyPluginAsync<ServerPluginOptions> = async (fastify, options) => {
   const config = options.apikitController.staticFiles;
