@@ -46,5 +46,5 @@
     }
   },
   "include": ["index.ts", "src", "types"],
-  "exclude": ["node_modules", "dist", "tests", ".apikit"]
+  "exclude": ["node_modules", "dist", "tests"]
 }
