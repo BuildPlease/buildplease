@@ -254,6 +254,8 @@ export class LoggerControllerImpl implements LoggerController {
     createDirectory(path.dirname(absFile));
     createFile(absFile);
 
+    console.info(`\x1b[32m[Logger]:\x1b[0m path → ${absFile}`);
+
     return {
       target: 'pino/file',
       options: {

@@ -19,7 +19,15 @@ type EnvironmentNames<T extends readonly EnvironmentConfig[]> = T extends readon
   : never;
 
 interface ApiKitConfigInput<Environments extends readonly EnvironmentConfig[]> {
+  /**
+   * @see {@link ApiKitConfig.debug}
+   * @default false
+   */
   debug?: boolean;
+  /**
+   * @see {@link ApiKitConfig.outDir}
+   * @default "apikit-runtime"
+   */
   outDir?: string;
   environments: Environments;
   server: { [K in EnvironmentNames<Environments>]: ServerConfig };

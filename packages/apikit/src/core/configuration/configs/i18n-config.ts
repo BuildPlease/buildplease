@@ -143,10 +143,4 @@ export interface I18nConfig {
    * @default '_'
    */
   contextSeparator?: InitOptions['contextSeparator'];
-
-  /**
-   * Enable debug logging in i18next initialization and translation (InitOptions['debug']).
-   * @default false
-   */
-  debug?: InitOptions['debug'];
 }

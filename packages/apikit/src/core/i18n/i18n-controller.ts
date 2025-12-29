@@ -57,6 +57,8 @@ export class I18nControllerImpl implements I18nController {
     const resources = this.makeResources(config);
 
     const initOptions: InitOptions = {
+      debug: this.configurationController.isDebug,
+
       lng: config.defaultLanguage,
       fallbackLng: config.fallbackLanguages,
       supportedLngs: config.supportedLanguages,
@@ -74,8 +76,7 @@ export class I18nControllerImpl implements I18nController {
       pluralSeparator: config.pluralSeparator,
       contextSeparator: config.contextSeparator,
 
-      debug: config.debug,
-      resources,
+      resources: resources,
     };
 
     await i18next.init(initOptions);
@@ -197,8 +198,8 @@ export class I18nControllerImpl implements I18nController {
       directories: ext.directories ?? [],
       files: ext.files ?? [],
 
-      defaultLanguage,
-      fallbackLanguages,
+      defaultLanguage: defaultLanguage,
+      fallbackLanguages: fallbackLanguages,
       supportedLanguages: ext.supportedLanguages ?? ['en', 'sk', 'cs'],
 
       load: ext.load ?? 'languageOnly',
@@ -214,8 +215,6 @@ export class I18nControllerImpl implements I18nController {
       nsSeparator: ext.nsSeparator ?? ':',
       pluralSeparator: ext.pluralSeparator ?? '_',
       contextSeparator: ext.contextSeparator ?? '_',
-
-      debug: ext.debug ?? false,
     };
   }
 
