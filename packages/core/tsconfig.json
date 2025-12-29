@@ -41,9 +41,10 @@
     "declarationDir": "dist/types",
     "baseUrl": "./",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "#/*": ["src-node/*"]
     }
   },
-  "include": ["index.ts", "src"],
+  "include": ["index.ts", "src", "src-node"],
   "exclude": ["node_modules", "dist", "test"]
 }

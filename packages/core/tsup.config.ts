@@ -21,7 +21,10 @@ const externals = [
 ];
 
 export default defineConfig({
-  entry: ['index.ts'],
+  entry: {
+    'src/index': './index.ts',
+    'src-node/index': './src-node/index.ts',
+  },
   tsconfig: 'tsconfig.json',
   platform: 'neutral',
   target: 'esnext',

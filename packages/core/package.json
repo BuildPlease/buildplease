@@ -8,9 +8,12 @@
   "license": "UNLICENSED",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
+      "types": "./dist/src/index.d.ts",
+      "import": "./dist/src/index.js"
+    },
+    "./node": {
+      "types": "./dist/src-node/index.d.ts",
+      "import": "./dist/src-node/index.js"
     }
   },
   "files": [

@@ -21,6 +21,7 @@
     "build": "pnpm run clean && lerna run build"
   },
   "devDependencies": {
+    "@types/node": "25.0.2",
     "@typescript-eslint/eslint-plugin": "8.50.0",
     "@typescript-eslint/parser": "8.50.0",
     "eslint": "9.39.2",
