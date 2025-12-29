@@ -5,11 +5,11 @@ import { Readable } from 'node:stream';
 import { pipeline as pipelineAsync } from 'node:stream/promises';
 
 import { injectable, inject } from 'inversify';
+import { createDirectoryAsync, ensureDirectoryAsync, removePathAsync } from '@nidavellirx/meowv-core/node';
 
 import { ApiKitSymbols } from '#/di';
 import type { LoggerController } from '#/logger';
 import type { FormatType } from '#/formatter';
-import { createDirectoryAsync, ensureDirectoryAsync, removePathAsync } from '#/file';
 
 export interface TemporaryFileRepository {
   /**

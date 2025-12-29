@@ -5,9 +5,9 @@ import { existsSync } from 'node:fs';
 import { injectable, inject } from 'inversify';
 import nodemailer from 'nodemailer';
 import ejs from 'ejs';
+import { resolvePath } from '@nidavellirx/meowv-core/node';
 
 import { ApiKitSymbols } from '#/di';
-import { resolvePath } from '#/file';
 import type { EmailTemplate } from '#/email';
 import type { LoggerController } from '#/logger';
 import type { ApiKitController, EmailTemplateGlobalDefaults } from '#/configuration';

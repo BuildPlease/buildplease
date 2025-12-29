@@ -1,6 +1,6 @@
 import path from 'node:path';
+import { createFile } from '@nidavellirx/meowv-core/node';
 
-import { createFile } from '#/file';
 import type { ApiKitConfig } from '#/configuration';
 
 export async function generateEnvironment(config: ApiKitConfig, outputPath: string): Promise<string[]> {

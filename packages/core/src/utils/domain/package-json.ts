@@ -28,10 +28,16 @@ export const PackageNameSchema = z
 export type PackageJsonModel = z.output<typeof PackageJsonSchema>;
 
 export const PackageJsonSchema = z.looseObject({
+  // Required
   name: PackageNameSchema,
   version: z.string().trim().min(1),
+
+  // Optional
   private: z.boolean().optional(),
   type: z.enum(['module', 'commonjs']).optional(),
+  dependencies: z.record(z.string(), z.string()).default({}),
+  peerDependencies: z.record(z.string(), z.string()).default({}),
+  devDependencies: z.record(z.string(), z.string()).default({}),
 });
 
 // MARK: - Helpers

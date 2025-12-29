@@ -1,17 +1,13 @@
-import pkg from './package.json' assert { type: 'json' };
 import { defineConfig } from 'tsup';
 
-type PackageJson = {
-  dependencies?: Record<string, string>;
-  peerDependencies?: Record<string, string>;
-};
+import { resolvePath, loadPackageJson } from '@node';
+
+const pkg = loadPackageJson(resolvePath(import.meta.url, './package.json'));
+const peers = Object.keys(pkg.peerDependencies);
+const deps = Object.keys(pkg.dependencies);
 
 const bundledDependencies: string[] = []; /* Bundled dependencies */
-const packageJson = pkg as PackageJson;
-const peers = Object.keys(packageJson.peerDependencies ?? {});
-const deps = Object.keys(packageJson.dependencies ?? {});
 const depsToExternalize = deps.filter((name) => !bundledDependencies.includes(name));
-
 const externals = [
   ...peers,
   ...peers.map((name) => `${name}/*`),

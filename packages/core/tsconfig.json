@@ -41,10 +41,13 @@
     "declarationDir": "dist/types",
     "baseUrl": "./",
     "paths": {
+      "@": ["src/index.ts"],
       "@/*": ["src/*"],
-      "#/*": ["src-node/*"]
+
+      "@node": ["src-node/index.ts"],
+      "@node/*": ["src-node/*"]
     }
   },
-  "include": ["index.ts", "src", "src-node"],
+  "include": ["index.ts", "src", "src-node", "tsup.config.ts"],
   "exclude": ["node_modules", "dist", "test"]
 }

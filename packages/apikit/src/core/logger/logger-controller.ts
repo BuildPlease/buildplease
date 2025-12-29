@@ -4,6 +4,7 @@ import { injectable, inject } from 'inversify';
 import pino, { type Logger, type Level, type Bindings, type LoggerOptions } from 'pino';
 
 import { isError, isObject, isEmptyObject, isPrimitive, filterObject } from '@nidavellirx/meowv-core';
+import { resolvePath, createDirectory, createFile } from '@nidavellirx/meowv-core/node';
 
 import { ApiKitSymbols } from '#/di';
 import type {
@@ -15,7 +16,6 @@ import type {
 } from '#/configuration';
 import type { LogOptions } from '#/logger';
 import type { RequestMetadata } from '#/request';
-import { resolvePath, createDirectory, createFile } from '#/file';
 
 export interface LoggerController {
   get instance(): Logger;

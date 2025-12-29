@@ -3,11 +3,11 @@ import fs from 'node:fs';
 import { inject, injectable } from 'inversify';
 import i18next, { type InitOptions } from 'i18next';
 import merge from 'lodash.merge';
+import { resolvePath, ensureDirectory } from '@nidavellirx/meowv-core/node';
 
 import { normalizeLocale, splitBaseRegion } from './utils';
 
 import { ApiKitSymbols } from '#/di';
-import { resolvePath, ensureDirectory } from '#/file';
 import type { ApiKitController, I18nConfig, I18nFileEntry } from '#/configuration';
 
 type ResourceEntry = {

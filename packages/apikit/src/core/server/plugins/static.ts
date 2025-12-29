@@ -3,8 +3,8 @@ import path from 'node:path';
 import fp from 'fastify-plugin';
 import fastifyStatic, { type FastifyStaticOptions } from '@fastify/static';
 import type { FastifyPluginAsync } from 'fastify';
+import { resolvePath, ensureDirectory } from '@nidavellirx/meowv-core/node';
 
-import { resolvePath, ensureDirectory } from '#/file';
 import type { ServerPluginOptions } from '#/server';
 
 const pluginName = 'apikit_@fastify/static';

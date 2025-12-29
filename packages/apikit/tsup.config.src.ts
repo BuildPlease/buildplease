@@ -1,25 +1,19 @@
-import pkg from './package.json' assert { type: 'json' };
 import fs from 'node:fs';
 import path from 'node:path';
 import { builtinModules } from 'node:module';
 import { defineConfig } from 'tsup';
 
-import { resolvePath } from './src/core/file';
-
-type PackageJson = {
-  dependencies?: Record<string, string>;
-  peerDependencies?: Record<string, string>;
-};
+import { resolvePath, loadPackageJson } from '@nidavellirx/meowv-core/node';
 
 const outDir = 'dist/src';
 
+const pkg = loadPackageJson(resolvePath(import.meta.url, './package.json'));
+const peers = Object.keys(pkg.peerDependencies);
+const deps = Object.keys(pkg.dependencies);
+
 const bundledDependencies: string[] = []; /* Bundled dependencies */
-const packageJson = pkg as PackageJson;
-const peers = Object.keys(packageJson.peerDependencies ?? {});
-const deps = Object.keys(packageJson.dependencies ?? {});
 const depsToExternalize = deps.filter((name) => !bundledDependencies.includes(name));
 const builtins = new Set([...builtinModules, ...builtinModules.map((name) => `node:${name}`), 'node:*']);
-
 const externals = [
   ...builtins,
 
