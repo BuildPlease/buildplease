@@ -22,6 +22,7 @@ import {
 
 export * from '@/core';
 export * from '@nidavellirx/meowv-core';
+export * from '@nidavellirx/meowv-core/node';
 
 export function MEOWV_APIKIT_INITIALIZE(): Assembly[] {
   const coreAssemblies = MEOWV_CORE_INITIALIZE();
