@@ -6,7 +6,6 @@ import { type Assembly, MEOWV_CORE_INITIALIZE } from '@nidavellirx/meowv-core';
 
 export * from './src';
 export * from '@nidavellirx/meowv-core';
-export * from '@nidavellirx/meowv-core/node';
 
 export function MEOWV_WEBKIT_INITIALIZE(): Assembly[] {
   const coreAssemblies = MEOWV_CORE_INITIALIZE();

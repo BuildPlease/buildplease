@@ -37,7 +37,7 @@ function getConsola() {
   if (sharedConsola) return sharedConsola;
 
   sharedConsola = createConsola({
-    fancy: true,
+    formatOptions: { colors: true },
   }).withTag(NUXTKIT_MODULE_NAME);
 
   return sharedConsola;

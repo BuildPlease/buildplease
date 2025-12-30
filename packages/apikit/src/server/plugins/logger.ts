@@ -58,7 +58,7 @@ const loggerPlugin: FastifyPluginAsync<ServerPluginOptions> = async (fastify, op
       }
     });
 
-    // ⚠️ [CRITICAL]: must return payload or response breaks
+    // ⚠️ [IMPORTANT]: must return payload or response breaks
     return payload;
   });
 };

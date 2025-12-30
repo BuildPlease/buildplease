@@ -5,7 +5,7 @@ import { builtinModules } from 'node:module';
 import { defineConfig } from 'tsup';
 
 import { resolvePath, loadPackageJson } from '@nidavellirx/meowv-core/node';
-import { Logger } from '@internal/utils';
+import { Logger } from '@internal/logger';
 
 const outDir = 'dist/src';
 

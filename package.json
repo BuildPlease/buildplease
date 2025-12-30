@@ -13,12 +13,13 @@
     "dep:check": "ncu -ws --dep prod,dev,optional,peer",
     "dep:update": "ncu -ws -i --dep prod,dev,optional,peer --peer",
     "clean": "node scripts/clean.mjs",
-    "clean:deep": "./scripts/cleanup.sh",
+    "clean:deep": "sh -c './scripts/cleanup.sh \"$@\"' --",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier . --check",
     "format:fix": "prettier . --write",
-    "build": "pnpm run clean && lerna run build"
+    "build": "pnpm run clean && lerna run build",
+    "typecheck": "lerna run typecheck"
   },
   "devDependencies": {
     "@types/node": "25.0.2",

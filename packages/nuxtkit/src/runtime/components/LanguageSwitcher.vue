@@ -27,21 +27,19 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import type { DropdownMenuItem } from '@nuxt/ui';
-import type { LocaleObject } from '@nuxtjs/i18n';
 
 import { useNuxtApp, useRuntimeConfig } from '#app';
 import { useCurrentLocale, normalizeLocale } from '#nuxtkit/composables';
 
-/**
- * Language switcher (KISS).
- * @prop displayFlag Show a flag icon. @default true
- * @prop labelField Which field to display. @default "name"
- */
+type LocaleItem = {
+  code: string;
+  name?: string;
+  flag?: string;
+};
+
 const props = withDefaults(
   defineProps<{
-    /** Show a flag icon. @default true */
     displayFlag?: boolean;
-    /** Which field to display. @default "name" */
     labelField?: 'code' | 'name';
   }>(),
   {
@@ -50,58 +48,75 @@ const props = withDefaults(
   },
 );
 
-type RawLocale = string | LocaleObject<string>;
 const config = useRuntimeConfig();
-const rawLocales = computed<RawLocale[]>(() => config.public.i18n?.locales ?? []);
-const locales = computed<LocaleObject[]>(() =>
-  rawLocales.value.map((locale) =>
-    typeof locale === 'string'
-      ? { code: locale, name: locale.toUpperCase(), flag: locale.toLowerCase() }
-      : locale,
-  ),
-);
+
+const availableLocales = computed<LocaleItem[]>(() => {
+  const value = config.public.i18n?.locales;
+
+  if (!Array.isArray(value)) return [];
+
+  return value.map((entry) => {
+    if (typeof entry === 'string') {
+      return {
+        code: entry,
+        name: entry.toUpperCase(),
+        flag: entry.toLowerCase(),
+      };
+    }
+
+    return {
+      code: entry.code,
+      name: entry.name,
+      flag: (entry as { flag?: string }).flag,
+    };
+  });
+});
 
 const currentCodeFull = useCurrentLocale({ withRegion: true });
 const currentCodeBase = computed(() => normalizeLocale(currentCodeFull.value, { preserveRegion: false }));
-const currentFlag = computed(() => (props.displayFlag ? makeFlag(currentLocale.value?.code) : undefined));
 
 const currentLocale = computed(() => {
-  return (
-    locales.value.find(
-      (locale) => normalizeLocale(locale.code, { preserveRegion: true }) === currentCodeFull.value,
-    ) ??
-    locales.value.find(
-      (locale) => normalizeLocale(locale.code, { preserveRegion: false }) === currentCodeBase.value,
-    )
+  const matchFull = availableLocales.value.find(
+    (locale) => normalizeLocale(locale.code, { preserveRegion: true }) === currentCodeFull.value,
+  );
+  if (matchFull) return matchFull;
+
+  return availableLocales.value.find(
+    (locale) => normalizeLocale(locale.code, { preserveRegion: false }) === currentCodeBase.value,
   );
 });
 
-const currentLabel = computed(() =>
-  props.labelField === 'name'
-    ? (currentLocale.value?.name ?? currentLocale.value?.code ?? currentCodeFull.value)
-    : (currentLocale.value?.code ?? currentCodeFull.value),
-);
+const currentLabel = computed(() => {
+  const locale = currentLocale.value;
+  if (!locale) return currentCodeFull.value;
 
-const items = computed<DropdownMenuItem[]>(() =>
-  locales.value
-    .filter((locale) => locale.code !== currentLocale.value?.code)
+  if (props.labelField === 'name') return locale.name ?? locale.code;
+  return locale.code;
+});
+
+const currentFlag = computed(() => {
+  if (!props.displayFlag) return undefined;
+  const locale = currentLocale.value;
+  if (!locale?.flag) return undefined;
+  return `i-flag-${locale.flag}-4x3`;
+});
+
+const items = computed<DropdownMenuItem[]>(() => {
+  const selected = currentLocale.value?.code;
+
+  return availableLocales.value
+    .filter((locale) => locale.code !== selected)
     .map((locale) => ({
       label: props.labelField === 'name' ? (locale.name ?? locale.code) : locale.code,
-      to: onSwitchLocale(locale.code),
-      icon: props.displayFlag ? makeFlag(locale.code) : undefined,
-    })),
-);
+      to: switchLocalePath(locale.code),
+      icon: props.displayFlag && locale.flag ? `i-flag-${locale.flag}-4x3` : undefined,
+    }));
+});
 
-function makeFlag(code?: string): string | undefined {
-  const locale = locales.value.find((l) => l.code === code);
-  const flag = locale?.flag;
-  return flag ? `i-flag-${flag}-4x3` : undefined;
-}
-
-function onSwitchLocale(localeCode: string): string {
+function switchLocalePath(localeCode: string): string {
   const app = useNuxtApp();
-  const switchLocalePath = app.$switchLocalePath as (locale: string) => string;
-
-  return switchLocalePath(localeCode);
+  const fn = app.$switchLocalePath as unknown;
+  if (typeof fn === 'function') return (fn as (locale: string) => string)(localeCode);
+  return '/';
 }
 </script>

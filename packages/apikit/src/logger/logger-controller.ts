@@ -266,38 +266,50 @@ export class LoggerControllerImpl implements LoggerController {
   }
 
   /**
-   * Resolves the most permissive (lowest) log level across all transports.
+   * Resolves the effective global Pino log level.
    *
-   * Ensures the global logger does not filter out entries that any transport
-   * is configured to accept.
+   * The global level is a **threshold**: Pino will drop any log calls below it
+   * before they ever reach transports. To avoid accidentally filtering out logs
+   * that a transport is configured to accept, we pick the most permissive
+   * (lowest) level across all configured transports.
    *
-   * @param {TransportOptions[]} transports
-   *   Configured log transport definitions.
-   * @returns {Level}
-   *   The effective global log level (defaults to `"info"` when unset).
+   * Debug override:
+   * - When {@link ApiKitController.isDebug} is enabled, the global level is forced
+   *   to `"trace"` so nothing is filtered globally.
+   * - Individual transport {@link BaseTransportOptions.level | levels} still apply
+   *   (e.g. file can stay at `"info"` while console shows `"trace"`).
+   *
+   * @param transports
+   *   Configured logger transport definitions.
+   *
+   * @returns
+   *   The effective global Pino level (defaults to `"info"` when no transport level is set).
    *
    * @example
-   * // Console wants "debug", file wants "warn" → result is "debug"
+   * // Console wants "debug", file wants "warn" → global must be "debug"
+   * // so debug logs are not filtered out before reaching console.
    * const level = resolveGlobalLogLevel([
    *   { type: 'console', level: 'debug', target: 'pino-pretty', pretty: {} },
-   *   { type: 'file',    level: 'warn',  path: './logs/app.log' }
+   *   { type: 'file', level: 'warn', path: './logs/app.log' },
    * ]);
    * // level === 'debug'
    */
   private resolveGlobalLogLevel(transports: TransportOptions[]): Level {
     const fallback: Level = 'info';
-    const weights: Record<Level, number> = {
+    if (this.configuration.isDebug) return 'trace';
+
+    const weights = {
       trace: 0,
       debug: 1,
       info: 2,
       warn: 3,
       error: 4,
       fatal: 5,
-    };
+    } satisfies Record<Level, number>;
 
-    return transports.reduce<Level>((lowest, t) => {
-      const level = (t.level ?? fallback) as Level;
-      return weights[level] < weights[lowest] ? level : lowest;
-    }, fallback);
+    const levels = transports.map((t) => t.level ?? fallback);
+    let lowest: Level = fallback;
+    for (const level of levels) if (weights[level] < weights[lowest]) lowest = level;
+    return lowest;
   }
 }

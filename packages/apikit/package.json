@@ -24,7 +24,8 @@
     "registry": "https://npm.pkg.github.com/"
   },
   "scripts": {
-    "build": "tsup --config tsup.config.cli.ts && tsup --config tsup.config.src.ts"
+    "build": "tsup --config tsup.config.cli.ts && tsup --config tsup.config.src.ts",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
     "@dotenvx/dotenvx": "1.51.2",

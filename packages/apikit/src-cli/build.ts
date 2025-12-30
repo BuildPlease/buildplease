@@ -1,7 +1,8 @@
 import { defineCommand } from 'citty';
 
+import { loadConfig } from '@internal/configuration';
 import { generate } from '@internal/generator';
-import { Logger, loadConfig } from '@internal/utils';
+import { Logger } from '@internal/logger';
 
 export const buildCommand = defineCommand({
   meta: {

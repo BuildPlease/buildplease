@@ -1,5 +1,6 @@
 import { isDefinedAndNotNull } from '@nidavellirx/meowv-core';
 
+import { ApiKitConfigDefaults } from '@internal/configuration';
 import type {
   ApiKitConfig,
   EmailConfig,
@@ -83,8 +84,3 @@ export function defineApikitConfig<const Environments extends readonly Environme
     staticFiles: config.staticFiles,
   };
 }
-
-export const ApiKitConfigDefaults = {
-  outDir: '.apikit',
-  isDebug: false,
-};

@@ -3,7 +3,8 @@ import path from 'path';
 
 import dotenvx from '@dotenvx/dotenvx';
 
-import { Logger, loadConfig } from '@internal/utils';
+import { ApiKitConfigDefaults, loadConfig } from '@internal/configuration';
+import { Logger } from '@internal/logger';
 
 import type {
   ApiKitConfig,
@@ -60,7 +61,7 @@ export async function makeApikitContext(options: MakeApikitContextOptions): Prom
   const staticFilesConfig = await initializeStaticFiles(config);
 
   global.apikit = {
-    isDebug: environmentConfig.debug ?? false,
+    isDebug: environmentConfig.debug ?? ApiKitConfigDefaults.isDebug,
     environmentConfig: environmentConfig,
     loggerConfig: loggerConfig,
     serverConfig: serverConfig,
@@ -69,7 +70,7 @@ export async function makeApikitContext(options: MakeApikitContextOptions): Prom
     staticFilesConfig: staticFilesConfig,
   };
 
-  Logger.success(`\n🚀 ApiKit context created for '${process.env.NODE_ENV}' environment`);
+  Logger.success(`ApiKit context created for [${process.env.NODE_ENV?.toUpperCase()}] environment`);
 }
 
 /**

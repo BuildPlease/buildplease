@@ -3,6 +3,11 @@ import { fileURLToPath } from 'node:url';
 const r = (p: string) => fileURLToPath(new URL(p, import.meta.url));
 
 export default defineNuxtConfig({
+  devServer: {
+    port: 5000,
+    host: 'localhost',
+  },
+
   devtools: { enabled: true },
   compatibilityDate: '2025-09-01',
   modules: ['@nidavellirx/meowv-nuxtkit', '@nuxtjs/i18n', '@nuxt/ui'],

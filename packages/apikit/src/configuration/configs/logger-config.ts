@@ -6,7 +6,11 @@ import type { PrettyOptions } from 'pino-pretty';
  */
 interface BaseTransportOptions {
   /**
-   * The minimum level of logs to capture.
+   * The minimum level of logs to capture **for this transport**.
+   *
+   * Note: When {@link EnvironmentConfig.debug} is enabled, ApiKit forces the global
+   * logger level to `"trace"`; transport levels still apply.
+   *
    * @default 'info'
    */
   level?: Level;
@@ -55,9 +59,14 @@ export interface FileTransportOptions extends BaseTransportOptions {
   type: 'file';
 
   /**
-   * Absolute path to the log file.
-   * Should be resolved via `resolvePath`.
-   * @example resolvePath(import.meta.url, './logs/production.log')
+   * Path to the log file.
+   *
+   * - Absolute paths are used as-is.
+   * - Relative paths are resolved against `process.cwd()`.
+   *
+   * @example "./logs/app.log"
+   * @example "/var/log/my-app/app.log"
+   * @example resolvePath(import.meta.url, "./logs/app.log")
    */
   path: string;
 }

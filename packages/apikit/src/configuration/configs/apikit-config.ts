@@ -11,7 +11,7 @@ export interface ApiKitConfig {
   /**
    * The output directory where the generated API files will be stored.
    *
-   * @default ".apikit"
+   * @default "apikit-runtime"
    */
   outDir: string;
 

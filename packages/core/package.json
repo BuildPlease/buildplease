@@ -24,7 +24,8 @@
     "registry": "https://npm.pkg.github.com/"
   },
   "scripts": {
-    "build": "tsup"
+    "build": "tsup",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
     "async-mutex": "0.5.0",

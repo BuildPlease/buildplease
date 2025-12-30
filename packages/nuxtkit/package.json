@@ -32,19 +32,19 @@
     "dev:prepare": "nuxt-module-build build --stub && nuxt-module-build prepare && nuxi prepare playground",
     "test": "vitest run",
     "test:watch": "vitest watch",
-    "test:types": "vue-tsc --noEmit && cd playground && vue-tsc --noEmit"
+    "typecheck": "vue-tsc --noEmit && cd playground && vue-tsc --noEmit"
   },
   "dependencies": {
+    "@iconify-json/flag": "1.2.10",
     "@nidavellirx/meowv-webkit": "workspace:^",
     "@nuxt/kit": "4.2.2",
-    "@iconify-json/flag": "1.2.10",
     "defu": "6.1.4"
   },
   "peerDependencies": {
     "@nuxt/ui": "^4.2.1",
     "@nuxtjs/i18n": "^10.2.1",
-    "reflect-metadata": "^0.2.2",
     "inversify": "^7.10.6",
+    "reflect-metadata": "^0.2.2",
     "vue-i18n": "^11.2.2",
     "zod": "^4.2.0"
   },
@@ -52,7 +52,9 @@
     "@nuxt/devtools": "3.1.1",
     "@nuxt/module-builder": "1.0.2",
     "@nuxt/schema": "4.2.2",
+    "consola": "3.4.2",
     "nuxt": "4.2.2",
+    "unbuild": "3.6.1",
     "vitest": "4.0.15",
     "vue-tsc": "3.1.8"
   }
