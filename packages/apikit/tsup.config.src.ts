@@ -52,28 +52,6 @@ export default defineConfig([
       await copyLocales();
     },
   },
-  // MARK: - Type agumentation only
-  {
-    entry: {
-      'types/index': './types/index.ts',
-    },
-    tsconfig: 'tsconfig.json',
-    platform: 'node',
-    target: 'esnext',
-    format: ['esm'],
-
-    outDir: outDir,
-    clean: false,
-
-    dts: { only: true },
-    bundle: false,
-    minify: false,
-    sourcemap: false,
-    splitting: false,
-    treeshake: true,
-
-    external: externals,
-  },
 ]);
 
 async function copyLocales(): Promise<void> {

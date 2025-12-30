@@ -1,7 +1,7 @@
 import { readdir, rm, stat } from 'node:fs/promises';
 
 const targets = ['apps', 'packages'];
-const folders = ['dist', '.nuxt', '.output', '.runtime', '.build', '.apikit'];
+const folders = ['dist', '.output', '.runtime', '.build', 'turbo', '.nuxt'];
 
 // MARK: - Logger
 
