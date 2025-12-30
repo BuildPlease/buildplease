@@ -1,4 +1,4 @@
-import type { RequestMetadata } from '#/request';
+import type { RequestMetadata } from '@/request';
 
 declare module 'fastify' {
   interface FastifyRequest {

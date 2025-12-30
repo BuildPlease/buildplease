@@ -1,4 +1,5 @@
 import { builtinModules } from 'node:module';
+
 import { defineConfig } from 'tsup';
 
 const outDir = 'dist/cli';
@@ -8,7 +9,7 @@ const externals = [...builtins];
 
 export default defineConfig({
   entry: {
-    index: 'src/cli/index.ts',
+    index: 'src-cli/index.ts',
   },
   tsconfig: 'tsconfig.json',
   platform: 'node',

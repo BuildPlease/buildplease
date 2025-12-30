@@ -5,11 +5,11 @@ import type {
   ServerConfig,
   I18nConfig,
   StaticFilesConfig,
-} from '#/configuration';
+} from '@/configuration';
 
 declare global {
   var apikit: {
-    debug: boolean;
+    isDebug: boolean;
     environmentConfig: EnvironmentConfig;
     loggerConfig: LoggerConfig;
     serverConfig: ServerConfig;

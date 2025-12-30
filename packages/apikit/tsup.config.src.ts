@@ -1,9 +1,11 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { builtinModules } from 'node:module';
+
 import { defineConfig } from 'tsup';
 
 import { resolvePath, loadPackageJson } from '@nidavellirx/meowv-core/node';
+import { Logger } from '@internal/utils';
 
 const outDir = 'dist/src';
 
@@ -77,7 +79,7 @@ export default defineConfig([
 ]);
 
 async function copyLocales(): Promise<void> {
-  const sourceLocalesDir = resolvePath(import.meta.url, './src/core/i18n/locales');
+  const sourceLocalesDir = resolvePath(import.meta.url, './src/i18n/locales');
   const destLocalesDir = resolvePath(import.meta.url, `./${outDir}/locales`);
 
   const entries = await fs.promises.readdir(sourceLocalesDir, { withFileTypes: true });
@@ -95,7 +97,7 @@ async function copyLocales(): Promise<void> {
     await fs.promises.copyFile(srcPath, destPath);
   }
 
-  console.log('✅ Copied localization files to:', destLocalesDir);
+  Logger.success('Copied localization files', { from: sourceLocalesDir, to: destLocalesDir });
 }
 
 async function copyRecursive(sourcePath: string, destinationPath: string): Promise<void> {

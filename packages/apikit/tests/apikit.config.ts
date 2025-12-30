@@ -1,14 +1,15 @@
-import { defineApikitConfig } from '../src/core/configuration/apikit-define';
+import { defineApikitConfig } from '@nidavellirx/meowv-apikit';
 
 export default defineApikitConfig({
-  debug: true,
-  outDir: '.apikit',
+  outDir: 'apikit-runtime',
   environments: [
     {
+      debug: true,
       name: 'development',
       file: '.env.development',
     },
     {
+      debug: false,
       name: 'production',
       file: '.env.production',
     },

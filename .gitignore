@@ -150,7 +150,7 @@ out
 dist
 
 # ApiKit build / generated output
-.apikit
+apikit-runtime
 
 # Ignore generated files and directories
 **/generated/*

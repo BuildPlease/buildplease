@@ -42,9 +42,19 @@
     "baseUrl": "./",
     "paths": {
       "@/*": ["src/*"],
-      "#/*": ["src/core/*"]
+      "@cli/*": ["src-cli/*"],
+      "@internal/*": ["src-internal/*"]
     }
   },
-  "include": ["index.ts", "src", "types"],
-  "exclude": ["node_modules", "dist", "tests"]
+  "include": [
+    "index.ts",
+    "src",
+    "src-internal",
+    "src-cli",
+    "types",
+    "tests",
+    "tsup.config.cli.ts",
+    "tsup.config.src.ts"
+  ],
+  "exclude": ["node_modules", "dist"]
 }
