@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 
-import { type PackageJsonModel, PackageJsonSchema } from '@/utils';
+import { type PackageJSONModel, PackageJSONSchema } from '@node/package-json';
 
 /**
  * Loads and validates a `package.json` file from the given filesystem path.
@@ -11,14 +11,14 @@ import { type PackageJsonModel, PackageJsonSchema } from '@/utils';
  * Absolute or relative path to a `package.json` file.
  *
  * @returns
- * Parsed and validated {@link PackageJsonModel}.
+ * Parsed and validated {@link PackageJSONModel}.
  *
  * @throws
  * - If the file cannot be read.
  * - If the file is not valid JSON.
- * - If the contents do not match {@link PackageJsonSchema}.
+ * - If the contents do not match {@link PackageJSONSchema}.
  */
-export function loadPackageJson(path: string): PackageJsonModel {
+export function loadPackageJSON(path: string): PackageJSONModel {
   let file: string;
   let json: unknown;
 
@@ -35,7 +35,7 @@ export function loadPackageJson(path: string): PackageJsonModel {
   }
 
   try {
-    return PackageJsonSchema.parse(json);
+    return PackageJSONSchema.parse(json);
   } catch (error) {
     throw new Error(`Invalid package.json at ${path}`, { cause: error });
   }

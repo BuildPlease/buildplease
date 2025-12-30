@@ -1,11 +1,15 @@
-import { builtinModules } from 'node:module';
-
 import { defineConfig } from 'tsup';
+import { resolvePath, loadPackageJSON, makeExternals } from '@nidavellirx/meowv-core/node';
 
 const outDir = 'dist/cli';
+const pkg = loadPackageJSON(resolvePath(import.meta.url, './package.json'));
 
-const builtins = new Set([...builtinModules, ...builtinModules.map((name) => `node:${name}`), 'node:*']);
-const externals = [...builtins];
+const externals = makeExternals(pkg, {
+  includeNodeBuiltins: true,
+  includePeers: true,
+  includeDependencies: true,
+  bundled: [],
+});
 
 export default defineConfig({
   entry: {
@@ -17,7 +21,7 @@ export default defineConfig({
   format: ['esm'],
 
   outDir: outDir,
-  clean: [outDir],
+  clean: true,
 
   dts: false,
 

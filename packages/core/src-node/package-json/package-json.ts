@@ -12,9 +12,9 @@ export const PackageNameSchema = z
     const words = normalizeWords(base);
 
     return {
-      original, //e.g. "@peyvee/api-beta"
-      prefix, //e.g. "peyvee" | undefined
-      base, //e.g. "api-beta"
+      original, //e.g. "@package/app-name"
+      prefix, //e.g. "package" | undefined
+      base, //e.g. "app-name"
 
       kebab: toKebab(words),
       snake: toSnake(words),
@@ -23,11 +23,11 @@ export const PackageNameSchema = z
     };
   });
 
-// MARK: - PackageJson
+// MARK: - Package JSON
 
-export type PackageJsonModel = z.output<typeof PackageJsonSchema>;
+export type PackageJSONModel = z.output<typeof PackageJSONSchema>;
 
-export const PackageJsonSchema = z.looseObject({
+export const PackageJSONSchema = z.looseObject({
   // Required
   name: PackageNameSchema,
   version: z.string().trim().min(1),

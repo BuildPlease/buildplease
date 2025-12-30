@@ -1,28 +1,16 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { builtinModules } from 'node:module';
 
 import { defineConfig } from 'tsup';
-import { resolvePath, loadPackageJson } from '@nidavellirx/meowv-core/node';
+import { resolvePath, loadPackageJSON, makeExternals } from '@nidavellirx/meowv-core/node';
 
 const outDir = 'dist/src';
+const pkg = loadPackageJSON(resolvePath(import.meta.url, './package.json'));
 
-const pkg = loadPackageJson(resolvePath(import.meta.url, './package.json'));
-const peers = Object.keys(pkg.peerDependencies);
-const deps = Object.keys(pkg.dependencies);
-
-const bundledDependencies: string[] = []; /* Bundled dependencies */
-const depsToExternalize = deps.filter((name) => !bundledDependencies.includes(name));
-const builtins = new Set([...builtinModules, ...builtinModules.map((name) => `node:${name}`), 'node:*']);
-const externals = [
-  ...builtins,
-
-  ...peers,
-  ...peers.map((name) => `${name}/*`),
-
-  ...depsToExternalize,
-  ...depsToExternalize.map((name) => `${name}/*`),
-];
+const externals = makeExternals(pkg, {
+  includeNodeBuiltins: true,
+  bundled: [],
+});
 
 export default defineConfig([
   {
@@ -35,7 +23,7 @@ export default defineConfig([
     format: ['cjs', 'esm'],
 
     outDir: outDir,
-    clean: [outDir],
+    clean: true,
 
     dts: true,
     minify: true,
