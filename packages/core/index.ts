@@ -1,5 +1,4 @@
 import 'reflect-metadata';
-
 import type { Assembly } from '@/di';
 import { Core_FormatterAssembly } from '@/index';
 

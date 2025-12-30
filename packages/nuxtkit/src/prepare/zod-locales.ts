@@ -16,50 +16,68 @@ export async function prepareZodLocales(
   if (!options.zodI18n.useModuleLocale) return;
 
   try {
-    // 1) app → ordered unique locale codes (prefers .code, falls back to .language, supports strings)
-    const appCodes = collectApplicationLocaleCodes(i18nOptions?.locales);
+    const rawAppCodes = collectApplicationLocaleCodes(i18nOptions?.locales);
 
-    // 2) module → shipped region codes from <region>.json files (e.g. "en-US")
     const langDir = resolver.resolve('./runtime/zod/locales');
     const shippedRegions = await readShippedRegionCodes(langDir);
-
-    // 3) alias maps
-    const aliasToBase = buildAliasToBaseMap(options.zodI18n.languageAlias); // "en-GB" → "en"
-    const baseToPreferred = buildBaseToPreferredRegions(options.zodI18n.languageAlias); // "en" → ["en-US","en-GB"]
-
-    // 4) base → shipped regions
+    const aliasToBase = buildAliasToBaseMap(options.zodI18n.languageAlias);
+    const baseToPreferred = buildBaseToPreferredRegions(options.zodI18n.languageAlias);
     const baseToShipped = groupShippedByBase(shippedRegions);
 
-    // 5) app codes → shipped files
-    const localesToRegister = computeLocalesToRegister(
-      appCodes,
-      shippedRegions,
-      aliasToBase,
-      baseToPreferred,
-      baseToShipped,
-    );
+    const allowedCodes = buildAllowedLocaleCodeSet(i18nOptions?.locales);
 
-    // 6) register with @nuxtjs/i18n
     nuxt.hook('i18n:registerModule', (register) => {
-      register({ langDir, locales: localesToRegister });
-    });
+      type RegisterConfig = Parameters<typeof register>[0];
+      type RegisterLocales = Exclude<RegisterConfig['locales'], undefined>;
+      type AllowedCode = RegisterLocales extends LocaleObject<infer C>[] ? C : never;
 
-    logger.debug(
-      `[zod-i18n] registered → ${localesToRegister.map((l) => `${l.code} ← ${l.file}`).join(', ')}`,
-    );
+      const appCodes = rawAppCodes.filter((code): code is AllowedCode => allowedCodes.has(code));
+
+      const localesToRegister = computeLocalesToRegister<AllowedCode>(
+        appCodes,
+        shippedRegions,
+        aliasToBase,
+        baseToPreferred,
+        baseToShipped,
+      );
+
+      if (localesToRegister.length === 0) {
+        logger.debug('[zod-i18n] no locales to register; skipping i18n:registerModule');
+        return;
+      }
+
+      register({ langDir, locales: localesToRegister });
+
+      logger.debug(
+        `[zod-i18n] registered → ${localesToRegister.map((l) => `${l.code} ← ${l.file}`).join(', ')}`,
+      );
+    });
   } catch (error) {
-    logger.fatal(error instanceof Error ? error.message : String(error));
+    logger.fatal('[zod-i18n] failed: ', error);
   }
 }
 
 // MARK: - Private
 
+function buildAllowedLocaleCodeSet(locales: NuxtI18nOptions['locales']): Set<string> {
+  const allowed = new Set<string>();
+  if (!locales) return allowed;
+
+  for (const entry of locales) {
+    if (typeof entry === 'string') allowed.add(entry);
+    else if (entry?.code) allowed.add(entry.code);
+    else if (entry?.language) allowed.add(entry.language);
+  }
+
+  return allowed;
+}
+
 /** Collect app locale codes (ordered, unique). Accepts string entries or objects with .code/.language */
 function collectApplicationLocaleCodes(locales: NuxtI18nOptions['locales']): string[] {
-  if (!locales) throw new Error('zod-i18n: no i18n locales configured.');
+  if (!locales) return [];
 
   const collected: string[] = [];
-  for (const entry of locales as Array<string | LocaleObject>) {
+  for (const entry of locales) {
     if (typeof entry === 'string') collected.push(entry);
     else if (entry?.code) collected.push(entry.code);
     else if (entry?.language) collected.push(entry.language);
@@ -74,7 +92,6 @@ function collectApplicationLocaleCodes(locales: NuxtI18nOptions['locales']): str
     }
   }
 
-  if (unique.length === 0) throw new Error('zod-i18n: resolved 0 locale codes from i18n configuration.');
   return unique;
 }
 
@@ -144,7 +161,7 @@ function pickRegionForBase(
   const prefs = baseToPreferred.get(base) ?? [];
   for (const pref of prefs) if (shipped.includes(pref)) return pref;
 
-  return shipped[0]; // fallback
+  return shipped[0];
 }
 
 /** Resolve a shipped region filename for an app locale code */
@@ -167,14 +184,14 @@ function resolveRegionForAppCode(
 }
 
 /** Map app codes to shipped <region>.json files */
-function computeLocalesToRegister(
-  applicationLocaleCodes: string[],
+function computeLocalesToRegister<TCode extends string>(
+  applicationLocaleCodes: TCode[],
   shippedRegionCodes: Set<string>,
   aliasToBaseMap: Map<string, string>,
   baseToPreferredRegions: Map<string, string[]>,
   baseToShipped: Map<string, string[]>,
-): LocaleObject[] {
-  const result: LocaleObject[] = [];
+): LocaleObject<TCode>[] {
+  const result: LocaleObject<TCode>[] = [];
 
   for (const appCode of applicationLocaleCodes) {
     const region = resolveRegionForAppCode(
@@ -187,6 +204,5 @@ function computeLocalesToRegister(
     if (region) result.push({ code: appCode, file: `${region}.json` });
   }
 
-  if (result.length === 0) throw new Error('zod-i18n: none of the app locales map to shipped zod locales.');
   return result;
 }
