@@ -15,7 +15,7 @@ const externals = makeExternals(pkg, {
 export default defineConfig([
   {
     entry: {
-      index: './index.ts',
+      index: './src/index.ts',
     },
     tsconfig: 'tsconfig.json',
     platform: 'node',

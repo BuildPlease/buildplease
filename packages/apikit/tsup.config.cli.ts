@@ -1,7 +1,7 @@
 import { defineConfig } from 'tsup';
 import { resolvePath, loadPackageJSON, makeExternals } from '@nidavellirx/meowv-core/node';
 
-const outDir = 'dist/cli';
+const outDir = 'dist';
 const pkg = loadPackageJSON(resolvePath(import.meta.url, './package.json'));
 
 const externals = makeExternals(pkg, {
@@ -13,7 +13,7 @@ const externals = makeExternals(pkg, {
 
 export default defineConfig({
   entry: {
-    index: 'src-cli/index.ts',
+    'cli/index': 'src-cli/index.ts',
   },
   tsconfig: 'tsconfig.json',
   platform: 'node',

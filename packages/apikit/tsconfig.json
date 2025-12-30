@@ -41,20 +41,12 @@
     "declarationDir": "dist/types",
     "baseUrl": "./",
     "paths": {
+      "#/*": ["./*"],
       "@/*": ["src/*"],
       "@cli/*": ["src-cli/*"],
       "@internal/*": ["src-internal/*"]
     }
   },
-  "include": [
-    "index.ts",
-    "src",
-    "src-internal",
-    "src-cli",
-    "types",
-    "tests",
-    "tsup.config.cli.ts",
-    "tsup.config.src.ts"
-  ],
+  "include": ["src", "src-internal", "src-cli", "types", "tests", "tsup.config.cli.ts", "tsup.config.src.ts"],
   "exclude": ["node_modules", "dist"]
 }

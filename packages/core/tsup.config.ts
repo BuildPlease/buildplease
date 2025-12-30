@@ -17,7 +17,7 @@ const externalsNode = makeExternals(pkg, {
 export default defineConfig([
   // MARK: - Neutral entry
   {
-    entry: { 'src/index': './index.ts' },
+    entry: { 'src/index': './src/index.ts' },
     tsconfig: 'tsconfig.json',
     platform: 'neutral',
     target: 'esnext',
