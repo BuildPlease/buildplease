@@ -249,7 +249,9 @@ export class LoggerControllerImpl implements LoggerController {
   }
 
   private makeFileTransportTarget(config: FileTransportOptions): pino.TransportTargetOptions {
-    const destination = resolvePath(process.cwd(), config.path);
+    const destination = path.isAbsolute(config.path)
+      ? path.normalize(config.path)
+      : resolvePath(process.cwd(), config.path);
     const level = this.makeTransportLevel(config.level);
 
     createDirectory(path.dirname(destination));
