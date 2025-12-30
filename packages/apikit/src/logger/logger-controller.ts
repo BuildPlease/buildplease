@@ -189,15 +189,15 @@ export class LoggerControllerImpl implements LoggerController {
 
   private makeInstance(): Logger {
     const config = this.configuration.logger;
+    const transports = config.transports;
 
-    if (!Array.isArray(config.transports)) {
+    if (!Array.isArray(transports)) {
       throw new Error('[Logger] Invalid config: "transports" must be an array.');
     }
 
-    const transports = Array.isArray(config.transports) ? config.transports : [];
-    const disabled = Boolean(config.disabled);
+    const disabled = config.disabled === true;
     const enabled = !disabled && transports.length > 0;
-    const level = this.resolveGlobalLogLevel(transports);
+    const level = this.makeGlobalLogLevel(transports);
 
     const options: LoggerOptions = {
       level: level,
@@ -239,28 +239,38 @@ export class LoggerControllerImpl implements LoggerController {
   }
 
   private makeConsoleTransportTarget(config: ConsoleTransportOptions): pino.TransportTargetOptions {
+    const level = this.makeTransportLevel(config.level);
+
     return {
       target: 'pino-pretty',
-      level: config.level,
+      level: level,
       options: config.pretty,
     };
   }
 
   private makeFileTransportTarget(config: FileTransportOptions): pino.TransportTargetOptions {
     const destination = resolvePath(process.cwd(), config.path);
+    const level = this.makeTransportLevel(config.level);
 
     createDirectory(path.dirname(destination));
     createFile(destination);
 
-    console.info(`\x1b[32m✔\x1b[0m LOGGER destination: ${destination}`);
+    if (this.configuration.isDebug) {
+      console.info(`\x1b[32m✔\x1b[0m LOGGER level: ${level}, destination: ${destination}`);
+    }
 
     return {
       target: 'pino/file',
-      level: config.level,
+      level: level,
       options: {
         destination: destination,
       },
     };
+  }
+
+  private makeTransportLevel(requested?: Level): Level {
+    if (this.configuration.isDebug) return 'trace';
+    return requested ?? ApiKitConfigDefaults.logger.defaultLevel;
   }
 
   /**
@@ -292,8 +302,8 @@ export class LoggerControllerImpl implements LoggerController {
    * ]);
    * // level === 'debug'
    */
-  private resolveGlobalLogLevel(transports: TransportOptions[]): Level {
-    const defaultLevel = ApiKitConfigDefaults.logger.defaultLevel;
+  private makeGlobalLogLevel(transports: TransportOptions[]): Level {
+    // In debug mode, do not globally filter anything.
     if (this.configuration.isDebug) return 'trace';
 
     const weights = {
@@ -305,9 +315,13 @@ export class LoggerControllerImpl implements LoggerController {
       fatal: 5,
     } satisfies Record<Level, number>;
 
-    const levels = transports.map((t) => t.level ?? defaultLevel);
-    let lowest: Level = defaultLevel;
-    for (const level of levels) if (weights[level] < weights[lowest]) lowest = level;
+    let lowest: Level = ApiKitConfigDefaults.logger.defaultLevel;
+
+    for (const t of transports) {
+      const effective = this.makeTransportLevel(t.level);
+      if (weights[effective] < weights[lowest]) lowest = effective;
+    }
+
     return lowest;
   }
 }
