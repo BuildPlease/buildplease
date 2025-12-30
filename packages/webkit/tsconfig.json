@@ -38,9 +38,13 @@
     "outDir": "./dist",
     "baseUrl": "./",
     "paths": {
-      "@/*": ["src/*"]
+      "#/*": ["./*"],
+      "@/*": ["src/*"],
+      "@internal/*": ["src-internal/*"],
+      "@node": ["src-node/index.ts"],
+      "@node/*": ["src-node/*"]
     }
   },
-  "include": ["index.ts", "src"],
+  "include": ["src", "src-node", "src-internal", "tsup.config.ts"],
   "exclude": ["node_modules", "dist", "test"]
 }

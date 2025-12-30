@@ -1,4 +1,5 @@
 import { builtinModules } from 'node:module';
+
 import type { PackageJSONModel } from '@node/package-json';
 
 export type MakeExternalsOptions = {

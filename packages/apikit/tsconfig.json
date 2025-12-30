@@ -47,6 +47,6 @@
       "@internal/*": ["src-internal/*"]
     }
   },
-  "include": ["src", "src-internal", "src-cli", "types", "tests", "tsup.config.cli.ts", "tsup.config.src.ts"],
+  "include": ["src", "src-cli", "src-internal", "types", "tests", "tsup.config.cli.ts", "tsup.config.src.ts"],
   "exclude": ["node_modules", "dist"]
 }

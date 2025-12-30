@@ -43,9 +43,9 @@
     "paths": {
       "#/*": ["./*"],
       "@/*": ["src/*"],
+      "@internal/*": ["src-internal/*"],
       "@node": ["src-node/index.ts"],
-      "@node/*": ["src-node/*"],
-      "@internal/*": ["src-internal/*"]
+      "@node/*": ["src-node/*"]
     }
   },
   "include": ["src", "src-node", "src-internal", "tsup.config.ts"],

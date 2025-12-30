@@ -16,7 +16,7 @@ const externalsNode = makeExternals(pkg, {
 export default defineConfig([
   // MARK: - Browser entry
   {
-    entry: { 'src/index': './index.ts' },
+    entry: { 'src/index': './src/index.ts' },
     tsconfig: 'tsconfig.json',
     platform: 'browser',
     target: 'esnext',

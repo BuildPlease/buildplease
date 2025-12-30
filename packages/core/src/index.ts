@@ -1,6 +1,7 @@
 import 'reflect-metadata';
-import type { Assembly } from '@/di';
 import { makeAssemblies } from '@internal/injection';
+
+import type { Assembly } from '@/di';
 
 // MARK: - Exports
 
