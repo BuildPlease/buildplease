@@ -25,7 +25,6 @@ const externals = [
 ];
 
 export default defineConfig([
-  // MARK: - Main
   {
     entry: {
       index: './index.ts',
