@@ -3,9 +3,7 @@ import path from 'node:path';
 import { builtinModules } from 'node:module';
 
 import { defineConfig } from 'tsup';
-
 import { resolvePath, loadPackageJson } from '@nidavellirx/meowv-core/node';
-import { Logger } from '@internal/logger';
 
 const outDir = 'dist/src';
 
@@ -96,8 +94,6 @@ async function copyLocales(): Promise<void> {
 
     await fs.promises.copyFile(srcPath, destPath);
   }
-
-  Logger.success('Copied localization files', { from: sourceLocalesDir, to: destLocalesDir });
 }
 
 async function copyRecursive(sourcePath: string, destinationPath: string): Promise<void> {

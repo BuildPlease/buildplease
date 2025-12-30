@@ -37,6 +37,7 @@ export default defineApikitConfig({
       ],
     },
     production: {
+      disabled: true,
       transports: [
         {
           type: 'file',

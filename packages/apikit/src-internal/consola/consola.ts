@@ -1,41 +1,43 @@
 import { createConsola } from 'consola';
 
-const logger = createConsola({
+const instance = createConsola({
+  level: +999,
   formatOptions: {
     colors: true,
+    date: true,
   },
 }).withTag('ApiKit');
 
-export class Logger {
+export class Consola {
   static log(message?: any, ...args: any[]): void {
-    logger.log(message, ...args);
+    instance.log(message, ...args);
   }
 
   static info(message?: any, ...args: any[]): void {
-    logger.info(message, ...args);
+    instance.info(message, ...args);
   }
 
   static success(message?: any, ...args: any[]): void {
-    logger.success(message, ...args);
+    instance.success(message, ...args);
   }
 
   static warn(message?: any, ...args: any[]): void {
-    logger.warn(message, ...args);
+    instance.warn(message, ...args);
   }
 
   static error(message?: any, ...args: any[]): void {
-    logger.error(message, ...args);
+    instance.error(message, ...args);
   }
 
   static debug(message?: any, ...args: any[]): void {
-    logger.debug(message, ...args);
+    instance.debug(message, ...args);
   }
 
   static start(message?: any, ...args: any[]): void {
-    logger.start(message, ...args);
+    instance.start(message, ...args);
   }
 
   static ready(message?: any, ...args: any[]): void {
-    logger.ready(message, ...args);
+    instance.ready(message, ...args);
   }
 }

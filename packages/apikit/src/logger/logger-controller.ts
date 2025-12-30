@@ -6,16 +6,17 @@ import pino, { type Logger, type Level, type Bindings, type LoggerOptions } from
 import { isError, isObject, isEmptyObject, isPrimitive, filterObject } from '@nidavellirx/meowv-core';
 import { resolvePath, createDirectory, createFile } from '@nidavellirx/meowv-core/node';
 
+import { ApiKitConfigDefaults } from '@internal/configuration';
+
 import { ApiKitSymbols } from '@/di';
+import type { LogOptions } from '@/logger';
+import type { RequestMetadata } from '@/request';
 import type {
   ApiKitController,
   TransportOptions,
   ConsoleTransportOptions,
-  PrettyConsoleTransportOptions,
   FileTransportOptions,
 } from '@/configuration';
-import type { LogOptions } from '@/logger';
-import type { RequestMetadata } from '@/request';
 
 export interface LoggerController {
   get instance(): Logger;
@@ -30,25 +31,13 @@ export interface LoggerController {
 
 @injectable()
 export class LoggerControllerImpl implements LoggerController {
-  public instance: Logger;
+  public readonly instance: Logger;
 
   constructor(
     @inject(ApiKitSymbols.DI.Configuration.Controller)
     private configuration: ApiKitController,
   ) {
-    const transports = this.configuration.logger.transports;
-    const level = this.resolveGlobalLogLevel(transports);
-
-    const options: LoggerOptions = {
-      level: level,
-    };
-
-    // MARK: - Only supply a transport block if user configured any transports
-    if (transports.length > 0) {
-      options.transport = { targets: this.makeTransportTargets(transports) };
-    }
-
-    this.instance = pino(options);
+    this.instance = this.makeInstance();
   }
 
   // MARK: - Public
@@ -103,16 +92,10 @@ export class LoggerControllerImpl implements LoggerController {
     this.instance[level]({ msg: title, ...logData });
   }
 
-  /**
-   * Specialized formatter for errors, built on top of `formatUnknown`.
-   */
   private formatError(error: unknown): unknown {
     return this.formatUnknown(error);
   }
 
-  /**
-   * Specialized formatter for miscellaneous details, built on top of `formatUnknown`.
-   */
   private formatDetails(details: unknown): unknown {
     return this.formatUnknown(details);
   }
@@ -204,6 +187,31 @@ export class LoggerControllerImpl implements LoggerController {
 
   // MARK: - Private: Configuration
 
+  private makeInstance(): Logger {
+    const config = this.configuration.logger;
+
+    if (!Array.isArray(config.transports)) {
+      throw new Error('[Logger] Invalid config: "transports" must be an array.');
+    }
+
+    const transports = Array.isArray(config.transports) ? config.transports : [];
+    const disabled = Boolean(config.disabled);
+    const enabled = !disabled && transports.length > 0;
+    const level = this.resolveGlobalLogLevel(transports);
+
+    const options: LoggerOptions = {
+      level: level,
+      enabled: enabled,
+      timestamp: true,
+    };
+
+    if (enabled) {
+      options.transport = { targets: this.makeTransportTargets(transports) };
+    }
+
+    return pino(options);
+  }
+
   private makeTransportTargets(input: TransportOptions[]): pino.TransportTargetOptions[] {
     if (input.filter((t) => t.type === 'console').length > 1) {
       throw new Error('[Logger] Multiple console transports are not supported.');
@@ -231,36 +239,26 @@ export class LoggerControllerImpl implements LoggerController {
   }
 
   private makeConsoleTransportTarget(config: ConsoleTransportOptions): pino.TransportTargetOptions {
-    const { target, level } = config;
-
-    if (target === 'pino-pretty') {
-      const prettyConfig = config as PrettyConsoleTransportOptions;
-
-      return {
-        target: 'pino-pretty',
-        options: {
-          level: level,
-          ...prettyConfig.pretty,
-        },
-      };
-    }
-
-    throw new Error(`Unsupported console target: ${target}`);
+    return {
+      target: 'pino-pretty',
+      level: config.level,
+      options: config.pretty,
+    };
   }
 
   private makeFileTransportTarget(config: FileTransportOptions): pino.TransportTargetOptions {
-    const absFile = resolvePath(process.cwd(), config.path);
+    const destination = resolvePath(process.cwd(), config.path);
 
-    createDirectory(path.dirname(absFile));
-    createFile(absFile);
+    createDirectory(path.dirname(destination));
+    createFile(destination);
 
-    console.info(`\x1b[32m[Logger]:\x1b[0m path → ${absFile}`);
+    console.info(`\x1b[32m✔\x1b[0m LOGGER destination: ${destination}`);
 
     return {
       target: 'pino/file',
+      level: config.level,
       options: {
-        destination: absFile,
-        level: config.level,
+        destination: destination,
       },
     };
   }
@@ -295,7 +293,7 @@ export class LoggerControllerImpl implements LoggerController {
    * // level === 'debug'
    */
   private resolveGlobalLogLevel(transports: TransportOptions[]): Level {
-    const fallback: Level = 'info';
+    const defaultLevel = ApiKitConfigDefaults.logger.defaultLevel;
     if (this.configuration.isDebug) return 'trace';
 
     const weights = {
@@ -307,8 +305,8 @@ export class LoggerControllerImpl implements LoggerController {
       fatal: 5,
     } satisfies Record<Level, number>;
 
-    const levels = transports.map((t) => t.level ?? fallback);
-    let lowest: Level = fallback;
+    const levels = transports.map((t) => t.level ?? defaultLevel);
+    let lowest: Level = defaultLevel;
     for (const level of levels) if (weights[level] < weights[lowest]) lowest = level;
     return lowest;
   }

@@ -64,6 +64,7 @@ export interface FileTransportOptions extends BaseTransportOptions {
    * - Absolute paths are used as-is.
    * - Relative paths are resolved against `process.cwd()`.
    *
+   * @required
    * @example "./logs/app.log"
    * @example "/var/log/my-app/app.log"
    * @example resolvePath(import.meta.url, "./logs/app.log")
@@ -73,19 +74,18 @@ export interface FileTransportOptions extends BaseTransportOptions {
 
 // ────────────────────────────────────────────────────────────────────────────────
 
-/**
- * All supported logger transports.
- */
 export type TransportOptions = ConsoleTransportOptions | FileTransportOptions;
 
-/**
- * Full logger configuration structure.
- */
 export interface LoggerConfig {
+  /**
+   * Whether logging is enabled.
+   *
+   * @default false
+   */
+  disabled?: boolean;
   /**
    * A list of transport configurations for the logger.
    * Each transport can have its own type and options.
-   * @required
    */
   transports: TransportOptions[];
 }

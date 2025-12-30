@@ -5,7 +5,7 @@ import type {
   ServerConfig,
   I18nConfig,
   StaticFilesConfig,
-} from './';
+} from '@/configuration/configs';
 
 export interface ApiKitConfig {
   /**

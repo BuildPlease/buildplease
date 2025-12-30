@@ -2,7 +2,7 @@ import { defineCommand } from 'citty';
 
 import { loadConfig } from '@internal/configuration';
 import { generate } from '@internal/generator';
-import { Logger } from '@internal/logger';
+import { Consola } from '@internal/consola';
 
 export const buildCommand = defineCommand({
   meta: {
@@ -41,16 +41,16 @@ export const buildCommand = defineCommand({
   },
   run: async ({ args }) => {
     try {
-      Logger.start('🚀 Building..');
+      Consola.start('Building.. 🚀');
 
       const { dir: argDirPath, config: argConfigName } = args;
       const apikitConfig = await loadConfig(argDirPath, argConfigName);
 
       await generate(apikitConfig);
 
-      Logger.success('🎉 Build Complete!');
+      Consola.success('Build Complete! 🎉');
     } catch (error) {
-      Logger.error(error);
+      Consola.error(error);
       process.exit(1);
     }
   },

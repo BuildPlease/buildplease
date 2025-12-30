@@ -6,8 +6,7 @@ import { makeErrorMap } from '#nuxtkit/zod/shared';
 
 export default defineNuxtPlugin({
   name: 'nuxtkit:plugin:zod-i18n',
-  // @ts-ignore provided by @nuxtjs/i18n
-  dependsOn: ['i18n:plugin'],
+  dependsOn: ['i18n:plugin'] as any,
   parallel: true,
   setup(_nuxt) {
     const app = useNuxtApp();
