@@ -14,7 +14,8 @@
     },
     "./node": {
       "types": "./dist/src-node/index.d.ts",
-      "import": "./dist/src-node/index.js"
+      "import": "./dist/src-node/index.js",
+      "require": "./dist/src-node/index.cjs"
     }
   },
   "files": [

@@ -42,7 +42,7 @@ export default defineConfig([
     tsconfig: 'tsconfig.json',
     platform: 'node',
     target: 'esnext',
-    format: ['esm'],
+    format: ['esm', 'cjs'],
 
     outDir: outDir,
     clean: false,
