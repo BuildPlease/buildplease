@@ -9,8 +9,16 @@ import { ApiErrorFactory } from '@/error';
 import type { LoggerController } from '@/logger';
 import type { ApiKitController } from '@/configuration';
 
+type ValidationIssueDetails = {
+  issues: Array<{
+    code: string;
+    path: Array<string | number>;
+    message: string;
+  }>;
+};
+
 export interface DtoValidationController {
-  /**
+    /**
    * Synchronously parse & validate `data` with a Zod schema.
    *
    * - The return type is inferred from `schema` via `z.infer<S>`.
@@ -88,10 +96,12 @@ export class DtoValidationControllerImpl implements DtoValidationController {
   private handleError(error: unknown): never {
     if (error instanceof ZodError) {
       if (this.configuration.isDebug) {
-        this.logger.debug('Dto validation failed', { details: error.issues });
+        this.logger.debug('Dto validation failed', {
+          details: { tree: z.treeifyError(error) },
+        });
       }
 
-      const details = z.treeifyError(error);
+      const details = this.buildValidationDetails(error);
       const overrideMessage = this.buildValidationMessage(error);
 
       throw ApiErrorFactory.make('Validation.INVALID_PROPERTIES', {
@@ -101,6 +111,16 @@ export class DtoValidationControllerImpl implements DtoValidationController {
     }
 
     throw error;
+  }
+
+  private buildValidationDetails(error: ZodError): ValidationIssueDetails {
+    return {
+      issues: error.issues.map((issue) => ({
+        code: issue.code,
+        path: issue.path.map((segment) => (typeof segment === 'number' ? segment : String(segment))),
+        message: issue.message,
+      })),
+    };
   }
 
   private buildValidationMessage(error: ZodError): string | null {
