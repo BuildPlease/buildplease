@@ -31,11 +31,11 @@
   },
   "dependencies": {
     "@meawkit/core": "workspace:^",
-    "axios": "1.13.2"
+    "axios": "1.14.0"
   },
   "peerDependencies": {
     "reflect-metadata": "^0.2.2",
-    "inversify": "^7.10.6",
-    "zod": "^4.2.0"
+    "inversify": "^8.1.0",
+    "zod": "^4.3.6"
   }
 }
