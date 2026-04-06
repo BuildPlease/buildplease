@@ -1,4 +1,4 @@
-import type { Equatable, Hashable, Identity } from '@nidavellirx/meowv-core';
+import type { Equatable, Hashable, Identity } from '@meawkit/core';
 
 import type { RemoteRequestConfig } from '@/networking';
 

@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 import { defineConfig } from 'tsup';
-import { resolvePath, loadPackageJSON, makeExternals } from '@nidavellirx/meowv-core/node';
+import { resolvePath, loadPackageJSON, makeExternals } from '@meawkit/core/node';
 
 const outDir = 'dist/src';
 const pkg = loadPackageJSON(resolvePath(import.meta.url, './package.json'));

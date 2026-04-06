@@ -1,5 +1,5 @@
 import { defineConfig } from 'tsup';
-import { resolvePath, loadPackageJSON, makeExternals } from '@nidavellirx/meowv-core/node';
+import { resolvePath, loadPackageJSON, makeExternals } from '@meawkit/core/node';
 
 const outDir = 'dist';
 const pkg = loadPackageJSON(resolvePath(import.meta.url, './package.json'));

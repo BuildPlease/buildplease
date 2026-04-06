@@ -1,11 +1,15 @@
 {
-  "name": "@nidavellirx/meowv-core",
+  "name": "@meawkit/core",
   "version": "1.0.0",
   "description": "",
   "type": "module",
   "keywords": [],
   "author": "Simon Rastislav Kovačič",
   "license": "UNLICENSED",
+  "repository": "git@github.com/MeawKit/MeawKit.git",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
   "exports": {
     ".": {
       "types": "./dist/src/index.d.ts",
@@ -21,10 +25,6 @@
   "files": [
     "dist"
   ],
-  "repository": "git@github.com/Nidavellirx/meowv.git",
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
-  },
   "scripts": {
     "build": "tsup",
     "typecheck": "tsc -p tsconfig.json --noEmit"

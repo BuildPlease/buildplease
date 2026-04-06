@@ -1,4 +1,4 @@
-import { isNonEmptyString } from '@nidavellirx/meowv-core';
+import { isNonEmptyString } from '@meawkit/core';
 import { injectable } from 'inversify';
 
 export interface MultipartFormatterController {

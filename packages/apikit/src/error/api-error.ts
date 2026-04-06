@@ -1,4 +1,4 @@
-import { type JSONSerializable, filterObject } from '@nidavellirx/meowv-core';
+import { type JSONSerializable, filterObject } from '@meawkit/core';
 
 export type ApiErrorDetails = unknown;
 

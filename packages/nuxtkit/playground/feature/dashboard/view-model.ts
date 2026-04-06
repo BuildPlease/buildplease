@@ -1,5 +1,5 @@
 import { injectable, inject } from 'inversify';
-import { CanceledError } from '@nidavellirx/meowv-webkit';
+import { CanceledError } from '@meawkit/webkit';
 
 import { Symbols } from '@di/symbols';
 import type {

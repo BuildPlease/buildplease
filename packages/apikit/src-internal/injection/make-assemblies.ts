@@ -1,4 +1,4 @@
-import { type Assembly } from '@nidavellirx/meowv-core';
+import { type Assembly } from '@meawkit/core';
 
 import { ConfigurationAssembly } from './assemblies/configuration';
 import { DatabaseAssembly } from './assemblies/database';

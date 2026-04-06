@@ -3,7 +3,7 @@ import path from 'node:path';
 import fp from 'fastify-plugin';
 import fastifyStatic, { type FastifyStaticOptions } from '@fastify/static';
 import type { FastifyPluginAsync } from 'fastify';
-import { resolvePath, ensureDirectory } from '@nidavellirx/meowv-core/node';
+import { resolvePath, ensureDirectory } from '@meawkit/core/node';
 
 import type { ServerPluginOptions } from '@/server';
 

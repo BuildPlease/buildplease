@@ -1,5 +1,5 @@
 import { decorate, injectable } from 'inversify';
-import { type RemoteEndpoint, BaseRemoteResource } from '@nidavellirx/meowv-webkit';
+import { type RemoteEndpoint, BaseRemoteResource } from '@meawkit/webkit';
 
 import { LanguageInterceptor, SSRRequestCookiesInterceptor } from '#nuxtkit/networking';
 

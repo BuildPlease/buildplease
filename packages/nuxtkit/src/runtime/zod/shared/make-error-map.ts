@@ -1,7 +1,7 @@
 import type { Composer } from 'vue-i18n';
 import { type $ZodErrorMap, type $ZodStringFormats, util } from 'zod/v4/core';
 
-import type { ValidationSchemaI18nParams } from '@nidavellirx/meowv-webkit';
+import type { ValidationSchemaI18nParams } from '@meawkit/webkit';
 
 import { useNuxtKit } from '#nuxtkit-internal/composables';
 import { getSizing, type Sizable, type SizableUnit } from '#nuxtkit/zod/shared';

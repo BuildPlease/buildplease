@@ -1,4 +1,4 @@
-import { definePluralRules } from '@nidavellirx/meowv-nuxtkit/shared';
+import { definePluralRules } from '@meawkit/nuxtkit/shared';
 
 export default defineI18nConfig(() => ({
   pluralRules: definePluralRules(),

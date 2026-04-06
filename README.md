@@ -34,7 +34,7 @@ npx lerna publish from-git --yes
 
 - Publishes packages that are explicitly **tagged** in Git.
 - **Tags Format**: `@scope/package@1.0.0`
-  - Example: `@nidavellirx/meowv-webkit@1.0.0`
+  - Example: `@meawkit/webkit@1.0.0`
 - **Use Case**: Manual control over versioning and tagging before publishing.
 
 ---

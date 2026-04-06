@@ -1,4 +1,4 @@
-import type { RemoteRequestInterceptor, RemoteRequestConfig } from '@nidavellirx/meowv-webkit';
+import type { RemoteRequestInterceptor, RemoteRequestConfig } from '@meawkit/webkit';
 
 import { useNuxtKit } from '#nuxtkit-internal/composables';
 import { useCurrentLocale } from '#nuxtkit/composables';

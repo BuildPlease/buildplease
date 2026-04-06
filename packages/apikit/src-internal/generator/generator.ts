@@ -1,6 +1,6 @@
 import path from 'node:path';
 
-import { resolvePath, removePath, createDirectory, createFile } from '@nidavellirx/meowv-core/node';
+import { resolvePath, removePath, createDirectory, createFile } from '@meawkit/core/node';
 
 import { generateEnvironment } from './generate-environment';
 

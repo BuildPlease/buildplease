@@ -1,13 +1,13 @@
 import 'reflect-metadata';
-import { type Assembly, MEOWV_CORE_INITIALIZE } from '@nidavellirx/meowv-core';
+import { type Assembly, MEOWV_CORE_INITIALIZE } from '@meawkit/core';
 
 import '#/types';
 import { makeAssemblies } from '@internal/injection';
 
 // MARK: - Exports
 
-export * from '@nidavellirx/meowv-core';
-export * from '@nidavellirx/meowv-core/node';
+export * from '@meawkit/core';
+export * from '@meawkit/core/node';
 export * from './configuration';
 export * from './database';
 export * from './di';

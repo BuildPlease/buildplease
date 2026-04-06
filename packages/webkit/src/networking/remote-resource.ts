@@ -12,7 +12,7 @@ import {
   isPlainObject,
   isDefinedAndNotNull,
   ignoreError,
-} from '@nidavellirx/meowv-core';
+} from '@meawkit/core';
 
 import {
   type RemoteEndpoint,

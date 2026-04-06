@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "@nidavellirx/meowv-nuxtkit-playground",
+  "name": "@meawkit/nuxtkit-playground",
   "type": "module",
   "scripts": {
     "clean": "nuxi cleanup",
@@ -13,7 +13,7 @@
     "zod": "4.2.0"
   },
   "devDependencies": {
-    "@nidavellirx/meowv-nuxtkit": "workspace:^",
+    "@meawkit/nuxtkit": "workspace:^",
     "@nuxt/ui": "4.2.1",
     "@nuxtjs/i18n": "10.2.1",
     "nuxt": "4.2.2"

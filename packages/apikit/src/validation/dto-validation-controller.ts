@@ -1,7 +1,7 @@
 import { injectable, inject } from 'inversify';
 import { z, type ZodType, ZodError } from 'zod';
 
-import type { ValidationSchemaI18nParams } from '@nidavellirx/meowv-core';
+import type { ValidationSchemaI18nParams } from '@meawkit/core';
 
 import { ApiKitSymbols } from '@/di';
 import { I18nProvider } from '@/i18n';
@@ -18,7 +18,7 @@ type ValidationIssueDetails = {
 };
 
 export interface DtoValidationController {
-    /**
+  /**
    * Synchronously parse & validate `data` with a Zod schema.
    *
    * - The return type is inferred from `schema` via `z.infer<S>`.

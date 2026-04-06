@@ -1,11 +1,15 @@
 {
-  "name": "@nidavellirx/meowv-apikit",
+  "name": "@meawkit/apikit",
   "version": "1.0.0",
   "description": "",
   "type": "module",
   "keywords": [],
   "author": "Simon Rastislav Kovačič",
   "license": "UNLICENSED",
+  "repository": "git@github.com/MeawKit/MeawKit.git",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
   "exports": {
     ".": {
       "types": "./dist/src/index.d.ts",
@@ -19,10 +23,6 @@
   "files": [
     "dist"
   ],
-  "repository": "git@github.com/Nidavellirx/meowv.git",
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
-  },
   "scripts": {
     "build": "tsup --config tsup.config.cli.ts && tsup --config tsup.config.src.ts",
     "typecheck": "tsc -p tsconfig.json --noEmit"
@@ -32,7 +32,7 @@
     "@fastify/cookie": "11.0.2",
     "@fastify/static": "8.3.0",
     "@fastify/view": "11.1.1",
-    "@nidavellirx/meowv-core": "workspace:^",
+    "@meawkit/core": "workspace:^",
     "citty": "0.1.6",
     "consola": "3.4.2",
     "ejs": "3.1.10",

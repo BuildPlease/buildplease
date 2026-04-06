@@ -30,7 +30,7 @@ export interface ApiErrorFactoryOptions {
  *
  * @example
  * // Define individual error groups first
- * import { defineErrors } from '@nidavellirx/meowv-apikit';
+ * import { defineErrors } from '@meawkit/apikit';
  *
  * export const AccountErrors = defineErrors({
  *   ACCOUNT_NOT_FOUND: {
@@ -97,7 +97,7 @@ export class ApiErrorFactory {
    *
    * @example
    * // Using defineErrors to build nested groups:
-   * import { defineErrors } from '@nidavellirx/meowv-apikit';
+   * import { defineErrors } from '@meawkit/apikit';
    *
    * export const AccountErrors = defineErrors({
    *   ACCOUNT_NOT_FOUND: {

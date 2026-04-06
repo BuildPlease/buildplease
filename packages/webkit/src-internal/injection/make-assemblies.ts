@@ -1,4 +1,4 @@
-import { type Assembly } from '@nidavellirx/meowv-core';
+import { type Assembly } from '@meawkit/core';
 
 export function makeAssemblies(): Assembly[] {
   return [];

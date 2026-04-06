@@ -6,7 +6,7 @@ import {
   type RemoteEndpoint,
   HttpError,
   delay,
-} from '@nidavellirx/meowv-webkit';
+} from '@meawkit/webkit';
 
 export type UnauthorizedOperation = AsyncOperation<void, void>;
 

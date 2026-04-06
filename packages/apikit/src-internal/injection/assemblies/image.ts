@@ -1,4 +1,4 @@
-import type { Assembly, AssemblyContainer } from '@nidavellirx/meowv-core';
+import type { Assembly, AssemblyContainer } from '@meawkit/core';
 
 import { ApiKitSymbols } from '@/di';
 import { type ImageNormalizationController, ImageNormalizationControllerImpl } from '@/image';

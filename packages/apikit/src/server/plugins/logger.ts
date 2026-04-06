@@ -3,7 +3,7 @@ import { Readable } from 'stream';
 import fp from 'fastify-plugin';
 import type { FastifyPluginAsync } from 'fastify';
 
-import { ignoreError, isDefinedAndNotNull } from '@nidavellirx/meowv-core';
+import { ignoreError, isDefinedAndNotNull } from '@meawkit/core';
 
 import type { ServerPluginOptions } from '@/server';
 

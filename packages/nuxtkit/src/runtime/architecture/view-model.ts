@@ -1,6 +1,6 @@
 import { reactive, type Reactive } from 'vue';
 import type { RouteLocationNormalizedLoaded, Router } from 'vue-router';
-import type { Awaitable } from '@nidavellirx/meowv-webkit';
+import type { Awaitable } from '@meawkit/webkit';
 
 import { useRouter, useRoute, useNuxtApp } from '#app';
 import { type Lifecycle, isSSR, isCSR, isHydrating } from '#nuxtkit/infrastructure';

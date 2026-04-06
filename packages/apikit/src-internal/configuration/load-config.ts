@@ -1,5 +1,5 @@
 import { createJiti } from 'jiti';
-import { resolvePath, ensureDirectory } from '@nidavellirx/meowv-core/node';
+import { resolvePath, ensureDirectory } from '@meawkit/core/node';
 
 import type { ApiKitConfig } from '@/configuration';
 

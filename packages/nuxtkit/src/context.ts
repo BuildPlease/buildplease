@@ -1,6 +1,6 @@
 import { type Resolver, createResolver, useLogger } from '@nuxt/kit';
 import type { Nuxt } from '@nuxt/schema';
-import type { DeepRequired } from '@nidavellirx/meowv-webkit';
+import type { DeepRequired } from '@meawkit/webkit';
 
 import { MODULE_NAME } from './constants';
 import type { NuxtKitOptions } from './types';

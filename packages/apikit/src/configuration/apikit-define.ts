@@ -1,4 +1,4 @@
-import { isDefinedAndNotNull } from '@nidavellirx/meowv-core';
+import { isDefinedAndNotNull } from '@meawkit/core';
 
 import { ApiKitConfigDefaults } from '@internal/configuration';
 

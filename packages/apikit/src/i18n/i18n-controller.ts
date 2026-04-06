@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import { inject, injectable } from 'inversify';
 import i18next, { type InitOptions } from 'i18next';
 import merge from 'lodash.merge';
-import { resolvePath, ensureDirectory } from '@nidavellirx/meowv-core/node';
+import { resolvePath, ensureDirectory } from '@meawkit/core/node';
 
 import { normalizeLocale, splitBaseRegion } from './utils';
 

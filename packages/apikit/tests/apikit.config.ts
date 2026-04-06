@@ -1,4 +1,4 @@
-import { defineApikitConfig } from '@nidavellirx/meowv-apikit';
+import { defineApikitConfig } from '@meawkit/apikit';
 
 export default defineApikitConfig({
   outDir: 'apikit-runtime',

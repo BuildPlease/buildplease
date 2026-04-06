@@ -1,5 +1,5 @@
 {
-  "name": "meowv",
+  "name": "meawkit",
   "version": "1.0.0",
   "description": "",
   "private": true,
@@ -7,7 +7,7 @@
   "keywords": [],
   "author": "Simon Rastislav Kovačič",
   "license": "UNLICENSED",
-  "repository": "git@github.com:Nidavellirx/meowv.git",
+  "repository": "git@github.com:MeawKit/MeawKit.git",
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "dep:check": "ncu -ws --dep prod,dev,optional,peer",

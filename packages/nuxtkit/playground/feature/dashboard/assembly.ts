@@ -1,4 +1,4 @@
-import type { Assembly, AssemblyContainer } from '@nidavellirx/meowv-webkit';
+import type { Assembly, AssemblyContainer } from '@meawkit/webkit';
 
 import { Symbols } from '@di/symbols';
 

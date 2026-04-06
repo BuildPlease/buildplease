@@ -1,4 +1,4 @@
-import type { ScopeController } from '@nidavellirx/meowv-webkit';
+import type { ScopeController } from '@meawkit/webkit';
 
 import { useNuxtApp } from '#app';
 

@@ -3,8 +3,8 @@ import path from 'node:path';
 import { injectable, inject } from 'inversify';
 import pino, { type Logger, type Level, type Bindings, type LoggerOptions } from 'pino';
 
-import { isError, isObject, isEmptyObject, isPrimitive, filterObject } from '@nidavellirx/meowv-core';
-import { resolvePath, createDirectory, createFile } from '@nidavellirx/meowv-core/node';
+import { isError, isObject, isEmptyObject, isPrimitive, filterObject } from '@meawkit/core';
+import { resolvePath, createDirectory, createFile } from '@meawkit/core/node';
 
 import { ApiKitConfigDefaults } from '@internal/configuration';
 

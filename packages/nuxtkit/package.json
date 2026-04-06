@@ -1,11 +1,14 @@
 {
-  "name": "@nidavellirx/meowv-nuxtkit",
+  "name": "@meawkit/nuxtkit",
   "version": "1.0.0",
   "description": "A Nuxt Kit for MVVM design pattern and Clean Code architecture, with foundation for web app",
   "type": "module",
   "author": "Simon Rastislav Kovačič",
   "license": "UNLICENSED",
-  "repository": "git@github.com/Nidavellirx/meowv.git",
+  "repository": "git@github.com/MeawKit/MeawKit.git",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
   "main": "./dist/module.mjs",
   "exports": {
     ".": {
@@ -36,7 +39,7 @@
   },
   "dependencies": {
     "@iconify-json/flag": "1.2.10",
-    "@nidavellirx/meowv-webkit": "workspace:^",
+    "@meawkit/webkit": "workspace:^",
     "@nuxt/kit": "4.2.2",
     "defu": "6.1.4"
   },

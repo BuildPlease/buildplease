@@ -1,4 +1,4 @@
-import { ignoreError } from '@nidavellirx/meowv-core';
+import { ignoreError } from '@meawkit/core';
 
 export class Token<T extends Record<string, unknown> = any> {
   private readonly _value: string;

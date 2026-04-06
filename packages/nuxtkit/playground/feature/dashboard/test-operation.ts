@@ -6,7 +6,7 @@ import {
   type RemoteEndpoint,
   delay,
   HttpError,
-} from '@nidavellirx/meowv-webkit';
+} from '@meawkit/webkit';
 
 export interface TestOperationInput {
   index: number;

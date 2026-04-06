@@ -1,4 +1,4 @@
-import { HttpError, CanceledError } from '@nidavellirx/meowv-webkit';
+import { HttpError, CanceledError } from '@meawkit/webkit';
 
 import { useNuxtApp, useRuntimeConfig } from '#app';
 import { useNuxtKit } from '#nuxtkit-internal/composables';

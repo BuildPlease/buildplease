@@ -4,7 +4,7 @@ import { pipeline as pipelineAsync } from 'stream/promises';
 import sharp, { type Sharp } from 'sharp';
 import { injectable, inject } from 'inversify';
 
-import { type UnitFormatterController, ByteUnit, CoreSymbols } from '@nidavellirx/meowv-core';
+import { type UnitFormatterController, ByteUnit, CoreSymbols } from '@meawkit/core';
 
 import { FormatType } from '@/formatter';
 import type { ImageOptions } from '@/image';

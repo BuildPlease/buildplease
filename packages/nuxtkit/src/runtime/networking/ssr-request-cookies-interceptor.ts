@@ -1,5 +1,5 @@
 import { parseCookies } from 'h3';
-import type { RemoteRequestInterceptor, RemoteRequestConfig } from '@nidavellirx/meowv-webkit';
+import type { RemoteRequestInterceptor, RemoteRequestConfig } from '@meawkit/webkit';
 
 import { useNuxtApp } from '#app';
 import { useNuxtKit } from '#nuxtkit-internal/composables';

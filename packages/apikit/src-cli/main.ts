@@ -1,5 +1,5 @@
 import { defineCommand } from 'citty';
-import { loadPackageJSON, resolvePath } from '@nidavellirx/meowv-core/node';
+import { loadPackageJSON, resolvePath } from '@meawkit/core/node';
 
 import { buildCommand } from './build';
 

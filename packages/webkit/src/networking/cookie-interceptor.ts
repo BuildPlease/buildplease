@@ -1,4 +1,4 @@
-import type { Identity } from '@nidavellirx/meowv-core';
+import type { Identity } from '@meawkit/core';
 
 import type { RemoteRequestConfig, RemoteRequestInterceptor } from '@/networking';
 

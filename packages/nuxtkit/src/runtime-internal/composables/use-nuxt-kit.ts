@@ -1,7 +1,7 @@
 import { createConsola, type ConsolaInstance } from 'consola';
 import { colors } from 'consola/utils';
 
-import { isObject } from '@nidavellirx/meowv-webkit';
+import { isObject } from '@meawkit/webkit';
 
 import { isCSR, isSSR, useRuntimeConfig } from '#imports';
 

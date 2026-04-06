@@ -1,1 +1,1 @@
-export * from '@nidavellirx/meowv-core/node';
+export * from '@meawkit/core/node';

@@ -1,6 +1,6 @@
 import { decorate, injectable } from 'inversify';
 import { sendRedirect } from 'h3';
-import { type RemoteEndpoint, type RemoteRequestConfig, HttpError } from '@nidavellirx/meowv-webkit';
+import { type RemoteEndpoint, type RemoteRequestConfig, HttpError } from '@meawkit/webkit';
 
 import { navigateTo, abortNavigation, isSSR } from '#imports';
 import { type NuxtApp, useNuxtApp, useRouter } from '#app';

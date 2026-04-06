@@ -1,6 +1,6 @@
 import { injectable } from 'inversify';
 
-import { isPlainObject, isObject } from '@nidavellirx/meowv-core';
+import { isPlainObject, isObject } from '@meawkit/core';
 
 /**
  * FormatterController is responsible for creating Formatter instances.

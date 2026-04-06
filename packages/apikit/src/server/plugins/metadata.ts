@@ -1,7 +1,7 @@
 import fp from 'fastify-plugin';
 import type { FastifyPluginAsync } from 'fastify';
 
-import { isNullOrEmpty } from '@nidavellirx/meowv-core';
+import { isNullOrEmpty } from '@meawkit/core';
 
 import type { RequestMetadata } from '@/request';
 import type { ServerPluginOptions } from '@/server';

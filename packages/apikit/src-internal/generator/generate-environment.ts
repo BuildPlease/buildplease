@@ -1,6 +1,6 @@
 import path from 'node:path';
 
-import { createFile } from '@nidavellirx/meowv-core/node';
+import { createFile } from '@meawkit/core/node';
 
 import type { ApiKitConfig } from '@/configuration';
 

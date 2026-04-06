@@ -2,7 +2,7 @@ import { injectable, inject } from 'inversify';
 
 import type { FastifyReply, FastifyRequest } from 'fastify';
 
-import { ignoreErrorAsync } from '@nidavellirx/meowv-core';
+import { ignoreErrorAsync } from '@meawkit/core';
 
 import { ApiKitSymbols } from '@/di';
 import { LogFlag, type LoggerController } from '@/logger';

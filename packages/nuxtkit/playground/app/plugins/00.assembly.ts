@@ -1,4 +1,4 @@
-import { MEOWV_WEBKIT_INITIALIZE } from '@nidavellirx/meowv-webkit';
+import { MEOWV_WEBKIT_INITIALIZE } from '@meawkit/webkit';
 
 import { LoginAssembly } from '@feature/login/assembly';
 import { DashboardAssembly } from '@feature/dashboard/assembly';

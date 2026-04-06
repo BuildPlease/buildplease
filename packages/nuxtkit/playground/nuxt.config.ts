@@ -10,7 +10,7 @@ export default defineNuxtConfig({
 
   devtools: { enabled: true },
   compatibilityDate: '2025-09-01',
-  modules: ['@nidavellirx/meowv-nuxtkit', '@nuxtjs/i18n', '@nuxt/ui'],
+  modules: ['@meawkit/nuxtkit', '@nuxtjs/i18n', '@nuxt/ui'],
   css: ['~/assets/styles/main.css'],
 
   alias: {
