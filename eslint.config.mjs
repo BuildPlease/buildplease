@@ -6,32 +6,27 @@ import vueParser from 'vue-eslint-parser';
 import vuePlugin from 'eslint-plugin-vue';
 import unicorn from 'eslint-plugin-unicorn';
 import checkFile from 'eslint-plugin-check-file';
-import prettierPlugin from 'eslint-plugin-prettier';
-import eslintConfigPrettier from 'eslint-config-prettier';
+import eslintConfigPrettier from 'eslint-config-prettier/flat';
 import jsonc from 'eslint-plugin-jsonc';
-import jsoncParser from 'jsonc-eslint-parser';
 import yml from 'eslint-plugin-yml';
-import yamlParser from 'yaml-eslint-parser';
 
-const tsJsRules = {
+// MARK: - Shared Rules
+
+const codeRules = {
   ...tsPlugin.configs.recommended.rules,
 
-  // Run Prettier from ESLint, but let it read the Prettier config file.
-  // (No inline options here — single source of truth!)
-  'prettier/prettier': 'error',
-
-  // Import hygiene
+  // Import
   'import/order': ['error', { 'newlines-between': 'always-and-inside-groups' }],
   'import/no-duplicates': ['error', { 'prefer-inline': false }],
   'import/newline-after-import': 'error',
   'import/first': 'error',
   'import/no-default-export': 'off',
 
-  // Misc hygiene
+  // General
   'no-multiple-empty-lines': ['error', { max: 1 }],
   'no-multi-spaces': ['error', { ignoreEOLComments: true }],
 
-  // TS prefs
+  // TypeScript
   '@typescript-eslint/no-empty-object-type': 'off',
   '@typescript-eslint/no-explicit-any': 'off',
   '@typescript-eslint/consistent-type-imports': [
@@ -50,127 +45,132 @@ const tsJsRules = {
       ignoreRestSiblings: true,
     },
   ],
+
+  // Unicorn
+  'unicorn/no-abusive-eslint-disable': 'error',
+  'unicorn/prefer-top-level-await': 'error',
 };
 
-export default [
-  // Global ignores
-  {
-    ignores: [
-      '**/node_modules/**',
-      '**/dist/**',
-      '**/.nuxt/**',
-      '**/.output/**',
-      '**/.apikit/**',
-      '**/.build/**',
-      '**/coverage/**',
-      'packages/web-*/**/networking/**',
-    ],
-  },
+const vueRules = {
+  ...vuePlugin.configs['flat/recommended'].rules,
+  ...codeRules,
 
-  // Vue SFCs
-  {
-    files: ['**/*.vue'],
-    languageOptions: {
-      parser: vueParser,
-      parserOptions: {
-        parser: tsParser,
-        ecmaVersion: 'latest',
-        sourceType: 'module',
-        extraFileExtensions: ['.vue'],
-      },
-      globals: { ...globals.browser, ...globals.node },
+  // Nuxt
+  'import/no-unresolved': 'off',
+
+  // Vue Structure
+  'vue/block-order': ['error', { order: ['template', 'script', 'style'] }],
+  'vue/max-attributes-per-line': ['error', { singleline: 5, multiline: 1 }],
+  'vue/no-v-html': 'error',
+
+  // File Naming
+  'check-file/filename-naming-convention': [
+    'error',
+    {
+      '**/*.md': 'KEBAB_CASE',
+      'components/**/*.vue': 'PASCAL_CASE',
     },
-    plugins: {
-      vue: vuePlugin,
-      '@typescript-eslint': tsPlugin,
-      import: importPlugin,
-      prettier: prettierPlugin,
-      'check-file': checkFile,
-      unicorn,
+  ],
+  'check-file/folder-naming-convention': [
+    'error',
+    {
+      'components/**/': 'KEBAB_CASE',
     },
-    rules: {
-      ...vuePlugin.configs['flat/recommended'].rules,
-      ...tsJsRules,
+  ],
+};
 
-      'import/no-unresolved': 'off', // Nuxt virtual imports
-      'vue/block-order': ['error', { order: ['template', 'script', 'style'] }],
-      'vue/max-attributes-per-line': ['error', { singleline: 5, multiline: 1 }],
-      'vue/no-v-html': 'error',
+// MARK: - Standalone Rules
 
-      'check-file/filename-naming-convention': [
-        'error',
-        {
-          '**/*.md': 'KEBAB_CASE',
-          'components/**/*.vue': 'PASCAL_CASE',
-        },
-      ],
-      'check-file/folder-naming-convention': [
-        'error',
-        {
-          'components/**/': 'KEBAB_CASE',
-        },
-      ],
+const globalIgnores = {
+  ignores: [
+    '**/node_modules/**',
+    '**/dist/**',
+    '**/coverage/**',
+    '**/generated/**',
+    '**/.nuxt/**',
+    '**/.output/**',
+    '**/.build/**',
+  ],
+};
 
-      'unicorn/no-abusive-eslint-disable': 'error',
-      'unicorn/prefer-top-level-await': 'error',
-    },
-  },
-
-  // JS / TS Global
-  {
-    files: ['**/*.{js,cjs,mjs,ts,tsx,jsx}'],
-    languageOptions: {
+const vueConfig = {
+  files: ['**/*.vue'],
+  languageOptions: {
+    parser: vueParser,
+    parserOptions: {
       parser: tsParser,
       ecmaVersion: 'latest',
       sourceType: 'module',
-      globals: { ...globals.node, ...globals.browser },
+      extraFileExtensions: ['.vue'],
     },
-    plugins: {
-      '@typescript-eslint': tsPlugin,
-      import: importPlugin,
-      prettier: prettierPlugin,
-      unicorn,
-    },
-    rules: {
-      ...tsJsRules,
-      'unicorn/no-abusive-eslint-disable': 'error',
-      'unicorn/prefer-top-level-await': 'error',
-    },
+    globals: { ...globals.browser, ...globals.node },
   },
+  plugins: {
+    vue: vuePlugin,
+    '@typescript-eslint': tsPlugin,
+    import: importPlugin,
+    'check-file': checkFile,
+    unicorn,
+  },
+  rules: vueRules,
+};
 
-  // tsconfig files (belt-and-suspenders: *ensure* comments are allowed)
+const codeConfig = {
+  files: ['**/*.{js,cjs,mjs,ts,tsx,jsx}'],
+  languageOptions: {
+    parser: tsParser,
+    ecmaVersion: 'latest',
+    sourceType: 'module',
+    globals: { ...globals.node, ...globals.browser },
+  },
+  plugins: {
+    '@typescript-eslint': tsPlugin,
+    import: importPlugin,
+    unicorn,
+  },
+  rules: codeRules,
+};
+
+const jsonConfig = [
+  ...jsonc.configs['recommended-with-json'],
   {
-    files: ['**/tsconfig*.json'],
-    languageOptions: { parser: jsoncParser },
+    files: ['**/*.json'],
     rules: {
       'jsonc/no-comments': 'off',
     },
   },
+];
 
-  // JSON / JSONC
+const jsoncConfig = [
+  ...jsonc.configs['recommended-with-jsonc'],
   {
-    files: ['**/*.json', '**/*.jsonc'],
-    languageOptions: { parser: jsoncParser },
-    plugins: { jsonc, prettier: prettierPlugin },
+    files: ['**/*.jsonc', '**/tsconfig*.json'],
     rules: {
-      ...jsonc.configs['recommended-with-json'].rules,
       'jsonc/no-comments': 'off',
-      'prettier/prettier': 'error', // run Prettier via ESLint on JSON
     },
   },
+];
 
-  // YAML
+const yamlConfig = [
+  ...yml.configs.standard,
   {
     files: ['**/*.{yml,yaml}'],
-    languageOptions: { parser: yamlParser },
-    plugins: { yml, prettier: prettierPlugin },
     rules: {
-      ...yml.configs.standard.rules,
       'yml/quotes': 'off',
-      'prettier/prettier': 'error', // run Prettier via ESLint on YAML
     },
   },
+];
 
-  // Turn off rules that conflict with Prettier
+// MARK: - Export
+
+export default [
+  globalIgnores,
+  vueConfig,
+  codeConfig,
+  ...jsonConfig,
+  ...jsoncConfig,
+  ...yamlConfig,
+
+  // Disable ESLint Formatting Rules That Conflict With Prettier
   eslintConfigPrettier,
 ];
