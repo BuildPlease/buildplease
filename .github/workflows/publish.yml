@@ -6,6 +6,7 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-22.04
+
     strategy:
       matrix:
         node-version: [20]
@@ -15,52 +16,55 @@ jobs:
       packages: write
 
     steps:
-      # Checkout the code
-      - name: Checkout Repository
+      # MARK: - Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      # Setup PNPM
+      # MARK: - Setup PNPM
       - name: Install pnpm
         uses: pnpm/action-setup@v4
 
-      # Setup Node.js
-      - name: Use Node.js ${{ matrix.node-version }}
+      # MARK: - Setup Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-          registry-url: 'https://npm.pkg.github.com'
+          registry-url: https://npm.pkg.github.com
           cache: pnpm
 
-      # Install Dependencies
+      # MARK: - Install Dependencies
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      # Build All Packages
-      - name: Build Packages
+      # MARK: - Build Packages
+      - name: Build packages
         run: pnpm run build
 
-      # Publish Updated Packages Using Lerna
-      - name: Publish with Lerna 🚀
+      # MARK: - Publish (Lerna)
+      - name: Publish packages
         run: npx lerna publish from-package --yes --summary-file ./lerna-publish-summary.json
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # Parse Summary and Generate Git Tags
-      - name: Generate Git Tags for Published Packages 🏷️
+      # MARK: - Git Tags
+      - name: Create git tags
         run: |
-          # Parse JSON and create tags
           SUMMARY_FILE="./lerna-publish-summary.json"
-          if [ -f "$SUMMARY_FILE" ]; then
-            PACKAGES=$(jq -r '.[] | "\(.packageName)@\(.version)"' $SUMMARY_FILE)
 
-            # Loop through packages and create Git tags
-            for PACKAGE in $PACKAGES; do
-              echo "Tagging $PACKAGE..."
-              git tag "$PACKAGE"
-            done
-
-            # Push all tags to the remote repository
-            git push --tags
-          else
-            echo "No summary file found. Skipping tag creation."
+          if [ ! -f "$SUMMARY_FILE" ]; then
+            exit 0
           fi
+
+          PACKAGES=$(jq -r '.[] | "\(.packageName)@\(.version)"' "$SUMMARY_FILE")
+
+          for PACKAGE in $PACKAGES; do
+            if git rev-parse "$PACKAGE" >/dev/null 2>&1; then
+              continue
+            fi
+
+            git tag "$PACKAGE"
+          done
+
+          git push --tags
