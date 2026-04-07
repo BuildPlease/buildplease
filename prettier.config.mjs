@@ -7,5 +7,5 @@ export default {
   trailingComma: 'all',
   arrowParens: 'always',
   vueIndentScriptAndStyle: false,
-  plugins: ['prettier-plugin-tailwindcss', 'prettier-plugin-ejs'],
+  plugins: ['prettier-plugin-tailwindcss', 'prettier-plugin-ejs', 'prettier-plugin-packagejson'],
 };

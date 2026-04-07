@@ -2,10 +2,10 @@
   "name": "@meawkit/apikit",
   "version": "1.0.0",
   "description": "",
-  "type": "module",
   "keywords": [],
-  "author": "Simon Rastislav Kovačič",
   "license": "UNLICENSED",
+  "author": "Simon Rastislav Kovačič",
+  "type": "module",
   "exports": {
     ".": {
       "types": "./dist/src/index.d.ts",
@@ -24,12 +24,12 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@meawkit/core": "workspace:^",
-    "@meawkit/identity": "workspace:^",
     "@dotenvx/dotenvx": "1.60.1",
     "@fastify/cookie": "11.0.2",
     "@fastify/static": "9.0.0",
     "@fastify/view": "11.1.1",
+    "@meawkit/core": "workspace:^",
+    "@meawkit/identity": "workspace:^",
     "citty": "0.2.2",
     "consola": "3.4.2",
     "ejs": "5.0.1",
@@ -45,18 +45,18 @@
     "pino-pretty": "13.1.3",
     "validator": "13.15.35"
   },
-  "peerDependencies": {
-    "fastify": "5.8.4",
-    "inversify": "^8.1.0",
-    "reflect-metadata": "^0.2.2",
-    "sharp": "^0.34.5",
-    "zod": "^4.3.6"
-  },
   "devDependencies": {
     "@types/ejs": "3.1.5",
     "@types/lodash.merge": "4.6.9",
     "@types/mime-types": "3.0.1",
     "@types/nodemailer": "8.0.0",
     "@types/validator": "13.15.10"
+  },
+  "peerDependencies": {
+    "fastify": "5.8.4",
+    "inversify": "^8.1.0",
+    "reflect-metadata": "^0.2.2",
+    "sharp": "^0.34.5",
+    "zod": "^4.3.6"
   }
 }

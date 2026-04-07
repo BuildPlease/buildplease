@@ -1,27 +1,28 @@
 {
   "name": "meawkit",
   "version": "1.0.0",
-  "description": "",
   "private": true,
-  "type": "module",
+  "description": "",
   "keywords": [],
-  "author": "Simon Rastislav Kovačič",
-  "license": "UNLICENSED",
   "repository": "git@github.com:MeawKit/MeawKit.git",
+  "license": "UNLICENSED",
+  "author": "Simon Rastislav Kovačič",
+  "type": "module",
   "scripts": {
-    "preinstall": "npx only-allow pnpm",
-    "dep:check": "ncu -ws --dep prod,dev,optional,peer",
-    "dep:update": "ncu -ws -i --dep prod,dev,optional,peer --peer",
+    "build": "pnpm run clean && lerna run build",
     "clean": "node scripts/clean.mjs",
     "clean:deep": "sh -c './scripts/cleanup.sh \"$@\"' --",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
+    "dep:check": "ncu -ws --dep prod,dev,optional,peer",
+    "dep:update": "ncu -ws -i --dep prod,dev,optional,peer --peer",
     "format": "prettier . --check",
     "format:fix": "prettier . --write",
-    "build": "pnpm run clean && lerna run build",
+    "preinstall": "npx only-allow pnpm",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "typecheck": "lerna run typecheck"
   },
   "devDependencies": {
+    "@swc/core": "1.15.24",
     "@types/node": "25.5.2",
     "@typescript-eslint/eslint-plugin": "8.58.0",
     "@typescript-eslint/parser": "8.58.0",
@@ -34,22 +35,22 @@
     "eslint-plugin-vue": "10.8.0",
     "eslint-plugin-yml": "3.3.1",
     "globals": "17.4.0",
+    "lerna": "9.0.7",
     "npm-check-updates": "20.0.0",
     "prettier": "3.8.1",
     "prettier-plugin-ejs": "1.0.3",
+    "prettier-plugin-packagejson": "3.0.2",
     "prettier-plugin-tailwindcss": "0.7.2",
-    "vue-eslint-parser": "10.4.0",
-    "lerna": "9.0.7",
-    "@swc/core": "1.15.24",
     "tsup": "8.5.1",
-    "typescript": "5.9.3"
+    "typescript": "5.9.3",
+    "vue-eslint-parser": "10.4.0"
   },
   "packageManager": "pnpm@10.33.0",
   "pnpm": {
     "overrides": {
-      "typescript": "5.9.3",
+      "@swc/core": "1.15.24",
       "tsup": "8.5.1",
-      "@swc/core": "1.15.24"
+      "typescript": "5.9.3"
     }
   }
 }

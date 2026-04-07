@@ -1,12 +1,12 @@
 {
   "name": "@meawkit/identity",
   "version": "1.0.0",
-  "description": "",
-  "type": "module",
   "private": true,
+  "description": "",
   "keywords": [],
-  "author": "Simon Rastislav Kovačič",
   "license": "UNLICENSED",
+  "author": "Simon Rastislav Kovačič",
+  "type": "module",
   "exports": {
     ".": {
       "types": "./dist/src/index.d.ts",

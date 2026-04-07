@@ -2,14 +2,14 @@
   "name": "@meawkit/nuxtkit",
   "version": "1.0.0",
   "description": "A Nuxt Kit for MVVM design pattern and Clean Code architecture, with foundation for web app",
-  "type": "module",
-  "author": "Simon Rastislav Kovačič",
-  "license": "UNLICENSED",
   "repository": "git@github.com/MeawKit/MeawKit.git",
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
+  "license": "UNLICENSED",
+  "author": "Simon Rastislav Kovačič",
+  "type": "module",
+  "imports": {
+    "#nuxtkit/*": "./dist/runtime/*.js",
+    "#shared/*": "./dist/shared/*.js"
   },
-  "main": "./dist/module.mjs",
   "exports": {
     ".": {
       "types": "./dist/types.d.mts",
@@ -20,19 +20,16 @@
       "import": "./dist/shared/index.js"
     }
   },
-  "imports": {
-    "#nuxtkit/*": "./dist/runtime/*.js",
-    "#shared/*": "./dist/shared/*.js"
-  },
+  "main": "./dist/module.mjs",
   "files": [
     "dist"
   ],
   "scripts": {
     "build": "npm run dev:prepare && npm run prepack",
-    "prepack": "nuxt-module-build build",
     "dev": "nuxi dev playground",
     "dev:build": "nuxi build playground",
     "dev:prepare": "nuxt-module-build build --stub && nuxt-module-build prepare && nuxi prepare playground",
+    "prepack": "nuxt-module-build build",
     "test": "vitest run",
     "test:watch": "vitest watch",
     "typecheck": "vue-tsc --noEmit && cd playground && vue-tsc --noEmit"
@@ -44,14 +41,6 @@
     "@nuxt/kit": "4.4.2",
     "defu": "6.1.6"
   },
-  "peerDependencies": {
-    "@nuxt/ui": "^4.6.1",
-    "@nuxtjs/i18n": "^10.2.4",
-    "inversify": "^8.1.0",
-    "reflect-metadata": "^0.2.2",
-    "vue-i18n": "^11.3.1",
-    "zod": "^4.3.6"
-  },
   "devDependencies": {
     "@nuxt/devtools": "3.2.4",
     "@nuxt/module-builder": "1.0.2",
@@ -61,6 +50,17 @@
     "unbuild": "3.6.1",
     "vitest": "4.1.2",
     "vue-tsc": "3.2.6"
+  },
+  "peerDependencies": {
+    "@nuxt/ui": "^4.6.1",
+    "@nuxtjs/i18n": "^10.2.4",
+    "inversify": "^8.1.0",
+    "reflect-metadata": "^0.2.2",
+    "vue-i18n": "^11.3.1",
+    "zod": "^4.3.6"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
   },
   "unbuild": {
     "failOnWarn": false

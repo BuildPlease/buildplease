@@ -1,11 +1,11 @@
 {
-  "private": true,
   "name": "@meawkit/nuxtkit-playground",
+  "private": true,
   "type": "module",
   "scripts": {
+    "build": "nuxi build",
     "clean": "nuxi cleanup",
     "dev": "nuxi dev",
-    "build": "nuxi build",
     "generate": "nuxi generate"
   },
   "dependencies": {
