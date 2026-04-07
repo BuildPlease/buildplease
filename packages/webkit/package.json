@@ -28,8 +28,10 @@
   },
   "dependencies": {
     "@meawkit/core": "workspace:^",
-    "@meawkit/identity": "workspace:^",
     "axios": "1.14.0"
+  },
+  "devDependencies": {
+    "@meawkit/identity": "workspace:^"
   },
   "peerDependencies": {
     "inversify": "^8.1.0",

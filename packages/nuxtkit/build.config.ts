@@ -1,30 +1,26 @@
 import { defineBuildConfig } from 'unbuild';
 
 export default defineBuildConfig({
+  externals: ['#imports'],
+  rollup: {
+    inlineDependencies: ['@meawkit/identity'],
+  },
   hooks: {
     'build:prepare'(ctx) {
       ctx.options.entries ||= [];
 
       // MARK: - Shared folder
       ctx.options.entries.push({
-        input: 'src/shared/',
+        input: 'src/shared/index',
+        builder: 'rollup',
         outDir: `${ctx.options.outDir}/shared`,
-        addRelativeDeclarationExtensions: true,
-        ext: 'js' as const,
-        pattern: [
-          '**',
-          '!**/*.stories.{js,cts,mts,ts,jsx,tsx}', // ignore storybook files
-          '!**/*.{spec,test}.{js,cts,mts,ts,jsx,tsx}', // ignore tests
-        ],
       });
 
-      // MARK: - Internal folder
+      // MARK: - Runtime-Internal folder
       ctx.options.entries.push({
-        input: 'src/runtime-internal/',
+        input: 'src/runtime-internal/index',
+        builder: 'rollup',
         outDir: `${ctx.options.outDir}/runtime-internal`,
-        addRelativeDeclarationExtensions: true,
-        ext: 'js' as const,
-        pattern: ['**', '!**/*.stories.{js,cts,mts,ts,jsx,tsx}', '!**/*.{spec,test}.{js,cts,mts,ts,jsx,tsx}'],
       });
     },
   },

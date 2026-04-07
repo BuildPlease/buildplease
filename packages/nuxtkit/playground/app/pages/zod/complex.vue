@@ -301,7 +301,6 @@ import { computed, reactive, ref } from 'vue';
 import type { FormErrorEvent, FormSubmitEvent } from '@nuxt/ui';
 import type { DateRange } from 'reka-ui';
 
-
 const schema = complexSchema;
 const result = ref<{ ok: boolean; errors: any[] } | null>(null);
 const resultPretty = computed(() => (result.value ? JSON.stringify(result.value, null, 2) : ''));

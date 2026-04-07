@@ -8,7 +8,7 @@
   "type": "module",
   "imports": {
     "#nuxtkit/*": "./dist/runtime/*.js",
-    "#shared/*": "./dist/shared/*.js"
+    "#shared": "./dist/shared/index.mjs"
   },
   "exports": {
     ".": {
@@ -16,8 +16,8 @@
       "import": "./dist/module.mjs"
     },
     "./shared": {
-      "types": "./dist/shared/index.d.ts",
-      "import": "./dist/shared/index.js"
+      "types": "./dist/shared/index.d.mts",
+      "import": "./dist/shared/index.mjs"
     }
   },
   "main": "./dist/module.mjs",
@@ -25,7 +25,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "npm run dev:prepare && npm run prepack",
+    "build": "pnpm run dev:prepare && pnpm run prepack",
     "dev": "nuxi dev playground",
     "dev:build": "nuxi build playground",
     "dev:prepare": "nuxt-module-build build --stub && nuxt-module-build prepare && nuxi prepare playground",
@@ -36,16 +36,16 @@
   },
   "dependencies": {
     "@iconify-json/flag": "1.2.11",
-    "@meawkit/identity": "workspace:^",
     "@meawkit/webkit": "workspace:^",
     "@nuxt/kit": "4.4.2",
+    "consola": "3.4.2",
     "defu": "6.1.6"
   },
   "devDependencies": {
+    "@meawkit/identity": "workspace:^",
     "@nuxt/devtools": "3.2.4",
     "@nuxt/module-builder": "1.0.2",
     "@nuxt/schema": "4.4.2",
-    "consola": "3.4.2",
     "nuxt": "4.4.2",
     "unbuild": "3.6.1",
     "vitest": "4.1.2",

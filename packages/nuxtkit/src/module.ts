@@ -18,7 +18,6 @@ import {
 } from './prepare';
 import { type MODULE_HOOK_UNAUTHORIZED_NAME, MODULE_CONFIG_KEY_NAME, MODULE_NAME } from './shared/constants';
 
-
 export default defineNuxtModule<ModuleOptions>({
   meta: {
     name: MODULE_NAME,

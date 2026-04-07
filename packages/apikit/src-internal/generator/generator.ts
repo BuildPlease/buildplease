@@ -6,7 +6,6 @@ import type { ApiKitConfig } from '@/configuration';
 
 import { generateEnvironment } from './generate-environment';
 
-
 export async function generate(config: ApiKitConfig): Promise<void> {
   const outputPath = await prepareGeneratedDirectory(config.outDir);
 

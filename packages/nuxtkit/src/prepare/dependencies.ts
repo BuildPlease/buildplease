@@ -17,18 +17,10 @@ import type { NuxtKitContext } from '../context';
 export async function prepareDependencies(context: NuxtKitContext, nuxt: Nuxt): Promise<void> {
   try {
     await ensurePeerDepsInstalled(nuxt, context.resolver);
-    await ensureNuxtMajor(nuxt, 4);
     await ensureNuxtModule(nuxt, ['@nuxtjs/i18n', '@nuxtjs/i18n-edge']);
     await ensureNuxtModule(nuxt, ['@nuxt/ui']);
   } catch (error) {
     context.logger.fatal(error instanceof Error ? error.message : String(error));
-  }
-}
-
-/** Require Nuxt major version >= `major`. */
-export async function ensureNuxtMajor(nuxt: Nuxt, major: number): Promise<void> {
-  if (!nuxt.options._majorVersion || nuxt.options._majorVersion < major) {
-    throw new Error(`Nuxt ${major} or later is required.`);
   }
 }
 
