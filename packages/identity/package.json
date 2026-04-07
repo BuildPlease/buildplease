@@ -1,0 +1,25 @@
+{
+  "name": "@meawkit/identity",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "private": true,
+  "keywords": [],
+  "author": "Simon Rastislav Kovačič",
+  "license": "UNLICENSED",
+  "exports": {
+    ".": {
+      "types": "./dist/src/index.d.ts",
+      "import": "./dist/src/index.js",
+      "require": "./dist/src/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {}
+}

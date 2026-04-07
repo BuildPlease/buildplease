@@ -62,7 +62,7 @@
   "page": {
     "home": {
       "title": "Vítejte",
-      "description": "Toto je úvodní stránka Meowv NuxtKit Playground. Objevujte MVVM + čistou architekturu s komponentami Nuxt UI."
+      "description": "Toto je úvodní stránka NuxtKit Playground. Objevujte MVVM + čistou architekturu s komponentami Nuxt UI."
     },
 
     "login": {

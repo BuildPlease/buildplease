@@ -1,4 +1,6 @@
-const prefix = 'Meowv.ApiKit.DI';
+import { FrameworkIdentity } from '@meawkit/identity';
+
+const prefix = `${FrameworkIdentity.moduleName}.ApiKit.DI`;
 
 const Configuration = {
   Controller: Symbol.for(`${prefix}.Configuration.Controller`),

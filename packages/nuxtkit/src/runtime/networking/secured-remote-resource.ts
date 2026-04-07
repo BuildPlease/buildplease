@@ -5,6 +5,7 @@ import { type RemoteEndpoint, type RemoteRequestConfig, HttpError } from '@meawk
 import { navigateTo, abortNavigation, isSSR } from '#imports';
 import { type NuxtApp, useNuxtApp, useRouter } from '#app';
 
+import { MODULE_HOOK_UNAUTHORIZED_NAME } from '#shared';
 import { useNuxtKit } from '#nuxtkit-internal/composables';
 import { useOperationQueue } from '#nuxtkit/composables';
 import { NuxtKitRemoteResource } from '#nuxtkit/networking';
@@ -24,12 +25,12 @@ export class SecuredRemoteResource<Input, Output> extends NuxtKitRemoteResource<
         return this.isUnauthorizedError(error);
       },
       onUnauthorized: async (error) => {
-        if (this.unauthorizedMode() === 'silent') return;
+        if (this.unauthorizedMode === 'silent') return;
 
         const app = useNuxtApp();
         const unauthorizedHttpError = this.makeUnauthorizedHttpError(app, error);
 
-        await app.callHook('meowv:unauthorized', {
+        await app.callHook(MODULE_HOOK_UNAUTHORIZED_NAME, {
           error: unauthorizedHttpError,
           isSSR: this.kit.isSSR,
           redirect: this.makeRedirect(app),
@@ -38,7 +39,7 @@ export class SecuredRemoteResource<Input, Output> extends NuxtKitRemoteResource<
     });
   }
 
-  protected unauthorizedMode(): 'notify' | 'silent' {
+  protected get unauthorizedMode(): 'notify' | 'silent' {
     return 'notify';
   }
 

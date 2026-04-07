@@ -39,6 +39,7 @@
   },
   "dependencies": {
     "@iconify-json/flag": "1.2.11",
+    "@meawkit/identity": "workspace:^",
     "@meawkit/webkit": "workspace:^",
     "@nuxt/kit": "4.4.2",
     "defu": "6.1.6"
@@ -60,5 +61,8 @@
     "unbuild": "3.6.1",
     "vitest": "4.1.2",
     "vue-tsc": "3.2.6"
+  },
+  "unbuild": {
+    "failOnWarn": false
   }
 }

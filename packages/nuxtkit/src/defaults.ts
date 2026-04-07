@@ -1,8 +1,5 @@
 import type { NuxtKitOptions } from './types';
 
-export const MODULE_NAME = '@meowv/nuxtkit';
-export const CONFIG_KEY_NAME = 'meowvNuxtKit';
-
 export const DEFAULT_OPTIONS = {
   debug: false,
   components: {
@@ -13,7 +10,7 @@ export const DEFAULT_OPTIONS = {
     genericErrorKey: 'errors.generic',
     genericMessageFallback: 'Something went wrong',
     unauthorizedKey: 'errors.unauthorized',
-    unauthorizedMessageFallback: 'Unauthorized',
+    unauthorizedMessageFallback: 'Access denied',
   },
   zodI18n: {
     useModuleLocale: true,

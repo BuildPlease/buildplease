@@ -1,6 +1,6 @@
 import { HttpError, CanceledError } from '@meawkit/webkit';
 
-import { useNuxtApp, useRuntimeConfig } from '#app';
+import { useNuxtApp } from '#app';
 import { useNuxtKit } from '#nuxtkit-internal/composables';
 
 export interface ErrorHandlerOptions {
@@ -52,6 +52,7 @@ export function useErrorHandler(error: unknown, options: ErrorHandlerOptions = D
   if (error instanceof CanceledError) return null;
 
   const kit = useNuxtKit();
+
   if (options.log) {
     kit.logger.error(error, { force: true });
   }
@@ -68,12 +69,12 @@ export function useErrorHandler(error: unknown, options: ErrorHandlerOptions = D
 
   // Step 3: Fallback
   const app = useNuxtApp();
-  const config = useRuntimeConfig().public.meowvNuxtKit;
-  const errors = config.errors;
   const { t, te } = app.$i18n;
 
+  const errors = kit.config.errors;
   const genericKey = errors.genericErrorKey;
   const genericFallback = errors.genericMessageFallback;
+
   return te(genericKey) ? t(genericKey) : genericFallback;
 }
 

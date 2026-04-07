@@ -1,10 +1,12 @@
 import { defineNuxtModule } from '@nuxt/kit';
 import type { HookResult } from '@nuxt/schema';
 
-import type { NuxtKitOptions, NuxtKitPublicRuntimeConfig } from './types';
 import type { UnauthorizedHookContext } from './runtime/types';
-import { MODULE_NAME, CONFIG_KEY_NAME, DEFAULT_OPTIONS } from './constants';
+import { MODULE_NAME, MODULE_CONFIG_KEY_NAME, type MODULE_HOOK_UNAUTHORIZED_NAME } from './shared/constants';
+
+import type { NuxtKitOptions, NuxtKitPublicRuntimeConfig } from './types';
 import { prepareContext } from './context';
+import { DEFAULT_OPTIONS } from './defaults';
 import {
   prepareHooks,
   prepareRuntime,
@@ -18,7 +20,7 @@ import {
 export default defineNuxtModule<ModuleOptions>({
   meta: {
     name: MODULE_NAME,
-    configKey: CONFIG_KEY_NAME,
+    configKey: MODULE_CONFIG_KEY_NAME,
     compatibility: {
       nuxt: '>=4.0.0',
     },
@@ -68,11 +70,11 @@ export default defineNuxtModule<ModuleOptions>({
 export interface ModuleOptions extends NuxtKitOptions {}
 
 export interface ModulePublicRuntimeConfig {
-  [CONFIG_KEY_NAME]: NuxtKitPublicRuntimeConfig;
+  [MODULE_CONFIG_KEY_NAME]: NuxtKitPublicRuntimeConfig;
 }
 
 export interface ModuleRuntimeHooks {
-  'meowv:unauthorized': (context: UnauthorizedHookContext) => HookResult;
+  [MODULE_HOOK_UNAUTHORIZED_NAME]: (context: UnauthorizedHookContext) => HookResult;
 }
 
 declare module '#app' {

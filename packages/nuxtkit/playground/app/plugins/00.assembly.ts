@@ -1,4 +1,4 @@
-import { MEOWV_WEBKIT_INITIALIZE } from '@meawkit/webkit';
+import { webkitAssembly } from '@meawkit/webkit';
 
 import { LoginAssembly } from '@feature/login/assembly';
 import { DashboardAssembly } from '@feature/dashboard/assembly';
@@ -9,7 +9,7 @@ export default defineNuxtPlugin({
     const scopeController = useScopeController();
     const container = scopeController.container;
 
-    const webkitAssemblies = MEOWV_WEBKIT_INITIALIZE();
+    const webkitAssemblies = webkitAssembly();
     const appAssemblies = [new LoginAssembly(), new DashboardAssembly()];
     const allAssemblies = [...webkitAssemblies, ...appAssemblies];
 

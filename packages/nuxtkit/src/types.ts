@@ -45,7 +45,7 @@ export interface NuxtKitOptions {
     /**
      * Fallback when the generic key is missing.
      * @default "Something went wrong"
-     * @example "Something went wrong"
+     * @example "An error occured"
      */
     genericMessageFallback?: string;
 
@@ -58,7 +58,7 @@ export interface NuxtKitOptions {
 
     /**
      * Fallback when the unauthorized key is missing.
-     * @default "Unauthorized"
+     * @default "Access denied"
      * @example "Unauthorized"
      */
     unauthorizedMessageFallback?: string;

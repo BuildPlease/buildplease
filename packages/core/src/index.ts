@@ -19,6 +19,6 @@ export * from './security';
 export * from './utils';
 export * from './validation';
 
-export function MEOWV_CORE_INITIALIZE(): Assembly[] {
+export function coreAssembly(): Assembly[] {
   return makeAssemblies();
 }

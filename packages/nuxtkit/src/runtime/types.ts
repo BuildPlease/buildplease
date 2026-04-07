@@ -1,5 +1,5 @@
 /**
- * Context passed to the 'meowv:unauthorized' hook.
+ * Context passed to the unauthorized hook.
  */
 export type UnauthorizedHookContext = {
   /** The Error that triggered the unauthorized state. */

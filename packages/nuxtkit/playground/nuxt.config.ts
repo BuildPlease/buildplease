@@ -28,7 +28,7 @@ export default defineNuxtConfig({
     },
   },
 
-  meowvNuxtKit: {
+  meawkitNuxtKit: {
     debug: true,
     components: {
       prefix: 'NuxtKit',
@@ -36,9 +36,7 @@ export default defineNuxtConfig({
     unauthorizedStatusCodes: [401],
     errors: {
       genericErrorKey: 'error.generic',
-      genericMessageFallback: 'Error',
       unauthorizedKey: 'error.unauthorized',
-      unauthorizedMessageFallback: 'Unauthorized',
     },
     zodI18n: {
       useModuleLocale: true,

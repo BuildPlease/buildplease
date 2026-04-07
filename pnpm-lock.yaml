@@ -94,6 +94,9 @@ importers:
       '@meawkit/core':
         specifier: workspace:^
         version: link:../core
+      '@meawkit/identity':
+        specifier: workspace:^
+        version: link:../identity
       citty:
         specifier: 0.2.2
         version: 0.2.2
@@ -170,6 +173,9 @@ importers:
 
   packages/core:
     dependencies:
+      '@meawkit/identity':
+        specifier: workspace:^
+        version: link:../identity
       async-mutex:
         specifier: 0.5.0
         version: 0.5.0
@@ -199,11 +205,16 @@ importers:
         specifier: 2.1.0
         version: 2.1.0
 
+  packages/identity: {}
+
   packages/nuxtkit:
     dependencies:
       '@iconify-json/flag':
         specifier: 1.2.11
         version: 1.2.11
+      '@meawkit/identity':
+        specifier: workspace:^
+        version: link:../identity
       '@meawkit/webkit':
         specifier: workspace:^
         version: link:../webkit
@@ -284,6 +295,9 @@ importers:
       '@meawkit/core':
         specifier: workspace:^
         version: link:../core
+      '@meawkit/identity':
+        specifier: workspace:^
+        version: link:../identity
       axios:
         specifier: 1.14.0
         version: 1.14.0
@@ -919,8 +933,8 @@ packages:
   '@iconify-json/lucide@1.2.101':
     resolution: {integrity: sha512-JUN7uuSLRG3GK/9c5b8cK9e7sL6EAWDaASIwBOd0zUeKS0ACcokJubo2RMQHyVUVpd8mYkrR3Zd2mkH9ghhw1Q==}
 
-  '@iconify/collections@1.0.669':
-    resolution: {integrity: sha512-oy/ztmcRvljkx4wV/fQ5OmpHyjEstntRjgexMajmlWMCy3Q54C3ISHWfB6p5sTH7eQPo8EWre9TCnldOBqcuxg==}
+  '@iconify/collections@1.0.670':
+    resolution: {integrity: sha512-32kW4oJ+QV1HCndcjwAprDyJJ0+T9ahP4y2lmLfekdGWNMwG1pVZah4biqT+HrZdEiBm8InJrbCvaitIusTE3g==}
 
   '@iconify/types@2.0.0':
     resolution: {integrity: sha512-+wluvCrRhXrhyOmRDJ3q8mux9JkKy5SJ/v8ol2tu4FVjyYvtEzkc/3pK15ET6RKg4b4w4BmTk1+gsCUhf21Ykg==}
@@ -4529,8 +4543,8 @@ packages:
     engines: {node: '>=0.12.18'}
     hasBin: true
 
-  electron-to-chromium@1.5.331:
-    resolution: {integrity: sha512-IbxXrsTlD3hRodkLnbxAPP4OuJYdWCeM3IOdT+CpcMoIwIoDfCmRpEtSPfwBXxVkg9xmBeY7Lz2Eo2TDn/HC3Q==}
+  electron-to-chromium@1.5.332:
+    resolution: {integrity: sha512-7OOtytmh/rINMLwaFTbcMVvYXO3AUm029X0LcyfYk0B557RlPkdpTpnH9+htMlfu5dKwOmT0+Zs2Aw+lnn6TeQ==}
 
   embla-carousel-auto-height@8.6.0:
     resolution: {integrity: sha512-/HrJQOEM6aol/oF33gd2QlINcXy3e19fJWvHDuHWp2bpyTa+2dm9tVVJak30m2Qy6QyQ6Fc8DkImtv7pxWOJUQ==}
@@ -9157,7 +9171,7 @@ snapshots:
     dependencies:
       '@iconify/types': 2.0.0
 
-  '@iconify/collections@1.0.669':
+  '@iconify/collections@1.0.670':
     dependencies:
       '@iconify/types': 2.0.0
 
@@ -9917,7 +9931,7 @@ snapshots:
 
   '@nuxt/icon@2.2.1(magicast@0.5.2)(vite@7.3.2(@types/node@25.5.2)(jiti@2.6.1)(lightningcss@1.32.0)(terser@5.46.1)(yaml@2.8.3))(vue@3.5.32(typescript@5.9.3))':
     dependencies:
-      '@iconify/collections': 1.0.669
+      '@iconify/collections': 1.0.670
       '@iconify/types': 2.0.0
       '@iconify/utils': 3.1.0
       '@iconify/vue': 5.0.0(vue@3.5.32(typescript@5.9.3))
@@ -12351,7 +12365,7 @@ snapshots:
     dependencies:
       baseline-browser-mapping: 2.10.16
       caniuse-lite: 1.0.30001786
-      electron-to-chromium: 1.5.331
+      electron-to-chromium: 1.5.332
       node-releases: 2.0.37
       update-browserslist-db: 1.2.3(browserslist@4.28.2)
 
@@ -12936,7 +12950,7 @@ snapshots:
 
   ejs@5.0.1: {}
 
-  electron-to-chromium@1.5.331: {}
+  electron-to-chromium@1.5.332: {}
 
   embla-carousel-auto-height@8.6.0(embla-carousel@8.6.0):
     dependencies:

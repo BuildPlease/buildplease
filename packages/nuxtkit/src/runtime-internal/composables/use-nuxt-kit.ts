@@ -4,11 +4,10 @@ import { colors } from 'consola/utils';
 import { isObject } from '@meawkit/webkit';
 
 import { isCSR, isSSR, useRuntimeConfig } from '#imports';
-
-const NUXTKIT_MODULE_NAME = 'NuxtKit';
+import { MODULE_NAME, MODULE_SYMBOL_NAME } from '#shared';
 
 export function useNuxtKit() {
-  const runtimeConfig = useRuntimeConfig().public.meowvNuxtKit;
+  const runtimeConfig = useRuntimeConfig().public.meawkitNuxtKit;
   const isDebugEnabled = Boolean(runtimeConfig.debug);
   const logger = new Logger(isDebugEnabled);
 
@@ -23,7 +22,7 @@ export function useNuxtKit() {
 }
 
 function makeSymbol(key: string): symbol {
-  return Symbol.for(`${NUXTKIT_MODULE_NAME}.${key}`);
+  return Symbol.for(`${MODULE_SYMBOL_NAME}.${key}`);
 }
 
 // MARK: - Logger
@@ -38,7 +37,7 @@ function getConsola() {
 
   sharedConsola = createConsola({
     formatOptions: { colors: true },
-  }).withTag(NUXTKIT_MODULE_NAME);
+  }).withTag(MODULE_NAME);
 
   return sharedConsola;
 }

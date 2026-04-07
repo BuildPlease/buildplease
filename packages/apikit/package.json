@@ -6,10 +6,6 @@
   "keywords": [],
   "author": "Simon Rastislav Kovačič",
   "license": "UNLICENSED",
-  "repository": "git@github.com/MeawKit/MeawKit.git",
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
-  },
   "exports": {
     ".": {
       "types": "./dist/src/index.d.ts",
@@ -28,11 +24,12 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
+    "@meawkit/core": "workspace:^",
+    "@meawkit/identity": "workspace:^",
     "@dotenvx/dotenvx": "1.60.1",
     "@fastify/cookie": "11.0.2",
     "@fastify/static": "9.0.0",
     "@fastify/view": "11.1.1",
-    "@meawkit/core": "workspace:^",
     "citty": "0.2.2",
     "consola": "3.4.2",
     "ejs": "5.0.1",

@@ -1,8 +1,13 @@
 import type { Nuxt } from '@nuxt/schema';
 import { defu } from 'defu';
 
-import type { NuxtKitPublicRuntimeConfig } from '../types';
+import { MODULE_CONFIG_KEY_NAME } from '../shared/constants';
 import type { NuxtKitContext } from '../context';
+import type { NuxtKitPublicRuntimeConfig } from '../types';
+
+type ModulePublicRuntimeStore = {
+  [K in typeof MODULE_CONFIG_KEY_NAME]?: Partial<NuxtKitPublicRuntimeConfig>;
+};
 
 export async function prepareRuntimeConfig(context: NuxtKitContext, nuxt: Nuxt) {
   const options = context.options;
@@ -15,8 +20,8 @@ export async function prepareRuntimeConfig(context: NuxtKitContext, nuxt: Nuxt) 
     zodI18n: options.zodI18n,
   } satisfies NuxtKitPublicRuntimeConfig;
 
-  nuxt.options.runtimeConfig.public.meowvNuxtKit = defu(
-    nuxt.options.runtimeConfig.public.meowvNuxtKit,
-    defaults,
-  );
+  const publicConfig = nuxt.options.runtimeConfig.public as ModulePublicRuntimeStore;
+  const current = publicConfig[MODULE_CONFIG_KEY_NAME];
+
+  publicConfig[MODULE_CONFIG_KEY_NAME] = defu(current, defaults);
 }

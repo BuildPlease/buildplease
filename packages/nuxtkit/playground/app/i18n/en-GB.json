@@ -62,7 +62,7 @@
   "page": {
     "home": {
       "title": "Welcome",
-      "description": "This is the landing page for the Meowv NuxtKit Playground. Explore MVVM + Clean Architecture with Nuxt UI components."
+      "description": "This is the landing page for the NuxtKit Playground. Explore MVVM + Clean Architecture with Nuxt UI components."
     },
 
     "login": {
