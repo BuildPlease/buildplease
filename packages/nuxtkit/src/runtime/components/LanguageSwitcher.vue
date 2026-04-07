@@ -26,10 +26,11 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
+
 import type { DropdownMenuItem } from '@nuxt/ui';
 
 import { useNuxtApp, useRuntimeConfig } from '#app';
-import { useCurrentLocale, normalizeLocale } from '#nuxtkit/composables';
+import { normalizeLocale, useCurrentLocale } from '#nuxtkit/composables';
 
 type LocaleItem = {
   code: string;

@@ -1,7 +1,7 @@
 import { readdir } from 'node:fs/promises';
 
 import type { Nuxt } from '@nuxt/schema';
-import type { NuxtI18nOptions, LocaleObject } from '@nuxtjs/i18n';
+import type { LocaleObject, NuxtI18nOptions } from '@nuxtjs/i18n';
 
 import type { NuxtKitContext } from '../context';
 

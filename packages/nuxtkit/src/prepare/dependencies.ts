@@ -1,8 +1,9 @@
 import { readFile } from 'node:fs/promises';
 import { pathToFileURL } from 'node:url';
 
+import { type Resolver, tryResolveModule } from '@nuxt/kit';
+
 import type { Nuxt } from '@nuxt/schema';
-import { tryResolveModule, type Resolver } from '@nuxt/kit';
 
 import type { NuxtKitContext } from '../context';
 

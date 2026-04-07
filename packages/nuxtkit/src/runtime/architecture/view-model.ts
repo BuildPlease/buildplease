@@ -1,9 +1,10 @@
-import { reactive, type Reactive } from 'vue';
-import type { RouteLocationNormalizedLoaded, Router } from 'vue-router';
-import type { Awaitable } from '@meawkit/webkit';
+import { type Reactive, reactive } from 'vue';
 
-import { useRouter, useRoute, useNuxtApp } from '#app';
-import { type Lifecycle, isSSR, isCSR, isHydrating } from '#nuxtkit/infrastructure';
+import type { Awaitable } from '@meawkit/webkit';
+import type { RouteLocationNormalizedLoaded, Router } from 'vue-router';
+
+import { useNuxtApp, useRoute, useRouter } from '#app';
+import { type Lifecycle, isCSR, isHydrating, isSSR } from '#nuxtkit/infrastructure';
 
 /**
  * Base class for managing reactive state and lifecycle logic in UI view models.

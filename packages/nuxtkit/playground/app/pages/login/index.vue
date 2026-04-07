@@ -67,8 +67,9 @@
 </template>
 
 <script setup lang="ts">
-import { loginSchema, type LoginDto } from '@schema';
 import { Symbols } from '@di/symbols';
+import { type LoginDto, loginSchema } from '@schema';
+
 import type { LoginViewModel } from '@feature/login/view-model';
 
 import type { FormSubmitEvent } from '#ui/types';

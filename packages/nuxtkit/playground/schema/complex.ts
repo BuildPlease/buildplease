@@ -1,5 +1,6 @@
-import type { OptionalPartial } from '@meawkit/webkit';
 import { z } from 'zod';
+
+import type { OptionalPartial } from '@meawkit/webkit';
 
 const stringSchema = z.object({
   stringMin1: z.string().trim().min(1), // Min length 1

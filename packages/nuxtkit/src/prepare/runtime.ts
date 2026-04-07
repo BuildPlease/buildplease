@@ -1,5 +1,6 @@
-import type { Nuxt } from '@nuxt/schema';
 import { addPlugin } from '@nuxt/kit';
+
+import type { Nuxt } from '@nuxt/schema';
 
 import type { NuxtKitContext } from '../context';
 

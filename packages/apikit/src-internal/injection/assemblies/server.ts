@@ -2,12 +2,12 @@ import type { Assembly, AssemblyContainer } from '@meawkit/core';
 
 import { ApiKitSymbols } from '@/di';
 import {
-  type ServerController,
-  ServerControllerImpl,
   type RequestController,
-  RequestControllerImpl,
   type ResponseController,
+  type ServerController,
+  RequestControllerImpl,
   ResponseControllerImpl,
+  ServerControllerImpl,
 } from '@/server';
 
 export class ServerAssembly implements Assembly {

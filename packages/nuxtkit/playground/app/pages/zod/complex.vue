@@ -294,11 +294,13 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, computed } from 'vue';
-import type { FormSubmitEvent, FormErrorEvent } from '@nuxt/ui';
+import { type CalendarDate, DateFormatter, getLocalTimeZone, parseDate } from '@internationalized/date';
 import { type ComplexData, type ComplexDto, complexSchema } from '@schema/complex';
-import { type CalendarDate, DateFormatter, parseDate, getLocalTimeZone } from '@internationalized/date';
+import { computed, reactive, ref } from 'vue';
+
+import type { FormErrorEvent, FormSubmitEvent } from '@nuxt/ui';
 import type { DateRange } from 'reka-ui';
+
 
 const schema = complexSchema;
 const result = ref<{ ok: boolean; errors: any[] } | null>(null);

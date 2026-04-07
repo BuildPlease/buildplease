@@ -1,4 +1,4 @@
-import { HttpError, CanceledError } from '@meawkit/webkit';
+import { CanceledError, HttpError } from '@meawkit/webkit';
 
 import { useNuxtApp } from '#app';
 import { useNuxtKit } from '#nuxtkit-internal/composables';

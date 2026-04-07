@@ -1,9 +1,11 @@
-import type { Nuxt } from '@nuxt/schema';
 import { defu } from 'defu';
 
-import { MODULE_CONFIG_KEY_NAME } from '../shared/constants';
+import type { Nuxt } from '@nuxt/schema';
+
 import type { NuxtKitContext } from '../context';
 import type { NuxtKitPublicRuntimeConfig } from '../types';
+
+import { MODULE_CONFIG_KEY_NAME } from '../shared/constants';
 
 type ModulePublicRuntimeStore = {
   [K in typeof MODULE_CONFIG_KEY_NAME]?: Partial<NuxtKitPublicRuntimeConfig>;

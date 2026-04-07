@@ -1,9 +1,9 @@
 import type {
   EmailConfig,
   EnvironmentConfig,
+  I18nConfig,
   LoggerConfig,
   ServerConfig,
-  I18nConfig,
   StaticFilesConfig,
 } from '@/configuration';
 

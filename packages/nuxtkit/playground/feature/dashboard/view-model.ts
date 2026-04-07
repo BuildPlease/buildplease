@@ -1,7 +1,7 @@
-import { injectable, inject } from 'inversify';
-import { CanceledError } from '@meawkit/webkit';
-
 import { Symbols } from '@di/symbols';
+import { CanceledError } from '@meawkit/webkit';
+import { inject, injectable } from 'inversify';
+
 import type {
   TestOperation,
   TestOperationInput,

@@ -1,5 +1,5 @@
+import { loadPackageJSON, makeExternals, resolvePath } from '@node';
 import { defineConfig } from 'tsup';
-import { resolvePath, loadPackageJSON, makeExternals } from '@node';
 
 const outDir = 'dist';
 const pkg = loadPackageJSON(resolvePath(import.meta.url, './package.json'));

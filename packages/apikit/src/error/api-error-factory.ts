@@ -1,9 +1,9 @@
 import merge from 'lodash.merge';
 
 import {
-  type RecursiveErrorTree,
-  type LocalizedApiError,
   type ApiErrorDetails,
+  type LocalizedApiError,
+  type RecursiveErrorTree,
   ApiError,
   ApiErrorCodes,
 } from '@/error';

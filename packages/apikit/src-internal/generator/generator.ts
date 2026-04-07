@@ -1,10 +1,11 @@
 import path from 'node:path';
 
-import { resolvePath, removePath, createDirectory, createFile } from '@meawkit/core/node';
+import { createDirectory, createFile, removePath, resolvePath } from '@meawkit/core/node';
+
+import type { ApiKitConfig } from '@/configuration';
 
 import { generateEnvironment } from './generate-environment';
 
-import type { ApiKitConfig } from '@/configuration';
 
 export async function generate(config: ApiKitConfig): Promise<void> {
   const outputPath = await prepareGeneratedDirectory(config.outDir);

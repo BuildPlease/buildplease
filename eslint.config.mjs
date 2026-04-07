@@ -1,14 +1,14 @@
-import globals from 'globals';
 import tsPlugin from '@typescript-eslint/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
-import importPlugin from 'eslint-plugin-import';
-import vueParser from 'vue-eslint-parser';
-import vuePlugin from 'eslint-plugin-vue';
-import unicorn from 'eslint-plugin-unicorn';
-import checkFile from 'eslint-plugin-check-file';
 import eslintConfigPrettier from 'eslint-config-prettier/flat';
+import checkFile from 'eslint-plugin-check-file';
+import importPlugin from 'eslint-plugin-import';
 import jsonc from 'eslint-plugin-jsonc';
+import unicorn from 'eslint-plugin-unicorn';
+import vuePlugin from 'eslint-plugin-vue';
 import yml from 'eslint-plugin-yml';
+import globals from 'globals';
+import vueParser from 'vue-eslint-parser';
 
 // MARK: - Shared Rules
 
@@ -16,7 +16,22 @@ const codeRules = {
   ...tsPlugin.configs.recommended.rules,
 
   // Import
-  'import/order': ['error', { 'newlines-between': 'always-and-inside-groups' }],
+  'import/order': [
+    'error',
+    {
+      groups: ['builtin', 'external', 'type', 'internal', ['parent', 'sibling', 'index']],
+      'newlines-between': 'always',
+      alphabetize: {
+        order: 'asc',
+        caseInsensitive: true,
+      },
+      named: {
+        enabled: true,
+        types: 'types-first',
+      },
+      sortTypesGroup: true,
+    },
+  ],
   'import/no-duplicates': ['error', { 'prefer-inline': false }],
   'import/newline-after-import': 'error',
   'import/first': 'error',

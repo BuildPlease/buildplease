@@ -197,6 +197,7 @@
 
 <script setup lang="ts">
 import { Symbols } from '@di/symbols';
+
 import type { DashboardViewModel, QueueTestItem } from '@feature/dashboard/view-model';
 
 import type { ButtonProps, PageCardProps } from '#ui/types';

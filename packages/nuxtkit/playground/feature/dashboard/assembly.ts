@@ -1,14 +1,13 @@
-import type { Assembly, AssemblyContainer } from '@meawkit/webkit';
-
 import { Symbols } from '@di/symbols';
-
-import { DashboardViewModel } from '@feature/dashboard/view-model';
-import { type TestOperation, TestResource, TestEndpoint } from '@feature/dashboard/test-operation';
+import { type TestOperation, TestEndpoint, TestResource } from '@feature/dashboard/test-operation';
 import {
   type UnauthorizedOperation,
-  UnauthorizedResource,
   UnauthorizedEndpoint,
+  UnauthorizedResource,
 } from '@feature/dashboard/unauthorized-operation';
+import { DashboardViewModel } from '@feature/dashboard/view-model';
+
+import type { Assembly, AssemblyContainer } from '@meawkit/webkit';
 
 export class DashboardAssembly implements Assembly {
   public assemble(container: AssemblyContainer): void {

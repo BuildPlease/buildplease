@@ -1,5 +1,5 @@
-import { injectable } from 'inversify';
 import { Symbols } from '@di/symbols';
+import { injectable } from 'inversify';
 
 export interface LoginController extends Controller {
   onLogin(input: string, password: string): Promise<void>;

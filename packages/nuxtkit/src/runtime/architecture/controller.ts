@@ -1,7 +1,8 @@
 import { reactive } from 'vue';
-import type { Router, RouteLocationNormalizedLoaded } from 'vue-router';
 
-import { useRouter, useRoute } from '#app';
+import type { RouteLocationNormalizedLoaded, Router } from 'vue-router';
+
+import { useRoute, useRouter } from '#app';
 
 /**
  * Generic interface for a controller with reactive status.

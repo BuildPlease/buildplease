@@ -2,7 +2,6 @@ import fs from 'fs';
 import path from 'path';
 
 import dotenvx from '@dotenvx/dotenvx';
-
 import { ApiKitConfigDefaults, loadConfig } from '@internal/configuration';
 import { Consola } from '@internal/consola';
 
@@ -10,9 +9,9 @@ import type {
   ApiKitConfig,
   EmailConfig,
   EnvironmentConfig,
+  I18nConfig,
   LoggerConfig,
   ServerConfig,
-  I18nConfig,
   StaticFilesConfig,
 } from '@/configuration';
 

@@ -1,8 +1,10 @@
 import fp from 'fastify-plugin';
+
 import type { FastifyPluginAsync } from 'fastify';
 
-import { RequestScope } from '@/request';
 import type { ServerPluginOptions } from '@/server';
+
+import { RequestScope } from '@/request';
 
 /**
  * This plugin initializes the per-request AsyncLocalStorage-based RequestScope.

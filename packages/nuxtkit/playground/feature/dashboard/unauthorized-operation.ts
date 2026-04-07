@@ -1,12 +1,11 @@
-import { injectable, inject } from 'inversify';
-
 import {
   type AsyncOperation,
-  type RemoteRequestConfig,
   type RemoteEndpoint,
-  HttpError,
+  type RemoteRequestConfig,
   delay,
+  HttpError,
 } from '@meawkit/webkit';
+import { inject, injectable } from 'inversify';
 
 export type UnauthorizedOperation = AsyncOperation<void, void>;
 

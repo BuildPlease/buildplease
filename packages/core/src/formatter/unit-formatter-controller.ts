@@ -1,7 +1,8 @@
 import { injectable } from 'inversify';
 
-import { ByteUnit } from '@/model';
 import type { FormatBytesOptions, FormattedBytes } from '@/formatter';
+
+import { ByteUnit } from '@/model';
 
 export interface UnitFormatterController {
   /**

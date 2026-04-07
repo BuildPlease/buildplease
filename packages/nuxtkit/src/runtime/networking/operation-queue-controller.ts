@@ -1,5 +1,5 @@
+import { type HttpError, CanceledError, Mutex } from '@meawkit/webkit';
 import { decorate, injectable } from 'inversify';
-import { Mutex, type HttpError, CanceledError } from '@meawkit/webkit';
 
 export type RunOptions = {
   isUnauthorized?: (error: unknown) => HttpError | false;

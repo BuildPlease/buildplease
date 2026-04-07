@@ -1,8 +1,8 @@
 import { z } from 'zod';
 
 import { defineNuxtPlugin, useNuxtApp } from '#app';
-import { useNuxtKit } from '#nuxtkit-internal/composables';
 import { makeErrorMap } from '#nuxtkit/zod/shared';
+import { useNuxtKit } from '#nuxtkit-internal/composables';
 
 export default defineNuxtPlugin({
   name: 'nuxtkit:plugin:zod-i18n',

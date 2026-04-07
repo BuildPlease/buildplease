@@ -1,20 +1,21 @@
 import { z } from 'zod';
 
+import type { ValidationSchemaI18nParams } from '@/validation';
+
 import {
-  type OpeningHourInterval,
   type Geometry,
+  type OpeningHourInterval,
   Address,
+  Contacts,
   Coordinates,
-  Point,
-  MultiPoint,
   LineString,
   MultiLineString,
-  Polygon,
+  MultiPoint,
   MultiPolygon,
   OpeningHour,
-  Contacts,
+  Point,
+  Polygon,
 } from '@/model';
-import type { ValidationSchemaI18nParams } from '@/validation';
 
 /* MARK: - Primitives: Longitude & Latitude */
 const LongitudeSchema = z.number().min(-180).max(180);

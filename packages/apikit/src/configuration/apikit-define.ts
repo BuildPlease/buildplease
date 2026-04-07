@@ -1,14 +1,13 @@
-import { isDefinedAndNotNull } from '@meawkit/core';
-
 import { ApiKitConfigDefaults } from '@internal/configuration';
+import { isDefinedAndNotNull } from '@meawkit/core';
 
 import type {
   ApiKitConfig,
   EmailConfig,
   EnvironmentConfig,
-  ServerConfig,
-  LoggerConfig,
   I18nConfig,
+  LoggerConfig,
+  ServerConfig,
   StaticFilesConfig,
 } from '@/configuration';
 

@@ -1,5 +1,5 @@
-import type { RouteLocationNormalizedLoaded } from 'vue-router';
 import type { Awaitable } from '@meawkit/webkit';
+import type { RouteLocationNormalizedLoaded } from 'vue-router';
 
 /**
  * Lifecycle contract for ViewModels.

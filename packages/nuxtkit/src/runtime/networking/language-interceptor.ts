@@ -1,7 +1,7 @@
-import type { RemoteRequestInterceptor, RemoteRequestConfig } from '@meawkit/webkit';
+import type { RemoteRequestConfig, RemoteRequestInterceptor } from '@meawkit/webkit';
 
-import { useNuxtKit } from '#nuxtkit-internal/composables';
 import { useCurrentLocale } from '#nuxtkit/composables';
+import { useNuxtKit } from '#nuxtkit-internal/composables';
 
 export class LanguageInterceptor implements RemoteRequestInterceptor {
   order = 0;

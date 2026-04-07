@@ -1,4 +1,4 @@
-import { filterObject, type JSONSerializable } from '@/utils';
+import { type JSONSerializable, filterObject } from '@/utils';
 
 export type OpeningHourInterval = {
   open: string;

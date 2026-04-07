@@ -1,8 +1,8 @@
-export { Mutex, Semaphore, withTimeout, tryAcquire } from 'async-mutex';
+export { Mutex, Semaphore, tryAcquire, withTimeout } from 'async-mutex';
 export type {
-  MutexInterface,
-  SemaphoreInterface,
   E_ALREADY_LOCKED,
   E_CANCELED,
   E_TIMEOUT,
+  MutexInterface,
+  SemaphoreInterface,
 } from 'async-mutex';

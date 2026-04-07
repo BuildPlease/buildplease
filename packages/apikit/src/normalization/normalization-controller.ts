@@ -1,6 +1,6 @@
 import { injectable } from 'inversify';
-import validator from 'validator';
 import { parsePhoneNumberWithError } from 'libphonenumber-js';
+import validator from 'validator';
 
 import { ApiErrorFactory } from '@/error';
 

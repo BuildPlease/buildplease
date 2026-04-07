@@ -1,14 +1,15 @@
 import fs from 'node:fs';
 
-import { inject, injectable } from 'inversify';
+import { ensureDirectory, resolvePath } from '@meawkit/core/node';
 import i18next, { type InitOptions } from 'i18next';
+import { inject, injectable } from 'inversify';
 import merge from 'lodash.merge';
-import { resolvePath, ensureDirectory } from '@meawkit/core/node';
+
+import type { ApiKitController, I18nConfig, I18nFileEntry } from '@/configuration';
 
 import { normalizeLocale, splitBaseRegion } from './utils';
 
 import { ApiKitSymbols } from '@/di';
-import type { ApiKitController, I18nConfig, I18nFileEntry } from '@/configuration';
 
 type ResourceEntry = {
   locale: string;

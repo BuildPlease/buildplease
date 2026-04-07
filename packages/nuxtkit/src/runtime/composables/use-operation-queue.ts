@@ -1,5 +1,5 @@
-import { OperationQueueControllerImpl } from '#nuxtkit/networking';
 import { isSSR } from '#nuxtkit/infrastructure';
+import { OperationQueueControllerImpl } from '#nuxtkit/networking';
 
 let clientQueue: OperationQueueControllerImpl | null = null;
 

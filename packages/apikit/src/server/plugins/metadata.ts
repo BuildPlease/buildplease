@@ -1,7 +1,7 @@
-import fp from 'fastify-plugin';
-import type { FastifyPluginAsync } from 'fastify';
-
 import { isNullOrEmpty } from '@meawkit/core';
+import fp from 'fastify-plugin';
+
+import type { FastifyPluginAsync } from 'fastify';
 
 import type { RequestMetadata } from '@/request';
 import type { ServerPluginOptions } from '@/server';

@@ -2,10 +2,10 @@ import { injectable } from 'inversify';
 
 import type {
   OpenAPIMediaType,
-  OpenAPISchemaMediaType,
-  OpenAPISchemaResponse,
   OpenAPISchemaExample,
   OpenAPISchemaHeaders,
+  OpenAPISchemaMediaType,
+  OpenAPISchemaResponse,
 } from '@/openapi';
 
 export interface OpenAPISchemaController {

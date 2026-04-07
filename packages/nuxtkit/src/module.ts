@@ -1,21 +1,23 @@
 import { defineNuxtModule } from '@nuxt/kit';
+
 import type { HookResult } from '@nuxt/schema';
 
 import type { UnauthorizedHookContext } from './runtime/types';
-import { MODULE_NAME, MODULE_CONFIG_KEY_NAME, type MODULE_HOOK_UNAUTHORIZED_NAME } from './shared/constants';
-
 import type { NuxtKitOptions, NuxtKitPublicRuntimeConfig } from './types';
+
 import { prepareContext } from './context';
 import { DEFAULT_OPTIONS } from './defaults';
 import {
-  prepareHooks,
-  prepareRuntime,
-  prepareRuntimeConfig,
   prepareAutoImports,
   prepareDependencies,
+  prepareHooks,
   prepareI18n,
+  prepareRuntime,
+  prepareRuntimeConfig,
   prepareZodLocales,
 } from './prepare';
+import { type MODULE_HOOK_UNAUTHORIZED_NAME, MODULE_CONFIG_KEY_NAME, MODULE_NAME } from './shared/constants';
+
 
 export default defineNuxtModule<ModuleOptions>({
   meta: {

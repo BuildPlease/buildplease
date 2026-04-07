@@ -2,10 +2,10 @@ import type { Assembly, AssemblyContainer } from '@meawkit/core';
 
 import { ApiKitSymbols } from '@/di';
 import {
-  type ValidationController,
-  ValidationControllerImpl,
   type DtoValidationController,
+  type ValidationController,
   DtoValidationControllerImpl,
+  ValidationControllerImpl,
 } from '@/validation';
 
 export class ValidationAssembly implements Assembly {

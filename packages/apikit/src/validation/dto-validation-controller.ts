@@ -1,13 +1,14 @@
-import { injectable, inject } from 'inversify';
-import { z, type ZodType, ZodError } from 'zod';
+import { inject, injectable } from 'inversify';
+import { type ZodType, z, ZodError } from 'zod';
 
 import type { ValidationSchemaI18nParams } from '@meawkit/core';
 
-import { ApiKitSymbols } from '@/di';
-import { I18nProvider } from '@/i18n';
-import { ApiErrorFactory } from '@/error';
-import type { LoggerController } from '@/logger';
 import type { ApiKitController } from '@/configuration';
+import type { LoggerController } from '@/logger';
+
+import { ApiKitSymbols } from '@/di';
+import { ApiErrorFactory } from '@/error';
+import { I18nProvider } from '@/i18n';
 
 type ValidationIssueDetails = {
   issues: Array<{

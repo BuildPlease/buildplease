@@ -1,22 +1,21 @@
 import path from 'node:path';
 
-import { injectable, inject } from 'inversify';
-import pino, { type Logger, type Level, type Bindings, type LoggerOptions } from 'pino';
-
-import { isError, isObject, isEmptyObject, isPrimitive, filterObject } from '@meawkit/core';
-import { resolvePath, createDirectory, createFile } from '@meawkit/core/node';
-
 import { ApiKitConfigDefaults } from '@internal/configuration';
+import { filterObject, isEmptyObject, isError, isObject, isPrimitive } from '@meawkit/core';
+import { createDirectory, createFile, resolvePath } from '@meawkit/core/node';
+import { inject, injectable } from 'inversify';
+import pino, { type Bindings, type Level, type Logger, type LoggerOptions } from 'pino';
 
-import { ApiKitSymbols } from '@/di';
-import type { LogOptions } from '@/logger';
-import type { RequestMetadata } from '@/request';
 import type {
   ApiKitController,
-  TransportOptions,
   ConsoleTransportOptions,
   FileTransportOptions,
+  TransportOptions,
 } from '@/configuration';
+import type { LogOptions } from '@/logger';
+import type { RequestMetadata } from '@/request';
+
+import { ApiKitSymbols } from '@/di';
 
 export interface LoggerController {
   get instance(): Logger;

@@ -1,14 +1,14 @@
 import { type Readable, PassThrough } from 'stream';
 import { pipeline as pipelineAsync } from 'stream/promises';
 
-import sharp, { type Sharp } from 'sharp';
-import { injectable, inject } from 'inversify';
-
 import { type UnitFormatterController, ByteUnit, CoreSymbols } from '@meawkit/core';
+import { inject, injectable } from 'inversify';
+import sharp, { type Sharp } from 'sharp';
 
-import { FormatType } from '@/formatter';
 import type { ImageOptions } from '@/image';
+
 import { ApiErrorFactory } from '@/error';
+import { FormatType } from '@/formatter';
 
 export interface ImageNormalizationController {
   processBufferToBuffer(input: Buffer, options?: ImageOptions): Promise<{ buffer: Buffer; type: FormatType }>;

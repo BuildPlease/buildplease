@@ -1,16 +1,17 @@
+import { existsSync } from 'node:fs';
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import { existsSync } from 'node:fs';
 
-import { injectable, inject } from 'inversify';
-import nodemailer from 'nodemailer';
-import ejs from 'ejs';
 import { resolvePath } from '@meawkit/core/node';
+import ejs from 'ejs';
+import { inject, injectable } from 'inversify';
+import nodemailer from 'nodemailer';
 
-import { ApiKitSymbols } from '@/di';
+import type { ApiKitController, EmailTemplateGlobalDefaults } from '@/configuration';
 import type { EmailTemplate } from '@/email';
 import type { LoggerController } from '@/logger';
-import type { ApiKitController, EmailTemplateGlobalDefaults } from '@/configuration';
+
+import { ApiKitSymbols } from '@/di';
 
 export interface EmailController {
   sendEmail(template: EmailTemplate): Promise<void>;

@@ -1,5 +1,5 @@
-import { decorate, injectable } from 'inversify';
 import { type RemoteEndpoint, type RemoteRequestConfig } from '@meawkit/webkit';
+import { decorate, injectable } from 'inversify';
 
 import { useOperationQueue } from '#nuxtkit/composables';
 import { NuxtKitRemoteResource } from '#nuxtkit/networking';

@@ -1,5 +1,6 @@
-import fp from 'fastify-plugin';
 import fastifyIp from 'fastify-ip';
+import fp from 'fastify-plugin';
+
 import type { FastifyPluginAsync } from 'fastify';
 
 const ipPlugin: FastifyPluginAsync = async (fastify) => {

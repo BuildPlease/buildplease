@@ -1,13 +1,15 @@
 import { inject, injectable } from 'inversify';
+
 import type { FastifyReply, FastifyRequest } from 'fastify';
 
-import { ApiKitSymbols } from '@/di';
 import type { LoggerController } from '@/logger';
+
+import { ApiKitSymbols } from '@/di';
 import {
-  type JSONHttpResponse,
   type FileHttpResponse,
-  type HttpResponse,
   type HttpHeaders,
+  type HttpResponse,
+  type JSONHttpResponse,
   ResponseType,
 } from '@/http';
 
