@@ -26,7 +26,7 @@ export * from './security';
 export * from './server';
 export * from './validation';
 
-export function ApikitAssembly(): Assembly[] {
+export function apikitAssembly(): Assembly[] {
   const core = coreAssembly();
   const assemblies = makeAssemblies();
 
