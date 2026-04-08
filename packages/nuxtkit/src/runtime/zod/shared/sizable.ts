@@ -1,5 +1,5 @@
 import { useCurrentLocale } from '#nuxtkit/composables';
-import { getPluralState, PluralState } from '#shared';
+import { getPluralState, PluralState } from '#nuxtkit-public';
 
 export interface SizableUnit {
   singular: string;

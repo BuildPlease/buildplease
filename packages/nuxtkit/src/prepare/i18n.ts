@@ -4,30 +4,29 @@ import type { NuxtI18nOptions } from '@nuxtjs/i18n';
 import type { NuxtKitContext } from '../context';
 
 /**
- * Validates required dependencies and Nuxt version.
- * Throws errors if validation fails.
- * @returns NuxtI18nOptions.
+ * Detect optional Nuxt i18n integration.
+ *
+ * @returns Nuxt i18n options when available, otherwise `null`.
  */
-export async function prepareI18n(context: NuxtKitContext, nuxt: Nuxt): Promise<NuxtI18nOptions> {
-  const { logger } = context;
+export async function prepareI18n(context: NuxtKitContext, nuxt: Nuxt): Promise<NuxtI18nOptions | null> {
+  const i18nModuleCandidates = ['@nuxtjs/i18n', '@nuxtjs/i18n-edge'];
+  const modules = nuxt.options.modules || [];
+
   let i18nOptions: NuxtI18nOptions = {} as NuxtI18nOptions;
 
-  // Check if @nuxtjs/i18n is installed
-  const i18nAvailable = nuxt.options.modules.some((module) => {
-    const i18nModuleNames = ['@nuxtjs/i18n', '@nuxtjs/i18n-edge'];
-
-    // Case: String module declaration
+  const available = modules.some((module) => {
+    // Case: string module declaration
     if (typeof module === 'string') {
-      if (i18nModuleNames.includes(module)) {
+      if (i18nModuleCandidates.includes(module)) {
         i18nOptions = (nuxt.options as any).i18n;
         return true;
       }
     }
 
-    // Case: Tuple module declaration (module + options)
+    // Case: tuple module declaration (module + options)
     if (Array.isArray(module)) {
       const [moduleName, options] = module;
-      if (i18nModuleNames.includes(moduleName as string)) {
+      if (i18nModuleCandidates.includes(moduleName as string)) {
         i18nOptions = options as NuxtI18nOptions;
         return true;
       }
@@ -36,9 +35,11 @@ export async function prepareI18n(context: NuxtKitContext, nuxt: Nuxt): Promise<
     return false;
   });
 
-  // Handle missing @nuxtjs/i18n module
-  if (!i18nAvailable) {
-    logger.fatal('Nuxt I18n module is required. Please install @nuxtjs/i18n.');
+  if (!available) {
+    context.logger.debug(
+      `I18n integration disabled: no supported module found (${i18nModuleCandidates.join(' or ')})`,
+    );
+    return null;
   }
 
   return i18nOptions;

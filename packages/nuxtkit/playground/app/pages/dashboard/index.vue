@@ -29,7 +29,7 @@
       <UCard>
         <template #header>
           <h2 class="text-base font-medium">
-            {{ t('page.dashboard.sections.basicOperations') }}
+            {{ t('page.dashboard.sections.basicOperations.title') }}
           </h2>
         </template>
 
@@ -61,11 +61,11 @@
           <div class="flex items-center justify-between gap-3">
             <div class="min-w-0">
               <h2 class="text-base font-medium">
-                {{ t('page.dashboard.sections.queueTest') }}
+                {{ t('page.dashboard.sections.queueTest.title') }}
               </h2>
 
               <p class="mt-0.5 text-sm text-neutral-500">
-                {{ t('operation.description.queueTest') }}
+                {{ t('page.dashboard.sections.queueTest.description') }}
               </p>
             </div>
 
@@ -197,7 +197,6 @@
 
 <script setup lang="ts">
 import { Symbols } from '@di/symbols';
-
 import type { DashboardViewModel, QueueTestItem } from '@feature/dashboard/view-model';
 
 import type { ButtonProps, PageCardProps } from '#ui/types';

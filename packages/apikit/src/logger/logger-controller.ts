@@ -12,10 +12,9 @@ import type {
   FileTransportOptions,
   TransportOptions,
 } from '@/configuration';
+import { ApiKitSymbols } from '@/di';
 import type { LogOptions } from '@/logger';
 import type { RequestMetadata } from '@/request';
-
-import { ApiKitSymbols } from '@/di';
 
 export interface LoggerController {
   get instance(): Logger;

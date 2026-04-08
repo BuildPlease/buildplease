@@ -25,10 +25,6 @@
       "queueTest": "Test de file d’opérations"
     },
 
-    "description": {
-      "queueTest": "Configurez les opérations, exécutez-les via une file sécurisée et observez les annulations."
-    },
-
     "input": {
       "delayMs": "Délai (ms)"
     },
@@ -76,8 +72,14 @@
       "goHome": "Retour à l’accueil",
 
       "sections": {
-        "basicOperations": "Opérations de base",
-        "queueTest": "Test de file"
+        "basicOperations": {
+          "title": "Opérations de base"
+        },
+
+        "queueTest": {
+          "title": "Test de file",
+          "description": "Configurez une file d’opérations. Si une opération échoue avec une erreur Unauthorized, toutes les opérations suivantes sont annulées. Les opérations Success et Error continuent normalement."
+        }
       }
     }
   }

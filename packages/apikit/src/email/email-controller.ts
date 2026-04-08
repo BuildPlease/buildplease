@@ -8,10 +8,9 @@ import { inject, injectable } from 'inversify';
 import nodemailer from 'nodemailer';
 
 import type { ApiKitController, EmailTemplateGlobalDefaults } from '@/configuration';
+import { ApiKitSymbols } from '@/di';
 import type { EmailTemplate } from '@/email';
 import type { LoggerController } from '@/logger';
-
-import { ApiKitSymbols } from '@/di';
 
 export interface EmailController {
   sendEmail(template: EmailTemplate): Promise<void>;

@@ -1,14 +1,12 @@
 import { ignoreErrorAsync } from '@meawkit/core';
-import { inject, injectable } from 'inversify';
-
 import type { FastifyReply, FastifyRequest } from 'fastify';
-
-import type { ResponseController } from '@/server';
+import { inject, injectable } from 'inversify';
 
 import { ApiKitSymbols } from '@/di';
 import { ApiError } from '@/error';
 import { type HttpResponse } from '@/http';
 import { type LoggerController, LogFlag } from '@/logger';
+import type { ResponseController } from '@/server';
 
 type HttpReplyPromise = (request: FastifyRequest, options: object) => Promise<HttpResponse>;
 type HttpOrVoidReplyPromise = (request: FastifyRequest, options?: object) => Promise<HttpResponse | void>;

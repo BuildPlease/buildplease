@@ -5,18 +5,30 @@ import type { LocaleObject, NuxtI18nOptions } from '@nuxtjs/i18n';
 
 import type { NuxtKitContext } from '../context';
 
-// MARK: - Public
-
+/**
+ * Register Zod locales from this module based on application i18n locales.
+ *
+ * @returns Resolves when locale registration is completed or skipped.
+ */
 export async function prepareZodLocales(
   context: NuxtKitContext,
   nuxt: Nuxt,
-  i18nOptions: NuxtI18nOptions,
+  i18nOptions: NuxtI18nOptions | null,
 ): Promise<void> {
   const { resolver, logger, options } = context;
-  if (!options.zodI18n.useModuleLocale) return;
+
+  if (!options.zodI18n.useModuleLocale) {
+    logger.info('Skipping zod locale setup: module locale support is disabled');
+    return;
+  }
+
+  if (!i18nOptions) {
+    logger.info('Skipping zod locale setup: i18n integration is disabled');
+    return;
+  }
 
   try {
-    const rawAppCodes = collectApplicationLocaleCodes(i18nOptions?.locales);
+    const rawAppCodes = collectApplicationLocaleCodes(i18nOptions.locales);
 
     const langDir = resolver.resolve('./runtime/zod/locales');
     const shippedRegions = await readShippedRegionCodes(langDir);
@@ -24,7 +36,7 @@ export async function prepareZodLocales(
     const baseToPreferred = buildBaseToPreferredRegions(options.zodI18n.languageAlias);
     const baseToShipped = groupShippedByBase(shippedRegions);
 
-    const allowedCodes = buildAllowedLocaleCodeSet(i18nOptions?.locales);
+    const allowedCodes = buildAllowedLocaleCodeSet(i18nOptions.locales);
 
     nuxt.hook('i18n:registerModule', (register) => {
       type RegisterConfig = Parameters<typeof register>[0];
@@ -49,7 +61,7 @@ export async function prepareZodLocales(
       register({ langDir, locales: localesToRegister });
 
       logger.debug(
-        `[zod-i18n] registered → ${localesToRegister.map((l) => `${l.code} ← ${l.file}`).join(', ')}`,
+        `[zod-i18n] registered → ${localesToRegister.map((locale) => `${locale.code} ← ${locale.file}`).join(', ')}`,
       );
     });
   } catch (error) {
@@ -59,6 +71,11 @@ export async function prepareZodLocales(
 
 // MARK: - Private
 
+/**
+ * Build a set of allowed locale codes from Nuxt i18n locale entries.
+ *
+ * @returns A set of locale codes accepted by the application.
+ */
 function buildAllowedLocaleCodeSet(locales: NuxtI18nOptions['locales']): Set<string> {
   const allowed = new Set<string>();
   if (!locales) return allowed;
@@ -72,7 +89,11 @@ function buildAllowedLocaleCodeSet(locales: NuxtI18nOptions['locales']): Set<str
   return allowed;
 }
 
-/** Collect app locale codes (ordered, unique). Accepts string entries or objects with .code/.language */
+/**
+ * Collect application locale codes in stable order without duplicates.
+ *
+ * @returns Ordered unique locale codes from application i18n config.
+ */
 function collectApplicationLocaleCodes(locales: NuxtI18nOptions['locales']): string[] {
   if (!locales) return [];
 
@@ -95,7 +116,11 @@ function collectApplicationLocaleCodes(locales: NuxtI18nOptions['locales']): str
   return unique;
 }
 
-/** Read shipped <region>.json files (e.g. returns Set["en-US","sk-SK"]) */
+/**
+ * Read shipped locale region codes from JSON files.
+ *
+ * @returns A set of shipped region codes such as `en-US` or `sk-SK`.
+ */
 async function readShippedRegionCodes(languageDirectory: string): Promise<Set<string>> {
   let files: string[];
   try {
@@ -104,12 +129,16 @@ async function readShippedRegionCodes(languageDirectory: string): Promise<Set<st
     throw new Error(`zod-i18n: cannot read locale directory: ${languageDirectory}`);
   }
 
-  const regions = files.filter((f) => f.endsWith('.json')).map((f) => f.replace(/\.json$/i, ''));
+  const regions = files.filter((file) => file.endsWith('.json')).map((file) => file.replace(/\.json$/i, ''));
   if (regions.length === 0) throw new Error(`zod-i18n: no locale JSON files found in: ${languageDirectory}`);
   return new Set(regions);
 }
 
-/** Alias → base (case-insensitive on alias), e.g. "en-GB" → "en" */
+/**
+ * Build a case-insensitive alias-to-base-language map.
+ *
+ * @returns A map like `en-gb -> en`.
+ */
 function buildAliasToBaseMap(languageAlias?: Record<string, string[]>): Map<string, string> {
   const map = new Map<string, string>();
   for (const [base, regions] of Object.entries(languageAlias ?? {})) {
@@ -118,7 +147,11 @@ function buildAliasToBaseMap(languageAlias?: Record<string, string[]>): Map<stri
   return map;
 }
 
-/** Base → preferred regions (keep order), e.g. "en" → ["en-US","en-GB"] */
+/**
+ * Build a base-language to preferred-regions map.
+ *
+ * @returns A map like `en -> ['en-US', 'en-GB']`.
+ */
 function buildBaseToPreferredRegions(languageAlias?: Record<string, string[]>): Map<string, string[]> {
   const map = new Map<string, string[]>();
   for (const [base, regions] of Object.entries(languageAlias ?? {})) {
@@ -127,7 +160,11 @@ function buildBaseToPreferredRegions(languageAlias?: Record<string, string[]>): 
   return map;
 }
 
-/** Base → shipped regions, e.g. ["en-US","en-GB","sk-SK"] → { en:["en-US","en-GB"], sk:["sk-SK"] } */
+/**
+ * Group shipped region codes by base language.
+ *
+ * @returns A map like `en -> ['en-US', 'en-GB']`.
+ */
 function groupShippedByBase(shippedRegionCodes: Set<string>): Map<string, string[]> {
   const map = new Map<string, string[]>();
   for (const region of shippedRegionCodes) {
@@ -140,7 +177,11 @@ function groupShippedByBase(shippedRegionCodes: Set<string>): Map<string, string
   return map;
 }
 
-/** Case-insensitive exact match against shipped regions; returns canonical cased region if found */
+/**
+ * Find a canonical shipped region code by exact case-insensitive match.
+ *
+ * @returns The canonical shipped region code when found.
+ */
 function findShippedRegion(shippedRegions: Set<string>, code: string): string | undefined {
   const lower = code.toLowerCase();
   for (const region of shippedRegions) {
@@ -149,7 +190,11 @@ function findShippedRegion(shippedRegions: Set<string>, code: string): string | 
   return undefined;
 }
 
-/** Pick a shipped region for a base using preference order, fallback to any shipped region */
+/**
+ * Pick the best shipped region for a base language.
+ *
+ * @returns A preferred shipped region when available, otherwise the first shipped region.
+ */
 function pickRegionForBase(
   base: string,
   baseToPreferred: Map<string, string[]>,
@@ -159,12 +204,18 @@ function pickRegionForBase(
   if (!shipped || shipped.length === 0) return undefined;
 
   const prefs = baseToPreferred.get(base) ?? [];
-  for (const pref of prefs) if (shipped.includes(pref)) return pref;
+  for (const pref of prefs) {
+    if (shipped.includes(pref)) return pref;
+  }
 
   return shipped[0];
 }
 
-/** Resolve a shipped region filename for an app locale code */
+/**
+ * Resolve a shipped region file for an application locale code.
+ *
+ * @returns A shipped region code when resolvable.
+ */
 function resolveRegionForAppCode(
   appCode: string,
   shippedRegions: Set<string>,
@@ -183,7 +234,11 @@ function resolveRegionForAppCode(
   return pickRegionForBase(base, baseToPreferred, baseToShipped);
 }
 
-/** Map app codes to shipped <region>.json files */
+/**
+ * Map application locale codes to shipped locale files.
+ *
+ * @returns Locale objects suitable for `i18n:registerModule`.
+ */
 function computeLocalesToRegister<TCode extends string>(
   applicationLocaleCodes: TCode[],
   shippedRegionCodes: Set<string>,

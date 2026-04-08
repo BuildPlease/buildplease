@@ -1,5 +1,4 @@
 import { type Resolver, addComponentsDir, addImports, addImportsDir } from '@nuxt/kit';
-
 import type { Nuxt } from '@nuxt/schema';
 
 import type { NuxtKitContext } from '../context';

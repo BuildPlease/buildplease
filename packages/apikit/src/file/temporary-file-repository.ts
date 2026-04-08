@@ -7,10 +7,9 @@ import { pipeline as pipelineAsync } from 'node:stream/promises';
 import { createDirectoryAsync, ensureDirectoryAsync, removePathAsync } from '@meawkit/core/node';
 import { inject, injectable } from 'inversify';
 
+import { ApiKitSymbols } from '@/di';
 import type { FormatType } from '@/formatter';
 import type { LoggerController } from '@/logger';
-
-import { ApiKitSymbols } from '@/di';
 
 export interface TemporaryFileRepository {
   /**

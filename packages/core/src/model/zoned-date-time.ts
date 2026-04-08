@@ -1,6 +1,5 @@
-import { formatInTimeZone, fromZonedTime, getTimezoneOffset, toZonedTime } from 'date-fns-tz';
-
 import type { FormatOptionsWithTZ } from 'date-fns-tz';
+import { formatInTimeZone, fromZonedTime, getTimezoneOffset, toZonedTime } from 'date-fns-tz';
 
 /**
  * A UTC instant paired with an IANA time zone for formatting and conversions.

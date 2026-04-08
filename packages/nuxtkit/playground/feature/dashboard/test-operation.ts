@@ -67,7 +67,7 @@ export class TestResource extends SecuredRemoteResource<TestOperationInput, Test
     super(endpoint);
   }
 
-  protected override unauthorizedMode(): 'notify' | 'silent' {
+  protected override get unauthorizedMode(): 'notify' | 'silent' {
     return 'silent';
   }
 }

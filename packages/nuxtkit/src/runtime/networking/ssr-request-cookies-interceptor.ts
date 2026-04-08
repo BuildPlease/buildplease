@@ -1,10 +1,9 @@
+import type { RemoteRequestConfig, RemoteRequestInterceptor } from '@meawkit/webkit';
 import { parseCookies } from 'h3';
 
-import type { RemoteRequestConfig, RemoteRequestInterceptor } from '@meawkit/webkit';
-
 import { useNuxtApp } from '#app';
+import { useNuxtKit } from '#internal-runtime';
 import { isSSR } from '#nuxtkit/infrastructure';
-import { useNuxtKit } from '#nuxtkit-internal/composables';
 
 export class SSRRequestCookiesInterceptor implements RemoteRequestInterceptor {
   public order = -20;

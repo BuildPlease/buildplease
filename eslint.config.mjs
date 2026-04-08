@@ -19,17 +19,17 @@ const codeRules = {
   'import/order': [
     'error',
     {
-      groups: ['builtin', 'external', 'type', 'internal', ['parent', 'sibling', 'index']],
+      groups: ['builtin', 'external', 'internal', 'unknown', ['parent', 'sibling', 'index']],
       'newlines-between': 'always',
       alphabetize: {
         order: 'asc',
+        orderImportKind: 'asc',
         caseInsensitive: true,
       },
       named: {
         enabled: true,
         types: 'types-first',
       },
-      sortTypesGroup: true,
     },
   ],
   'import/no-duplicates': ['error', { 'prefer-inline': false }],

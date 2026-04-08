@@ -2,16 +2,6 @@ import type { NuxtKitOptions } from './types';
 
 export const DEFAULT_OPTIONS = {
   debug: false,
-  components: {
-    prefix: '',
-  },
-  unauthorizedStatusCodes: [401],
-  errors: {
-    genericErrorKey: 'errors.generic',
-    genericMessageFallback: 'Something went wrong',
-    unauthorizedKey: 'errors.unauthorized',
-    unauthorizedMessageFallback: 'Access denied',
-  },
   zodI18n: {
     useModuleLocale: true,
     keyPrefix: 'zod',
@@ -26,4 +16,14 @@ export const DEFAULT_OPTIONS = {
       year: 'numeric',
     },
   },
+  components: {
+    prefix: '',
+  },
+  errors: {
+    genericErrorKey: 'errors.generic',
+    genericMessageFallback: 'Something went wrong',
+    unauthorizedKey: 'errors.unauthorized',
+    unauthorizedMessageFallback: 'Access denied',
+  },
+  unauthorizedStatusCodes: [401],
 } as const satisfies NuxtKitOptions;

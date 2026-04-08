@@ -1,7 +1,5 @@
 import { z } from 'zod';
 
-import type { ValidationSchemaI18nParams } from '@/validation';
-
 import {
   type Geometry,
   type OpeningHourInterval,
@@ -16,6 +14,7 @@ import {
   Point,
   Polygon,
 } from '@/model';
+import type { ValidationSchemaI18nParams } from '@/validation';
 
 /* MARK: - Primitives: Longitude & Latitude */
 const LongitudeSchema = z.number().min(-180).max(180);

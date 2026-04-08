@@ -3,7 +3,7 @@ import { type ConsolaInstance, createConsola } from 'consola';
 import { colors } from 'consola/utils';
 
 import { isCSR, isSSR, useRuntimeConfig } from '#imports';
-import { MODULE_NAME, MODULE_SYMBOL_NAME } from '#shared';
+import { MODULE_NAME, MODULE_SYMBOL_NAME } from '#internal-shared';
 
 export function useNuxtKit() {
   const runtimeConfig = useRuntimeConfig().public.meawkitNuxtKit;

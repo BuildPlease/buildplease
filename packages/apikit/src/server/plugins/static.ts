@@ -2,9 +2,8 @@ import path from 'node:path';
 
 import fastifyStatic, { type FastifyStaticOptions } from '@fastify/static';
 import { ensureDirectory, resolvePath } from '@meawkit/core/node';
-import fp from 'fastify-plugin';
-
 import type { FastifyPluginAsync } from 'fastify';
+import fp from 'fastify-plugin';
 
 import type { ServerPluginOptions } from '@/server';
 

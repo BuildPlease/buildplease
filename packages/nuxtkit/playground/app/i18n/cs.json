@@ -25,10 +25,6 @@
       "queueTest": "Test fronty operací"
     },
 
-    "description": {
-      "queueTest": "Nastavte operace, spusťte je přes zabezpečenou frontu a sledujte rušení."
-    },
-
     "input": {
       "delayMs": "Zpoždění (ms)"
     },
@@ -76,8 +72,14 @@
       "goHome": "Zpět na domov",
 
       "sections": {
-        "basicOperations": "Základní operace",
-        "queueTest": "Test fronty"
+        "basicOperations": {
+          "title": "Základní operace"
+        },
+
+        "queueTest": {
+          "title": "Test fronty",
+          "description": "Nastavte frontu operací. Pokud některá operace skončí chybou Unauthorized, všechny následující operace se zruší. Operace Success a Error pokračují normálně."
+        }
       }
     }
   }

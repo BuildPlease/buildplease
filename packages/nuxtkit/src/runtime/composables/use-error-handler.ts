@@ -1,7 +1,7 @@
 import { CanceledError, HttpError } from '@meawkit/webkit';
 
 import { useNuxtApp } from '#app';
-import { useNuxtKit } from '#nuxtkit-internal/composables';
+import { useNuxtKit } from '#internal-runtime';
 
 export interface ErrorHandlerOptions {
   /**

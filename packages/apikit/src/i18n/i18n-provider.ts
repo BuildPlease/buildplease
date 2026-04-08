@@ -1,8 +1,8 @@
 import i18next, { type TOptions } from 'i18next';
 
-import { normalizeLocale, splitBaseRegion } from './utils';
-
 import { RequestScope } from '@/request';
+
+import { normalizeLocale, splitBaseRegion } from './utils';
 
 export interface I18nOptions extends TOptions {}
 

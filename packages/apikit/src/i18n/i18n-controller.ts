@@ -6,10 +6,9 @@ import { inject, injectable } from 'inversify';
 import merge from 'lodash.merge';
 
 import type { ApiKitController, I18nConfig, I18nFileEntry } from '@/configuration';
+import { ApiKitSymbols } from '@/di';
 
 import { normalizeLocale, splitBaseRegion } from './utils';
-
-import { ApiKitSymbols } from '@/di';
 
 type ResourceEntry = {
   locale: string;

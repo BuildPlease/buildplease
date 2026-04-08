@@ -4,10 +4,10 @@ import { decorate, injectable } from 'inversify';
 
 import { type NuxtApp, useNuxtApp, useRouter } from '#app';
 import { abortNavigation, isSSR, navigateTo } from '#imports';
+import { useNuxtKit } from '#internal-runtime';
+import { MODULE_HOOK_UNAUTHORIZED_NAME } from '#internal-shared';
 import { useOperationQueue } from '#nuxtkit/composables';
 import { NuxtKitRemoteResource } from '#nuxtkit/networking';
-import { useNuxtKit } from '#nuxtkit-internal/composables';
-import { MODULE_HOOK_UNAUTHORIZED_NAME } from '#shared';
 
 export class SecuredRemoteResource<Input, Output> extends NuxtKitRemoteResource<Input, Output> {
   private readonly kit = useNuxtKit();

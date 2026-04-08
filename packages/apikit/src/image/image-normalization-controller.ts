@@ -5,10 +5,9 @@ import { type UnitFormatterController, ByteUnit, CoreSymbols } from '@meawkit/co
 import { inject, injectable } from 'inversify';
 import sharp, { type Sharp } from 'sharp';
 
-import type { ImageOptions } from '@/image';
-
 import { ApiErrorFactory } from '@/error';
 import { FormatType } from '@/formatter';
+import type { ImageOptions } from '@/image';
 
 export interface ImageNormalizationController {
   processBufferToBuffer(input: Buffer, options?: ImageOptions): Promise<{ buffer: Buffer; type: FormatType }>;

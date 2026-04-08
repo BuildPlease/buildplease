@@ -13,6 +13,11 @@ export interface NuxtKitOptions {
   debug: boolean;
 
   /**
+   * Zod i18n integration (keeps Zod’s locale in sync with Nuxt i18n).
+   */
+  zodI18n: ZodI18nOptions;
+
+  /**
    * Auto-imported components provided by the module.
    */
   components: {
@@ -23,13 +28,6 @@ export interface NuxtKitOptions {
      */
     prefix: string;
   };
-
-  /**
-   * HTTP status codes to treat as unauthorized.
-   * @default [401]
-   * @example [401, 403]
-   */
-  unauthorizedStatusCodes: number[];
 
   /**
    * Error message keys and fallbacks.
@@ -65,9 +63,11 @@ export interface NuxtKitOptions {
   };
 
   /**
-   * Zod i18n integration (keeps Zod’s locale in sync with Nuxt i18n).
+   * HTTP status codes to treat as unauthorized.
+   * @default [401]
+   * @example [401, 403]
    */
-  zodI18n: ZodI18nOptions;
+  unauthorizedStatusCodes: number[];
 }
 
 /**

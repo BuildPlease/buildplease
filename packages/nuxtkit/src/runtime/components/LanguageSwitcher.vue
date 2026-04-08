@@ -25,9 +25,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
-
 import type { DropdownMenuItem } from '@nuxt/ui';
+import { computed } from 'vue';
 
 import { useNuxtApp, useRuntimeConfig } from '#app';
 import { normalizeLocale, useCurrentLocale } from '#nuxtkit/composables';

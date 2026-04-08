@@ -1,9 +1,8 @@
 import { Readable } from 'stream';
 
 import { ignoreError, isDefinedAndNotNull } from '@meawkit/core';
-import fp from 'fastify-plugin';
-
 import type { FastifyPluginAsync } from 'fastify';
+import fp from 'fastify-plugin';
 
 import type { ServerPluginOptions } from '@/server';
 

@@ -1,8 +1,5 @@
-import { inject, injectable } from 'inversify';
-
 import type { FastifyReply, FastifyRequest } from 'fastify';
-
-import type { LoggerController } from '@/logger';
+import { inject, injectable } from 'inversify';
 
 import { ApiKitSymbols } from '@/di';
 import {
@@ -12,6 +9,7 @@ import {
   type JSONHttpResponse,
   ResponseType,
 } from '@/http';
+import type { LoggerController } from '@/logger';
 
 export interface ResponseController {
   sendResponse(request: FastifyRequest, reply: FastifyReply, response: HttpResponse): Promise<void>;

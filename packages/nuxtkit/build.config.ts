@@ -9,18 +9,25 @@ export default defineBuildConfig({
     'build:prepare'(ctx) {
       ctx.options.entries ||= [];
 
-      // MARK: - Shared folder
+      // MARK: - Public folder
       ctx.options.entries.push({
-        input: 'src/shared/index',
+        input: 'src/public/index',
         builder: 'rollup',
-        outDir: `${ctx.options.outDir}/shared`,
+        outDir: `${ctx.options.outDir}/public`,
       });
 
-      // MARK: - Runtime-Internal folder
+      // MARK: - Internal-Shared folder
       ctx.options.entries.push({
-        input: 'src/runtime-internal/index',
+        input: 'src/internal-shared/index',
         builder: 'rollup',
-        outDir: `${ctx.options.outDir}/runtime-internal`,
+        outDir: `${ctx.options.outDir}/internal-shared`,
+      });
+
+      // MARK: - Internal-Runtime folder
+      ctx.options.entries.push({
+        input: 'src/internal-runtime/index',
+        builder: 'rollup',
+        outDir: `${ctx.options.outDir}/internal-runtime`,
       });
     },
   },

@@ -25,10 +25,6 @@
       "queueTest": "Operation queue test"
     },
 
-    "description": {
-      "queueTest": "Configure operations, run them through secured queue and observe cancellations."
-    },
-
     "input": {
       "delayMs": "Delay (ms)"
     },
@@ -76,8 +72,14 @@
       "goHome": "Go Back to Home",
 
       "sections": {
-        "basicOperations": "Basic operations",
-        "queueTest": "Queue test"
+        "basicOperations": {
+          "title": "Basic operations"
+        },
+
+        "queueTest": {
+          "title": "Queue test",
+          "description": "Configure an operation queue. If any operation fails with Unauthorized, all following operations are cancelled. Success and Error operations continue normally."
+        }
       }
     }
   }

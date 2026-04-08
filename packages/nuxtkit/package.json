@@ -7,17 +7,17 @@
   "author": "Simon Rastislav Kovačič",
   "type": "module",
   "imports": {
-    "#nuxtkit/*": "./dist/runtime/*.js",
-    "#shared": "./dist/shared/index.mjs"
+    "#internal-runtime": "./dist/internal-runtime/index.mjs",
+    "#internal-shared": "./dist/internal-shared/index.mjs"
   },
   "exports": {
     ".": {
       "types": "./dist/types.d.mts",
       "import": "./dist/module.mjs"
     },
-    "./shared": {
-      "types": "./dist/shared/index.d.mts",
-      "import": "./dist/shared/index.mjs"
+    "./public": {
+      "types": "./dist/public/index.d.mts",
+      "import": "./dist/public/index.mjs"
     }
   },
   "main": "./dist/module.mjs",

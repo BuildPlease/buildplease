@@ -1,8 +1,8 @@
 import { z } from 'zod';
 
 import { defineNuxtPlugin, useNuxtApp } from '#app';
+import { useNuxtKit } from '#internal-runtime';
 import { makeErrorMap } from '#nuxtkit/zod/shared';
-import { useNuxtKit } from '#nuxtkit-internal/composables';
 
 export default defineNuxtPlugin({
   name: 'nuxtkit:plugin:zod-i18n',
@@ -14,14 +14,14 @@ export default defineNuxtPlugin({
     const i18n = app.$i18n;
 
     if (!i18n) {
-      logger.warn(`Zod: i18n not available; skipping error-map binding`, { force: true });
+      logger.debug('Zod i18n integration disabled: i18n is unavailable');
       return;
     }
 
     const errorMap = makeErrorMap(i18n);
     z.config({ localeError: errorMap });
 
-    const message = `Zod: i18n configured for locale:"${i18n.locale.value}", prefix="${config.zodI18n.keyPrefix}"`;
+    const message = `Zod i18n integration configured: locale="${i18n.locale.value}", prefix="${config.zodI18n.keyPrefix}"`;
     logger.info(message, { force: true });
   },
 });

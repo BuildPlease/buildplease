@@ -2,13 +2,12 @@ import Fastify, { type FastifyBaseLogger, type FastifyInstance } from 'fastify';
 import { inject, injectable } from 'inversify';
 
 import type { ApiKitController } from '@/configuration';
-import type { I18nController } from '@/i18n';
-
-import { FastifyPlugins } from './plugins';
-
 import { ApiKitSymbols } from '@/di';
 import { ApiError, ApiErrorFactory } from '@/error';
+import type { I18nController } from '@/i18n';
 import { type LoggerController, LogFlag } from '@/logger';
+
+import { FastifyPlugins } from './plugins';
 
 const LOG_PREFIX = '[Server]';
 
