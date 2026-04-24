@@ -2,7 +2,7 @@ import 'reflect-metadata';
 import { makeAssemblies } from '@internal/injection';
 import { type Assembly, coreAssembly } from '@meawkit/core';
 
-import '#/types';
+import '../types';
 
 // MARK: - Exports
 

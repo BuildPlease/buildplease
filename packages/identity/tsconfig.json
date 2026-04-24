@@ -38,11 +38,9 @@
     /* Paths */
     "rootDir": "./",
     "outDir": "./dist",
-    "declarationDir": "dist/types",
-    "baseUrl": "./",
+    "declarationDir": "./dist/types",
     "paths": {
-      "#/*": ["./*"],
-      "@/*": ["src/*"]
+      "@/*": ["./src/*"]
     }
   },
   "include": ["src", "tsup.config.ts"],

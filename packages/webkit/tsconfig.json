@@ -36,13 +36,11 @@
 
     /* Paths */
     "outDir": "./dist",
-    "baseUrl": "./",
     "paths": {
-      "#/*": ["./*"],
-      "@/*": ["src/*"],
-      "@internal/*": ["src-internal/*"],
-      "@node": ["src-node/index.ts"],
-      "@node/*": ["src-node/*"]
+      "@/*": ["./src/*"],
+      "@internal/*": ["./src-internal/*"],
+      "@node": ["./src-node/index.ts"],
+      "@node/*": ["./src-node/*"]
     }
   },
   "include": ["src", "src-node", "src-internal", "tsup.config.ts"],

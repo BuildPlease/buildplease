@@ -37,14 +37,12 @@
 
     /* Paths */
     "rootDir": "./",
-    "outDir": "dist",
-    "declarationDir": "dist/types",
-    "baseUrl": "./",
+    "outDir": "./dist",
+    "declarationDir": "./dist/types",
     "paths": {
-      "#/*": ["./*"],
-      "@/*": ["src/*"],
-      "@cli/*": ["src-cli/*"],
-      "@internal/*": ["src-internal/*"]
+      "@/*": ["./src/*"],
+      "@cli/*": ["./src-cli/*"],
+      "@internal/*": ["./src-internal/*"],
     }
   },
   "include": ["src", "src-cli", "src-internal", "types", "tests", "tsup.config.cli.ts", "tsup.config.src.ts"],
