@@ -41,7 +41,7 @@ export default defineApikitConfig({
       transports: [
         {
           type: 'file',
-          path: './logs/production.log',
+          envPathKey: 'LOGGER_PATH',
         },
       ],
     },

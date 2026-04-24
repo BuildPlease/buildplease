@@ -2,7 +2,7 @@ import path from 'node:path';
 
 import { ApiKitConfigDefaults } from '@internal/configuration';
 import { filterObject, isEmptyObject, isError, isObject, isPrimitive } from '@meawkit/core';
-import { createDirectory, createFile, resolvePath } from '@meawkit/core/node';
+import { createDirectory, createFile, env, resolvePath } from '@meawkit/core/node';
 import { inject, injectable } from 'inversify';
 import pino, { type Bindings, type Level, type Logger, type LoggerOptions } from 'pino';
 
@@ -247,10 +247,12 @@ export class LoggerControllerImpl implements LoggerController {
   }
 
   private makeFileTransportTarget(config: FileTransportOptions): pino.TransportTargetOptions {
-    const destination = path.isAbsolute(config.path)
-      ? path.normalize(config.path)
-      : resolvePath(process.cwd(), config.path);
+    const filePath = env(config.envPathKey);
     const level = this.makeTransportLevel(config.level);
+
+    const destination = path.isAbsolute(filePath)
+      ? path.normalize(filePath)
+      : resolvePath(process.cwd(), filePath);
 
     createDirectory(path.dirname(destination));
     createFile(destination);
@@ -298,7 +300,7 @@ export class LoggerControllerImpl implements LoggerController {
    * // so debug logs are not filtered out before reaching console.
    * const level = resolveGlobalLogLevel([
    *   { type: 'console', level: 'debug', target: 'pino-pretty', pretty: {} },
-   *   { type: 'file', level: 'warn', path: './logs/app.log' },
+   *   { type: 'file', level: 'warn', envPathKey: 'LOGGER_PATH' }
    * ]);
    * // level === 'debug'
    */

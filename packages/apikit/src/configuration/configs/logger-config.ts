@@ -4,6 +4,7 @@ import type { PrettyOptions } from 'pino-pretty';
 /**
  * Base transport configuration options.
  */
+
 interface BaseTransportOptions {
   /**
    * The minimum level of logs to capture **for this transport**.
@@ -16,13 +17,14 @@ interface BaseTransportOptions {
   level?: Level;
 }
 
-// ────────────────────────────────────────────────────────────────────────────────
-// Console transport types
+/**
+ * Console Transport
+ */
 
 /**
  * Console transport using `pino-pretty` formatter.
  */
-export interface PrettyConsoleTransportOptions extends BaseTransportOptions {
+export interface ConsoleTransportOptions extends BaseTransportOptions {
   /**
    * Transport type: console.
    */
@@ -42,16 +44,9 @@ export interface PrettyConsoleTransportOptions extends BaseTransportOptions {
 }
 
 /**
- * All supported console transport variants.
+ * File Transport
  */
-export type ConsoleTransportOptions = PrettyConsoleTransportOptions;
 
-// ────────────────────────────────────────────────────────────────────────────────
-// File transport
-
-/**
- * File-based logging transport.
- */
 export interface FileTransportOptions extends BaseTransportOptions {
   /**
    * Transport type: file.
@@ -59,30 +54,32 @@ export interface FileTransportOptions extends BaseTransportOptions {
   type: 'file';
 
   /**
-   * Path to the log file.
+   * Environment variable key that contains the log file path.
    *
+   * The resolved path value:
    * - Absolute paths are used as-is.
    * - Relative paths are resolved against `process.cwd()`.
    *
    * @required
-   * @example "./logs/app.log"
-   * @example "/var/log/my-app/app.log"
-   * @example resolvePath(import.meta.url, "./logs/app.log")
+   * @example "LOGGER_PATH"
    */
-  path: string;
+  envPathKey: string;
 }
 
-// ────────────────────────────────────────────────────────────────────────────────
+/**
+ * Logger Configuration
+ */
 
 export type TransportOptions = ConsoleTransportOptions | FileTransportOptions;
 
 export interface LoggerConfig {
   /**
-   * Whether logging is enabled.
+   * Whether logging is disabled.
    *
    * @default false
    */
   disabled?: boolean;
+
   /**
    * A list of transport configurations for the logger.
    * Each transport can have its own type and options.
