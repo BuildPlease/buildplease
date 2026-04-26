@@ -42,7 +42,7 @@
     "paths": {
       "@/*": ["./src/*"],
       "@cli/*": ["./src-cli/*"],
-      "@internal/*": ["./src-internal/*"],
+      "@internal/*": ["./src-internal/*"]
     }
   },
   "include": ["src", "src-cli", "src-internal", "types", "tests", "tsup.config.cli.ts", "tsup.config.src.ts"],

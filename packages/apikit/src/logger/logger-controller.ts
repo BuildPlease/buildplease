@@ -2,7 +2,7 @@ import path from 'node:path';
 
 import { ApiKitConfigDefaults } from '@internal/configuration';
 import { filterObject, isEmptyObject, isError, isObject, isPrimitive } from '@meawkit/core';
-import { createDirectory, createFile, env, resolvePath } from '@meawkit/core/node';
+import { ensureDirectory, env, resolvePath } from '@meawkit/core/node';
 import { inject, injectable } from 'inversify';
 import pino, { type Bindings, type Level, type Logger, type LoggerOptions } from 'pino';
 
@@ -254,8 +254,7 @@ export class LoggerControllerImpl implements LoggerController {
       ? path.normalize(filePath)
       : resolvePath(process.cwd(), filePath);
 
-    createDirectory(path.dirname(destination));
-    createFile(destination);
+    ensureDirectory(path.dirname(destination));
 
     if (this.configuration.isDebug) {
       console.info(`\x1b[32m✔\x1b[0m LOGGER level: ${level}, destination: ${destination}`);
