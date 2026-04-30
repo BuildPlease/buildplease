@@ -5,6 +5,7 @@ import type {
   EnvironmentConfig,
   I18nConfig,
   LoggerConfig,
+  MetricsConfig,
   ServerConfig,
   StaticFilesConfig,
 } from '@/configuration';
@@ -14,6 +15,7 @@ export interface ApiKitController {
   get environment(): EnvironmentConfig;
   get logger(): LoggerConfig;
   get server(): ServerConfig;
+  get metrics(): MetricsConfig;
   get email(): EmailConfig;
   get i18n(): I18nConfig | undefined;
   get staticFiles(): StaticFilesConfig | undefined;
@@ -25,6 +27,7 @@ export class ApiKitControllerImpl implements ApiKitController {
   private readonly _environment: EnvironmentConfig;
   private readonly _logger: LoggerConfig;
   private readonly _server: ServerConfig;
+  private readonly _metrics: MetricsConfig;
   private readonly _email: EmailConfig;
   private readonly _i18n?: I18nConfig;
   private readonly _staticFiles?: StaticFilesConfig;
@@ -34,6 +37,7 @@ export class ApiKitControllerImpl implements ApiKitController {
     this._environment = this.loadEnvironmentConfig();
     this._logger = this.loadLoggerConfig();
     this._server = this.loadServerConfig();
+    this._metrics = this.loadMetricsConfig();
     this._email = this.loadEmailConfig();
     this._i18n = this.loadI18nConfig();
     this._staticFiles = this.loadStaticFilesConfig();
@@ -55,6 +59,10 @@ export class ApiKitControllerImpl implements ApiKitController {
     return this._server;
   }
 
+  get metrics(): MetricsConfig {
+    return this._metrics;
+  }
+
   get email(): EmailConfig {
     return this._email;
   }
@@ -68,6 +76,7 @@ export class ApiKitControllerImpl implements ApiKitController {
   }
 
   // MARK: - Private loaders
+
   private loadDebug(): boolean {
     return global.apikit.isDebug;
   }
@@ -87,6 +96,12 @@ export class ApiKitControllerImpl implements ApiKitController {
   private loadServerConfig(): ServerConfig {
     const config = global.apikit?.serverConfig;
     if (!config) throw new Error('Server config is missing.');
+    return config;
+  }
+
+  private loadMetricsConfig(): MetricsConfig {
+    const config = global.apikit?.metricsConfig;
+    if (!config) throw new Error('Metrics config is missing.');
     return config;
   }
 

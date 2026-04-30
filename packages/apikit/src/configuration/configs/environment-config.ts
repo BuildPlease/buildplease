@@ -1,28 +1,40 @@
 export interface EnvironmentConfig {
   /**
-   * Enables verbose debug mode for environment.
+   * Enables debug mode for this environment.
    *
    * When set to true, additional diagnostic information may be logged
-   * or included in responses to assist with development and troubleshooting.
+   * or included in responses.
    *
+   * @optional
    * @default false
    */
-  debug?: boolean;
+  debug: boolean;
 
   /**
-   * Name of the environment (e.g., 'production', 'development').
+   * Environment name.
+   *
+   * @required
+   *
+   * @example "test"
+   * @example "production"
    */
   name: string;
 
   /**
-   * Path to the environment file (e.g., `.env.production`).
-   * This is a required field.
+   * Environment file name or path.
+   *
+   * @required
+   *
+   * @example ".env.test"
+   * @example "./env/.env.production"
    */
   file: string;
 
   /**
-   * Directory containing the environment file.
-   * Defaults to the project root if not specified.
+   * Directory used to resolve relative environment file paths.
+   *
+   * @optional
+   * @default process.cwd()
    */
-  fileDir?: string;
+  fileDir: string;
 }

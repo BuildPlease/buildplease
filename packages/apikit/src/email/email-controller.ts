@@ -2,15 +2,25 @@ import { existsSync } from 'node:fs';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 
-import { resolvePath } from '@meawkit/core/node';
+import { optional } from '@meawkit/core';
 import ejs from 'ejs';
 import { inject, injectable } from 'inversify';
 import nodemailer from 'nodemailer';
 
-import type { ApiKitController, EmailTemplateGlobalDefaults } from '@/configuration';
+import type { ApiKitController } from '@/configuration';
 import { ApiKitSymbols } from '@/di';
 import type { EmailTemplate } from '@/email';
 import type { LoggerController } from '@/logger';
+
+const LOG_PREFIX = '[Email]:';
+
+type SmtpConfig = {
+  host: string;
+  port: number;
+  user: string;
+  pass: string;
+  sender: string;
+};
 
 export interface EmailController {
   sendEmail(template: EmailTemplate): Promise<void>;
@@ -19,15 +29,10 @@ export interface EmailController {
 @injectable()
 export class EmailControllerImpl implements EmailController {
   private transporter?: nodemailer.Transporter;
+
   private readonly templatesPath: string;
   private readonly isEnabled: boolean;
-  private readonly smtpConfig: {
-    host: string;
-    port: number;
-    user: string;
-    pass: string;
-    sender: string;
-  };
+  private readonly smtpConfig: SmtpConfig;
 
   constructor(
     @inject(ApiKitSymbols.DI.Configuration.Controller)
@@ -36,14 +41,8 @@ export class EmailControllerImpl implements EmailController {
     private logger: LoggerController,
   ) {
     this.isEnabled = this.configuration.email.enabled;
-    this.templatesPath =
-      this.configuration.email.templatesPath || resolvePath(process.cwd(), './src/templates');
-
-    if (this.isEnabled) {
-      this.smtpConfig = this.validateSmtpConfig();
-    } else {
-      this.smtpConfig = { host: '', port: 0, user: '', pass: '', sender: '' };
-    }
+    this.smtpConfig = makeSmtpConfig(this.isEnabled);
+    this.templatesPath = makeTemplatesPath(this.configuration.email.templatesPath);
   }
 
   // MARK: - Public
@@ -51,7 +50,8 @@ export class EmailControllerImpl implements EmailController {
   async sendEmail(template: EmailTemplate): Promise<void> {
     try {
       if (!this.isEnabled) {
-        throw new Error('Email sending is disabled.');
+        this.logger.debug(`${LOG_PREFIX} Sending skipped — disabled`);
+        return;
       }
 
       const transporter = this.getOrCreateTransporter();
@@ -73,7 +73,7 @@ export class EmailControllerImpl implements EmailController {
 
       await transporter.sendMail(mailOptions);
     } catch (error) {
-      this.logger.error('Error while sending email', { error: error });
+      this.logger.error(`${LOG_PREFIX} Send failed`, { error: error });
       throw error;
     }
   }
@@ -91,17 +91,19 @@ export class EmailControllerImpl implements EmailController {
         },
       });
     }
+
     return this.transporter;
   }
 
   private async renderTemplate<T>(template: EmailTemplate<T>): Promise<string> {
     try {
       const filePath = this.makeFilePath(template.templatePath, template.fallbackPath);
-
       const templateString = await fs.readFile(filePath, 'utf-8');
       const data = { globals: this.makeGlobals(), ...template.data };
+
       return ejs.render(templateString, data);
     } catch (error) {
+      this.logger.error(`${LOG_PREFIX} Render failed`, { error: error });
       throw error;
     }
   }
@@ -115,12 +117,15 @@ export class EmailControllerImpl implements EmailController {
       if (existsSync(fallback)) return fallback;
     }
 
-    throw new Error(`Email template not found: ${primary}${fallbackPath ? ` or ${fallbackPath}` : ''}`);
+    throw new Error(
+      `${LOG_PREFIX} Template not found: ${primary}${fallbackPath ? ` or ${fallbackPath}` : ''}`,
+    );
   }
-  private makeGlobals() {
-    const clientDefined = this.configuration.email.globals ?? {};
 
-    const runtimeDefaults: EmailTemplateGlobalDefaults = {
+  private makeGlobals() {
+    const clientDefined = this.configuration.email.globals;
+
+    const runtimeDefaults = {
       generatedDate: new Date().toISOString().replace('T', ' ').substring(0, 16) + ' UTC',
     };
 
@@ -130,35 +135,45 @@ export class EmailControllerImpl implements EmailController {
     };
   }
 
-  private validateSmtpConfig() {
-    const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASSWORD, SMTP_SENDER } = process.env;
-
-    if (!SMTP_HOST || !SMTP_PORT || !SMTP_USER || !SMTP_PASSWORD || !SMTP_SENDER) {
-      throw new Error(
-        'SMTP configuration is incomplete. Required: SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASSWORD, SMTP_SENDER',
-      );
-    }
-
-    const port = Number(SMTP_PORT);
-    if (Number.isNaN(port) || port <= 0) {
-      throw new Error('SMTP_PORT must be a valid positive number.');
-    }
-
-    return {
-      host: SMTP_HOST,
-      port: port,
-      user: SMTP_USER,
-      pass: SMTP_PASSWORD,
-      sender: SMTP_SENDER,
-    };
-  }
-
   private sanitizeTemplatePath(templatePath: string): string {
     if (templatePath.includes('..')) {
-      throw new Error(`Invalid template path: ${templatePath}`);
+      throw new Error(`${LOG_PREFIX} Invalid template path: ${templatePath}`);
     }
 
     const cleanedPath = templatePath.replace(/^\/+/, '');
     return cleanedPath.endsWith('.ejs') ? cleanedPath : cleanedPath + '.ejs';
   }
+}
+
+function makeSmtpConfig(enabled: boolean): SmtpConfig {
+  if (!enabled) return { host: '', port: 0, user: '', pass: '', sender: '' };
+
+  const read = (key: string): string => {
+    return optional(process.env[key]).orThrow(new Error(`${LOG_PREFIX} Missing ${key}`));
+  };
+
+  const host = read('SMTP_HOST');
+  const rawPort = read('SMTP_PORT');
+  const user = read('SMTP_USER');
+  const pass = read('SMTP_PASSWORD');
+  const sender = read('SMTP_SENDER');
+
+  const port = Number(rawPort);
+  if (!Number.isInteger(port) || port <= 0) {
+    throw new Error(`${LOG_PREFIX} SMTP_PORT must be a positive integer`);
+  }
+
+  return {
+    host: host,
+    port: port,
+    user: user,
+    pass: pass,
+    sender: sender,
+  };
+}
+
+function makeTemplatesPath(input: string): string {
+  const value = input.trim();
+
+  return path.isAbsolute(value) ? path.normalize(value) : path.resolve(process.cwd(), value);
 }

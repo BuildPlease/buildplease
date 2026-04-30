@@ -1,88 +1,74 @@
 import type { Level } from 'pino';
 import type { PrettyOptions } from 'pino-pretty';
 
-/**
- * Base transport configuration options.
- */
-
-interface BaseTransportOptions {
+export interface LoggerConfig {
   /**
-   * The minimum level of logs to capture **for this transport**.
+   * Disables logger output.
    *
-   * Note: When {@link EnvironmentConfig.debug} is enabled, ApiKit forces the global
-   * logger level to `"trace"`; transport levels still apply.
-   *
-   * @default 'info'
+   * @optional
+   * @default false
    */
-  level?: Level;
+  disabled: boolean;
+
+  /**
+   * Logger output transports.
+   *
+   * @optional
+   * @default []
+   */
+  transports: TransportOptions[];
 }
 
-/**
- * Console Transport
- */
+export type TransportOptions = ConsoleTransportOptions | FileTransportOptions;
 
-/**
- * Console transport using `pino-pretty` formatter.
- */
+export interface BaseTransportOptions {
+  /**
+   * Minimum log level written by this transport.
+   *
+   * @optional
+   * @default "info"
+   */
+  level: Level;
+}
+
 export interface ConsoleTransportOptions extends BaseTransportOptions {
   /**
    * Transport type: console.
+   *
+   * @required
    */
   type: 'console';
 
   /**
-   * Specifies the target transport.
-   * Must be 'pino-pretty' for pretty output.
+   * Pino transport target used for formatted console output.
+   *
+   * @required
    */
   target: 'pino-pretty';
 
   /**
-   * Options for formatting console output.
-   * Taken directly from `pino-pretty` typings.
+   * Console output formatting options.
+   *
+   * @optional
+   * @default {}
    */
-  pretty?: PrettyOptions;
+  pretty: PrettyOptions;
 }
-
-/**
- * File Transport
- */
 
 export interface FileTransportOptions extends BaseTransportOptions {
   /**
    * Transport type: file.
+   *
+   * @required
    */
   type: 'file';
 
   /**
    * Environment variable key that contains the log file path.
    *
-   * The resolved path value:
-   * - Absolute paths are used as-is.
-   * - Relative paths are resolved against `process.cwd()`.
-   *
    * @required
+   *
    * @example "LOGGER_PATH"
    */
   envPathKey: string;
-}
-
-/**
- * Logger Configuration
- */
-
-export type TransportOptions = ConsoleTransportOptions | FileTransportOptions;
-
-export interface LoggerConfig {
-  /**
-   * Whether logging is disabled.
-   *
-   * @default false
-   */
-  disabled?: boolean;
-
-  /**
-   * A list of transport configurations for the logger.
-   * Each transport can have its own type and options.
-   */
-  transports: TransportOptions[];
 }

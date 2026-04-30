@@ -3,50 +3,50 @@ import type {
   EnvironmentConfig,
   I18nConfig,
   LoggerConfig,
+  MetricsConfig,
   ServerConfig,
   StaticFilesConfig,
 } from '@/configuration/configs';
 
 export interface ApiKitConfig {
   /**
-   * The output directory where the generated API files will be stored.
-   *
-   * @default "apikit-runtime"
+   * Directory where generated ApiKit runtime files are written.
    */
   outDir: string;
 
   /**
-   * A list of environment configurations.
-   * Each environment defines specific settings for different runtime contexts.
+   * Environment configurations available to ApiKit.
    */
   environments: readonly EnvironmentConfig[];
 
   /**
-   * Server configurations mapped by environment or custom keys.
-   * Defines settings such as host, port, and other server options.
+   * Server configurations mapped by environment name.
    */
   server: Record<string, ServerConfig>;
 
   /**
-   * Logger configurations mapped by environment or custom keys.
-   * Defines logging behavior such as log level, output format, etc.
+   * Logger configurations mapped by environment name.
    */
   logger: Record<string, LoggerConfig>;
 
   /**
-   * Email configurations
-   * Defines email template base paths and whether email sending is enabled.
-   *
+   * Metrics configurations mapped by environment name.
+   */
+  metrics: Record<string, MetricsConfig>;
+
+  /**
+   * Email configuration.
    */
   email: EmailConfig;
 
   /**
-   * Localization/i18n configuration for register custom file entries.
+   * Localization configuration.
    */
   i18n?: I18nConfig;
 
   /**
-   * Static files configuration
+   * Static file serving configuration.
+   *
    */
   staticFiles?: StaticFilesConfig;
 }

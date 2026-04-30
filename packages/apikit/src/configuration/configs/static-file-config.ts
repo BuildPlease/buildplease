@@ -2,56 +2,75 @@ import type { FastifyStaticOptions } from '@fastify/static';
 
 export interface StaticFilesConfig {
   /**
-   * Enable static file serving.
+   * Enables static file serving.
+   *
+   * @optional
    * @default true
    */
-  enabled?: boolean;
+  enabled: boolean;
 
   /**
-   * Absolute or resolved path to static assets.
+   * Root directory containing static files.
+   *
+   * @required
+   *
    * @example resolvePath(import.meta.url, './src/public')
    */
   rootPath: string;
 
   /**
-   * Route prefix for serving static files.
-   * @default '/'
+   * URL prefix used to serve static files.
+   *
+   * @optional
+   * @default "/"
    */
-  routePrefix?: string;
+  routePrefix: string;
 
   /**
-   * Cache control max-age (in seconds).
-   * @default 3600 (1 hour)
+   * Cache-Control max-age value in seconds.
+   *
+   * @optional
+   * @default 3600
    */
-  maxAge?: number;
+  maxAge: number;
 
   /**
-   * How to treat dotfiles.
-   * @default 'ignore'
+   * Controls how dotfiles are handled.
+   *
+   * @optional
+   * @default "ignore"
    */
-  dotfiles?: FastifyStaticOptions['dotfiles'];
+  dotfiles: FastifyStaticOptions['dotfiles'];
 
   /**
-   * Enable HTTP ETag headers.
+   * Enables HTTP ETag headers.
+   *
+   * @optional
    * @default true
    */
-  etag?: boolean;
+  etag: boolean;
 
   /**
-   * Mark static assets as immutable.
+   * Marks served files as immutable.
+   *
+   * @optional
    * @default true
    */
-  immutable?: boolean;
+  immutable: boolean;
 
   /**
-   * Attach `reply.sendFile()` helper to Fastify reply object.
+   * Adds static file helpers to Fastify replies.
+   *
+   * @optional
    * @default true
    */
-  decorateReply?: boolean;
+  decorateReply: boolean;
 
   /**
-   * Serve `.gz` or `.br` pre-compressed files if available.
+   * Serves pre-compressed files when matching files are available.
+   *
+   * @optional
    * @default false
    */
-  preCompressed?: boolean;
+  preCompressed: boolean;
 }

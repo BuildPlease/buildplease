@@ -1,6 +1,5 @@
 import path from 'node:path';
 
-import { ApiKitConfigDefaults } from '@internal/configuration';
 import { filterObject, isEmptyObject, isError, isObject, isPrimitive } from '@meawkit/core';
 import { ensureDirectory, env, resolvePath } from '@meawkit/core/node';
 import { inject, injectable } from 'inversify';
@@ -269,43 +268,35 @@ export class LoggerControllerImpl implements LoggerController {
     };
   }
 
-  private makeTransportLevel(requested?: Level): Level {
+  private makeTransportLevel(requested: Level): Level {
     if (this.configuration.isDebug) return 'trace';
-    return requested ?? ApiKitConfigDefaults.logger.defaultLevel;
+    return requested;
   }
 
   /**
    * Resolves the effective global Pino log level.
    *
-   * The global level is a **threshold**: Pino will drop any log calls below it
-   * before they ever reach transports. To avoid accidentally filtering out logs
-   * that a transport is configured to accept, we pick the most permissive
-   * (lowest) level across all configured transports.
+   * The global level is a threshold: Pino drops log calls below this level
+   * before they reach transports. To avoid filtering logs too early, ApiKit
+   * uses the most permissive transport level.
    *
    * Debug override:
-   * - When {@link ApiKitController.isDebug} is enabled, the global level is forced
-   *   to `"trace"` so nothing is filtered globally.
-   * - Individual transport {@link BaseTransportOptions.level | levels} still apply
-   *   (e.g. file can stay at `"info"` while console shows `"trace"`).
+   * - When debug mode is enabled, the global level is forced to `"trace"`.
+   * - Individual transport levels are resolved by `makeTransportLevel`.
    *
    * @param transports
    *   Configured logger transport definitions.
    *
    * @returns
-   *   The effective global Pino level (defaults to `"info"` when no transport level is set).
-   *
-   * @example
-   * // Console wants "debug", file wants "warn" → global must be "debug"
-   * // so debug logs are not filtered out before reaching console.
-   * const level = resolveGlobalLogLevel([
-   *   { type: 'console', level: 'debug', target: 'pino-pretty', pretty: {} },
-   *   { type: 'file', level: 'warn', envPathKey: 'LOGGER_PATH' }
-   * ]);
-   * // level === 'debug'
+   *   The effective global Pino level.
+   *   Returns `"info"` when no transports are configured.
    */
   private makeGlobalLogLevel(transports: TransportOptions[]): Level {
-    // In debug mode, do not globally filter anything.
     if (this.configuration.isDebug) return 'trace';
+
+    const firstTransport = transports.at(0);
+    const fallbackLevel: Level = 'info';
+    if (!firstTransport) return fallbackLevel;
 
     const weights = {
       trace: 0,
@@ -316,10 +307,10 @@ export class LoggerControllerImpl implements LoggerController {
       fatal: 5,
     } satisfies Record<Level, number>;
 
-    let lowest: Level = ApiKitConfigDefaults.logger.defaultLevel;
+    let lowest = this.makeTransportLevel(firstTransport.level);
 
-    for (const t of transports) {
-      const effective = this.makeTransportLevel(t.level);
+    for (const transport of transports.slice(1)) {
+      const effective = this.makeTransportLevel(transport.level);
       if (weights[effective] < weights[lowest]) lowest = effective;
     }
 

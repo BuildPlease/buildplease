@@ -23,28 +23,16 @@ const staticFilesPlugin: FastifyPluginAsync<ServerPluginOptions> = async (fastif
   const resolvedPath = path.isAbsolute(rootPath) ? rootPath : resolvePath(process.cwd(), rootPath);
   const root = ensureDirectory(resolvedPath);
 
-  // MARK: - Options with defaults
-  const {
-    routePrefix = '/',
-    maxAge = 3600,
-    enabled = true,
-    dotfiles = 'ignore',
-    decorateReply = true,
-    immutable = true,
-    etag = true,
-    preCompressed = false,
-  } = config;
-
   const pluginOptions: FastifyStaticOptions = {
     root: root,
-    prefix: routePrefix,
-    maxAge: maxAge,
-    serve: enabled,
-    dotfiles: dotfiles,
-    decorateReply: decorateReply,
-    immutable: immutable,
-    etag: etag,
-    preCompressed: preCompressed,
+    prefix: config.routePrefix,
+    maxAge: config.maxAge,
+    serve: config.enabled,
+    dotfiles: config.dotfiles,
+    decorateReply: config.decorateReply,
+    immutable: config.immutable,
+    etag: config.etag,
+    preCompressed: config.preCompressed,
   };
 
   await fastify.register(fastifyStatic, pluginOptions);

@@ -2,6 +2,7 @@ import fpCookie from './cookie';
 import fpIp from './ip';
 import fpLogger from './logger';
 import fpMetadata from './metadata';
+import fpMetrics from './metrics';
 import fpScope from './scope';
 import fpStaticFiles from './static';
 import fpView from './view';
@@ -15,6 +16,7 @@ export const FastifyPlugins = {
   ip: fpIp,
   logger: fpLogger,
   metadata: fpMetadata,
+  metrics: fpMetrics,
   scope: fpScope,
   staticFiles: fpStaticFiles,
   view: fpView,

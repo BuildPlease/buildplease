@@ -3,6 +3,7 @@ import type {
   EnvironmentConfig,
   I18nConfig,
   LoggerConfig,
+  MetricsConfig,
   ServerConfig,
   StaticFilesConfig,
 } from '@/configuration';
@@ -13,6 +14,7 @@ declare global {
     environmentConfig: EnvironmentConfig;
     loggerConfig: LoggerConfig;
     serverConfig: ServerConfig;
+    metricsConfig: MetricsConfig;
     emailConfig: EmailConfig;
     i18nConfig?: I18nConfig;
     staticFilesConfig?: StaticFilesConfig;

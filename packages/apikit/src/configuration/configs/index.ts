@@ -1,6 +1,7 @@
 export * from './email-config';
 export * from './environment-config';
 export * from './i18n-config';
+export * from './metrics-config';
 export * from './logger-config';
 export * from './server-config';
 export * from './static-file-config';
