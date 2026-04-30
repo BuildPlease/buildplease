@@ -35,29 +35,29 @@
     "typecheck": "vue-tsc --noEmit && cd playground && vue-tsc --noEmit"
   },
   "dependencies": {
-    "@iconify-json/flag": "1.2.11",
+    "@iconify-json/flag": "1.2.12",
     "@meawkit/webkit": "workspace:^",
-    "@nuxt/kit": "4.4.2",
+    "@nuxt/kit": "4.4.4",
     "consola": "3.4.2",
-    "defu": "6.1.6"
+    "defu": "6.1.7"
   },
   "devDependencies": {
     "@meawkit/identity": "workspace:^",
     "@nuxt/devtools": "3.2.4",
     "@nuxt/module-builder": "1.0.2",
-    "@nuxt/schema": "4.4.2",
-    "nuxt": "4.4.2",
+    "@nuxt/schema": "4.4.4",
+    "nuxt": "4.4.4",
     "unbuild": "3.6.1",
-    "vitest": "4.1.2",
-    "vue-tsc": "3.2.6"
+    "vitest": "4.1.5",
+    "vue-tsc": "3.2.7"
   },
   "peerDependencies": {
-    "@nuxt/ui": "^4.6.1",
-    "@nuxtjs/i18n": "^10.2.4",
+    "@nuxt/ui": "^4.7.1",
+    "@nuxtjs/i18n": "^10.3.0",
     "inversify": "^8.1.0",
     "reflect-metadata": "^0.2.2",
-    "vue-i18n": "^11.3.1",
-    "zod": "^4.3.6"
+    "vue-i18n": "^11.4.0",
+    "zod": "^4.4.1"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"

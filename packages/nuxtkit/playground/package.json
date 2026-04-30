@@ -9,13 +9,13 @@
     "generate": "nuxi generate"
   },
   "dependencies": {
-    "@iconify-json/lucide": "1.2.101",
-    "zod": "4.3.6"
+    "@iconify-json/lucide": "1.2.105",
+    "zod": "4.4.1"
   },
   "devDependencies": {
     "@meawkit/nuxtkit": "workspace:^",
-    "@nuxt/ui": "4.6.1",
-    "@nuxtjs/i18n": "10.2.4",
-    "nuxt": "4.4.2"
+    "@nuxt/ui": "4.7.1",
+    "@nuxtjs/i18n": "10.3.0",
+    "nuxt": "4.4.4"
   }
 }
