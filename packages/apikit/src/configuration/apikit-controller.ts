@@ -1,121 +1,100 @@
 import { injectable } from 'inversify';
 
 import type {
+  ApiKitRuntimeConfig,
+  BasicAuthConfig,
+  CorsConfig,
   EmailConfig,
-  EnvironmentConfig,
   I18nConfig,
   LoggerConfig,
   MetricsConfig,
+  MultipartConfig,
   ServerConfig,
   StaticFilesConfig,
-} from '@/configuration';
+} from './configs';
+import type { ConfigurationContract } from './core/configuration';
+import type { EnvironmentConfig } from './core/environments';
+import { getResolvedConfiguration } from './core/registry';
+
+// MARK: - Public
 
 export interface ApiKitController {
   get isDebug(): boolean;
+  get runtime(): ApiKitRuntimeConfig;
   get environment(): EnvironmentConfig;
   get logger(): LoggerConfig;
   get server(): ServerConfig;
   get metrics(): MetricsConfig;
   get email(): EmailConfig;
-  get i18n(): I18nConfig | undefined;
-  get staticFiles(): StaticFilesConfig | undefined;
+  get i18n(): I18nConfig;
+  get staticFiles(): StaticFilesConfig;
+  get basicAuth(): BasicAuthConfig;
+  get cors(): CorsConfig;
+  get multipart(): MultipartConfig;
+
+  get<T>(configuration: ConfigurationContract<T, any>): T;
+  optional<T>(configuration: ConfigurationContract<T, any>): T | undefined;
 }
 
 @injectable()
 export class ApiKitControllerImpl implements ApiKitController {
-  private readonly _isDebug: boolean;
-  private readonly _environment: EnvironmentConfig;
-  private readonly _logger: LoggerConfig;
-  private readonly _server: ServerConfig;
-  private readonly _metrics: MetricsConfig;
-  private readonly _email: EmailConfig;
-  private readonly _i18n?: I18nConfig;
-  private readonly _staticFiles?: StaticFilesConfig;
-
-  constructor() {
-    this._isDebug = this.loadDebug();
-    this._environment = this.loadEnvironmentConfig();
-    this._logger = this.loadLoggerConfig();
-    this._server = this.loadServerConfig();
-    this._metrics = this.loadMetricsConfig();
-    this._email = this.loadEmailConfig();
-    this._i18n = this.loadI18nConfig();
-    this._staticFiles = this.loadStaticFilesConfig();
+  public get isDebug(): boolean {
+    return global.apikit.runtimeConfig.debug;
   }
 
-  get isDebug(): boolean {
-    return this._isDebug;
+  public get runtime(): ApiKitRuntimeConfig {
+    return global.apikit.runtimeConfig;
   }
 
-  get environment(): EnvironmentConfig {
-    return this._environment;
+  public get environment(): EnvironmentConfig {
+    return global.apikit.environmentConfig;
   }
 
-  get logger(): LoggerConfig {
-    return this._logger;
+  public get logger(): LoggerConfig {
+    return global.apikit.loggerConfig;
   }
 
-  get server(): ServerConfig {
-    return this._server;
+  public get server(): ServerConfig {
+    return global.apikit.serverConfig;
   }
 
-  get metrics(): MetricsConfig {
-    return this._metrics;
+  public get metrics(): MetricsConfig {
+    return global.apikit.metricsConfig;
   }
 
-  get email(): EmailConfig {
-    return this._email;
+  public get email(): EmailConfig {
+    return global.apikit.emailConfig;
   }
 
-  get i18n(): I18nConfig | undefined {
-    return this._i18n;
+  public get i18n(): I18nConfig {
+    return global.apikit.i18nConfig;
   }
 
-  get staticFiles(): StaticFilesConfig | undefined {
-    return this._staticFiles;
+  public get staticFiles(): StaticFilesConfig {
+    return global.apikit.staticFilesConfig;
   }
 
-  // MARK: - Private loaders
-
-  private loadDebug(): boolean {
-    return global.apikit.isDebug;
+  public get basicAuth(): BasicAuthConfig {
+    return global.apikit.basicAuthConfig;
   }
 
-  private loadEnvironmentConfig(): EnvironmentConfig {
-    const config = global.apikit?.environmentConfig;
-    if (!config) throw new Error('Environment config is missing.');
-    return config;
+  public get cors(): CorsConfig {
+    return global.apikit.corsConfig;
   }
 
-  private loadLoggerConfig(): LoggerConfig {
-    const config = global.apikit?.loggerConfig;
-    if (!config) throw new Error('Logger config is missing.');
-    return config;
+  public get multipart(): MultipartConfig {
+    return global.apikit.multipartConfig;
   }
 
-  private loadServerConfig(): ServerConfig {
-    const config = global.apikit?.serverConfig;
-    if (!config) throw new Error('Server config is missing.');
-    return config;
+  public get<T>(configuration: ConfigurationContract<T, any>): T {
+    const value = getResolvedConfiguration(configuration);
+
+    if (value === undefined) throw new Error('Configuration is missing.');
+
+    return value;
   }
 
-  private loadMetricsConfig(): MetricsConfig {
-    const config = global.apikit?.metricsConfig;
-    if (!config) throw new Error('Metrics config is missing.');
-    return config;
-  }
-
-  private loadEmailConfig(): EmailConfig {
-    const config = global.apikit?.emailConfig;
-    if (!config) throw new Error('Email config is missing.');
-    return config;
-  }
-
-  private loadI18nConfig(): I18nConfig | undefined {
-    return global.apikit?.i18nConfig;
-  }
-
-  private loadStaticFilesConfig(): StaticFilesConfig | undefined {
-    return global.apikit?.staticFilesConfig;
+  public optional<T>(configuration: ConfigurationContract<T, any>): T | undefined {
+    return getResolvedConfiguration(configuration);
   }
 }

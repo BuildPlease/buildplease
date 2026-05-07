@@ -1,7 +1,7 @@
 import path from 'node:path';
 
 import { filterObject, isEmptyObject, isError, isObject, isPrimitive } from '@meawkit/core';
-import { ensureDirectory, env, resolvePath } from '@meawkit/core/node';
+import { ensureDirectory, resolvePath } from '@meawkit/core/node';
 import { inject, injectable } from 'inversify';
 import pino, { type Bindings, type Level, type Logger, type LoggerOptions } from 'pino';
 
@@ -37,50 +37,41 @@ export class LoggerControllerImpl implements LoggerController {
     this.instance = this.makeInstance();
   }
 
-  // MARK: - Public
-
-  public info(title: string, options?: LogOptions) {
+  public info(title: string, options?: LogOptions): void {
     this.log('info', title, options);
   }
 
-  public debug(title: string, options?: LogOptions) {
+  public debug(title: string, options?: LogOptions): void {
     this.log('debug', title, options);
   }
 
-  public trace(title: string, options?: LogOptions) {
+  public trace(title: string, options?: LogOptions): void {
     this.log('trace', title, options);
   }
 
-  public warn(title: string, options?: LogOptions) {
+  public warn(title: string, options?: LogOptions): void {
     this.log('warn', title, options);
   }
 
-  public error(title: string, options?: LogOptions) {
+  public error(title: string, options?: LogOptions): void {
     this.log('error', title, options);
   }
 
-  public fatal(title: string, options?: LogOptions) {
+  public fatal(title: string, options?: LogOptions): void {
     this.log('fatal', title, options);
   }
 
-  public child(bindings: Bindings) {
+  public child(bindings: Bindings): Logger {
     return this.instance.child(bindings);
   }
 
-  // MARK: - Private: Log
-
-  private log(level: pino.Level, title: string, options?: LogOptions) {
+  private log(level: pino.Level, title: string, options?: LogOptions): void {
     const logData: Record<string, unknown> = {};
 
-    if (options?.flag) {
-      logData.flag = options.flag;
-    }
-    if (options?.details) {
-      logData.details = this.formatDetails(options.details);
-    }
-    if (options?.error) {
-      logData.error = this.formatError(options.error);
-    }
+    if (options?.flag) logData.flag = options.flag;
+    if (options?.details) logData.details = this.formatDetails(options.details);
+    if (options?.error) logData.error = this.formatError(options.error);
+
     if (options?.metadata) {
       const formatted = this.formatMetadata(options.metadata);
       if (formatted) logData.metadata = formatted;
@@ -128,18 +119,7 @@ export class LoggerControllerImpl implements LoggerController {
     return isEmptyObject(filtered) ? undefined : filtered;
   }
 
-  /**
-   * Normalizes arbitrary values into JSON-safe structures.
-   *
-   * - Error instances → { type, message, stack, ...extras }
-   * - Buffer → "[Buffer]"
-   * - Stream → "[Stream]"
-   * - Plain object → deep-cloned JSON
-   * - Primitive → { type, value }
-   * - Fallback → { type, value: String(value) }
-   */
   private formatUnknown(value: unknown): unknown {
-    // Errors
     if (isError(value)) {
       const base: Record<string, unknown> = {
         type: value.constructor.name,
@@ -160,13 +140,9 @@ export class LoggerControllerImpl implements LoggerController {
       return Object.keys(extras).length > 0 ? { ...base, ...extras } : base;
     }
 
-    // Buffers
     if (Buffer.isBuffer(value)) return '[Buffer]';
+    if (value && typeof (value as { readonly pipe?: unknown }).pipe === 'function') return '[Stream]';
 
-    // Streams
-    if (value && typeof (value as any).pipe === 'function') return '[Stream]';
-
-    // Plain objects
     if (isObject(value)) {
       try {
         return JSON.parse(JSON.stringify(value));
@@ -175,64 +151,50 @@ export class LoggerControllerImpl implements LoggerController {
       }
     }
 
-    // Primitives
     if (isPrimitive(value)) return value;
 
-    // Fallback
     return String(value);
   }
 
-  // MARK: - Private: Configuration
-
   private makeInstance(): Logger {
     const config = this.configuration.logger;
-    const transports = config.transports;
 
-    if (!Array.isArray(transports)) {
-      throw new Error('[Logger] Invalid config: "transports" must be an array.');
+    if (!config.enabled) {
+      return pino({
+        enabled: false,
+        timestamp: true,
+      });
     }
 
-    const disabled = config.disabled === true;
-    const enabled = !disabled && transports.length > 0;
+    const transports = config.transports;
     const level = this.makeGlobalLogLevel(transports);
 
     const options: LoggerOptions = {
-      level: level,
-      enabled: enabled,
+      level,
+      enabled: true,
       timestamp: true,
+      transport: {
+        targets: this.makeTransportTargets(transports),
+      },
     };
-
-    if (enabled) {
-      options.transport = { targets: this.makeTransportTargets(transports) };
-    }
 
     return pino(options);
   }
 
-  private makeTransportTargets(input: TransportOptions[]): pino.TransportTargetOptions[] {
-    if (input.filter((t) => t.type === 'console').length > 1) {
+  private makeTransportTargets(input: readonly TransportOptions[]): pino.TransportTargetOptions[] {
+    if (input.filter((transport) => transport.type === 'console').length > 1) {
       throw new Error('[Logger] Multiple console transports are not supported.');
     }
 
-    const transports: pino.TransportTargetOptions[] = [];
-
-    input.forEach((transportConfig) => {
-      const type = transportConfig.type;
-      switch (type) {
+    return input.map((transportConfig) => {
+      switch (transportConfig.type) {
         case 'console':
-          const consoleTransport = this.makeConsoleTransportTarget(transportConfig);
-          transports.push(consoleTransport);
-          break;
+          return this.makeConsoleTransportTarget(transportConfig);
+
         case 'file':
-          const fileTransport = this.makeFileTransportTarget(transportConfig);
-          transports.push(fileTransport);
-          break;
-        default:
-          throw new Error(`Unsupported transport type: ${type}`);
+          return this.makeFileTransportTarget(transportConfig);
       }
     });
-
-    return transports;
   }
 
   private makeConsoleTransportTarget(config: ConsoleTransportOptions): pino.TransportTargetOptions {
@@ -240,18 +202,16 @@ export class LoggerControllerImpl implements LoggerController {
 
     return {
       target: 'pino-pretty',
-      level: level,
+      level,
       options: config.pretty,
     };
   }
 
   private makeFileTransportTarget(config: FileTransportOptions): pino.TransportTargetOptions {
-    const filePath = env(config.envPathKey);
     const level = this.makeTransportLevel(config.level);
-
-    const destination = path.isAbsolute(filePath)
-      ? path.normalize(filePath)
-      : resolvePath(process.cwd(), filePath);
+    const destination = path.isAbsolute(config.path)
+      ? path.normalize(config.path)
+      : resolvePath(process.cwd(), config.path);
 
     ensureDirectory(path.dirname(destination));
 
@@ -261,37 +221,17 @@ export class LoggerControllerImpl implements LoggerController {
 
     return {
       target: 'pino/file',
-      level: level,
-      options: {
-        destination: destination,
-      },
+      level,
+      options: { destination },
     };
   }
 
-  private makeTransportLevel(requested: Level): Level {
+  private makeTransportLevel(requested?: Level): Level {
     if (this.configuration.isDebug) return 'trace';
-    return requested;
+    return requested ?? 'info';
   }
 
-  /**
-   * Resolves the effective global Pino log level.
-   *
-   * The global level is a threshold: Pino drops log calls below this level
-   * before they reach transports. To avoid filtering logs too early, ApiKit
-   * uses the most permissive transport level.
-   *
-   * Debug override:
-   * - When debug mode is enabled, the global level is forced to `"trace"`.
-   * - Individual transport levels are resolved by `makeTransportLevel`.
-   *
-   * @param transports
-   *   Configured logger transport definitions.
-   *
-   * @returns
-   *   The effective global Pino level.
-   *   Returns `"info"` when no transports are configured.
-   */
-  private makeGlobalLogLevel(transports: TransportOptions[]): Level {
+  private makeGlobalLogLevel(transports: readonly TransportOptions[]): Level {
     if (this.configuration.isDebug) return 'trace';
 
     const firstTransport = transports.at(0);

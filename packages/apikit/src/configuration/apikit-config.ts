@@ -1,52 +1,51 @@
+import {
+  type ApiKitRuntimeConfiguration,
+  type BasicAuthConfiguration,
+  type CorsConfiguration,
+  type EmailConfiguration,
+  type I18nConfiguration,
+  type LoggerConfiguration,
+  type MetricsConfiguration,
+  type MultipartConfiguration,
+  type ServerConfiguration,
+  type StaticFilesConfiguration,
+} from './configs';
 import type {
-  EmailConfig,
-  EnvironmentConfig,
-  I18nConfig,
-  LoggerConfig,
-  MetricsConfig,
-  ServerConfig,
-  StaticFilesConfig,
-} from '@/configuration/configs';
+  ConfigurationBinding,
+  ConfigurationContract,
+  ConfigurationInputFromSchema,
+  ConfigurationSchema,
+} from './core/configuration';
+import type { EnvironmentRegistry } from './core/environments';
 
-export interface ApiKitConfig {
-  /**
-   * Directory where generated ApiKit runtime files are written.
-   */
-  outDir: string;
+// MARK: - Public
 
-  /**
-   * Environment configurations available to ApiKit.
-   */
-  environments: readonly EnvironmentConfig[];
+export interface DefineApiKitInput {
+  readonly runtime?: InputOf<typeof ApiKitRuntimeConfiguration>;
+  readonly server: InputOf<typeof ServerConfiguration>;
+  readonly logger?: InputOf<typeof LoggerConfiguration>;
 
-  /**
-   * Server configurations mapped by environment name.
-   */
-  server: Record<string, ServerConfig>;
+  readonly metrics?: InputOf<typeof MetricsConfiguration>;
+  readonly email?: InputOf<typeof EmailConfiguration>;
+  readonly i18n?: InputOf<typeof I18nConfiguration>;
+  readonly staticFiles?: InputOf<typeof StaticFilesConfiguration>;
+  readonly basicAuth?: InputOf<typeof BasicAuthConfiguration>;
+  readonly cors?: InputOf<typeof CorsConfiguration>;
+  readonly multipart?: InputOf<typeof MultipartConfiguration>;
 
-  /**
-   * Logger configurations mapped by environment name.
-   */
-  logger: Record<string, LoggerConfig>;
-
-  /**
-   * Metrics configurations mapped by environment name.
-   */
-  metrics: Record<string, MetricsConfig>;
-
-  /**
-   * Email configuration.
-   */
-  email: EmailConfig;
-
-  /**
-   * Localization configuration.
-   */
-  i18n?: I18nConfig;
-
-  /**
-   * Static file serving configuration.
-   *
-   */
-  staticFiles?: StaticFilesConfig;
+  readonly configurations?: readonly ExtensionConfigurationBinding[];
 }
+
+export interface ApiKitConfig<
+  Environments extends EnvironmentRegistry = EnvironmentRegistry,
+> extends DefineApiKitInput {
+  readonly environments: Environments;
+  readonly configurations: readonly ExtensionConfigurationBinding[];
+}
+
+// MARK: - Private
+
+type InputOf<Contract extends ConfigurationContract<any, ConfigurationSchema>> =
+  Contract extends ConfigurationContract<any, infer Schema> ? ConfigurationInputFromSchema<Schema> : never;
+
+type ExtensionConfigurationBinding = ConfigurationBinding<any, any>;
