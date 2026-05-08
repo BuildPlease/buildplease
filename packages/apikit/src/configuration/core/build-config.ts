@@ -7,15 +7,15 @@ import { isConfigurationSource } from './source';
 // MARK: - Internal
 
 export function getBuildOutDir(config: ApiKitConfig): string {
-  const runtime = config.runtime;
+  const build = config.build;
 
-  if (!runtime || typeof runtime !== 'object' || Array.isArray(runtime) || isConfigurationSource(runtime)) {
-    return ApiKitDefaults.runtime.outDir;
+  if (!build || typeof build !== 'object' || Array.isArray(build) || isConfigurationSource(build)) {
+    return ApiKitDefaults.build.outDir;
   }
 
-  const outDir = (runtime as { readonly outDir?: unknown }).outDir;
+  const outDir = (build as { readonly outDir?: unknown }).outDir;
 
   if (typeof outDir === 'string' && outDir.trim()) return outDir.trim();
 
-  return ApiKitDefaults.runtime.outDir;
+  return ApiKitDefaults.build.outDir;
 }

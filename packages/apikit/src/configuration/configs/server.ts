@@ -2,7 +2,7 @@ import { type InferConfiguration, defineConfiguration, field } from '@/configura
 
 export type TrustProxy = boolean | string | number | string[] | ((address: string, hop: number) => boolean);
 
-export const ServerConfiguration = defineConfiguration({
+export const ServerConfiguration = defineConfiguration('apikit.server', {
   identifier: field.string(),
   host: field.string(),
   port: field.number(),

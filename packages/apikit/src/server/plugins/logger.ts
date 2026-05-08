@@ -6,6 +6,8 @@ import fp from 'fastify-plugin';
 
 import type { ServerPluginOptions } from '@/server';
 
+const pluginName = 'Apikit@logger';
+
 const loggerPlugin: FastifyPluginAsync<ServerPluginOptions> = async (fastify, options) => {
   const logger = options.loggerController;
   const debug = options.apikitController.isDebug;
@@ -63,7 +65,7 @@ const loggerPlugin: FastifyPluginAsync<ServerPluginOptions> = async (fastify, op
 };
 
 export default fp(loggerPlugin, {
-  name: 'apikit-logger',
+  name: pluginName,
 });
 
 function safeSanitize(input: unknown, headers?: Record<string, unknown>) {

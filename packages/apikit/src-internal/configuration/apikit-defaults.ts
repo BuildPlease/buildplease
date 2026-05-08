@@ -6,49 +6,23 @@ import type {
   FastifyMultipartOptions,
 } from '@fastify/multipart';
 import type { FastifyStaticOptions } from '@fastify/static';
-import type { RouteOptions } from 'fastify';
 import type { InitOptions } from 'i18next';
 import type { Level } from 'pino';
 
-type BasicAuthOptions = Omit<FastifyBasicAuthOptions, 'validate' | 'authenticate'>;
-type CorsOptions = Omit<FastifyCorsOptions, 'origin'>;
+type CorsOptions = FastifyCorsOptions;
 
 type MultipartOptions =
   | FastifyMultipartBaseOptions
   | FastifyMultipartOptions
   | FastifyMultipartAttachFieldsToBodyOptions;
 
-type StaticFilesDotfilesMode = NonNullable<FastifyStaticOptions['dotfiles']>;
-
-interface MetricsDefaultConfig {
-  enabled: boolean;
-}
-
-interface MetricsRouteConfig {
-  enabled?:
-    | boolean
-    | {
-        histogram?: boolean;
-        summary?: boolean;
-      };
-
-  registeredRoutesOnly?: boolean;
-  groupStatusCodes?: boolean;
-  routeBlacklist?: (string | RegExp)[];
-  methodBlacklist?: string[];
-  invalidRouteGroup?: string;
-}
-
 type I18nFallbackLanguages = Extract<
   NonNullable<InitOptions<object>['fallbackLng']>,
   string | readonly string[]
 >;
 
-type I18nLoadMode = NonNullable<InitOptions<object>['load']>;
-type I18nPreload = NonNullable<InitOptions<object>['preload']>;
-
 interface ApiKitDefaultsSchema {
-  runtime: {
+  build: {
     debug: boolean;
     outDir: string;
     environmentFileDir: string;
@@ -90,8 +64,8 @@ interface ApiKitDefaultsSchema {
     fallbackLanguages: I18nFallbackLanguages;
     supportedLanguages: string[];
 
-    load: I18nLoadMode;
-    preload: I18nPreload;
+    load: NonNullable<InitOptions<object>['load']>;
+    preload: NonNullable<InitOptions<object>['preload']>;
     nonExplicitSupportedLngs: boolean;
     lowerCaseLng: boolean;
     cleanCode: boolean;
@@ -108,7 +82,7 @@ interface ApiKitDefaultsSchema {
     enabled: boolean;
     routePrefix: string;
     maxAge: number;
-    dotfiles: StaticFilesDotfilesMode;
+    dotfiles: NonNullable<FastifyStaticOptions['dotfiles']>;
     etag: boolean;
     immutable: boolean;
     decorateReply: boolean;
@@ -117,15 +91,16 @@ interface ApiKitDefaultsSchema {
 
   basicAuth: {
     enabled: boolean;
-    authenticate: boolean;
-    realm: string;
-    options: BasicAuthOptions;
+    authenticate: NonNullable<FastifyBasicAuthOptions['authenticate']>;
+    proxyMode: boolean;
+    header: string | undefined;
+    strictCredentials: boolean | undefined;
   };
 
   cors: {
     enabled: boolean;
-    isDevelopment: boolean;
-    allowedOrigins: string[];
+    allowAllOrigins: boolean;
+    includeWwwSubdomain: boolean;
     options: CorsOptions;
   };
 
@@ -136,9 +111,9 @@ interface ApiKitDefaultsSchema {
 }
 
 export const ApiKitDefaults: ApiKitDefaultsSchema = {
-  runtime: {
+  build: {
     debug: false,
-    outDir: 'apikit-runtime',
+    outDir: '.apikit',
     environmentFileDir: process.cwd(),
   },
 
@@ -206,14 +181,15 @@ export const ApiKitDefaults: ApiKitDefaultsSchema = {
   basicAuth: {
     enabled: false,
     authenticate: false,
-    realm: 'Access to the site',
-    options: {},
+    proxyMode: false,
+    header: undefined,
+    strictCredentials: undefined,
   },
 
   cors: {
     enabled: false,
-    isDevelopment: false,
-    allowedOrigins: [],
+    allowAllOrigins: false,
+    includeWwwSubdomain: true,
     options: {
       methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
       credentials: true,

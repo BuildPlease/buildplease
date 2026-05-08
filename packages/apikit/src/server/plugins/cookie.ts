@@ -2,6 +2,8 @@ import fastifyCookie from '@fastify/cookie';
 import type { FastifyPluginAsync } from 'fastify';
 import fp from 'fastify-plugin';
 
+const pluginName = 'Apikit@cookie';
+
 const cookiePlugin: FastifyPluginAsync = async (fastify) => {
   await fastify.register(fastifyCookie, {
     hook: 'onRequest',
@@ -10,5 +12,5 @@ const cookiePlugin: FastifyPluginAsync = async (fastify) => {
 };
 
 export default fp(cookiePlugin, {
-  name: 'apikit_@fastify/cookie',
+  name: pluginName,
 });

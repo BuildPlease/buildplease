@@ -5,7 +5,7 @@ import { type InferConfiguration, defineConfiguration, field } from '@/configura
 
 export type StaticFilesDotfilesMode = NonNullable<FastifyStaticOptions['dotfiles']>;
 
-export const StaticFilesConfiguration = defineConfiguration({
+export const StaticFilesConfiguration = defineConfiguration('apikit.staticFiles', {
   enabled: field.boolean().default(ApiKitDefaults.staticFiles.enabled),
   publicDirectory: field.string().optional(),
 

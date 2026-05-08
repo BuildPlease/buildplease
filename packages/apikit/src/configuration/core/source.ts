@@ -33,24 +33,24 @@ export function defineSource<const Environments extends Record<string, unknown>>
   type EnvironmentName = keyof Environments & string;
 
   return {
-    env(name: string): ConfigurationSource<string | undefined> {
-      return makeSource('env', { name });
+    env(name: string): ConfigurationSource<string> {
+      return makeSource('env', { name: name });
     },
 
     byEnvironment<const Cases extends { readonly [Key in EnvironmentName]: unknown }>(
       cases: Cases,
-    ): ConfigurationSource<Cases[EnvironmentName]> {
-      return makeSource('by-environment', { cases });
+    ): ConfigurationSource<InferSourceOutput<Cases[EnvironmentName]>> {
+      return makeSource('by-environment', { cases: cases });
     },
 
     compute<Output>(
       compute: (context: ConfigurationResolveContext<EnvironmentName>) => Output | Promise<Output>,
     ): ConfigurationSource<Output> {
-      return makeSource('compute', { compute });
+      return makeSource('compute', { compute: compute });
     },
 
     static<Output>(value: Output): ConfigurationSource<Output> {
-      return makeSource('static', { value });
+      return makeSource('static', { value: value });
     },
   };
 }
@@ -71,6 +71,19 @@ type ConfigurationSourceTransform = (
   value: unknown,
   context: ConfigurationResolveContext,
 ) => unknown | Promise<unknown>;
+
+type InferSourceOutput<T> =
+  T extends ConfigurationSource<infer Output>
+    ? Output
+    : T extends (...args: any[]) => any
+      ? T
+      : T extends readonly [unknown, ...unknown[]]
+        ? { readonly [Key in keyof T]: InferSourceOutput<T[Key]> }
+        : T extends readonly (infer Item)[]
+          ? readonly InferSourceOutput<Item>[]
+          : T extends object
+            ? { readonly [Key in keyof T]: InferSourceOutput<T[Key]> }
+            : T;
 
 function makeSource<Output>(
   kind: ConfigurationSourceKind,

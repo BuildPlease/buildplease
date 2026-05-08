@@ -34,6 +34,7 @@ export type LoggerConfigurationValue =
     };
 
 export const LoggerConfiguration = defineConfiguration(
+  'apikit.logger',
   field.custom<LoggerConfigurationValue>().default({
     enabled: ApiKitDefaults.logger.enabled,
   }),

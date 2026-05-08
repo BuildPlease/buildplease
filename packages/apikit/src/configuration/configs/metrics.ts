@@ -24,7 +24,7 @@ export interface MetricsRouteConfig {
   readonly invalidRouteGroup?: string;
 }
 
-export const MetricsConfiguration = defineConfiguration({
+export const MetricsConfiguration = defineConfiguration('apikit.metrics', {
   enabled: field.boolean().default(ApiKitDefaults.metrics.enabled),
   endpoint: field.custom<MetricsEndpoint>().default(ApiKitDefaults.metrics.endpoint),
   name: field.string().default(ApiKitDefaults.metrics.name),

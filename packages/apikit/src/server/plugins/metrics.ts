@@ -4,7 +4,7 @@ import fp from 'fastify-plugin';
 
 import type { ServerPluginOptions } from '@/server';
 
-const pluginName = 'apikit_fastify-metrics';
+const pluginName = 'Apikit@metrics';
 
 const metricsPlugin: FastifyPluginAsync<ServerPluginOptions> = async (fastify, options) => {
   const config = options.apikitController.metrics;

@@ -41,6 +41,8 @@ export default defineConfig([
   },
 ]);
 
+// MARK: - Locales
+
 async function copyLocales(): Promise<void> {
   const sourceLocalesDir = resolvePath(import.meta.url, './src/i18n/locales');
   const destLocalesDir = resolvePath(import.meta.url, `./${outDir}/locales`);

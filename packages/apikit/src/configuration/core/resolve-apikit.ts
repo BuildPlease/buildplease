@@ -1,7 +1,7 @@
 import {
   type ApiKitConfig,
-  type ApiKitRuntimeConfig,
   type BasicAuthConfig,
+  type BuildConfig,
   type CorsConfig,
   type EmailConfig,
   type I18nConfig,
@@ -10,8 +10,8 @@ import {
   type MultipartConfig,
   type ServerConfig,
   type StaticFilesConfig,
-  ApiKitRuntimeConfiguration,
   BasicAuthConfiguration,
+  BuildConfiguration,
   CorsConfiguration,
   EmailConfiguration,
   I18nConfiguration,
@@ -38,8 +38,8 @@ export interface ResolveApikitOptions {
 }
 
 export interface ResolvedApiKitConfig {
-  readonly runtime: ApiKitRuntimeConfig;
   readonly environment: EnvironmentConfig;
+  readonly build: BuildConfig;
 
   readonly basicAuth: BasicAuthConfig;
   readonly cors: CorsConfig;
@@ -54,17 +54,24 @@ export interface ResolvedApiKitConfig {
 
 // MARK: - Internal
 
-export async function resolveRuntimeConfiguration(
+export async function resolveBuildConfiguration(
   config: ApiKitConfig,
   environmentName: string,
-): Promise<ApiKitRuntimeConfig> {
+): Promise<BuildConfig> {
+  const environmentDefinition = config.environments[environmentName];
+
+  if (!environmentDefinition) {
+    const message = `Unknown environment "${environmentName}". Expected one of ${Object.keys(config.environments).join(', ')}.`;
+    throw new Error(message);
+  }
+
   const environment: EnvironmentConfig = {
     name: environmentName,
-    file: '',
-    fileDir: process.cwd(),
+    file: environmentDefinition.file,
+    fileDir: environmentDefinition.fileDir ?? process.cwd(),
   };
 
-  return resolveConfigurationContract(ApiKitRuntimeConfiguration, config.runtime, {
+  return resolveConfigurationContract(BuildConfiguration, config.build, {
     environment: environment,
   });
 }
@@ -80,6 +87,7 @@ export async function resolveApikit(
     packageJson: options.packageJson,
   };
 
+  const build = await resolveConfigurationContract(BuildConfiguration, config.build, resolveOptions);
   const cors = await resolveConfigurationContract(CorsConfiguration, config.cors, resolveOptions);
   const server = await resolveConfigurationContract(ServerConfiguration, config.server, resolveOptions);
   const logger = await resolveConfigurationContract(LoggerConfiguration, config.logger, resolveOptions);
@@ -101,15 +109,14 @@ export async function resolveApikit(
     config.multipart,
     resolveOptions,
   );
-  const runtime = await resolveConfigurationContract(
-    ApiKitRuntimeConfiguration,
-    config.runtime,
-    resolveOptions,
-  );
 
   for (const binding of config.configurations) {
+    if (binding.contract.key.startsWith('apikit.')) {
+      throw new Error(`Configuration key "${binding.contract.key}" is reserved for ApiKit.`);
+    }
+
     if (hasResolvedConfiguration(binding.contract)) {
-      throw new Error('Configuration is registered more than once.');
+      throw new Error(`Configuration "${binding.contract.key}" is registered more than once.`);
     }
 
     const value = await resolveConfigurationBinding(binding, resolveOptions);
@@ -118,8 +125,8 @@ export async function resolveApikit(
   }
 
   return {
-    runtime: runtime,
     environment: options.environment,
+    build: build,
     server: server,
     logger: logger,
     metrics: metrics,

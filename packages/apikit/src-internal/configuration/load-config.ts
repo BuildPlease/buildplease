@@ -36,9 +36,6 @@ export async function loadConfig(dir?: string, configName?: string): Promise<Api
 }
 
 function assertApiKitConfig(input: unknown, file: string): ApiKitConfig {
-  if (input == null) {
-    throw new Error(`ApiKit config is missing (${file})`);
-  }
-
+  if (input == null) throw new Error(`ApiKit config is missing (${file})`);
   return input as ApiKitConfig;
 }

@@ -11,7 +11,8 @@ import { FastifyPlugins } from './plugins';
 
 const LOG_PREFIX = '[Server]';
 
-// MARK: - Plugins Options
+// MARK: - Plugin Options
+
 export interface ServerPluginBaseOptions {
   i18nController: I18nController;
   loggerController: LoggerController;
@@ -20,9 +21,16 @@ export interface ServerPluginBaseOptions {
 
 export type ServerPluginOptions<TExtras extends object = {}> = ServerPluginBaseOptions & TExtras;
 
+export type ServerPluginExternalHook = (
+  instance: FastifyInstance,
+  options: ServerPluginOptions,
+) => Promise<void>;
+
 export interface ServerController {
   get instance(): FastifyInstance;
-  preparePlugins(registerExternal?: (instance: FastifyInstance) => Promise<void>): Promise<void>;
+
+  preparePlugins(externalHook?: ServerPluginExternalHook): Promise<void>;
+
   prepare(shutdownHook?: () => Promise<void>): Promise<void>;
   start(): Promise<void>;
 }
@@ -58,12 +66,7 @@ export class ServerControllerImpl implements ServerController {
     return this.server;
   }
 
-  public async preparePlugins(
-    registerExternal: (
-      instance: FastifyInstance,
-      options: ServerPluginOptions,
-    ) => Promise<void> = async () => {},
-  ): Promise<void> {
+  public async preparePlugins(externalHook: ServerPluginExternalHook = async () => {}): Promise<void> {
     const options: ServerPluginOptions = {
       i18nController: this.i18n,
       loggerController: this.logger,
@@ -89,7 +92,7 @@ export class ServerControllerImpl implements ServerController {
       await this.server.register(plugin, options);
     }
 
-    await registerExternal(this.server, options);
+    await externalHook(this.server, options);
 
     for (const plugin of latePlugins) {
       await this.server.register(plugin, options);

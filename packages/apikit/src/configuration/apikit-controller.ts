@@ -1,8 +1,8 @@
 import { injectable } from 'inversify';
 
 import type {
-  ApiKitRuntimeConfig,
   BasicAuthConfig,
+  BuildConfig,
   CorsConfig,
   EmailConfig,
   I18nConfig,
@@ -14,14 +14,15 @@ import type {
 } from './configs';
 import type { ConfigurationContract } from './core/configuration';
 import type { EnvironmentConfig } from './core/environments';
-import { getResolvedConfiguration } from './core/registry';
+import { getResolvedConfiguration, hasResolvedConfiguration } from './core/registry';
 
 // MARK: - Public
 
 export interface ApiKitController {
   get isDebug(): boolean;
-  get runtime(): ApiKitRuntimeConfig;
+  get build(): BuildConfig;
   get environment(): EnvironmentConfig;
+
   get logger(): LoggerConfig;
   get server(): ServerConfig;
   get metrics(): MetricsConfig;
@@ -39,11 +40,11 @@ export interface ApiKitController {
 @injectable()
 export class ApiKitControllerImpl implements ApiKitController {
   public get isDebug(): boolean {
-    return global.apikit.runtimeConfig.debug;
+    return global.apikit.buildConfig.debug;
   }
 
-  public get runtime(): ApiKitRuntimeConfig {
-    return global.apikit.runtimeConfig;
+  public get build(): BuildConfig {
+    return global.apikit.buildConfig;
   }
 
   public get environment(): EnvironmentConfig {
@@ -87,11 +88,11 @@ export class ApiKitControllerImpl implements ApiKitController {
   }
 
   public get<T>(configuration: ConfigurationContract<T, any>): T {
-    const value = getResolvedConfiguration(configuration);
+    if (!hasResolvedConfiguration(configuration)) {
+      throw new Error(`Configuration "${configuration.key}" is missing.`);
+    }
 
-    if (value === undefined) throw new Error('Configuration is missing.');
-
-    return value;
+    return getResolvedConfiguration(configuration) as T;
   }
 
   public optional<T>(configuration: ConfigurationContract<T, any>): T | undefined {

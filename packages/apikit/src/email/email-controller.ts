@@ -127,12 +127,12 @@ export class EmailControllerImpl implements EmailController {
   private makeGlobals(): Record<string, unknown> {
     const clientDefined = this.configuration.email.globals;
 
-    const runtimeDefaults = {
+    const defaults = {
       generatedDate: new Date().toISOString().replace('T', ' ').substring(0, 16) + ' UTC',
     };
 
     return {
-      ...runtimeDefaults,
+      ...defaults,
       ...clientDefined,
     };
   }

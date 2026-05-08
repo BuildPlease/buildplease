@@ -10,6 +10,8 @@ import fpScope from './scope';
 import fpStaticFiles from './static';
 import fpView from './view';
 
+// MARK: - Plugins
+
 export const FastifyPlugins = {
   basicAuth: fpBasicAuth,
   cookie: fpCookie,
@@ -23,3 +25,18 @@ export const FastifyPlugins = {
   staticFiles: fpStaticFiles,
   view: fpView,
 } as const;
+
+// MARK: - Fastify Plugin
+
+export { default as fp } from 'fastify-plugin';
+
+// MARK: - Plugin Exports
+
+export { default as fastifyBasicAuth } from '@fastify/basic-auth';
+export { default as fastifyCookie } from '@fastify/cookie';
+export { default as fastifyCors } from '@fastify/cors';
+export { default as fastifyMultipart } from '@fastify/multipart';
+export { default as fastifyStatic } from '@fastify/static';
+export { default as fastifyView } from '@fastify/view';
+export { default as fastifyIp } from 'fastify-ip';
+export { default as fastifyMetrics } from 'fastify-metrics';

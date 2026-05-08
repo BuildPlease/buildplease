@@ -4,6 +4,8 @@ import fp from 'fastify-plugin';
 import { RequestScope } from '@/request';
 import type { ServerPluginOptions } from '@/server';
 
+const pluginName = 'Apikit@scope';
+
 /**
  * This plugin initializes the per-request AsyncLocalStorage-based RequestScope.
  *
@@ -32,5 +34,5 @@ const requestScopePlugin: FastifyPluginAsync<ServerPluginOptions> = async (fasti
 };
 
 export default fp(requestScopePlugin, {
-  name: 'apikit_scope',
+  name: pluginName,
 });

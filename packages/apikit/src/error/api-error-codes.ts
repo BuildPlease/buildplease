@@ -26,7 +26,7 @@ export type RecursiveErrorTree = {
   [key: string]: RecursiveErrorTree | LocalizedApiError;
 };
 
-// --- Runtime Error Definitions ---
+// MARK: - Error Definitions
 
 export const CommonErrors = defineErrors({
   NOT_FOUND: {

@@ -2,7 +2,7 @@ import { ApiKitDefaults } from '@internal/configuration/apikit-defaults';
 
 import { type InferConfiguration, defineConfiguration, field } from '@/configuration/core';
 
-export const EmailConfiguration = defineConfiguration({
+export const EmailConfiguration = defineConfiguration('apikit.email', {
   enabled: field.boolean().default(ApiKitDefaults.email.enabled),
   templatesPath: field.string().default(ApiKitDefaults.email.templatesPath),
   globals: field.custom<Record<string, unknown>>().default(ApiKitDefaults.email.globals),

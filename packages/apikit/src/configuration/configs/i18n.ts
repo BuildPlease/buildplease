@@ -24,7 +24,7 @@ export type I18nFallbackLanguages = Extract<
 export type I18nLoadMode = NonNullable<I18nInitOptions['load']>;
 export type I18nPreload = NonNullable<I18nInitOptions['preload']>;
 
-export const I18nConfiguration = defineConfiguration({
+export const I18nConfiguration = defineConfiguration('apikit.i18n', {
   directories: field.array(field.custom<I18nDirectoryEntry>()).default(ApiKitDefaults.i18n.directories),
   files: field.array(field.custom<I18nFileEntry>()).default(ApiKitDefaults.i18n.files),
 

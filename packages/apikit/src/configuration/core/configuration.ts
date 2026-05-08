@@ -47,6 +47,7 @@ export type ConfigurationInputFromSchema<Schema> =
         : never);
 
 export interface ConfigurationContract<Output, Schema extends ConfigurationSchema = ConfigurationSchema> {
+  readonly key: string;
   readonly schema: Schema;
 
   (input: ConfigurationInputFromSchema<Schema>): ConfigurationBinding<Output, Schema>;
@@ -64,8 +65,12 @@ export type InferConfiguration<Contract> =
   Contract extends ConfigurationContract<infer Output, any> ? Output : never;
 
 export function defineConfiguration<const Schema extends ConfigurationSchema>(
+  key: string,
   schema: Schema,
 ): ConfigurationContract<InferSchemaOutput<Schema>, Schema> {
+  const normalizedKey = key.trim();
+  if (!normalizedKey) throw new Error('Configuration key must not be empty.');
+
   type Output = InferSchemaOutput<Schema>;
 
   const contract = ((input: ConfigurationInputFromSchema<Schema>) => {
@@ -81,6 +86,7 @@ export function defineConfiguration<const Schema extends ConfigurationSchema>(
 
   Object.defineProperties(contract, {
     [CONFIGURATION_CONTRACT]: { value: true },
+    key: { value: normalizedKey },
     schema: { value: schema },
   });
 

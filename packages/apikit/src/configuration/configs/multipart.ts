@@ -12,7 +12,7 @@ export type MultipartOptions =
   | FastifyMultipartOptions
   | FastifyMultipartAttachFieldsToBodyOptions;
 
-export const MultipartConfiguration = defineConfiguration({
+export const MultipartConfiguration = defineConfiguration('apikit.multipart', {
   enabled: field.boolean().default(ApiKitDefaults.multipart.enabled),
   options: field.custom<MultipartOptions>().default(ApiKitDefaults.multipart.options as MultipartOptions),
 });

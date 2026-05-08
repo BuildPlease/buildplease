@@ -32,7 +32,7 @@ export async function resolveConfigurationContract<Output, Schema extends Config
     packageJson: options.packageJson,
   };
 
-  return resolveSchema(contract.schema, input, context, 'configuration') as Promise<Output>;
+  return resolveSchema(contract.schema, input, context, contract.key) as Promise<Output>;
 }
 
 export async function resolveConfigurationBinding<Output>(

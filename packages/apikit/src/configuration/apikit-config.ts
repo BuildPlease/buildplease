@@ -1,6 +1,6 @@
 import {
-  type ApiKitRuntimeConfiguration,
   type BasicAuthConfiguration,
+  type BuildConfiguration,
   type CorsConfiguration,
   type EmailConfiguration,
   type I18nConfiguration,
@@ -21,10 +21,10 @@ import type { EnvironmentRegistry } from './core/environments';
 // MARK: - Public
 
 export interface DefineApiKitInput {
-  readonly runtime?: InputOf<typeof ApiKitRuntimeConfiguration>;
+  readonly build?: InputOf<typeof BuildConfiguration>;
+
   readonly server: InputOf<typeof ServerConfiguration>;
   readonly logger?: InputOf<typeof LoggerConfiguration>;
-
   readonly metrics?: InputOf<typeof MetricsConfiguration>;
   readonly email?: InputOf<typeof EmailConfiguration>;
   readonly i18n?: InputOf<typeof I18nConfiguration>;

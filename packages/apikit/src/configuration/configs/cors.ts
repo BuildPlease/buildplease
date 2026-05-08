@@ -3,16 +3,13 @@ import { ApiKitDefaults } from '@internal/configuration/apikit-defaults';
 
 import { type InferConfiguration, defineConfiguration, field } from '@/configuration/core';
 
-export type CorsOptions = Omit<FastifyCorsOptions, 'origin'>;
-export type CorsAllowedOrigins = string | readonly string[];
+export type CorsOptions = FastifyCorsOptions;
 
-export const CorsConfiguration = defineConfiguration({
+export const CorsConfiguration = defineConfiguration('apikit.cors', {
   enabled: field.boolean().default(ApiKitDefaults.cors.enabled),
-
-  isDevelopment: field.boolean().default(ApiKitDefaults.cors.isDevelopment),
-  allowedOrigins: field.custom<CorsAllowedOrigins>().default(ApiKitDefaults.cors.allowedOrigins),
-
-  options: field.custom<CorsOptions>().default(ApiKitDefaults.cors.options as CorsOptions),
+  allowAllOrigins: field.boolean().default(ApiKitDefaults.cors.allowAllOrigins),
+  includeWwwSubdomain: field.boolean().default(ApiKitDefaults.cors.includeWwwSubdomain),
+  options: field.custom<CorsOptions>().default(ApiKitDefaults.cors.options),
 });
 
 export type CorsConfig = InferConfiguration<typeof CorsConfiguration>;

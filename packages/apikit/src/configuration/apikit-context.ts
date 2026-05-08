@@ -6,7 +6,7 @@ import { Consola } from '@internal/consola';
 
 import { type EnvironmentConfig, resolveEnvironment } from './core/environments';
 import { loadConfig } from './core/load-config';
-import { resolveApikit, resolveRuntimeConfiguration } from './core/resolve-apikit';
+import { resolveApikit, resolveBuildConfiguration } from './core/resolve-apikit';
 
 // MARK: - Public
 
@@ -19,9 +19,9 @@ export interface LoadApikitContextOptions {
 export async function loadApikitContext(options: LoadApikitContextOptions): Promise<void> {
   const definition = await loadConfig(options.configDir, options.configName);
 
-  const runtimeConfig = await resolveRuntimeConfiguration(definition, options.environment);
+  const buildConfig = await resolveBuildConfiguration(definition, options.environment);
   const environmentConfig = resolveEnvironment(definition.environments, options.environment, {
-    fileDir: runtimeConfig.environmentFileDir,
+    fileDir: buildConfig.environmentFileDir,
   });
 
   initializeEnvironment(environmentConfig);
@@ -31,8 +31,8 @@ export async function loadApikitContext(options: LoadApikitContextOptions): Prom
   });
 
   global.apikit = {
-    runtimeConfig: resolved.runtime,
     environmentConfig: resolved.environment,
+    buildConfig: resolved.build,
     loggerConfig: resolved.logger,
     serverConfig: resolved.server,
     metricsConfig: resolved.metrics,

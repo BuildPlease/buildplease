@@ -6,40 +6,57 @@ import fp from 'fastify-plugin';
 
 import type { ServerPluginOptions } from '@/server';
 
-const pluginName = 'apikit_@fastify/basic-auth';
+const pluginName = 'ApiKit@basic-auth';
 
 const basicAuthPlugin: FastifyPluginAsync<ServerPluginOptions> = async (fastify, options) => {
   const config = options.apikitController.basicAuth;
 
   if (!config.enabled) return;
 
-  if (!config.username || !config.password) {
+  const username = config.username;
+  const password = config.password;
+
+  if (!username || !password) {
     throw new Error(`[${pluginName}] username and password are required when basic auth is enabled.`);
   }
 
-  const validate: FastifyBasicAuthOptions['validate'] = async (
-    inputUsername,
-    inputPassword,
-    _request,
-    reply,
-  ) => {
-    let ok = true;
-
-    ok = secureCompare(inputUsername, config.username!) && ok;
-    ok = secureCompare(inputPassword, config.password!) && ok;
-
-    if (!ok) {
-      reply.code(401).header('WWW-Authenticate', `Basic realm="${config.realm}"`).send('Unauthorized');
-      throw new Error('Access denied');
-    }
-  };
-
   await fastify.register(basicAuth, {
-    ...config.options,
+    validate: makeValidate(username, password),
     authenticate: config.authenticate,
-    validate: validate,
+    proxyMode: config.proxyMode,
+    header: config.header,
+    strictCredentials: config.strictCredentials,
   });
 };
+
+export default fp(basicAuthPlugin, {
+  name: pluginName,
+});
+
+// MARK: - Private
+
+function makeValidate(username: string, password: string): FastifyBasicAuthOptions['validate'] {
+  return async (inputUsername, inputPassword) => {
+    validateCredentials({
+      inputUsername: inputUsername,
+      inputPassword: inputPassword,
+      expectedUsername: username,
+      expectedPassword: password,
+    });
+  };
+}
+
+function validateCredentials(input: {
+  inputUsername: string | Buffer;
+  inputPassword: string | Buffer;
+  expectedUsername: string;
+  expectedPassword: string;
+}): void {
+  const usernameMatches = secureCompare(input.inputUsername, input.expectedUsername);
+  const passwordMatches = secureCompare(input.inputPassword, input.expectedPassword);
+
+  if (!usernameMatches || !passwordMatches) throw new Error('Access denied');
+}
 
 function secureCompare(a: string | Buffer, b: string | Buffer): boolean {
   const bufferA = Buffer.isBuffer(a) ? a : Buffer.from(a, 'utf-8');
@@ -52,7 +69,3 @@ function secureCompare(a: string | Buffer, b: string | Buffer): boolean {
 
   return crypto.timingSafeEqual(bufferA, bufferB);
 }
-
-export default fp(basicAuthPlugin, {
-  name: pluginName,
-});
