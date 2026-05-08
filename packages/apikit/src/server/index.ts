@@ -1,4 +1,4 @@
-export * from './plugins';
+export { default as fp } from 'fastify-plugin';
 
 export * from './endpoint';
 export * from './server-controller';

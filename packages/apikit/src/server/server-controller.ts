@@ -59,7 +59,10 @@ export class ServerControllerImpl implements ServerController {
   }
 
   public async preparePlugins(
-    registerExternal: (instance: FastifyInstance) => Promise<void> = async () => {},
+    registerExternal: (
+      instance: FastifyInstance,
+      options: ServerPluginOptions,
+    ) => Promise<void> = async () => {},
   ): Promise<void> {
     const options: ServerPluginOptions = {
       i18nController: this.i18n,
@@ -67,24 +70,28 @@ export class ServerControllerImpl implements ServerController {
       apikitController: this.configuration,
     };
 
-    // MARK: 1. Internal plugins (must run before external)
-    const earlyInternalPlugins = [
+    const earlyPlugins = [
       FastifyPlugins.cookie,
       FastifyPlugins.ip,
       FastifyPlugins.metadata,
       FastifyPlugins.scope,
       FastifyPlugins.logger,
-    ];
-    for (const plugin of earlyInternalPlugins) {
+
+      FastifyPlugins.cors,
+      FastifyPlugins.multipart,
+      FastifyPlugins.basicAuth,
+      FastifyPlugins.metrics,
+    ] as const;
+
+    const latePlugins = [FastifyPlugins.staticFiles, FastifyPlugins.view] as const;
+
+    for (const plugin of earlyPlugins) {
       await this.server.register(plugin, options);
     }
 
-    // MARK: 2. External plugins (e.g., CORS, Rate-Limit, etc.)
-    await registerExternal(this.server);
+    await registerExternal(this.server, options);
 
-    // MARK: 3. Internal late plugins (can run after external)
-    const lateInternalPlugins = [FastifyPlugins.staticFiles, FastifyPlugins.view];
-    for (const plugin of lateInternalPlugins) {
+    for (const plugin of latePlugins) {
       await this.server.register(plugin, options);
     }
   }
@@ -95,21 +102,15 @@ export class ServerControllerImpl implements ServerController {
   }
 
   public async start(): Promise<void> {
-    const rawHost = process.env.SERVER_HOST;
-    const rawPort = process.env.SERVER_PORT;
-
-    if (!rawHost) throw new Error('Missing required environment variable: SERVER_HOST');
-    if (!rawPort) throw new Error('Missing required environment variable: SERVER_PORT');
-
-    const host = rawHost;
-    const port = Number(rawPort);
+    const host = this.configuration.server.host;
+    const port = this.configuration.server.port;
 
     if (!Number.isInteger(port) || port <= 0 || port > 65535) {
-      throw new Error(`Invalid SERVER_PORT "${rawPort}", must be an integer 1-65535`);
+      throw new Error(`Invalid server port "${port}", must be an integer 1-65535.`);
     }
 
     await this.server.ready();
-    await this.server.listen({ port, host });
+    await this.server.listen({ host: host, port: port });
 
     this.logger.info(`${LOG_PREFIX} Debug mode ${this.configuration.isDebug ? 'ON' : 'OFF'}`);
     this.logger.info(`${LOG_PREFIX} Started on ${host}:${port}`);

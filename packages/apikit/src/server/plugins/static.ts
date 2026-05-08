@@ -1,7 +1,4 @@
-import path from 'node:path';
-
-import fastifyStatic, { type FastifyStaticOptions } from '@fastify/static';
-import { ensureDirectory, resolvePath } from '@meawkit/core/node';
+import fastifyStatic from '@fastify/static';
 import type { FastifyPluginAsync } from 'fastify';
 import fp from 'fastify-plugin';
 
@@ -12,31 +9,30 @@ const pluginName = 'apikit_@fastify/static';
 const staticFilesPlugin: FastifyPluginAsync<ServerPluginOptions> = async (fastify, options) => {
   const config = options.apikitController.staticFiles;
 
-  // MARK: - Skip if not configured
-  if (!config) {
-    fastify.log.info(`[${pluginName}] No static file config provided — skipping`);
+  if (!config.enabled) {
+    fastify.log.info(`[${pluginName}] Static files disabled — skipping`);
     return;
   }
 
-  // MARK: - Resolve and ensure path
-  const rootPath = config.rootPath;
-  const resolvedPath = path.isAbsolute(rootPath) ? rootPath : resolvePath(process.cwd(), rootPath);
-  const root = ensureDirectory(resolvedPath);
+  if (!config.publicDirectory) {
+    const message = `[${pluginName}] publicDirectory is required when static files are enabled.`;
 
-  const pluginOptions: FastifyStaticOptions = {
-    root: root,
+    fastify.log.error(message);
+    throw new Error(message);
+  }
+
+  await fastify.register(fastifyStatic, {
+    root: config.publicDirectory,
     prefix: config.routePrefix,
     maxAge: config.maxAge,
-    serve: config.enabled,
     dotfiles: config.dotfiles,
-    decorateReply: config.decorateReply,
-    immutable: config.immutable,
     etag: config.etag,
+    immutable: config.immutable,
+    decorateReply: config.decorateReply,
     preCompressed: config.preCompressed,
-  };
+  });
 
-  await fastify.register(fastifyStatic, pluginOptions);
-  fastify.log.info(`Serving static files from ${root}`);
+  fastify.log.info(`[${pluginName}] Static files enabled from ${config.publicDirectory}`);
 };
 
 export default fp(staticFilesPlugin, {

@@ -16,15 +16,13 @@ const metricsPlugin: FastifyPluginAsync<ServerPluginOptions> = async (fastify, o
 
   await fastify.register(fastifyMetrics, {
     endpoint: config.endpoint,
-    defaultMetrics: {
-      enabled: true,
-    },
-    routeMetrics: {
-      enabled: true,
-    },
+    name: config.name,
+    defaultMetrics: config.defaultMetrics,
+    routeMetrics: config.routeMetrics,
+    clearRegisterOnInit: config.clearRegisterOnInit,
   });
 
-  fastify.log.info(`[${pluginName}] Metrics enabled on ${config.endpoint}`);
+  fastify.log.info(`[${pluginName}] Metrics enabled`);
 };
 
 export default fp(metricsPlugin, {

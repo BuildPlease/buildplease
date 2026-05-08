@@ -2,12 +2,11 @@ import { existsSync } from 'node:fs';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 
-import { optional } from '@meawkit/core';
 import ejs from 'ejs';
 import { inject, injectable } from 'inversify';
 import nodemailer from 'nodemailer';
 
-import type { ApiKitController } from '@/configuration';
+import type { ApiKitController, EmailConfig } from '@/configuration';
 import { ApiKitSymbols } from '@/di';
 import type { EmailTemplate } from '@/email';
 import type { LoggerController } from '@/logger';
@@ -41,13 +40,13 @@ export class EmailControllerImpl implements EmailController {
     private logger: LoggerController,
   ) {
     this.isEnabled = this.configuration.email.enabled;
-    this.smtpConfig = makeSmtpConfig(this.isEnabled);
+    this.smtpConfig = makeSmtpConfig(this.configuration.email);
     this.templatesPath = makeTemplatesPath(this.configuration.email.templatesPath);
   }
 
   // MARK: - Public
 
-  async sendEmail(template: EmailTemplate): Promise<void> {
+  public async sendEmail(template: EmailTemplate): Promise<void> {
     try {
       if (!this.isEnabled) {
         this.logger.debug(`${LOG_PREFIX} Sending skipped — disabled`);
@@ -60,10 +59,10 @@ export class EmailControllerImpl implements EmailController {
       const subject = template.subject;
       const htmlContent = await this.renderTemplate(template);
 
-      const mailOptions: any = {
+      const mailOptions: nodemailer.SendMailOptions = {
         to: recipient,
         from: sender,
-        subject,
+        subject: subject,
         html: htmlContent,
       };
 
@@ -99,7 +98,10 @@ export class EmailControllerImpl implements EmailController {
     try {
       const filePath = this.makeFilePath(template.templatePath, template.fallbackPath);
       const templateString = await fs.readFile(filePath, 'utf-8');
-      const data = { globals: this.makeGlobals(), ...template.data };
+      const data = {
+        globals: this.makeGlobals(),
+        ...template.data,
+      };
 
       return ejs.render(templateString, data);
     } catch (error) {
@@ -122,7 +124,7 @@ export class EmailControllerImpl implements EmailController {
     );
   }
 
-  private makeGlobals() {
+  private makeGlobals(): Record<string, unknown> {
     const clientDefined = this.configuration.email.globals;
 
     const runtimeDefaults = {
@@ -141,34 +143,41 @@ export class EmailControllerImpl implements EmailController {
     }
 
     const cleanedPath = templatePath.replace(/^\/+/, '');
-    return cleanedPath.endsWith('.ejs') ? cleanedPath : cleanedPath + '.ejs';
+    return cleanedPath.endsWith('.ejs') ? cleanedPath : `${cleanedPath}.ejs`;
   }
 }
 
-function makeSmtpConfig(enabled: boolean): SmtpConfig {
-  if (!enabled) return { host: '', port: 0, user: '', pass: '', sender: '' };
+// MARK: - Private
 
-  const read = (key: string): string => {
-    return optional(process.env[key]).orThrow(new Error(`${LOG_PREFIX} Missing ${key}`));
-  };
+function makeSmtpConfig(config: EmailConfig): SmtpConfig {
+  if (!config.enabled) {
+    return {
+      host: '',
+      port: 0,
+      user: '',
+      pass: '',
+      sender: '',
+    };
+  }
 
-  const host = read('SMTP_HOST');
-  const rawPort = read('SMTP_PORT');
-  const user = read('SMTP_USER');
-  const pass = read('SMTP_PASSWORD');
-  const sender = read('SMTP_SENDER');
+  const smtp = config.smtp;
 
-  const port = Number(rawPort);
-  if (!Number.isInteger(port) || port <= 0) {
-    throw new Error(`${LOG_PREFIX} SMTP_PORT must be a positive integer`);
+  if (!smtp.host) throw new Error(`${LOG_PREFIX} email.smtp.host is required when email is enabled`);
+  if (!smtp.port) throw new Error(`${LOG_PREFIX} email.smtp.port is required when email is enabled`);
+  if (!smtp.user) throw new Error(`${LOG_PREFIX} email.smtp.user is required when email is enabled`);
+  if (!smtp.password) throw new Error(`${LOG_PREFIX} email.smtp.password is required when email is enabled`);
+  if (!smtp.sender) throw new Error(`${LOG_PREFIX} email.smtp.sender is required when email is enabled`);
+
+  if (!Number.isInteger(smtp.port) || smtp.port <= 0) {
+    throw new Error(`${LOG_PREFIX} email.smtp.port must be a positive integer`);
   }
 
   return {
-    host: host,
-    port: port,
-    user: user,
-    pass: pass,
-    sender: sender,
+    host: smtp.host,
+    port: smtp.port,
+    user: smtp.user,
+    pass: smtp.password,
+    sender: smtp.sender,
   };
 }
 
