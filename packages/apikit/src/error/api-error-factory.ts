@@ -170,9 +170,7 @@ export class ApiErrorFactory {
 type Flatten<T> = T extends LocalizedApiError
   ? ''
   : {
-        [K in keyof T]: K extends string
-          ? `${K}${T[K] extends LocalizedApiError ? '' : '.'}${Flatten<T[K]>}`
-          : never;
+        [K in keyof T]: K extends string ? `${K}${T[K] extends LocalizedApiError ? '' : '.'}${Flatten<T[K]>}` : never;
       }[keyof T] extends infer D
     ? D extends string
       ? D

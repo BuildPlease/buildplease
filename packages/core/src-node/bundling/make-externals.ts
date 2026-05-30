@@ -85,12 +85,9 @@ export function makeExternals(pkg: PackageJSONModel, opts: MakeExternalsOptions 
   const peers = includePeers ? Object.keys(pkg.peerDependencies ?? {}) : [];
   const deps = includeDependencies ? Object.keys(pkg.dependencies ?? {}).filter((n) => !bundled.has(n)) : [];
 
-  const builtins = includeNodeBuiltins
-    ? [...builtinModules, ...builtinModules.map((m) => `node:${m}`), 'node:*']
-    : [];
+  const builtins = includeNodeBuiltins ? [...builtinModules, ...builtinModules.map((m) => `node:${m}`), 'node:*'] : [];
 
-  const withSubpaths = (names: string[]) =>
-    includeSubpaths ? [...names, ...names.map((n) => `${n}/*`)] : names;
+  const withSubpaths = (names: string[]) => (includeSubpaths ? [...names, ...names.map((n) => `${n}/*`)] : names);
 
   return Array.from(new Set([...builtins, ...withSubpaths(peers), ...withSubpaths(deps), ...extra]));
 }

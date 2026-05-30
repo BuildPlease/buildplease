@@ -5,9 +5,6 @@ import { type EmailController, EmailControllerImpl } from '@/email';
 
 export class EmailAssembly implements Assembly {
   public assemble(container: AssemblyContainer): void {
-    container
-      .bind<EmailController>(ApiKitSymbols.DI.Email.Controller)
-      .to(EmailControllerImpl)
-      .inSingletonScope();
+    container.bind<EmailController>(ApiKitSymbols.DI.Email.Controller).to(EmailControllerImpl).inSingletonScope();
   }
 }

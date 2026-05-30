@@ -6,9 +6,7 @@
         <div class="hidden sm:block"></div>
 
         <!-- Center -->
-        <div
-          class="flex flex-col items-center gap-2 justify-self-center text-sm text-gray-500 dark:text-gray-400"
-        >
+        <div class="flex flex-col items-center gap-2 justify-self-center text-sm text-gray-500 dark:text-gray-400">
           <div>
             {{ t('common.copyright', { year }) }}
           </div>

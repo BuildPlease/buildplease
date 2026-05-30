@@ -228,11 +228,7 @@ function stringifyPrimitive(value: util.Primitive): string {
   return util.stringifyPrimitive(value);
 }
 
-function formatDate(
-  i18n: Composer,
-  value: number | bigint | Date,
-  options?: Intl.DateTimeFormatOptions,
-): string {
+function formatDate(i18n: Composer, value: number | bigint | Date, options?: Intl.DateTimeFormatOptions): string {
   const numericOrDate = typeof value === 'bigint' ? Number(value) : value;
   const date = typeof numericOrDate === 'number' ? new Date(numericOrDate) : numericOrDate;
   return options ? i18n.d(date, options) : i18n.d(date);

@@ -267,10 +267,7 @@ export function ignoreError<T>(fn: () => T): Optional<T> {
  *   console.error('cleanup+notify failed:', err);
  * });
  */
-export async function ignoreErrorAsync(
-  fn: () => any | Promise<any>,
-  onError?: (error: any) => void,
-): Promise<void> {
+export async function ignoreErrorAsync(fn: () => any | Promise<any>, onError?: (error: any) => void): Promise<void> {
   try {
     await fn();
   } catch (error) {

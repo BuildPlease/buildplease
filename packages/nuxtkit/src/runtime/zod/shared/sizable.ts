@@ -18,11 +18,7 @@ export type Sizable = Record<string, SizableUnit>;
  * @param SizableData - The size data (singular, few, many, verb) based on locale
  * @returns { unit: string, verb: string } - The pluralized unit and verb
  */
-export function getSizing(
-  origin: string,
-  count: number,
-  sizable: Sizable,
-): { unit: string; verb: string } | null {
+export function getSizing(origin: string, count: number, sizable: Sizable): { unit: string; verb: string } | null {
   const sizing = sizable[origin];
   if (!sizing) return null;
 

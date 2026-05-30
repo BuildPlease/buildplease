@@ -39,9 +39,7 @@ export class Formatter<T> {
    * @returns The same Formatter instance for chaining.
    */
   apply(
-    transformationsOrTransformer:
-      | Partial<Record<keyof T, (value: any) => any>>
-      | ((value: T) => T | null | undefined),
+    transformationsOrTransformer: Partial<Record<keyof T, (value: any) => any>> | ((value: T) => T | null | undefined),
   ): Formatter<T | null | undefined> {
     if (typeof transformationsOrTransformer === 'function') {
       this.value = transformationsOrTransformer(this.value) as T;
@@ -93,10 +91,7 @@ export class Formatter<T> {
   private applyTransformations(transformations: Partial<Record<keyof T, (value: any) => any>>): void {
     if (isObject(this.value)) {
       this.value = Object.fromEntries(
-        Object.entries(this.value).map(([key, value]) => [
-          key,
-          transformations[key as keyof T]?.(value) ?? value,
-        ]),
+        Object.entries(this.value).map(([key, value]) => [key, transformations[key as keyof T]?.(value) ?? value]),
       ) as unknown as T;
     }
   }

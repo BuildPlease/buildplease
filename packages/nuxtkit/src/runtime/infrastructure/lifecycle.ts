@@ -95,10 +95,7 @@ export interface Lifecycle {
    * @param {RouteLocationNormalizedLoaded} from Current route.
    * @returns {void | boolean | Promise<void | boolean>} `false` to block; otherwise allow.
    */
-  beforeRouteLeave(
-    to: RouteLocationNormalizedLoaded,
-    from: RouteLocationNormalizedLoaded,
-  ): Awaitable<boolean | void>;
+  beforeRouteLeave(to: RouteLocationNormalizedLoaded, from: RouteLocationNormalizedLoaded): Awaitable<boolean | void>;
 
   /**
    * Router guard: called before updating the current route (same component instance).
@@ -107,10 +104,7 @@ export interface Lifecycle {
    * @param {RouteLocationNormalizedLoaded} from Current route.
    * @returns {void | boolean | Promise<void | boolean>} `false` to block; otherwise allow.
    */
-  beforeRouteUpdate(
-    to: RouteLocationNormalizedLoaded,
-    from: RouteLocationNormalizedLoaded,
-  ): Awaitable<boolean | void>;
+  beforeRouteUpdate(to: RouteLocationNormalizedLoaded, from: RouteLocationNormalizedLoaded): Awaitable<boolean | void>;
 
   /* ---------------------------------------------------
    * Server-Side Rendering

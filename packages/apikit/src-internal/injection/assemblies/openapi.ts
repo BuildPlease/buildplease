@@ -5,8 +5,6 @@ import { type OpenAPISchemaController, OpenAPISchemaControllerImpl } from '@/ope
 
 export class OpenAPIAssembly implements Assembly {
   public assemble(container: AssemblyContainer): void {
-    container
-      .bind<OpenAPISchemaController>(ApiKitSymbols.DI.OpenAPI.SchemaController)
-      .to(OpenAPISchemaControllerImpl);
+    container.bind<OpenAPISchemaController>(ApiKitSymbols.DI.OpenAPI.SchemaController).to(OpenAPISchemaControllerImpl);
   }
 }

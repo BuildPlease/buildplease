@@ -8,8 +8,6 @@ export type Primitive = string | number | boolean | bigint | symbol | null | und
  */
 export function isPrimitive(value: unknown): value is Primitive {
   return (
-    value === null ||
-    value === undefined ||
-    ['string', 'number', 'boolean', 'bigint', 'symbol'].includes(typeof value)
+    value === null || value === undefined || ['string', 'number', 'boolean', 'bigint', 'symbol'].includes(typeof value)
   );
 }

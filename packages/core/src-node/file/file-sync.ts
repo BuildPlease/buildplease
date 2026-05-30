@@ -96,9 +96,7 @@ export function removePath(
 export function ensureDirectory(targetPath: string): string {
   const absolutePath = resolvePath(process.cwd(), targetPath);
   const directory =
-    fs.existsSync(absolutePath) && fs.statSync(absolutePath).isDirectory()
-      ? absolutePath
-      : path.dirname(absolutePath);
+    fs.existsSync(absolutePath) && fs.statSync(absolutePath).isDirectory() ? absolutePath : path.dirname(absolutePath);
 
   if (!fs.existsSync(directory)) {
     throw new Error(`Directory "${directory}" does not exist.`);

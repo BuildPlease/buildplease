@@ -1,0 +1,42 @@
+{
+  "name": "@meawkit/devkit",
+  "version": "1.0.0",
+  "description": "Shared MeawKit repository hygiene toolkit.",
+  "keywords": [],
+  "license": "UNLICENSED",
+  "author": "Simon Rastislav Kovačič",
+  "type": "module",
+  "bin": {
+    "meawkit": "./bin/meawkit.mjs"
+  },
+  "files": [
+    "bin",
+    "commands",
+    "configs"
+  ],
+  "dependencies": {
+    "@typescript-eslint/eslint-plugin": "8.59.1",
+    "@typescript-eslint/parser": "8.59.1",
+    "citty": "0.2.2",
+    "consola": "3.4.2",
+    "eslint": "9.39.4",
+    "eslint-config-prettier": "10.1.8",
+    "eslint-plugin-check-file": "3.3.1",
+    "eslint-plugin-import": "2.32.0",
+    "eslint-plugin-jsonc": "3.1.2",
+    "eslint-plugin-unicorn": "64.0.0",
+    "eslint-plugin-vue": "10.9.0",
+    "eslint-plugin-yml": "3.3.2",
+    "execa": "8.0.1",
+    "globals": "17.5.0",
+    "npm-check-updates": "22.0.1",
+    "prettier": "3.8.3",
+    "prettier-plugin-ejs": "1.0.3",
+    "prettier-plugin-packagejson": "3.0.2",
+    "prettier-plugin-tailwindcss": "0.8.0",
+    "vue-eslint-parser": "10.4.0"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  }
+}

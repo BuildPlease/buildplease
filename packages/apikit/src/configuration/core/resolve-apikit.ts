@@ -54,10 +54,7 @@ export interface ResolvedApiKitConfig {
 
 // MARK: - Internal
 
-export async function resolveBuildConfiguration(
-  config: ApiKitConfig,
-  environmentName: string,
-): Promise<BuildConfig> {
+export async function resolveBuildConfiguration(config: ApiKitConfig, environmentName: string): Promise<BuildConfig> {
   const environmentDefinition = config.environments[environmentName];
 
   if (!environmentDefinition) {
@@ -94,21 +91,9 @@ export async function resolveApikit(
   const metrics = await resolveConfigurationContract(MetricsConfiguration, config.metrics, resolveOptions);
   const email = await resolveConfigurationContract(EmailConfiguration, config.email, resolveOptions);
   const i18n = await resolveConfigurationContract(I18nConfiguration, config.i18n, resolveOptions);
-  const staticFiles = await resolveConfigurationContract(
-    StaticFilesConfiguration,
-    config.staticFiles,
-    resolveOptions,
-  );
-  const basicAuth = await resolveConfigurationContract(
-    BasicAuthConfiguration,
-    config.basicAuth,
-    resolveOptions,
-  );
-  const multipart = await resolveConfigurationContract(
-    MultipartConfiguration,
-    config.multipart,
-    resolveOptions,
-  );
+  const staticFiles = await resolveConfigurationContract(StaticFilesConfiguration, config.staticFiles, resolveOptions);
+  const basicAuth = await resolveConfigurationContract(BasicAuthConfiguration, config.basicAuth, resolveOptions);
+  const multipart = await resolveConfigurationContract(MultipartConfiguration, config.multipart, resolveOptions);
 
   for (const binding of config.configurations) {
     if (binding.contract.key.startsWith('apikit.')) {

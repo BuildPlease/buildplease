@@ -12,8 +12,6 @@ export class ValidationAssembly implements Assembly {
   public assemble(container: AssemblyContainer): void {
     container.bind<ValidationController>(ApiKitSymbols.DI.Validation.Controller).to(ValidationControllerImpl);
 
-    container
-      .bind<DtoValidationController>(ApiKitSymbols.DI.Validation.DtoController)
-      .to(DtoValidationControllerImpl);
+    container.bind<DtoValidationController>(ApiKitSymbols.DI.Validation.DtoController).to(DtoValidationControllerImpl);
   }
 }

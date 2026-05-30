@@ -126,10 +126,7 @@ export class MongoDbQueryFormatterImpl implements MongoDbQueryFormatter {
    */
   private isPlainObject(val: unknown): val is Record<string, any> {
     return (
-      typeof val === 'object' &&
-      val !== null &&
-      !Array.isArray(val) &&
-      Object.getPrototypeOf(val) === Object.prototype
+      typeof val === 'object' && val !== null && !Array.isArray(val) && Object.getPrototypeOf(val) === Object.prototype
     );
   }
 

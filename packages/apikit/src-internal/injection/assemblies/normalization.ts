@@ -5,8 +5,6 @@ import { type NormalizationController, NormalizationControllerImpl } from '@/nor
 
 export class NormalizationAssembly implements Assembly {
   public assemble(container: AssemblyContainer): void {
-    container
-      .bind<NormalizationController>(ApiKitSymbols.DI.Normalization.Controller)
-      .to(NormalizationControllerImpl);
+    container.bind<NormalizationController>(ApiKitSymbols.DI.Normalization.Controller).to(NormalizationControllerImpl);
   }
 }

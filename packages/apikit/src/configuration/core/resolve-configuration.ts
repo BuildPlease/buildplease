@@ -62,12 +62,7 @@ async function resolveSchema(
   const result: Record<string, unknown> = {};
 
   for (const [key, childSchema] of Object.entries(schema)) {
-    result[key] = await resolveSchema(
-      childSchema,
-      (source as Record<string, unknown>)[key],
-      context,
-      `${path}.${key}`,
-    );
+    result[key] = await resolveSchema(childSchema, (source as Record<string, unknown>)[key], context, `${path}.${key}`);
   }
 
   return result;
@@ -91,11 +86,7 @@ async function resolveField(
   return field.parse(resolved, path);
 }
 
-async function resolveValue(
-  input: unknown,
-  context: ConfigurationResolveContext,
-  path: string,
-): Promise<unknown> {
+async function resolveValue(input: unknown, context: ConfigurationResolveContext, path: string): Promise<unknown> {
   if (isConfigurationSource(input)) return resolveSource(input, context, path);
   if (isConfigurationBinding(input)) return resolveConfigurationBinding(input, context);
 

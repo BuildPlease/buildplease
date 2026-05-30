@@ -1,10 +1,4 @@
-import {
-  type AsyncOperation,
-  type RemoteEndpoint,
-  type RemoteRequestConfig,
-  delay,
-  HttpError,
-} from '@meawkit/webkit';
+import { type AsyncOperation, type RemoteEndpoint, type RemoteRequestConfig, delay, HttpError } from '@meawkit/webkit';
 import { inject, injectable } from 'inversify';
 
 export interface TestOperationInput {

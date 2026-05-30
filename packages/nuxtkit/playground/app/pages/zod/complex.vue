@@ -188,11 +188,7 @@
                 variant="subtle"
                 icon="i-lucide-calendar"
               >
-                {{
-                  dateMinModel
-                    ? dateFormatter.format(dateMinModel.toDate(getLocalTimeZone()))
-                    : 'Select a date'
-                }}
+                {{ dateMinModel ? dateFormatter.format(dateMinModel.toDate(getLocalTimeZone())) : 'Select a date' }}
               </UButton>
 
               <template #content>
@@ -215,11 +211,7 @@
                 variant="subtle"
                 icon="i-lucide-calendar"
               >
-                {{
-                  dateMaxModel
-                    ? dateFormatter.format(dateMaxModel.toDate(getLocalTimeZone()))
-                    : 'Select a date'
-                }}
+                {{ dateMaxModel ? dateFormatter.format(dateMaxModel.toDate(getLocalTimeZone())) : 'Select a date' }}
               </UButton>
 
               <template #content>

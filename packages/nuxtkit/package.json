@@ -2,7 +2,6 @@
   "name": "@meawkit/nuxtkit",
   "version": "1.0.0",
   "description": "A Nuxt Kit for MVVM design pattern and Clean Code architecture, with foundation for web app",
-  "repository": "git@github.com/MeawKit/MeawKit.git",
   "license": "UNLICENSED",
   "author": "Simon Rastislav Kovačič",
   "type": "module",

@@ -11,18 +11,9 @@ import type { ImageOptions } from '@/image';
 
 export interface ImageNormalizationController {
   processBufferToBuffer(input: Buffer, options?: ImageOptions): Promise<{ buffer: Buffer; type: FormatType }>;
-  processBufferToStream(
-    input: Buffer,
-    options?: ImageOptions,
-  ): Promise<{ stream: Readable; type: FormatType }>;
-  processStreamToBuffer(
-    input: Readable,
-    options?: ImageOptions,
-  ): Promise<{ buffer: Buffer; type: FormatType }>;
-  processStreamToStream(
-    input: Readable,
-    options?: ImageOptions,
-  ): Promise<{ stream: Readable; type: FormatType }>;
+  processBufferToStream(input: Buffer, options?: ImageOptions): Promise<{ stream: Readable; type: FormatType }>;
+  processStreamToBuffer(input: Readable, options?: ImageOptions): Promise<{ buffer: Buffer; type: FormatType }>;
+  processStreamToStream(input: Readable, options?: ImageOptions): Promise<{ stream: Readable; type: FormatType }>;
 }
 
 @injectable()
@@ -96,10 +87,7 @@ export class ImageNormalizationControllerImpl implements ImageNormalizationContr
     return { processed: instance, type };
   }
 
-  private validateInputFormat(
-    format: keyof sharp.FormatEnum | undefined,
-    allowed?: (keyof sharp.FormatEnum)[],
-  ) {
+  private validateInputFormat(format: keyof sharp.FormatEnum | undefined, allowed?: (keyof sharp.FormatEnum)[]) {
     if (!format || !sharp.format[format]?.input) {
       throw ApiErrorFactory.make('Format.UNSUPPORTED_FORMAT', {
         details: `Unsupported input format: ${format}`,
@@ -149,11 +137,7 @@ export class ImageNormalizationControllerImpl implements ImageNormalizationContr
 
   // MARK: - Helpers
 
-  private async applyNormalization(
-    instance: Sharp,
-    meta: sharp.Metadata,
-    options: ImageOptions,
-  ): Promise<Sharp> {
+  private async applyNormalization(instance: Sharp, meta: sharp.Metadata, options: ImageOptions): Promise<Sharp> {
     const hasConstraints =
       options.minWidth != null ||
       options.maxWidth != null ||
@@ -177,12 +161,7 @@ export class ImageNormalizationControllerImpl implements ImageNormalizationContr
     // Crop to the allowed aspect-ratio band (centered) if outside bounds
     const tolerance = options.aspectRatioTolerance ?? 0;
     const aspectRatio = width / height;
-    const targetAR = this.pickTargetAspectRatio(
-      aspectRatio,
-      options.minAspectRatio,
-      options.maxAspectRatio,
-      tolerance,
-    );
+    const targetAR = this.pickTargetAspectRatio(aspectRatio, options.minAspectRatio, options.maxAspectRatio, tolerance);
 
     let currentWidth = width; // track width to avoid re-reading metadata
     if (targetAR !== undefined) {
@@ -244,12 +223,7 @@ export class ImageNormalizationControllerImpl implements ImageNormalizationContr
     }
   }
 
-  private pickTargetAspectRatio(
-    current: number,
-    minAR?: number,
-    maxAR?: number,
-    tol = 0,
-  ): number | undefined {
+  private pickTargetAspectRatio(current: number, minAR?: number, maxAR?: number, tol = 0): number | undefined {
     if (typeof minAR === 'number' && current < minAR - tol) return minAR;
     if (typeof maxAR === 'number' && current > maxAR + tol) return maxAR;
     return undefined;

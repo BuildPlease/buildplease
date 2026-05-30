@@ -12,10 +12,7 @@ import {
 
 export class ServerAssembly implements Assembly {
   public assemble(container: AssemblyContainer): void {
-    container
-      .bind<ServerController>(ApiKitSymbols.DI.Server.Controller)
-      .to(ServerControllerImpl)
-      .inSingletonScope();
+    container.bind<ServerController>(ApiKitSymbols.DI.Server.Controller).to(ServerControllerImpl).inSingletonScope();
 
     container
       .bind<RequestController>(ApiKitSymbols.DI.Server.RequestController)

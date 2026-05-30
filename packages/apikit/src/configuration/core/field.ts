@@ -127,9 +127,7 @@ function makeField<Output, Required extends boolean, Input = Output>(
 
     map<NextOutput>(transform: (value: Output) => NextOutput) {
       const mappedDefault =
-        options.hasDefault && options.defaultValue !== undefined
-          ? transform(options.defaultValue)
-          : undefined;
+        options.hasDefault && options.defaultValue !== undefined ? transform(options.defaultValue) : undefined;
 
       return makeField<NextOutput, Required, Input>((value, path) => transform(parse(value, path)), {
         required: options.required,

@@ -10,12 +10,9 @@ import yml from 'eslint-plugin-yml';
 import globals from 'globals';
 import vueParser from 'vue-eslint-parser';
 
-// MARK: - Shared Rules
-
 const codeRules = {
   ...tsPlugin.configs.recommended.rules,
 
-  // Import
   'import/order': [
     'error',
     {
@@ -37,11 +34,9 @@ const codeRules = {
   'import/first': 'error',
   'import/no-default-export': 'off',
 
-  // General
   'no-multiple-empty-lines': ['error', { max: 1 }],
   'no-multi-spaces': ['error', { ignoreEOLComments: true }],
 
-  // TypeScript
   '@typescript-eslint/no-empty-object-type': 'off',
   '@typescript-eslint/no-explicit-any': 'off',
   '@typescript-eslint/consistent-type-imports': [
@@ -61,7 +56,6 @@ const codeRules = {
     },
   ],
 
-  // Unicorn
   'unicorn/no-abusive-eslint-disable': 'error',
   'unicorn/prefer-top-level-await': 'error',
 };
@@ -70,15 +64,12 @@ const vueRules = {
   ...vuePlugin.configs['flat/recommended'].rules,
   ...codeRules,
 
-  // Nuxt
   'import/no-unresolved': 'off',
 
-  // Vue Structure
   'vue/block-order': ['error', { order: ['template', 'script', 'style'] }],
   'vue/max-attributes-per-line': ['error', { singleline: 5, multiline: 1 }],
   'vue/no-v-html': 'error',
 
-  // File Naming
   'check-file/filename-naming-convention': [
     'error',
     {
@@ -93,8 +84,6 @@ const vueRules = {
     },
   ],
 };
-
-// MARK: - Standalone Rules
 
 const globalIgnores = {
   ignores: [
@@ -176,8 +165,6 @@ const yamlConfig = [
   },
 ];
 
-// MARK: - Export
-
 export default [
   globalIgnores,
   vueConfig,
@@ -185,7 +172,5 @@ export default [
   ...jsonConfig,
   ...jsoncConfig,
   ...yamlConfig,
-
-  // Disable ESLint Formatting Rules That Conflict With Prettier
   eslintConfigPrettier,
 ];

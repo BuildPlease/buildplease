@@ -53,16 +53,12 @@ export interface ConfigurationContract<Output, Schema extends ConfigurationSchem
   (input: ConfigurationInputFromSchema<Schema>): ConfigurationBinding<Output, Schema>;
 }
 
-export interface ConfigurationBinding<
-  Output = unknown,
-  Schema extends ConfigurationSchema = ConfigurationSchema,
-> {
+export interface ConfigurationBinding<Output = unknown, Schema extends ConfigurationSchema = ConfigurationSchema> {
   readonly contract: ConfigurationContract<Output, Schema>;
   readonly input: ConfigurationInputFromSchema<Schema>;
 }
 
-export type InferConfiguration<Contract> =
-  Contract extends ConfigurationContract<infer Output, any> ? Output : never;
+export type InferConfiguration<Contract> = Contract extends ConfigurationContract<infer Output, any> ? Output : never;
 
 export function defineConfiguration<const Schema extends ConfigurationSchema>(
   key: string,

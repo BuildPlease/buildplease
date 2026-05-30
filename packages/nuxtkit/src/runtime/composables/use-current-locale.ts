@@ -57,10 +57,7 @@ function firstLocale(val: unknown): string | undefined {
  * @throws When no input is provided.
  * @returns The normalized locale (e.g. `"en"` or `"en-gb"`).
  */
-export function normalizeLocale(
-  input: string | undefined | null,
-  options: { preserveRegion?: boolean } = {},
-): string {
+export function normalizeLocale(input: string | undefined | null, options: { preserveRegion?: boolean } = {}): string {
   const raw = input?.trim();
   if (!raw) throw new Error('[normalizeLocale] No locale provided.');
 

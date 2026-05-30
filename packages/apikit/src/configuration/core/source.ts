@@ -27,9 +27,7 @@ export interface ConfigurationSource<Output = unknown> {
   ): ConfigurationSource<NextOutput>;
 }
 
-export function defineSource<const Environments extends Record<string, unknown>>(
-  _environments: Environments,
-) {
+export function defineSource<const Environments extends Record<string, unknown>>(_environments: Environments) {
   type EnvironmentName = keyof Environments & string;
 
   return {
@@ -98,10 +96,7 @@ function makeSource<Output>(
     map<NextOutput>(
       transform: (value: Output, context: ConfigurationResolveContext) => NextOutput | Promise<NextOutput>,
     ) {
-      return makeSource<NextOutput>(kind, options, [
-        ...transforms,
-        transform as ConfigurationSourceTransform,
-      ]);
+      return makeSource<NextOutput>(kind, options, [...transforms, transform as ConfigurationSourceTransform]);
     },
   };
 

@@ -7,19 +7,13 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-.output
-.nuxt
-node_modules
-dist
-*.local
-public
-
 # lock files
 pnpm-lock.yaml
 yarn.lock
 package-lock.json
 
 # Editor directories and files
+.vscode
 .vscode/*
 !.vscode/extensions.json
 !.vscode/settings.json
@@ -31,6 +25,9 @@ package-lock.json
 *.sln
 *.sw?
 
-# Generated directories and files
-generated
-/.nx/workspace-data
+# Dependencies and generated output
+.output
+.nuxt
+node_modules
+dist
+*.local

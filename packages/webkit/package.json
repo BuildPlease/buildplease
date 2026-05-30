@@ -3,7 +3,11 @@
   "version": "1.0.0",
   "description": "",
   "keywords": [],
-  "repository": "git@github.com/MeawKit/MeawKit.git",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MeawKit/MeawKit.git",
+    "directory": "packages/webkit"
+  },
   "license": "UNLICENSED",
   "author": "Simon Rastislav Kovačič",
   "type": "module",

@@ -35,9 +35,7 @@ export class OpenAPISchemaControllerImpl implements OpenAPISchemaController {
   private constructContent(
     contents: Partial<Record<OpenAPIMediaType, OpenAPISchemaMediaType>>,
   ): Record<OpenAPIMediaType, { schema: any; examples?: Record<string, any> }> {
-    return Object.entries(contents).reduce<
-      Record<OpenAPIMediaType, { schema: any; examples?: Record<string, any> }>
-    >(
+    return Object.entries(contents).reduce<Record<OpenAPIMediaType, { schema: any; examples?: Record<string, any> }>>(
       (acc, [type, { schema, examples }]) => {
         acc[type as OpenAPIMediaType] = {
           schema,

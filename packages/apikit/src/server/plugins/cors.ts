@@ -55,10 +55,7 @@ function formatOrigin(
   return origin;
 }
 
-function formatOriginList(
-  input: readonly unknown[],
-  options: FormatOriginOptions,
-): FastifyCorsOptions['origin'] {
+function formatOriginList(input: readonly unknown[], options: FormatOriginOptions): FastifyCorsOptions['origin'] {
   const output: OriginEntry[] = [];
 
   for (const entry of input) {

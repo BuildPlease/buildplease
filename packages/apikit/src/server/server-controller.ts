@@ -21,10 +21,7 @@ export interface ServerPluginBaseOptions {
 
 export type ServerPluginOptions<TExtras extends object = {}> = ServerPluginBaseOptions & TExtras;
 
-export type ServerPluginExternalHook = (
-  instance: FastifyInstance,
-  options: ServerPluginOptions,
-) => Promise<void>;
+export type ServerPluginExternalHook = (instance: FastifyInstance, options: ServerPluginOptions) => Promise<void>;
 
 export interface ServerController {
   get instance(): FastifyInstance;

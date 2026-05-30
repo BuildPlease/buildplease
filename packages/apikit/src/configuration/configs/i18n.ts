@@ -16,10 +16,7 @@ export interface I18nFileEntry {
 
 type I18nInitOptions = InitOptions<object>;
 
-export type I18nFallbackLanguages = Extract<
-  NonNullable<I18nInitOptions['fallbackLng']>,
-  string | readonly string[]
->;
+export type I18nFallbackLanguages = Extract<NonNullable<I18nInitOptions['fallbackLng']>, string | readonly string[]>;
 
 export type I18nLoadMode = NonNullable<I18nInitOptions['load']>;
 export type I18nPreload = NonNullable<I18nInitOptions['preload']>;

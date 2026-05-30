@@ -16,10 +16,7 @@ type MultipartOptions =
   | FastifyMultipartOptions
   | FastifyMultipartAttachFieldsToBodyOptions;
 
-type I18nFallbackLanguages = Extract<
-  NonNullable<InitOptions<object>['fallbackLng']>,
-  string | readonly string[]
->;
+type I18nFallbackLanguages = Extract<NonNullable<InitOptions<object>['fallbackLng']>, string | readonly string[]>;
 
 interface ApiKitDefaultsSchema {
   build: {

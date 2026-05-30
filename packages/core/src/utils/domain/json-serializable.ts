@@ -38,9 +38,7 @@ export interface JSONSerializable {
  * @returns `true` if `value` is a JSON primitive (`string | number | boolean | null`), otherwise `false`.
  */
 export function isJSONPrimitive(value: unknown): value is JSONPrimitive {
-  return (
-    value === null || typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean'
-  );
+  return value === null || typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean';
 }
 
 /**

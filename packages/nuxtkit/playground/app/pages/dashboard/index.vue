@@ -157,8 +157,7 @@
               <template #header>
                 <div class="flex items-center justify-between gap-3">
                   <div class="text-sm text-neutral-500">
-                    #{{ index + 1 }} · {{ t(`operation.mode.${item.input.mode}`) }} ·
-                    {{ item.input.delayMs }}ms
+                    #{{ index + 1 }} · {{ t(`operation.mode.${item.input.mode}`) }} · {{ item.input.delayMs }}ms
                   </div>
 
                   <UBadge

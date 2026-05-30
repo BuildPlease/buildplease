@@ -119,9 +119,7 @@ export class EmailControllerImpl implements EmailController {
       if (existsSync(fallback)) return fallback;
     }
 
-    throw new Error(
-      `${LOG_PREFIX} Template not found: ${primary}${fallbackPath ? ` or ${fallbackPath}` : ''}`,
-    );
+    throw new Error(`${LOG_PREFIX} Template not found: ${primary}${fallbackPath ? ` or ${fallbackPath}` : ''}`);
   }
 
   private makeGlobals(): Record<string, unknown> {
