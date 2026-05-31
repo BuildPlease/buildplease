@@ -22,8 +22,8 @@
   },
   "devDependencies": {
     "@meawkit/devkit": "workspace:*",
-    "@swc/core": "1.15.32",
-    "@types/node": "25.6.0",
+    "@swc/core": "1.15.40",
+    "@types/node": "25.9.1",
     "lerna": "9.0.7",
     "tsup": "8.5.1",
     "typescript": "5.9.3"
@@ -31,7 +31,7 @@
   "packageManager": "pnpm@11.0.8",
   "pnpm": {
     "overrides": {
-      "@swc/core": "1.15.32",
+      "@swc/core": "1.15.40",
       "tsup": "8.5.1",
       "typescript": "5.9.3"
     }

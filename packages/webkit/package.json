@@ -32,7 +32,7 @@
   },
   "dependencies": {
     "@meawkit/core": "workspace:^",
-    "axios": "1.15.2"
+    "axios": "1.16.1"
   },
   "devDependencies": {
     "@meawkit/identity": "workspace:^"
@@ -40,7 +40,7 @@
   "peerDependencies": {
     "inversify": "^8.1.0",
     "reflect-metadata": "^0.2.2",
-    "zod": "^4.4.1"
+    "zod": "^4.4.3"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/"
