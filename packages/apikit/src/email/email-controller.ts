@@ -37,7 +37,7 @@ export class EmailControllerImpl implements EmailController {
     @inject(ApiKitSymbols.DI.Configuration.Controller)
     private readonly configuration: ApiKitController,
     @inject(ApiKitSymbols.DI.Logger.Controller)
-    private logger: LoggerController,
+    private readonly logger: LoggerController,
   ) {
     this.isEnabled = this.configuration.email.enabled;
     this.smtpConfig = makeSmtpConfig(this.configuration.email);
@@ -57,11 +57,11 @@ export class EmailControllerImpl implements EmailController {
       const htmlContent = await this.renderTemplate(template);
 
       const mailOptions: nodemailer.SendMailOptions = {
-        html: htmlContent,
         to: template.recipient,
         from: template.sender,
         subject: template.subject,
-        ...(template.replyTo ? { replyTo: template.replyTo } : {}),
+        html: htmlContent,
+        ...(template.replyTo !== undefined ? { replyTo: template.replyTo } : {}),
       };
 
       await transporter.sendMail(mailOptions);
@@ -89,10 +89,11 @@ export class EmailControllerImpl implements EmailController {
     return this.transporter;
   }
 
-  private async renderTemplate<T>(template: EmailTemplate<T>): Promise<string> {
+  private async renderTemplate<TData extends object>(template: EmailTemplate<TData>): Promise<string> {
     try {
       const filePath = this.makeFilePath(template.templatePath, template.fallbackPath);
       const templateString = await fs.readFile(filePath, 'utf-8');
+
       const data = {
         globals: this.makeGlobals(),
         ...template.data,
@@ -157,15 +158,12 @@ function makeSmtpConfig(config: EmailConfig): SmtpConfig {
 
   if (!smtp.host) throw new Error(`${LOG_PREFIX} email.smtp.host is required when email is enabled`);
   if (!smtp.port) throw new Error(`${LOG_PREFIX} email.smtp.port is required when email is enabled`);
+  if (smtp.secure === undefined) throw new Error(`${LOG_PREFIX} email.smtp.secure is required when email is enabled`);
   if (!smtp.user) throw new Error(`${LOG_PREFIX} email.smtp.user is required when email is enabled`);
   if (!smtp.password) throw new Error(`${LOG_PREFIX} email.smtp.password is required when email is enabled`);
 
   if (!Number.isInteger(smtp.port) || smtp.port <= 0) {
     throw new Error(`${LOG_PREFIX} email.smtp.port must be a positive integer`);
-  }
-
-  if (smtp.secure === undefined) {
-    throw new Error(`${LOG_PREFIX} email.smtp.secure is required when email is enabled`);
   }
 
   return {
