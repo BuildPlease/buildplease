@@ -8,7 +8,7 @@ import { clean } from '../commands/clean.mjs';
 import { CommandFailedError } from '../commands/run-bin.mjs';
 import { depCheck, depUpdate, format, formatFix, lint, lintFix } from '../commands/tool-commands.mjs';
 
-function normalizePassthroughArgs(args) {
+function normalizePassthroughArgs(args = []) {
   if (args[0] !== '--') return args;
   return args.slice(1);
 }
@@ -40,17 +40,56 @@ function formatUnknownOption(key) {
   return `--${key.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`)}`;
 }
 
-function assertKnownArgs(commandName, args, argsDefinition) {
+function assertKnownOptions(commandName, args, argsDefinition) {
   const knownKeys = new Set(['_', ...Object.keys(argsDefinition)]);
   const unknownKey = Object.keys(args).find((key) => !knownKeys.has(key));
 
   if (unknownKey) {
     throw new Error(`Unsupported ${commandName} option: ${formatUnknownOption(unknownKey)}`);
   }
+}
 
-  if (args._.length > 0) {
-    throw new Error(`Unsupported ${commandName} argument: ${args._[0]}`);
+function isEnabled(value) {
+  return value === true || value === '' || value === 'true';
+}
+
+function parseCleanDeepRawArgs(rawArgs) {
+  const options = {
+    clearCache: false,
+    clearLock: false,
+  };
+
+  for (const arg of normalizePassthroughArgs(rawArgs)) {
+    if (arg === '--cache') {
+      options.clearCache = true;
+      continue;
+    }
+
+    if (arg === '--lock') {
+      options.clearLock = true;
+      continue;
+    }
+
+    if (arg.startsWith('--')) {
+      throw new Error(`Unsupported clean-deep option: ${arg}`);
+    }
+
+    throw new Error(`Unsupported clean-deep argument: ${arg}`);
   }
+
+  return options;
+}
+
+function parseCleanDeepOptions(context) {
+  assertKnownOptions('clean-deep', context.args, cleanDeepArgs);
+
+  const rawOptions = parseCleanDeepRawArgs(context.rawArgs);
+  const positionalOptions = parseCleanDeepRawArgs(context.args._ ?? []);
+
+  return {
+    clearCache: isEnabled(context.args.cache) || rawOptions.clearCache || positionalOptions.clearCache,
+    clearLock: isEnabled(context.args.lock) || rawOptions.clearLock || positionalOptions.clearLock,
+  };
 }
 
 const cleanDeepCommand = defineCommand({
@@ -60,12 +99,7 @@ const cleanDeepCommand = defineCommand({
   },
   args: cleanDeepArgs,
   run(context) {
-    assertKnownArgs('clean-deep', context.args, cleanDeepArgs);
-
-    return cleanDeep({
-      clearCache: context.args.cache === true,
-      clearLock: context.args.lock === true,
-    });
+    return cleanDeep(parseCleanDeepOptions(context));
   },
 });
 
