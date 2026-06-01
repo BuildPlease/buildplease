@@ -10,9 +10,9 @@ export const EmailConfiguration = defineConfiguration('apikit.email', {
   smtp: {
     host: field.string().optional(),
     port: field.number().optional(),
+    secure: field.boolean().optional(),
     user: field.string().optional(),
     password: field.string().optional(),
-    sender: field.string().optional(),
   },
 });
 

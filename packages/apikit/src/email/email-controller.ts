@@ -16,9 +16,9 @@ const LOG_PREFIX = '[Email]:';
 type SmtpConfig = {
   host: string;
   port: number;
+  secure: boolean;
   user: string;
   pass: string;
-  sender: string;
 };
 
 export interface EmailController {
@@ -54,21 +54,15 @@ export class EmailControllerImpl implements EmailController {
       }
 
       const transporter = this.getOrCreateTransporter();
-      const recipient = template.recipient;
-      const sender = template.sender || this.smtpConfig.sender;
-      const subject = template.subject;
       const htmlContent = await this.renderTemplate(template);
 
       const mailOptions: nodemailer.SendMailOptions = {
-        to: recipient,
-        from: sender,
-        subject: subject,
         html: htmlContent,
+        to: template.recipient,
+        from: template.sender,
+        subject: template.subject,
+        ...(template.replyTo ? { replyTo: template.replyTo } : {}),
       };
-
-      if (template.replyTo) {
-        mailOptions.replyTo = template.replyTo;
-      }
 
       await transporter.sendMail(mailOptions);
     } catch (error) {
@@ -84,6 +78,7 @@ export class EmailControllerImpl implements EmailController {
       this.transporter = nodemailer.createTransport({
         host: this.smtpConfig.host,
         port: this.smtpConfig.port,
+        secure: this.smtpConfig.secure,
         auth: {
           user: this.smtpConfig.user,
           pass: this.smtpConfig.pass,
@@ -152,9 +147,9 @@ function makeSmtpConfig(config: EmailConfig): SmtpConfig {
     return {
       host: '',
       port: 0,
+      secure: false,
       user: '',
       pass: '',
-      sender: '',
     };
   }
 
@@ -164,18 +159,21 @@ function makeSmtpConfig(config: EmailConfig): SmtpConfig {
   if (!smtp.port) throw new Error(`${LOG_PREFIX} email.smtp.port is required when email is enabled`);
   if (!smtp.user) throw new Error(`${LOG_PREFIX} email.smtp.user is required when email is enabled`);
   if (!smtp.password) throw new Error(`${LOG_PREFIX} email.smtp.password is required when email is enabled`);
-  if (!smtp.sender) throw new Error(`${LOG_PREFIX} email.smtp.sender is required when email is enabled`);
 
   if (!Number.isInteger(smtp.port) || smtp.port <= 0) {
     throw new Error(`${LOG_PREFIX} email.smtp.port must be a positive integer`);
   }
 
+  if (smtp.secure === undefined) {
+    throw new Error(`${LOG_PREFIX} email.smtp.secure is required when email is enabled`);
+  }
+
   return {
     host: smtp.host,
     port: smtp.port,
+    secure: smtp.secure,
     user: smtp.user,
     pass: smtp.password,
-    sender: smtp.sender,
   };
 }
 

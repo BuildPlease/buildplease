@@ -6,11 +6,11 @@
 export interface EmailTemplate<T = object> {
   data: T;
   recipient: string;
-  sender?: string;
-  replyTo?: string;
+  sender: string;
   subject: string;
   templatePath: string;
   fallbackPath?: string;
+  replyTo?: string;
 }
 
 /**
@@ -21,16 +21,16 @@ export interface EmailTemplate<T = object> {
 export abstract class BaseEmailTemplate<T extends object> implements EmailTemplate<T> {
   data: T;
   recipient: string;
-  sender?: string;
-  replyTo?: string;
+  sender: string;
   subject: string;
+  replyTo?: string;
 
-  constructor(params: { recipient: string; sender?: string; replyTo?: string; subject?: string; data: T }) {
+  constructor(params: { data: T; recipient: string; sender: string; replyTo?: string; subject?: string }) {
     this.data = params.data;
     this.recipient = params.recipient;
     this.sender = params.sender;
-    this.replyTo = params.replyTo;
     this.subject = params.subject ?? this.defaultSubject();
+    this.replyTo = params.replyTo;
   }
 
   /**
