@@ -7,10 +7,11 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-# lock files
+# Lock files
 pnpm-lock.yaml
 yarn.lock
 package-lock.json
+bun.lockb
 
 # Editor directories and files
 .vscode
@@ -25,9 +26,39 @@ package-lock.json
 *.sln
 *.sw?
 
-# Dependencies and generated output
-.output
-.nuxt
+# Env files
+.env
+.env.*
+!.env.example
+
+# Dependencies and build output
 node_modules
 dist
-*.local
+build
+out
+.output
+.nuxt
+.next
+.turbo
+.cache
+.vercel
+.netlify
+.svelte-kit
+.astro
+
+# Nuxt/Vue auto-generated typy
+.nuxt/**
+auto-imports.d.ts
+components.d.ts
+typed-router.d.ts
+
+# Test coverage
+coverage
+.nyc_output
+
+# Minifikované súbory
+*.min.js
+*.min.css
+
+# Generated changelogs
+CHANGELOG.md
