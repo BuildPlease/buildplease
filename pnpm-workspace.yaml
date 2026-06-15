@@ -2,19 +2,16 @@ packages:
   - packages/*
   - packages/*/playground
 
+overrides:
+  '@swc/core': 1.15.40
+  tsup: 8.5.1
+  typescript: 5.9.3
+
 allowBuilds:
   '@parcel/watcher': true
   '@swc/core': true
+  '@tailwindcss/oxide': true
   esbuild: true
   nx: true
   sharp: true
   vue-demi: true
-
-onlyBuiltDependencies:
-  - '@parcel/watcher'
-  - '@swc/core'
-  - '@tailwindcss/oxide'
-  - esbuild
-  - nx
-  - sharp
-  - vue-demi

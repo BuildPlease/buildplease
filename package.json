@@ -28,12 +28,5 @@
     "tsup": "8.5.1",
     "typescript": "5.9.3"
   },
-  "packageManager": "pnpm@11.0.8",
-  "pnpm": {
-    "overrides": {
-      "@swc/core": "1.15.40",
-      "tsup": "8.5.1",
-      "typescript": "5.9.3"
-    }
-  }
+  "packageManager": "pnpm@11.7.0"
 }

@@ -106,7 +106,7 @@ const cleanDeepCommand = defineCommand({
 const run = defineCommand({
   meta: {
     name: 'run',
-    description: 'Run a shared MeawKit command.',
+    description: 'Run a shared DevKit command.',
   },
   subCommands: {
     clean: createPassthroughCommand('clean', 'Remove build artifact folders.', clean),
@@ -122,8 +122,8 @@ const run = defineCommand({
 
 const main = defineCommand({
   meta: {
-    name: 'meawkit',
-    description: 'Shared MeawKit repository hygiene toolkit.',
+    name: 'devkit',
+    description: 'Shared DevKit repository hygiene toolkit.',
   },
   subCommands: {
     run,

@@ -7,7 +7,7 @@
   "author": "Simon Rastislav Kovačič",
   "type": "module",
   "bin": {
-    "meawkit": "./bin/meawkit.mjs"
+    "devkit": "./bin/devkit.mjs"
   },
   "files": [
     "bin",
