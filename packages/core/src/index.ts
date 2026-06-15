@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { makeAssemblies } from '@internal/injection';
+import { makeAssemblies } from '@internal/di';
 
 import type { Assembly } from '@/di';
 

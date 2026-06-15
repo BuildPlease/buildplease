@@ -211,6 +211,9 @@ importers:
       globals:
         specifier: 17.6.0
         version: 17.6.0
+      jiti:
+        specifier: 2.7.0
+        version: 2.7.0
       npm-check-updates:
         specifier: 22.2.1
         version: 22.2.1

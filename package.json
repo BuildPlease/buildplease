@@ -9,15 +9,15 @@
   "type": "module",
   "scripts": {
     "build": "pnpm run clean && lerna run build",
-    "clean": "meawkit run clean",
-    "clean:deep": "meawkit run clean-deep",
-    "dep:check": "meawkit run dep-check",
-    "dep:update": "meawkit run dep-update",
-    "format": "meawkit run format",
-    "format:fix": "meawkit run format-fix",
+    "clean": "devkit run clean",
+    "clean:deep": "devkit run clean-deep",
+    "dep:check": "devkit run dep-check",
+    "dep:update": "devkit run dep-update",
+    "format": "devkit run format",
+    "format:fix": "devkit run format-fix",
     "preinstall": "npx only-allow pnpm",
-    "lint": "meawkit run lint",
-    "lint:fix": "meawkit run lint-fix",
+    "lint": "devkit run lint",
+    "lint:fix": "devkit run lint-fix",
     "typecheck": "lerna run typecheck"
   },
   "devDependencies": {
