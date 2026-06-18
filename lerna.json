@@ -1,6 +1,5 @@
 {
   "npmClient": "pnpm",
-  "packages": ["packages/*"],
   "version": "independent",
   "command": {
     "publish": {

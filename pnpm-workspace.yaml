@@ -2,11 +2,26 @@ packages:
   - packages/*
   - packages/*/playground
 
+# Save exact versions without ^/~ ranges.
+saveExact: true
+
+# Hoist dependencies for tools that expect flat node_modules.
+shamefullyHoist: true
+
+# Auto-install resolvable peer dependencies.
+autoInstallPeers: true
+
+# Fail install on invalid or missing peer dependencies.
+strictPeerDependencies: true
+
+# Force critical tooling dependencies to one workspace-wide version.
 overrides:
   '@swc/core': 1.15.40
+  '@types/node': 25.9.1
   tsup: 8.5.1
   typescript: 5.9.3
 
+# Allow reviewed dependencies to run install/build scripts.
 allowBuilds:
   '@parcel/watcher': true
   '@swc/core': true
