@@ -1,5 +1,14 @@
 import type sharp from 'sharp';
-import { type Sharp } from 'sharp';
+
+/**
+ * Runtime Sharp pipeline instance.
+ *
+ * @remarks
+ * Sharp no longer exposes a stable named `Sharp` type export in the currently
+ * used type surface. `ReturnType<typeof sharp>` keeps this contract aligned
+ * with the callable default export instead of depending on a removed named type.
+ */
+export type SharpInstance = ReturnType<typeof sharp>;
 
 /**
  * Shared options applied to every image configuration.
@@ -21,14 +30,14 @@ type Base = {
 
     /**
      * Low-level hook executed after framework transforms and before output.
-     * Must return the same `Sharp` instance (mutated) or a new pipeline.
+     * Must return the same Sharp pipeline instance (mutated) or a new pipeline.
      *
      * @example
      * ```ts
      * configure: s => s.rotate().withMetadata()
      * ```
      */
-    configure?: (instance: Sharp) => Sharp;
+    configure?: (instance: SharpInstance) => SharpInstance;
   };
 };
 

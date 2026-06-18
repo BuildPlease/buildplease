@@ -1,1 +1,2 @@
-export * from './make-externals';
+export * from './dependency-bundling-policy';
+export * from './make-dependency-bundling-policy';

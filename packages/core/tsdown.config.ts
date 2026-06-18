@@ -1,17 +1,18 @@
-import { loadPackageJSON, makeExternals, resolvePath } from '@node';
-import { defineConfig } from 'tsup';
+import { defineConfig } from 'tsdown';
+
+import { loadPackageJSON, makeDependencyBundlingPolicy, resolvePath } from './src-node';
 
 const outDir = 'dist';
 const pkg = loadPackageJSON(resolvePath(import.meta.url, './package.json'));
 
-const externalsNeutral = makeExternals(pkg, {
+const neutralPolicy = makeDependencyBundlingPolicy(pkg, {
   includeNodeBuiltins: false,
-  bundled: [],
+  bundle: ['@meawkit/identity'],
 });
 
-const externalsNode = makeExternals(pkg, {
+const nodePolicy = makeDependencyBundlingPolicy(pkg, {
   includeNodeBuiltins: true,
-  bundled: [],
+  bundle: ['@meawkit/identity'],
 });
 
 export default defineConfig([
@@ -26,15 +27,18 @@ export default defineConfig([
     outDir: outDir,
     clean: true,
 
+    hash: false,
     dts: true,
     minify: true,
-    bundle: true,
     shims: false,
     sourcemap: false,
-    splitting: false,
     treeshake: true,
 
-    external: externalsNeutral,
+    deps: {
+      neverBundle: neutralPolicy.external,
+      alwaysBundle: neutralPolicy.bundle,
+      onlyBundle: neutralPolicy.bundle,
+    },
   },
   // MARK: - Node entry
   {
@@ -47,14 +51,17 @@ export default defineConfig([
     outDir: outDir,
     clean: false,
 
+    hash: false,
     dts: true,
     minify: true,
-    bundle: true,
     shims: false,
     sourcemap: false,
-    splitting: false,
     treeshake: true,
 
-    external: externalsNode,
+    deps: {
+      neverBundle: nodePolicy.external,
+      alwaysBundle: nodePolicy.bundle,
+      onlyBundle: nodePolicy.bundle,
+    },
   },
 ]);

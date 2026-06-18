@@ -14,17 +14,21 @@ autoInstallPeers: true
 # Fail install on invalid or missing peer dependencies.
 strictPeerDependencies: true
 
-# Force critical tooling dependencies to one workspace-wide version.
+# Disable pnpm minimum release age checks for this workspace.
+minimumReleaseAge: 0
+
+# Do not auto-run install before scripts.
+verifyDepsBeforeRun: false
+
+# Force critical dependencies to one workspace-wide version.
 overrides:
-  '@swc/core': 1.15.40
-  '@types/node': 25.9.1
-  tsup: 8.5.1
-  typescript: 5.9.3
+  tsx: 4.22.4
+  tsdown: 0.22.3
+  typescript: 6.0.3
 
 # Allow reviewed dependencies to run install/build scripts.
 allowBuilds:
   '@parcel/watcher': true
-  '@swc/core': true
   '@tailwindcss/oxide': true
   esbuild: true
   nx: true

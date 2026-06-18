@@ -22,11 +22,10 @@
   },
   "devDependencies": {
     "@meawkit/devkit": "workspace:*",
-    "@swc/core": "1.15.40",
-    "@types/node": "25.9.1",
     "lerna": "9.0.7",
-    "tsup": "8.5.1",
-    "typescript": "5.9.3"
+    "tsdown": "0.22.3",
+    "tsx": "4.22.4",
+    "typescript": "6.0.3"
   },
   "packageManager": "pnpm@11.7.0"
 }

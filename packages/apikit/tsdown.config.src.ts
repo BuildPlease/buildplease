@@ -1,15 +1,15 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-import { loadPackageJSON, makeExternals, resolvePath } from '@meawkit/core/node';
-import { defineConfig } from 'tsup';
+import { loadPackageJSON, makeDependencyBundlingPolicy, resolvePath } from '@meawkit/core/node';
+import { defineConfig } from 'tsdown';
 
 const outDir = 'dist/src';
 const pkg = loadPackageJSON(resolvePath(import.meta.url, './package.json'));
 
-const externals = makeExternals(pkg, {
+const policy = makeDependencyBundlingPolicy(pkg, {
   includeNodeBuiltins: true,
-  bundled: [],
+  bundle: ['@meawkit/identity'],
 });
 
 export default defineConfig([
@@ -20,23 +20,28 @@ export default defineConfig([
     tsconfig: 'tsconfig.json',
     platform: 'node',
     target: 'esnext',
-    format: ['cjs', 'esm'],
+    format: ['esm', 'cjs'],
 
     outDir: outDir,
     clean: true,
 
+    hash: false,
     dts: true,
     minify: true,
-    bundle: true,
     shims: false,
     sourcemap: false,
-    splitting: false,
     treeshake: true,
 
-    external: externals,
+    deps: {
+      neverBundle: policy.external,
+      alwaysBundle: policy.bundle,
+      onlyBundle: policy.bundle,
+    },
 
-    onSuccess: async () => {
-      await copyLocales();
+    hooks: {
+      'build:done': async () => {
+        await copyLocales();
+      },
     },
   },
 ]);

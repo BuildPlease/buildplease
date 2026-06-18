@@ -1,50 +1,21 @@
 {
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    /* Base options */
-    "target": "ES2024",
-    "module": "Preserve",
-    "moduleResolution": "bundler",
-
-    /* Strictness */
-    "strict": true,
-    "alwaysStrict": true,
-    "strictNullChecks": true,
-    "strictFunctionTypes": true,
-    "strictPropertyInitialization": true,
-    "noUncheckedIndexedAccess": true,
-    "noUncheckedSideEffectImports": true,
-    "forceConsistentCasingInFileNames": true,
-    "noImplicitOverride": true,
-    "noImplicitAny": true,
-    "noImplicitThis": true,
-    "verbatimModuleSyntax": true,
-
-    /* Module Handling */
-    "esModuleInterop": true,
-    "resolveJsonModule": true,
-    "resolvePackageJsonExports": true,
-    "allowImportingTsExtensions": true,
-
-    /* Decorators */
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-
-    /* Output Control */
-    "declaration": true,
-    "emitDeclarationOnly": true,
-    "skipLibCheck": true,
-    "sourceMap": false,
-
-    /* Paths */
+    /* Project output */
     "rootDir": "./",
     "outDir": "./dist",
     "declarationDir": "./dist/types",
+
+    /* Runtime types */
+    "types": ["node"],
+
+    /* Project paths */
     "paths": {
       "@/*": ["./src/*"],
       "@cli/*": ["./src-cli/*"],
       "@internal/*": ["./src-internal/*"]
     }
   },
-  "include": ["src", "src-cli", "src-internal", "types", "tests", "tsup.config.cli.ts", "tsup.config.src.ts"],
+  "include": ["src", "src-cli", "src-internal", "types", "tests", "tsdown.config.cli.ts", "tsdown.config.src.ts"],
   "exclude": ["node_modules", "dist"]
 }

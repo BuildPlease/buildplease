@@ -1,4 +1,4 @@
-import { defineConfig } from 'tsup';
+import { defineConfig } from 'tsdown';
 
 export default defineConfig([
   {
@@ -11,12 +11,11 @@ export default defineConfig([
     outDir: 'dist',
     clean: true,
 
+    hash: false,
     dts: true,
     minify: true,
-    bundle: true,
     shims: false,
     sourcemap: false,
-    splitting: false,
     treeshake: true,
   },
 ]);

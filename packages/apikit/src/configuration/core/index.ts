@@ -7,6 +7,6 @@ export {
   defineEnvironments,
 } from './environments';
 
-export { field } from './field';
+export { type ConfigurationField, field } from './field';
 
 export { type ConfigurationResolveContext, defineSource } from './source';
