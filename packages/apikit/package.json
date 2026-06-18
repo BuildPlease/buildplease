@@ -26,7 +26,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsdown --config tsdown.config.cli.ts --config-loader tsx && tsdown --config tsdown.config.src.ts --config-loader tsx",
+    "build": "tsdown --config tsdown.config.cli.ts --config-loader unrun && tsdown --config tsdown.config.src.ts --config-loader unrun",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {

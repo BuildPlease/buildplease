@@ -22,7 +22,7 @@ verifyDepsBeforeRun: false
 
 # Force critical dependencies to one workspace-wide version.
 overrides:
-  tsx: 4.22.4
+  unrun: 0.3.1
   tsdown: 0.22.3
   typescript: 6.0.3
 

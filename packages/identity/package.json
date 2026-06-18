@@ -23,7 +23,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsdown --config-loader tsx",
+    "build": "tsdown --config-loader unrun",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {}
