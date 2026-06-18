@@ -14,8 +14,14 @@ export interface NormalizationController {
 @injectable()
 export class NormalizationControllerImpl implements NormalizationController {
   normalizeEmail(email: string): string {
-    const normalizedEmail = validator.normalizeEmail(email, {
-      all_lowercase: false,
+    const value = email.trim();
+
+    if (!validator.isEmail(value)) {
+      throw ApiErrorFactory.make('Validation.INVALID_EMAIL_FORMAT');
+    }
+
+    const normalizedEmail = validator.normalizeEmail(value, {
+      all_lowercase: true,
       gmail_lowercase: true,
       gmail_remove_dots: true,
       gmail_remove_subaddress: true,
@@ -27,10 +33,12 @@ export class NormalizationControllerImpl implements NormalizationController {
       icloud_lowercase: true,
       icloud_remove_subaddress: true,
     });
+
     if (!normalizedEmail) {
-      throw ApiErrorFactory.make('Validation.INVALID_PHONE_NUMBER_FORMAT');
+      throw ApiErrorFactory.make('Validation.INVALID_EMAIL_FORMAT');
     }
-    return normalizedEmail as string;
+
+    return normalizedEmail;
   }
 
   normalizePhoneToE164(phoneNumber: string): string {

@@ -48,7 +48,7 @@ export type EdgeConfiguration = InferConfiguration<typeof EdgeConfiguration>;
 
 export default defineApikit(environments, {
   build: {
-    outDir: '.apikit-output',
+    outDir: 'apikit-output',
 
     debug: from.byEnvironment({
       development: true,
@@ -193,9 +193,9 @@ export default defineApikit(environments, {
     smtp: {
       host: from.env('SMTP_HOST'),
       port: from.env('SMTP_PORT'),
+      secure: from.env('SMTP_SECURE'),
       user: from.env('SMTP_USER'),
       password: from.env('SMTP_PASSWORD'),
-      sender: from.env('SMTP_SENDER'),
     },
   },
 
