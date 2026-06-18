@@ -1,16 +1,17 @@
-import { loadPackageJSON, makeExternals, resolvePath } from '@meawkit/core/node';
-import { defineConfig } from 'tsup';
+import { loadPackageJSON, makeDependencyBundlingPolicy, resolvePath } from '@meawkit/core/node';
+import { defineConfig } from 'tsdown';
 
 const outDir = 'dist';
 const pkg = loadPackageJSON(resolvePath(import.meta.url, './package.json'));
 
-const externalsBrowser = makeExternals(pkg, {
+const browserPolicy = makeDependencyBundlingPolicy(pkg, {
   includeNodeBuiltins: false,
-  bundled: [],
+  bundle: ['@meawkit/identity'],
 });
-const externalsNode = makeExternals(pkg, {
+
+const nodePolicy = makeDependencyBundlingPolicy(pkg, {
   includeNodeBuiltins: true,
-  bundled: [],
+  bundle: ['@meawkit/identity'],
 });
 
 export default defineConfig([
@@ -20,20 +21,23 @@ export default defineConfig([
     tsconfig: 'tsconfig.json',
     platform: 'browser',
     target: 'esnext',
-    format: ['esm'],
+    format: ['esm', 'cjs'],
 
     outDir: outDir,
     clean: true,
 
+    hash: false,
     dts: true,
     minify: true,
-    bundle: true,
     shims: false,
     sourcemap: false,
-    splitting: false,
     treeshake: true,
 
-    external: externalsBrowser,
+    deps: {
+      neverBundle: browserPolicy.external,
+      alwaysBundle: browserPolicy.bundle,
+      onlyBundle: browserPolicy.bundle,
+    },
   },
 
   // MARK: - Node entry
@@ -47,14 +51,17 @@ export default defineConfig([
     outDir: outDir,
     clean: false,
 
+    hash: false,
     dts: true,
     minify: true,
-    bundle: true,
     shims: false,
     sourcemap: false,
-    splitting: false,
     treeshake: true,
 
-    external: externalsNode,
+    deps: {
+      neverBundle: nodePolicy.external,
+      alwaysBundle: nodePolicy.bundle,
+      onlyBundle: nodePolicy.bundle,
+    },
   },
 ]);

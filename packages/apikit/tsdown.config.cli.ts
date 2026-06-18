@@ -1,14 +1,14 @@
-import { loadPackageJSON, makeExternals, resolvePath } from '@meawkit/core/node';
-import { defineConfig } from 'tsup';
+import { loadPackageJSON, makeDependencyBundlingPolicy, resolvePath } from '@meawkit/core/node';
+import { defineConfig } from 'tsdown';
 
 const outDir = 'dist';
 const pkg = loadPackageJSON(resolvePath(import.meta.url, './package.json'));
 
-const externals = makeExternals(pkg, {
+const policy = makeDependencyBundlingPolicy(pkg, {
   includeNodeBuiltins: true,
   includePeers: true,
   includeDependencies: true,
-  bundled: [],
+  bundle: ['@meawkit/identity'],
 });
 
 export default defineConfig({
@@ -23,14 +23,16 @@ export default defineConfig({
   outDir: outDir,
   clean: true,
 
+  hash: false,
   dts: false,
-
   minify: true,
-  bundle: true,
   shims: false,
   sourcemap: false,
-  splitting: false,
   treeshake: true,
 
-  external: externals,
+  deps: {
+    neverBundle: policy.external,
+    alwaysBundle: policy.bundle,
+    onlyBundle: policy.bundle,
+  },
 });

@@ -8,21 +8,31 @@
   "type": "module",
   "exports": {
     ".": {
-      "types": "./dist/src/index.d.ts",
-      "import": "./dist/src/index.js",
-      "require": "./dist/src/index.cjs"
+      "import": {
+        "types": "./dist/src/index.d.ts",
+        "default": "./dist/src/index.js"
+      },
+      "require": {
+        "types": "./dist/src/index.d.cts",
+        "default": "./dist/src/index.cjs"
+      }
     },
     "./node": {
-      "types": "./dist/src-node/index.d.ts",
-      "import": "./dist/src-node/index.js",
-      "require": "./dist/src-node/index.cjs"
+      "import": {
+        "types": "./dist/src-node/index.d.mts",
+        "default": "./dist/src-node/index.mjs"
+      },
+      "require": {
+        "types": "./dist/src-node/index.d.cts",
+        "default": "./dist/src-node/index.cjs"
+      }
     }
   },
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "tsup",
+    "build": "tsdown --config-loader tsx",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
@@ -34,10 +44,11 @@
   },
   "devDependencies": {
     "@meawkit/identity": "workspace:^",
-    "@types/ms": "2.1.0"
+    "@types/ms": "2.1.0",
+    "@types/node": "25.9.3"
   },
   "peerDependencies": {
-    "inversify": "^8.1.0",
+    "inversify": "^8.1.1",
     "reflect-metadata": "^0.2.2",
     "zod": "^4.4.3"
   },

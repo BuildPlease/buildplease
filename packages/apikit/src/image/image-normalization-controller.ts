@@ -3,11 +3,12 @@ import { pipeline as pipelineAsync } from 'stream/promises';
 
 import { type UnitFormatterController, ByteUnit, CoreSymbols } from '@meawkit/core';
 import { inject, injectable } from 'inversify';
-import sharp, { type Sharp } from 'sharp';
+import sharp from 'sharp';
 
 import { ApiErrorFactory } from '@/error';
 import { FormatType } from '@/formatter';
-import type { ImageOptions } from '@/image';
+
+import type { ImageOptions, SharpInstance } from './image-options';
 
 export interface ImageNormalizationController {
   processBufferToBuffer(input: Buffer, options?: ImageOptions): Promise<{ buffer: Buffer; type: FormatType }>;
@@ -54,9 +55,9 @@ export class ImageNormalizationControllerImpl implements ImageNormalizationContr
   // MARK: - Private
 
   private async transform(
-    imageIn: Sharp,
+    imageIn: SharpInstance,
     inputOptions?: ImageOptions,
-  ): Promise<{ processed: Sharp; type: FormatType }> {
+  ): Promise<{ processed: SharpInstance; type: FormatType }> {
     const options = inputOptions ?? this.makeDefaultOptions();
 
     let meta: sharp.Metadata;
@@ -74,7 +75,8 @@ export class ImageNormalizationControllerImpl implements ImageNormalizationContr
 
     let instance = await this.applyNormalization(imageIn, meta, options);
 
-    const { outputFormat, sharp: sharpOptions } = options;
+    const outputFormat = this.toSharpFormat(options.outputFormat);
+    const { sharp: sharpOptions } = options;
     instance = sharpOptions?.toFormat
       ? instance.toFormat(outputFormat, sharpOptions.toFormat)
       : instance.toFormat(outputFormat);
@@ -120,24 +122,39 @@ export class ImageNormalizationControllerImpl implements ImageNormalizationContr
     }
   }
 
-  private toFormatType(fmt: keyof sharp.FormatEnum): FormatType {
-    if (!sharp.format[fmt]?.output) {
-      const message = `Cannot encode output format: ${fmt}`;
-      throw ApiErrorFactory.make('Format.UNSUPPORTED_FORMAT', { details: message });
-    }
-    return new FormatType(fmt);
+  private toSharpFormat(format: ImageOptions['outputFormat']): keyof sharp.FormatEnum {
+    return format as keyof sharp.FormatEnum;
   }
 
-  private asReadable(instance: Sharp): Readable {
+  private toFormatType(format: ImageOptions['outputFormat']): FormatType {
+    const formatInfo = this.getFormatInfo(format);
+
+    if (!formatInfo?.output) {
+      const message = `Cannot encode output format: ${format}`;
+      throw ApiErrorFactory.make('Format.UNSUPPORTED_FORMAT', { details: message });
+    }
+    return new FormatType(format);
+  }
+
+  private getFormatInfo(format: string): { input?: boolean; output?: boolean } | undefined {
+    const formats = sharp.format as unknown as Record<string, { input?: boolean; output?: boolean } | undefined>;
+
+    return formats[format];
+  }
+  private asReadable(instance: SharpInstance): Readable {
     const out = new PassThrough();
-    instance.on('error', (error) => out.destroy(error));
+    instance.on('error', (error: Error) => out.destroy(error));
     instance.pipe(out);
     return out;
   }
 
   // MARK: - Helpers
 
-  private async applyNormalization(instance: Sharp, meta: sharp.Metadata, options: ImageOptions): Promise<Sharp> {
+  private async applyNormalization(
+    instance: SharpInstance,
+    meta: sharp.Metadata,
+    options: ImageOptions,
+  ): Promise<SharpInstance> {
     const hasConstraints =
       options.minWidth != null ||
       options.maxWidth != null ||

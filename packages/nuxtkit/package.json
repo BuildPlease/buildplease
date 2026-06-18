@@ -36,7 +36,7 @@
   "dependencies": {
     "@iconify-json/flag": "1.2.12",
     "@meawkit/webkit": "workspace:^",
-    "@nuxt/kit": "4.4.6",
+    "@nuxt/kit": "4.4.8",
     "consola": "3.4.2",
     "defu": "6.1.7"
   },
@@ -44,18 +44,18 @@
     "@meawkit/identity": "workspace:^",
     "@nuxt/devtools": "3.2.4",
     "@nuxt/module-builder": "1.0.2",
-    "@nuxt/schema": "4.4.6",
-    "nuxt": "4.4.6",
+    "@nuxt/schema": "4.4.8",
+    "nuxt": "4.4.8",
     "unbuild": "3.6.1",
-    "vitest": "4.1.7",
-    "vue-tsc": "3.3.3"
+    "vitest": "4.1.9",
+    "vue-tsc": "3.3.5"
   },
   "peerDependencies": {
-    "@nuxt/ui": "^4.8.1",
+    "@nuxt/ui": "^4.9.0",
     "@nuxtjs/i18n": "^10.4.0",
-    "inversify": "^8.1.0",
+    "inversify": "^8.1.1",
     "reflect-metadata": "^0.2.2",
-    "vue-i18n": "^11.4.4",
+    "vue-i18n": "^11.4.6",
     "zod": "^4.4.3"
   },
   "publishConfig": {
