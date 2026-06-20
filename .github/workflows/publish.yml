@@ -42,6 +42,10 @@ jobs:
       - name: Build packages
         run: pnpm run build
 
+      # MARK: - Typecheck Packages
+      - name: Typecheck packages
+        run: pnpm run typecheck
+
       # MARK: - Publish (Lerna)
       - name: Publish packages
         run: npx lerna publish from-package --yes --summary-file ./lerna-publish-summary.json
