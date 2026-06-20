@@ -4,11 +4,12 @@ import { pipeline as pipelineAsync } from 'stream/promises';
 import { type UnitFormatterController, ByteUnit, CoreSymbols } from '@meawkit/core';
 import { inject, injectable } from 'inversify';
 import sharp from 'sharp';
+import type { Metadata } from 'sharp';
 
 import { ApiErrorFactory } from '@/error';
 import { FormatType } from '@/formatter';
 
-import type { ImageOptions, SharpInstance } from './image-options';
+import type { ImageOptions, SharpFormat, SharpInstance } from './image-options';
 
 export interface ImageNormalizationController {
   processBufferToBuffer(input: Buffer, options?: ImageOptions): Promise<{ buffer: Buffer; type: FormatType }>;
@@ -60,7 +61,7 @@ export class ImageNormalizationControllerImpl implements ImageNormalizationContr
   ): Promise<{ processed: SharpInstance; type: FormatType }> {
     const options = inputOptions ?? this.makeDefaultOptions();
 
-    let meta: sharp.Metadata;
+    let meta: Metadata;
 
     try {
       meta = await imageIn.metadata();
@@ -89,7 +90,7 @@ export class ImageNormalizationControllerImpl implements ImageNormalizationContr
     return { processed: instance, type };
   }
 
-  private validateInputFormat(format: keyof sharp.FormatEnum | undefined, allowed?: (keyof sharp.FormatEnum)[]) {
+  private validateInputFormat(format: SharpFormat | undefined, allowed?: SharpFormat[]) {
     if (!format || !sharp.format[format]?.input) {
       throw ApiErrorFactory.make('Format.UNSUPPORTED_FORMAT', {
         details: `Unsupported input format: ${format}`,
@@ -122,8 +123,8 @@ export class ImageNormalizationControllerImpl implements ImageNormalizationContr
     }
   }
 
-  private toSharpFormat(format: ImageOptions['outputFormat']): keyof sharp.FormatEnum {
-    return format as keyof sharp.FormatEnum;
+  private toSharpFormat(format: ImageOptions['outputFormat']): SharpFormat {
+    return format as SharpFormat;
   }
 
   private toFormatType(format: ImageOptions['outputFormat']): FormatType {
@@ -152,7 +153,7 @@ export class ImageNormalizationControllerImpl implements ImageNormalizationContr
 
   private async applyNormalization(
     instance: SharpInstance,
-    meta: sharp.Metadata,
+    meta: Metadata,
     options: ImageOptions,
   ): Promise<SharpInstance> {
     const hasConstraints =

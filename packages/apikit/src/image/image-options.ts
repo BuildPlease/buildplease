@@ -1,21 +1,34 @@
-import type sharp from 'sharp';
+import type {
+  AvifOptions,
+  FormatEnum,
+  GifOptions,
+  HeifOptions,
+  JpegOptions,
+  Jp2Options,
+  JxlOptions,
+  PngOptions,
+  ResizeOptions,
+  Sharp,
+  TiffOptions,
+  WebpOptions,
+} from 'sharp';
 
 /**
  * Runtime Sharp pipeline instance.
- *
- * @remarks
- * Sharp no longer exposes a stable named `Sharp` type export in the currently
- * used type surface. `ReturnType<typeof sharp>` keeps this contract aligned
- * with the callable default export instead of depending on a removed named type.
  */
-export type SharpInstance = ReturnType<typeof sharp>;
+export type SharpInstance = Sharp;
+
+/**
+ * Sharp format key accepted by the normalization pipeline.
+ */
+export type SharpFormat = Extract<keyof FormatEnum, string>;
 
 /**
  * Shared options applied to every image configuration.
  */
 type Base = {
   maximumSize?: number;
-  allowedInputFormats?: (keyof sharp.FormatEnum)[];
+  allowedInputFormats?: SharpFormat[];
 
   /**
    * Direct passthrough for Sharp configuration.
@@ -26,7 +39,7 @@ type Base = {
    */
   sharp?: {
     /** Optional resize transformation applied before encoding. Mirrors `sharp.resize()` options. */
-    resize?: sharp.ResizeOptions;
+    resize?: ResizeOptions;
 
     /**
      * Low-level hook executed after framework transforms and before output.
@@ -43,15 +56,15 @@ type Base = {
 
 /** Mapping of encoder-specific options keyed by output format. */
 type OutputOptionsMap = {
-  jpeg: sharp.JpegOptions;
-  png: sharp.PngOptions;
-  webp: sharp.WebpOptions;
-  avif: sharp.AvifOptions;
-  heif: sharp.HeifOptions;
-  tiff: sharp.TiffOptions;
-  jp2: sharp.Jp2Options;
-  jxl: sharp.JxlOptions;
-  gif: sharp.GifOptions;
+  jpeg: JpegOptions;
+  png: PngOptions;
+  webp: WebpOptions;
+  avif: AvifOptions;
+  heif: HeifOptions;
+  tiff: TiffOptions;
+  jp2: Jp2Options;
+  jxl: JxlOptions;
+  gif: GifOptions;
 };
 
 /**
