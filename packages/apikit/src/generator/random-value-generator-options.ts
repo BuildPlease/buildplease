@@ -61,11 +61,3 @@ export interface GenerateStringOptions {
    */
   alphabet?: RandomValueAlphabet;
 }
-
-/**
- * @description Default options for `RandomValueGenerator.generateString`.
- */
-export const DEFAULT_GENERATE_STRING_OPTIONS = {
-  length: 8,
-  alphabet: 'alphanumeric',
-} as const satisfies Required<GenerateStringOptions>;

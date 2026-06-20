@@ -3,8 +3,8 @@ import { pipeline as pipelineAsync } from 'stream/promises';
 
 import { type UnitFormatterController, ByteUnit, CoreSymbols } from '@meawkit/core';
 import { inject, injectable } from 'inversify';
-import sharp from 'sharp';
 import type { Metadata } from 'sharp';
+import sharp from 'sharp';
 
 import { ApiErrorFactory } from '@/error';
 import { FormatType } from '@/formatter';

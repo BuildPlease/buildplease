@@ -60,6 +60,10 @@ const Server = {
   ResponseController: Symbol.for(`${prefix}.Server.ResponseController`),
 };
 
+const Security = {
+  CryptographyController: Symbol.for(`${prefix}.Security.CryptographyController`),
+};
+
 export const ApiKitSymbols = {
   DI: {
     Configuration,
@@ -75,5 +79,6 @@ export const ApiKitSymbols = {
     Image,
     Logger,
     Server,
+    Security,
   },
 };

@@ -8,7 +8,6 @@ import {
   type GenerateStringOptions,
   type RandomValueAlphabet,
   type RandomValueAlphabetPreset,
-  DEFAULT_GENERATE_STRING_OPTIONS,
 } from './random-value-generator-options';
 
 /**
@@ -18,6 +17,14 @@ export const RANDOM_VALUE_GENERATOR_LIMITS = {
   maxStringLength: 4096,
   randomIntegerRangeLimit: 2 ** 48,
 } as const;
+
+/**
+ * @description Default options for `RandomValueGenerator.generateString`.
+ */
+export const DEFAULT_GENERATE_STRING_OPTIONS = {
+  length: 8,
+  alphabet: 'alphanumeric',
+} as const satisfies Required<GenerateStringOptions>;
 
 const ALPHABETS: Record<RandomValueAlphabetPreset, string> = {
   decimal: '0123456789',

@@ -11,6 +11,7 @@ import { ImageAssembly } from './assemblies/image';
 import { LoggerAssembly } from './assemblies/logger';
 import { NormalizationAssembly } from './assemblies/normalization';
 import { OpenAPIAssembly } from './assemblies/openapi';
+import { SecurityAssembly } from './assemblies/security';
 import { ServerAssembly } from './assemblies/server';
 import { ValidationAssembly } from './assemblies/validation';
 
@@ -27,6 +28,7 @@ export function makeAssemblies(): Assembly[] {
     new LoggerAssembly(),
     new NormalizationAssembly(),
     new OpenAPIAssembly(),
+    new SecurityAssembly(),
     new ServerAssembly(),
     new ValidationAssembly(),
   ];
