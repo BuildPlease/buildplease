@@ -5,12 +5,12 @@ import { DatabaseAssembly } from './assemblies/database';
 import { EmailAssembly } from './assemblies/email';
 import { FileAssembly } from './assemblies/file';
 import { FormatterAssembly } from './assemblies/formatter';
+import { GeneratorAssembly } from './assemblies/generator';
 import { I18nAssembly } from './assemblies/i18n';
 import { ImageAssembly } from './assemblies/image';
 import { LoggerAssembly } from './assemblies/logger';
 import { NormalizationAssembly } from './assemblies/normalization';
 import { OpenAPIAssembly } from './assemblies/openapi';
-import { SecurityAssembly } from './assemblies/security';
 import { ServerAssembly } from './assemblies/server';
 import { ValidationAssembly } from './assemblies/validation';
 
@@ -21,12 +21,12 @@ export function makeAssemblies(): Assembly[] {
     new EmailAssembly(),
     new FileAssembly(),
     new FormatterAssembly(),
+    new GeneratorAssembly(),
     new I18nAssembly(),
     new ImageAssembly(),
     new LoggerAssembly(),
     new NormalizationAssembly(),
     new OpenAPIAssembly(),
-    new SecurityAssembly(),
     new ServerAssembly(),
     new ValidationAssembly(),
   ];

@@ -15,6 +15,7 @@ export * from './email';
 export * from './error';
 export * from './file';
 export * from './formatter';
+export * from './generator';
 export * from './http';
 export * from './i18n';
 export * from './image';

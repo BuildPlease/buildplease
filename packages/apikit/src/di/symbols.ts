@@ -42,6 +42,10 @@ const Formatter = {
   MultipartController: Symbol.for(`${prefix}.Formatter.MultipartController`),
 };
 
+const Generator = {
+  RandomValueGenerator: Symbol.for(`${prefix}.Generator.RandomValueGenerator`),
+};
+
 const Image = {
   NormalizationController: Symbol.for(`${prefix}.Image.NormalizationController`),
 };
@@ -56,10 +60,6 @@ const Server = {
   ResponseController: Symbol.for(`${prefix}.Server.ResponseController`),
 };
 
-const Security = {
-  Controller: Symbol.for(`${prefix}.Security.Controller`),
-};
-
 export const ApiKitSymbols = {
   DI: {
     Configuration,
@@ -71,9 +71,9 @@ export const ApiKitSymbols = {
     I18n,
     Normalization,
     Formatter,
+    Generator,
     Image,
     Logger,
     Server,
-    Security,
   },
 };

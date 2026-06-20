@@ -1,2 +1,1 @@
-export * from './security-controller';
 export * from './token';
