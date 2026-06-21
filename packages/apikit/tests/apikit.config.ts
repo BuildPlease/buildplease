@@ -48,7 +48,7 @@ export type EdgeConfiguration = InferConfiguration<typeof EdgeConfiguration>;
 
 export default defineApikit(environments, {
   build: {
-    outDir: 'apikit-output',
+    outDir: '.apikit',
 
     debug: from.byEnvironment({
       development: true,

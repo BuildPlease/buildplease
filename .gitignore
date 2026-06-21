@@ -174,8 +174,5 @@ storybook-static/
 # Custom
 # ------------------------------------------------------------------------------
 
-apikit-build/
-apikit-output/
-
 **/generated/
 **/__generated__/
