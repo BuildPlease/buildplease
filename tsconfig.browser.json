@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    /* Browser runtime libs */
+    "lib": ["ES2024", "DOM", "DOM.Iterable"],
+
+    /* No forced Node globals in browser packages */
+    "types": []
+  }
+}

@@ -1,7 +1,3 @@
-packages:
-  - packages/*
-  - packages/*/playground
-
 # Save exact versions without ^/~ ranges.
 saveExact: true
 
@@ -20,12 +16,16 @@ minimumReleaseAge: 0
 # Do not auto-run install before scripts.
 verifyDepsBeforeRun: false
 
-# Force critical dependencies to one workspace-wide version.
+#####
+
+packages:
+  - packages/*
+  - packages/*/playground
+
 overrides:
   unrun: 0.3.1
   tsdown: 0.22.3
 
-# Allow reviewed dependencies to run install/build scripts.
 allowBuilds:
   '@parcel/watcher': true
   '@tailwindcss/oxide': true
@@ -34,3 +34,10 @@ allowBuilds:
   nx: true
   sharp: true
   vue-demi: true
+
+# Temporary TypeScript 6 compatibility allowance for build tooling, until upstream peer ranges declare TS6 support.
+peerDependencyRules:
+  allowedVersions:
+    "tsconfck>typescript": "6.0.3"
+    "unbuild>typescript": "6.0.3"
+    "@nuxt/module-builder>typescript": "6.0.3"

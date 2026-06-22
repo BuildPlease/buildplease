@@ -1,13 +1,10 @@
 {
-  "extends": "../../tsconfig.base.json",
+  "extends": "../../tsconfig.node.json",
   "compilerOptions": {
     /* Project output */
     "rootDir": "./",
     "outDir": "./dist",
     "declarationDir": "./dist/types",
-
-    /* Runtime types */
-    "types": ["node"],
 
     /* Project paths */
     "paths": {

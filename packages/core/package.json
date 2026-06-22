@@ -44,8 +44,7 @@
   },
   "devDependencies": {
     "@meawkit/identity": "workspace:^",
-    "@types/ms": "2.1.0",
-    "@types/node": "25.9.3"
+    "@types/ms": "2.1.0"
   },
   "peerDependencies": {
     "inversify": "^8.1.1",
