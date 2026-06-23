@@ -10,7 +10,7 @@ import { ApiKitSymbols } from '@/di';
 
 import { normalizeLocale, splitBaseRegion } from './utils';
 
-const LOG_PREFIX = '[i18n]';
+const LOG_PREFIX = '[ApiKit:I18n]';
 
 export interface ParseLocaleOptions {
   /**
@@ -127,7 +127,7 @@ export class I18nControllerImpl implements I18nController {
     const resources = makeResources(config);
 
     return {
-      debug: this.configurationController.isDebug,
+      debug: false,
 
       lng: config.defaultLanguage,
       fallbackLng: config.fallbackLanguages,

@@ -8,6 +8,8 @@ import { ApiErrorFactory } from '@/error';
 import { I18nProvider } from '@/i18n';
 import type { LoggerController } from '@/logger';
 
+const LOG_PREFIX = '[ApiKit:Validation]';
+
 type ValidationIssueDetails = {
   issues: Array<{
     code: string;
@@ -95,7 +97,7 @@ export class DtoValidationControllerImpl implements DtoValidationController {
   private handleError(error: unknown): never {
     if (error instanceof ZodError) {
       if (this.configuration.isDebug) {
-        this.logger.debug('Dto validation failed', {
+        this.logger.debug(`${LOG_PREFIX} Dto validation failed`, {
           details: { tree: z.treeifyError(error) },
         });
       }

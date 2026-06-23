@@ -5,7 +5,7 @@ import fp from 'fastify-plugin';
 import type { CorsConfig } from '@/configuration';
 import type { ServerPluginOptions } from '@/server';
 
-const pluginName = 'ApiKit@cors';
+const pluginName = 'apikit-cors';
 
 type OriginEntry = string | RegExp | boolean;
 

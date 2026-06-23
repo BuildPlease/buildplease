@@ -6,7 +6,8 @@ import fp from 'fastify-plugin';
 
 import type { ServerPluginOptions } from '@/server';
 
-const pluginName = 'ApiKit@basic-auth';
+const pluginName = 'apikit-basic-auth';
+const LOG_PREFIX = '[ApiKit:BasicAuth]';
 
 const basicAuthPlugin: FastifyPluginAsync<ServerPluginOptions> = async (fastify, options) => {
   const config = options.apikitController.basicAuth;
@@ -17,7 +18,7 @@ const basicAuthPlugin: FastifyPluginAsync<ServerPluginOptions> = async (fastify,
   const password = config.password;
 
   if (!username || !password) {
-    throw new Error(`[${pluginName}] username and password are required when basic auth is enabled.`);
+    throw new Error(`${LOG_PREFIX} username and password are required when basic auth is enabled.`);
   }
 
   await fastify.register(basicAuth, {

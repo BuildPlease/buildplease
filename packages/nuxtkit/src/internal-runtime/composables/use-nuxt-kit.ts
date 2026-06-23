@@ -77,7 +77,7 @@ export class Logger {
   private emit(fn: (log: ConsolaLogObject) => void, input: unknown, options?: LoggerOptions) {
     if (!this.shouldLog(options)) return;
 
-    const prefix = isSSR ? colors.magenta('[SSR]') : colors.green('[CSR]');
+    const prefix = isSSR ? colors.magenta('[NuxtKit:SSR]') : colors.green('[NuxtKit:CSR]');
     const message = this.formatInput(input);
     const { force: _force, ...consolaOptions } = options ?? {};
 

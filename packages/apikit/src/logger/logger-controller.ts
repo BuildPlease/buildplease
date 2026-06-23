@@ -216,7 +216,7 @@ export class LoggerControllerImpl implements LoggerController {
     ensureDirectory(path.dirname(destination));
 
     if (this.configuration.isDebug) {
-      console.info(`\x1b[32m✔\x1b[0m LOGGER level: ${level}, destination: ${destination}`);
+      console.info(`[ApiKit:Logger] File transport enabled: level=${level}, destination=${destination}`);
     }
 
     return {

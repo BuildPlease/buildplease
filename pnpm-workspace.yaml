@@ -16,7 +16,6 @@ minimumReleaseAge: 0
 # Do not auto-run install before scripts.
 verifyDepsBeforeRun: false
 
-#####
 
 packages:
   - packages/*
@@ -38,6 +37,6 @@ allowBuilds:
 # Temporary TypeScript 6 compatibility allowance for build tooling, until upstream peer ranges declare TS6 support.
 peerDependencyRules:
   allowedVersions:
-    "tsconfck>typescript": "6.0.3"
-    "unbuild>typescript": "6.0.3"
-    "@nuxt/module-builder>typescript": "6.0.3"
+    tsconfck>typescript: 6.0.3
+    unbuild>typescript: 6.0.3
+    '@nuxt/module-builder>typescript': 6.0.3

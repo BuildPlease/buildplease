@@ -20,7 +20,7 @@ export class LanguageInterceptor implements RemoteRequestInterceptor {
     const currentLocale = useCurrentLocale({ withRegion: false });
     const value = currentLocale.value;
 
-    logger.debug(`[LanguageInterceptor] - Accept-Language: ${value}`);
+    logger.debug(`[NuxtKit:Language] Accept-Language: ${value}`);
 
     return {
       ...config,

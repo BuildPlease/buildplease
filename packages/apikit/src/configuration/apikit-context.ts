@@ -44,7 +44,7 @@ export async function loadApikitContext(options: LoadApikitContextOptions): Prom
     multipartConfig: resolved.multipart,
   };
 
-  Consola.success(`ApiKit context created for [${environmentConfig.name.toUpperCase()}] environment`);
+  Consola.success(`[ApiKit] Context created for ${environmentConfig.name} environment`);
 }
 
 // MARK: - Private

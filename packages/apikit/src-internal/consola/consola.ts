@@ -1,4 +1,5 @@
 import { createConsola } from 'consola';
+import { colors } from 'consola/utils';
 
 const instance = createConsola({
   level: +999,
@@ -9,6 +10,8 @@ const instance = createConsola({
 }).withTag('ApiKit');
 
 export class Consola {
+  public static readonly color = colors;
+
   static log(message?: any, ...args: any[]): void {
     instance.log(message, ...args);
   }

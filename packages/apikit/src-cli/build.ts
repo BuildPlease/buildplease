@@ -1,7 +1,12 @@
-import { loadConfig } from '@internal/configuration';
 import { Consola } from '@internal/consola';
-import { generate } from '@internal/generator';
 import { defineCommand } from 'citty';
+
+import { ApiKitPipeline, environmentStep, generateStep, loadConfigStep } from './pipeline';
+
+type BuildCommandArgs = {
+  readonly dir?: string;
+  readonly config?: string;
+};
 
 export const buildCommand = defineCommand({
   meta: {
@@ -39,17 +44,17 @@ export const buildCommand = defineCommand({
     },
   },
   run: async ({ args }) => {
+    const { dir, config } = args as BuildCommandArgs;
+
     try {
-      Consola.start('Building.. 🚀');
-
-      const { dir: argDirPath, config: argConfigName } = args;
-      const apikitConfig = await loadConfig(argDirPath, argConfigName);
-
-      await generate(apikitConfig);
-
-      Consola.success('Build Complete! 🎉');
+      await ApiKitPipeline.build('build').use(loadConfigStep()).use(environmentStep()).use(generateStep()).run({
+        dir: dir,
+        config: config,
+      });
     } catch (error) {
-      Consola.error(error);
+      Consola.error('ApiKit build failed');
+      Consola.error(error instanceof Error ? error.message : String(error));
+
       process.exit(1);
     }
   },

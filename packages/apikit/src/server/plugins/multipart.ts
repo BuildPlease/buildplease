@@ -4,7 +4,7 @@ import fp from 'fastify-plugin';
 
 import type { ServerPluginOptions } from '@/server';
 
-const pluginName = 'Apikit@multipart';
+const pluginName = 'apikit-multipart';
 
 const multipartPlugin: FastifyPluginAsync<ServerPluginOptions> = async (fastify, options) => {
   const config = options.apikitController.multipart;

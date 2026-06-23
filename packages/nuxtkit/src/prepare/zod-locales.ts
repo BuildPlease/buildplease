@@ -18,12 +18,12 @@ export async function prepareZodLocales(
   const { resolver, logger, options } = context;
 
   if (!options.zodI18n.useModuleLocale) {
-    logger.info('Skipping zod locale setup: module locale support is disabled');
+    logger.info('[NuxtKit:ZodI18n] Skipping locale setup: module locale support is disabled');
     return;
   }
 
   if (!i18nOptions) {
-    logger.info('Skipping zod locale setup: i18n integration is disabled');
+    logger.info('[NuxtKit:ZodI18n] Skipping locale setup: i18n integration is disabled');
     return;
   }
 
@@ -54,18 +54,18 @@ export async function prepareZodLocales(
       );
 
       if (localesToRegister.length === 0) {
-        logger.debug('[zod-i18n] no locales to register; skipping i18n:registerModule');
+        logger.debug('[NuxtKit:ZodI18n] No locales to register; skipping i18n:registerModule');
         return;
       }
 
       register({ langDir, locales: localesToRegister });
 
       logger.debug(
-        `[zod-i18n] registered → ${localesToRegister.map((locale) => `${locale.code} ← ${locale.file}`).join(', ')}`,
+        `[NuxtKit:ZodI18n] Registered → ${localesToRegister.map((locale) => `${locale.code} ← ${locale.file}`).join(', ')}`,
       );
     });
   } catch (error) {
-    logger.fatal('[zod-i18n] failed: ', error);
+    logger.fatal('[NuxtKit:ZodI18n] Failed: ', error);
   }
 }
 

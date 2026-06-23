@@ -4,18 +4,19 @@ import fp from 'fastify-plugin';
 
 import type { ServerPluginOptions } from '@/server';
 
-const pluginName = 'Apikit@static';
+const pluginName = 'apikit-static';
+const LOG_PREFIX = '[ApiKit:Static]';
 
 const staticFilesPlugin: FastifyPluginAsync<ServerPluginOptions> = async (fastify, options) => {
   const config = options.apikitController.staticFiles;
 
   if (!config.enabled) {
-    fastify.log.info(`[${pluginName}] Static files disabled — skipping`);
+    fastify.log.info(`${LOG_PREFIX} Disabled — skipping`);
     return;
   }
 
   if (!config.publicDirectory) {
-    const message = `[${pluginName}] publicDirectory is required when static files are enabled.`;
+    const message = `${LOG_PREFIX} publicDirectory is required when static files are enabled.`;
 
     fastify.log.error(message);
     throw new Error(message);
@@ -32,7 +33,7 @@ const staticFilesPlugin: FastifyPluginAsync<ServerPluginOptions> = async (fastif
     preCompressed: config.preCompressed,
   });
 
-  fastify.log.info(`[${pluginName}] Static files enabled from ${config.publicDirectory}`);
+  fastify.log.info(`${LOG_PREFIX} Enabled from ${config.publicDirectory}`);
 };
 
 export default fp(staticFilesPlugin, {

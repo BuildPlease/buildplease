@@ -36,7 +36,9 @@ export async function prepareI18n(context: NuxtKitContext, nuxt: Nuxt): Promise<
   });
 
   if (!available) {
-    context.logger.debug(`I18n integration disabled: no supported module found (${i18nModuleCandidates.join(' or ')})`);
+    context.logger.debug(
+      `[NuxtKit:I18n] Integration disabled: no supported module found (${i18nModuleCandidates.join(' or ')})`,
+    );
     return null;
   }
 

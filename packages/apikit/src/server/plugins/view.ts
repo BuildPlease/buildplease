@@ -3,7 +3,7 @@ import ejs from 'ejs';
 import type { FastifyPluginAsync } from 'fastify';
 import fp from 'fastify-plugin';
 
-const pluginName = 'Apikit@view';
+const pluginName = 'apikit-view';
 
 const viewPlugin: FastifyPluginAsync = async (fastify) => {
   await fastify.register(fastifyView, {

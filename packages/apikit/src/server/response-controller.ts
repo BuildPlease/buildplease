@@ -11,6 +11,8 @@ import {
 } from '@/http';
 import type { LoggerController } from '@/logger';
 
+const LOG_PREFIX = '[ApiKit:Response]';
+
 export interface ResponseController {
   sendResponse(request: FastifyRequest, reply: FastifyReply, response: HttpResponse): Promise<void>;
 }
@@ -29,7 +31,7 @@ export class ResponseControllerImpl implements ResponseController {
       case ResponseType.File:
         return await this.sendFileResponse(request, reply, response as FileHttpResponse);
       default:
-        throw new Error('Unsupported response type');
+        throw new Error(`${LOG_PREFIX} Unsupported response type`);
     }
   }
 
@@ -65,7 +67,7 @@ export class ResponseControllerImpl implements ResponseController {
       }
     } catch (error) {
       const requestId = request.metadata.requestId;
-      this.logger.error('Error sending file response', { error: error, metadata: { requestId: requestId } });
+      this.logger.error(`${LOG_PREFIX} File response failed`, { error: error, metadata: { requestId: requestId } });
 
       throw error;
     }

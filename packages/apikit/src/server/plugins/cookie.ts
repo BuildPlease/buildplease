@@ -2,7 +2,7 @@ import fastifyCookie from '@fastify/cookie';
 import type { FastifyPluginAsync } from 'fastify';
 import fp from 'fastify-plugin';
 
-const pluginName = 'Apikit@cookie';
+const pluginName = 'apikit-cookie';
 
 const cookiePlugin: FastifyPluginAsync = async (fastify) => {
   await fastify.register(fastifyCookie, {

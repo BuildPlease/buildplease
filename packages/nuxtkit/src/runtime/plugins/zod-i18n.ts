@@ -14,7 +14,7 @@ export default defineNuxtPlugin({
     const i18n = app.$i18n;
 
     if (!i18n) {
-      logger.debug('Zod i18n integration disabled: i18n is unavailable');
+      logger.debug('[NuxtKit:ZodI18n] Integration disabled: i18n is unavailable');
       return;
     }
 

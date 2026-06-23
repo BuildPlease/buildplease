@@ -110,7 +110,11 @@ export class ServerControllerImpl implements ServerController {
     }
 
     await this.server.ready();
-    await this.server.listen({ host: host, port: port });
+    await this.server.listen({
+      host: host,
+      port: port,
+      listenTextResolver: (address) => `${LOG_PREFIX} Listening at ${address}`,
+    });
 
     this.logger.info(`${LOG_PREFIX} Debug mode ${this.configuration.isDebug ? 'ON' : 'OFF'}`);
     this.logger.info(`${LOG_PREFIX} Started on ${host}:${port}`);
@@ -188,25 +192,25 @@ export class ServerControllerImpl implements ServerController {
     type ShutdownEvent = ShutdownSignal | ShutdownErrorEvent;
 
     const shutdown = async (reason: ShutdownEvent, error?: unknown) => {
-      this.logger.warn(`⛔ ${LOG_PREFIX} Shutdown: ${reason}`);
+      this.logger.warn(`${LOG_PREFIX} ⛔ Shutdown: ${reason}`);
 
       if (hook) {
         try {
           await hook();
         } catch (error) {
-          this.logger.error(`⚠️ ${LOG_PREFIX} Shutdown hook failed`, { error: error });
+          this.logger.error(`${LOG_PREFIX} ⚠️ Shutdown hook failed`, { error: error });
         }
       }
 
       try {
         await this.server.close();
-        this.logger.info(`✅ ${LOG_PREFIX} Closed`);
+        this.logger.info(`${LOG_PREFIX} ✅ Closed`);
       } catch (err) {
-        this.logger.error(`❌ ${LOG_PREFIX} Close failed`, { error: err });
+        this.logger.error(`${LOG_PREFIX} ❌ Close failed`, { error: err });
       }
 
       if (error) {
-        this.logger.error(`🚨 ${LOG_PREFIX} Fatal error during shutdown`, { error });
+        this.logger.error(`${LOG_PREFIX} 🚨 Fatal error during shutdown`, { error });
       }
 
       process.exit(error ? 1 : 0);

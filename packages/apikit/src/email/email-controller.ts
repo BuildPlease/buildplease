@@ -11,7 +11,7 @@ import { ApiKitSymbols } from '@/di';
 import type { EmailTemplate } from '@/email';
 import type { LoggerController } from '@/logger';
 
-const LOG_PREFIX = '[Email]:';
+const LOG_PREFIX = '[Email]';
 
 type SmtpConfig = {
   host: string;

@@ -11,6 +11,8 @@ import { ApiKitSymbols } from '@/di';
 import type { FormatType } from '@/formatter';
 import type { LoggerController } from '@/logger';
 
+const LOG_PREFIX = '[ApiKit:TemporaryFile]';
+
 export interface TemporaryFileRepository {
   /**
    * Absolute path to the OS temporary directory used as a root for all operations.
@@ -84,7 +86,7 @@ export class TemporaryFileRepositoryImpl implements TemporaryFileRepository {
     try {
       return await createDirectoryAsync(abs);
     } catch (error) {
-      this.logger.error('TemporaryFileRepository.createDirectory error', { error, details: { abs } });
+      this.logger.error(`${LOG_PREFIX} Create directory failed`, { error, details: { abs } });
       throw error;
     }
   }
@@ -94,7 +96,7 @@ export class TemporaryFileRepositoryImpl implements TemporaryFileRepository {
     try {
       await removePathAsync(abs, { recursive: true, force: true });
     } catch (error) {
-      this.logger.error('TemporaryFileRepository.deleteDirectory error', { error, details: { abs } });
+      this.logger.error(`${LOG_PREFIX} Delete directory failed`, { error, details: { abs } });
       throw error;
     }
   }
@@ -130,13 +132,13 @@ export class TemporaryFileRepositoryImpl implements TemporaryFileRepository {
 
       const error = new Error('Unsupported content type: expected Buffer or Readable.');
 
-      this.logger.error('TemporaryFileRepository.save unsupported content', {
+      this.logger.error(`${LOG_PREFIX} Save unsupported content`, {
         error: error,
         details: { fileAbs, typeof: typeof content },
       });
       throw error;
     } catch (error) {
-      this.logger.error('TemporaryFileRepository.save error', {
+      this.logger.error(`${LOG_PREFIX} Save failed`, {
         error,
         details: { fileAbs, relativeDirectory, filename, extension: type.extension },
       });
@@ -149,7 +151,7 @@ export class TemporaryFileRepositoryImpl implements TemporaryFileRepository {
     try {
       await removePathAsync(abs, { recursive: false, force: true });
     } catch (error) {
-      this.logger.error('TemporaryFileRepository.delete error', { error, details: { abs } });
+      this.logger.error(`${LOG_PREFIX} Delete failed`, { error, details: { abs } });
       throw error;
     }
   }
@@ -164,7 +166,7 @@ export class TemporaryFileRepositoryImpl implements TemporaryFileRepository {
 
     if (!joined.startsWith(rootWithSep) && joined !== this.rootDir) {
       const error = new Error(`Path escapes repository root: "${relativePath}"`);
-      this.logger.error('TemporaryFileRepository.safeJoin traversal attempt', {
+      this.logger.error(`${LOG_PREFIX} Path traversal attempt`, {
         error,
         details: { root: this.rootDir, attempted: joined },
       });

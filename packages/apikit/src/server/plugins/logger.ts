@@ -6,7 +6,9 @@ import fp from 'fastify-plugin';
 
 import type { ServerPluginOptions } from '@/server';
 
-const pluginName = 'Apikit@logger';
+const pluginName = 'apikit-logger';
+const REQUEST_LOG_PREFIX = '[ApiKit:Request]';
+const RESPONSE_LOG_PREFIX = '[ApiKit:Response]';
 
 const loggerPlugin: FastifyPluginAsync<ServerPluginOptions> = async (fastify, options) => {
   const logger = options.loggerController;
@@ -26,7 +28,7 @@ const loggerPlugin: FastifyPluginAsync<ServerPluginOptions> = async (fastify, op
     const metadata = request.metadata;
 
     ignoreError(() => {
-      logger.info('onRequest', { metadata });
+      logger.info(`${REQUEST_LOG_PREFIX} onRequest`, { metadata });
     });
   });
 
@@ -36,7 +38,7 @@ const loggerPlugin: FastifyPluginAsync<ServerPluginOptions> = async (fastify, op
     const metadata = { requestId: request.metadata.requestId };
 
     ignoreError(() => {
-      logger.debug('preValidation', {
+      logger.debug(`${REQUEST_LOG_PREFIX} preValidation`, {
         metadata: metadata,
         details: { body: safeSanitize(request.body, request.headers) },
       });
@@ -50,12 +52,12 @@ const loggerPlugin: FastifyPluginAsync<ServerPluginOptions> = async (fastify, op
       const details = { elapsedTime: reply.elapsedTime, statusCode: reply.statusCode };
 
       if (debug) {
-        logger.debug('onSend', {
+        logger.debug(`${RESPONSE_LOG_PREFIX} onSend`, {
           metadata: metadata,
           details: { ...details, body: safeSanitize(payload, reply.getHeaders()) },
         });
       } else {
-        logger.info('onSend', { metadata, details });
+        logger.info(`${RESPONSE_LOG_PREFIX} onSend`, { metadata, details });
       }
     });
 

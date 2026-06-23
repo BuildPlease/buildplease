@@ -2,7 +2,7 @@ import type { FastifyPluginAsync } from 'fastify';
 import fastifyIp from 'fastify-ip';
 import fp from 'fastify-plugin';
 
-const pluginName = 'ApiKit@ip';
+const pluginName = 'apikit-ip';
 
 const ipPlugin: FastifyPluginAsync = async (fastify) => {
   await fastify.register(fastifyIp, {

@@ -8,6 +8,8 @@ import { type HttpResponse } from '@/http';
 import { type LoggerController, LogFlag } from '@/logger';
 import type { ResponseController } from '@/server';
 
+const LOG_PREFIX = '[ApiKit:Request]';
+
 type HttpReplyPromise = (request: FastifyRequest, options: object) => Promise<HttpResponse>;
 type HttpOrVoidReplyPromise = (request: FastifyRequest, options?: object) => Promise<HttpResponse | void>;
 
@@ -64,9 +66,9 @@ export class RequestControllerImpl implements RequestController {
       const requestId = request.metadata.requestId;
 
       if (error instanceof ApiError) {
-        this.logger.info('Api Error Response', { error: error, metadata: { requestId: requestId } });
+        this.logger.info(`${LOG_PREFIX} Api error response`, { error: error, metadata: { requestId: requestId } });
       } else {
-        this.logger.error('Unexpected Error', {
+        this.logger.error(`${LOG_PREFIX} Unexpected error`, {
           flag: LogFlag.Important,
           error: error,
           metadata: { requestId: requestId },

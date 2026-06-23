@@ -5,7 +5,7 @@ import fp from 'fastify-plugin';
 import type { RequestMetadata } from '@/request';
 import type { ServerPluginOptions } from '@/server';
 
-const pluginName = 'Apikit@request-metadata';
+const pluginName = 'apikit-request-metadata';
 
 const requestMetadataPlugin: FastifyPluginAsync<ServerPluginOptions> = async (fastify, options) => {
   const i18n = options.i18nController;
