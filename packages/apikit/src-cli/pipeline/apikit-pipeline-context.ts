@@ -1,5 +1,7 @@
-import { loadConfig } from '@internal/configuration';
-import { Consola } from '@internal/consola';
+import path from 'node:path';
+
+import { type ApiKitConfigurationLoadResult, loadApiKitConfiguration } from '@internal/configuration';
+import { ConsoleOutput } from '@internal/console';
 
 import type { ApiKitConfig } from '@/configuration';
 
@@ -8,31 +10,41 @@ export type ApiKitPipelineOptions = {
   readonly config?: string;
 };
 
-const PIPELINE_LABEL_WIDTH = 10;
-
 export class ApiKitPipelineContext {
-  private config?: ApiKitConfig;
+  private configuration?: ApiKitConfigurationLoadResult;
 
   public constructor(public readonly options: ApiKitPipelineOptions) {}
 
   // MARK: - Public
 
+  public async getConfiguration(): Promise<ApiKitConfigurationLoadResult> {
+    this.configuration ??= await loadApiKitConfiguration(this.options.dir, this.options.config);
+    return this.configuration;
+  }
+
   public async getConfig(): Promise<ApiKitConfig> {
-    this.config ??= await loadConfig(this.options.dir, this.options.config);
-    return this.config;
+    return (await this.getConfiguration()).config;
+  }
+
+  public async getConfigFilePath(): Promise<string> {
+    return formatPath((await this.getConfiguration()).configFilePath);
   }
 
   public success(label: string, message: string): void {
-    Consola.success(this.formatMessage(label, message));
+    ConsoleOutput.success(ConsoleOutput.step(label, message));
   }
 
   public info(label: string, message: string): void {
-    Consola.info(this.formatMessage(label, message));
+    ConsoleOutput.info(ConsoleOutput.step(label, message));
+  }
+}
+
+function formatPath(filePath: string): string {
+  const relativePath = path.relative(process.cwd(), filePath);
+
+  if (!relativePath || relativePath.startsWith('..')) {
+    return filePath;
   }
 
-  // MARK: - Private
-
-  private formatMessage(label: string, message: string): string {
-    return `${label.padEnd(PIPELINE_LABEL_WIDTH)}${message}`;
-  }
+  return relativePath;
 }

@@ -1,4 +1,4 @@
-import { Consola } from '@internal/consola';
+import { ConsoleOutput } from '@internal/console';
 import { generate } from '@internal/generator';
 
 import { getBuildOutDir } from '@/configuration/core/build-config';
@@ -10,7 +10,6 @@ export function loadConfigStep(): ApiKitPipelineStep {
     name: 'config',
     async run(context): Promise<void> {
       await context.getConfig();
-      context.success('config', 'Loaded configuration');
     },
   };
 }
@@ -21,14 +20,14 @@ export function environmentStep(): ApiKitPipelineStep {
     async run(context): Promise<void> {
       const config = await context.getConfig();
       const environments = Object.entries(config.environments);
-      const noun = environments.length === 1 ? 'environment' : 'environments';
-
-      context.success('env', `Registered ${environments.length} ${noun}.`);
-
-      for (const [name, environment] of environments) {
-        const file = environment.fileDir ? `${environment.fileDir}/${environment.file}` : environment.file;
-        context.info('env', `${Consola.color.blue(name)}: ${Consola.color.dim(file)}`);
-      }
+      ConsoleOutput.panel(
+        'environments',
+        environments.map(([name, environment]) => ({
+          label: name,
+          value: environment.fileDir ? `${environment.fileDir}/${environment.file}` : environment.file,
+        })),
+        environments.length,
+      );
     },
   };
 }

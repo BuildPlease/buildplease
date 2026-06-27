@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 import dotenvx from '@dotenvx/dotenvx';
-import { Consola } from '@internal/consola';
+import { ConsoleOutput } from '@internal/console';
 
 import { type EnvironmentConfig, resolveEnvironment } from './core/environments';
 import { loadConfig } from './core/load-config';
@@ -44,7 +44,7 @@ export async function loadApikitContext(options: LoadApikitContextOptions): Prom
     multipartConfig: resolved.multipart,
   };
 
-  Consola.success(`[ApiKit] Context created for ${environmentConfig.name} environment`);
+  ConsoleOutput.success(`[ApiKit] Context created for ${environmentConfig.name} environment`);
 }
 
 // MARK: - Private

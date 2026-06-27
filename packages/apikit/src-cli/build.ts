@@ -1,7 +1,7 @@
-import { Consola } from '@internal/consola';
+import { ConsoleOutput } from '@internal/console';
 import { defineCommand } from 'citty';
 
-import { ApiKitPipeline, environmentStep, generateStep, loadConfigStep } from './pipeline';
+import { ApiKitPipeline, environmentStep, generateStep } from './pipeline';
 
 type BuildCommandArgs = {
   readonly dir?: string;
@@ -47,13 +47,13 @@ export const buildCommand = defineCommand({
     const { dir, config } = args as BuildCommandArgs;
 
     try {
-      await ApiKitPipeline.build('build').use(loadConfigStep()).use(environmentStep()).use(generateStep()).run({
+      await ApiKitPipeline.make('build').use(environmentStep()).use(generateStep()).run({
         dir: dir,
         config: config,
       });
     } catch (error) {
-      Consola.error('ApiKit build failed');
-      Consola.error(error instanceof Error ? error.message : String(error));
+      ConsoleOutput.error('ApiKit build failed');
+      ConsoleOutput.error(error instanceof Error ? error.message : String(error));
 
       process.exit(1);
     }

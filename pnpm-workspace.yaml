@@ -16,7 +16,6 @@ minimumReleaseAge: 0
 # Do not auto-run install before scripts.
 verifyDepsBeforeRun: false
 
-
 packages:
   - packages/*
   - packages/*/playground

@@ -28,5 +28,5 @@
     "typescript": "6.0.3",
     "unrun": "0.3.1"
   },
-  "packageManager": "pnpm@11.8.0"
+  "packageManager": "pnpm@11.9.0"
 }
