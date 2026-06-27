@@ -47,7 +47,6 @@
     "@nuxt/schema": "4.4.8",
     "nuxt": "4.4.8",
     "unbuild": "3.6.1",
-    "vitest": "4.1.9",
     "vue-tsc": "3.3.5"
   },
   "peerDependencies": {

@@ -13,6 +13,6 @@
       "@internal/*": ["./src-internal/*"]
     }
   },
-  "include": ["src", "src-cli", "src-internal", "types", "tests", "tsdown.config.cli.ts", "tsdown.config.src.ts"],
+  "include": ["src", "src-cli", "src-internal", "types", "test", "tsdown.config.cli.ts", "tsdown.config.src.ts"],
   "exclude": ["node_modules", "dist"]
 }

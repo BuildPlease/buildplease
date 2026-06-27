@@ -70,12 +70,11 @@ export async function clean() {
   let totalSkipped = 0;
 
   for (const base of targets) {
+    if (!(await directoryExists(base))) continue;
+
     const projects = await listDirectories(base);
 
-    if (projects.length === 0) {
-      consola.warn(`No projects found in ${base}/*`);
-      continue;
-    }
+    if (projects.length === 0) continue;
 
     for (const projectPath of projects) {
       const result = await cleanProject(projectPath);

@@ -18,7 +18,8 @@
     "preinstall": "npx only-allow pnpm",
     "lint": "devkit run lint",
     "lint:fix": "devkit run lint-fix",
-    "typecheck": "lerna run typecheck"
+    "typecheck": "lerna run typecheck",
+    "test": "lerna run test --stream"
   },
   "devDependencies": {
     "@meawkit/devkit": "workspace:*",
@@ -26,7 +27,8 @@
     "lerna": "9.0.7",
     "tsdown": "0.22.3",
     "typescript": "6.0.3",
-    "unrun": "0.3.1"
+    "unrun": "0.3.1",
+    "vitest": "4.1.9"
   },
   "packageManager": "pnpm@11.9.0"
 }
