@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest';
 
-import { defineConfiguration, isConfigurationBinding, isConfigurationContract } from '@/configuration/core/configuration';
+import {
+  defineConfiguration,
+  isConfigurationBinding,
+  isConfigurationContract,
+} from '@/configuration/core/configuration';
 import { field } from '@/configuration/core/field';
 
 describe('defineConfiguration', () => {

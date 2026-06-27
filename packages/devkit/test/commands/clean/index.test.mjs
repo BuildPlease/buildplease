@@ -1,4 +1,4 @@
-import { mkdtemp, mkdir, stat, rm } from 'node:fs/promises';
+import { mkdir, mkdtemp, rm, stat } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { InterceptorSet, type RemoteRequestInterceptor } from '@/networking/remote-request-interceptor';
+import { type RemoteRequestInterceptor, InterceptorSet } from '@/networking/remote-request-interceptor';
 
 function interceptor(name: string, order: number): RemoteRequestInterceptor {
   const item: RemoteRequestInterceptor = {

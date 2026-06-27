@@ -14,6 +14,9 @@
     "commands",
     "configs"
   ],
+  "scripts": {
+    "test": "vitest run"
+  },
   "dependencies": {
     "@typescript-eslint/eslint-plugin": "8.61.1",
     "@typescript-eslint/parser": "8.61.1",
@@ -38,8 +41,5 @@
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/"
-  },
-  "scripts": {
-    "test": "vitest run"
   }
 }

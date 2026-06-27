@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import { ApiError } from '@/error/api-error';
 import { NormalizationControllerImpl } from '@/normalization/normalization-controller';
+
 import { withTestRequestScope } from '../../utils/request-scope';
 
 describe('NormalizationController', () => {

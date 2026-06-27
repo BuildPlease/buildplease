@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import { RequestScope } from '@/request/request-scope';
+
 import { makeTestRequestMetadata } from '../../fixtures/request-metadata';
 
 describe('RequestScope', () => {
@@ -15,6 +16,8 @@ describe('RequestScope', () => {
   });
 
   it('rejects access outside request lifecycle', () => {
-    expect(() => RequestScope.metadata).toThrow('[RequestScope] Attempted to access `metadata` outside of request lifecycle.');
+    expect(() => RequestScope.metadata).toThrow(
+      '[RequestScope] Attempted to access `metadata` outside of request lifecycle.',
+    );
   });
 });

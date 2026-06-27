@@ -24,8 +24,8 @@
   ],
   "scripts": {
     "build": "tsdown --config-loader unrun",
-    "typecheck": "tsc -p tsconfig.json --noEmit",
-    "test": "vitest run"
+    "test": "vitest run",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {}
 }

@@ -1,6 +1,6 @@
+import { ConsoleOutput } from '@internal/console/console-output';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { ConsoleOutput } from '@internal/console/console-output';
 
 const ANSI_PATTERN = /\u001B\[[0-9;]*m/g;
 

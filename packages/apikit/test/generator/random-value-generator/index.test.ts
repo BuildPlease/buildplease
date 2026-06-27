@@ -23,7 +23,9 @@ describe('RandomValueGenerator', () => {
 
     expect(() =>
       generator.generateNumber({ min: 0, max: RANDOM_VALUE_GENERATOR_LIMITS.randomIntegerRangeLimit }),
-    ).toThrow(`GenerateNumberOptions range must be lower than ${RANDOM_VALUE_GENERATOR_LIMITS.randomIntegerRangeLimit}`);
+    ).toThrow(
+      `GenerateNumberOptions range must be lower than ${RANDOM_VALUE_GENERATOR_LIMITS.randomIntegerRangeLimit}`,
+    );
   });
 
   it('generates strings using presets and custom alphabets', () => {

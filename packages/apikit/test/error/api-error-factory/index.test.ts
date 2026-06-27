@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import { ApiError } from '@/error/api-error';
 import { ApiErrorFactory } from '@/error/api-error-factory';
+
 import { TestErrorFactory } from './fixtures';
 
 describe('ApiErrorFactory', () => {

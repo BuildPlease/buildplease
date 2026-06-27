@@ -18,8 +18,8 @@
     "preinstall": "npx only-allow pnpm",
     "lint": "devkit run lint",
     "lint:fix": "devkit run lint-fix",
-    "typecheck": "lerna run typecheck",
-    "test": "lerna run test --stream"
+    "test": "lerna run test --stream",
+    "typecheck": "lerna run typecheck"
   },
   "devDependencies": {
     "@meawkit/devkit": "workspace:*",

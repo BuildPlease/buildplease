@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest';
 
-import { capitalized, emptyOrUndefinedStringToNull, isNonEmptyString, isNullOrEmpty } from '@/utils/application/string-utils';
+import {
+  capitalized,
+  emptyOrUndefinedStringToNull,
+  isNonEmptyString,
+  isNullOrEmpty,
+} from '@/utils/application/string-utils';
 
 describe('string utils', () => {
   it('detects non-empty strings', () => {
