@@ -1,8 +1,7 @@
+import { makeInterval } from '@test/fixtures/model/time-interval';
 import { describe, expect, it } from 'vitest';
 
 import { TimeInterval } from '@/model/time-interval';
-
-import { makeInterval } from './fixtures';
 
 describe('TimeInterval', () => {
   it('parses compact string intervals', () => {

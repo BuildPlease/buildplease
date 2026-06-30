@@ -1,9 +1,8 @@
+import { withTestRequestScope } from '@test/utils/request-scope';
 import { describe, expect, it } from 'vitest';
 
 import { ApiError } from '@/error/api-error';
 import { NormalizationControllerImpl } from '@/normalization/normalization-controller';
-
-import { withTestRequestScope } from '../../utils/request-scope';
 
 describe('NormalizationController', () => {
   const controller = new NormalizationControllerImpl();

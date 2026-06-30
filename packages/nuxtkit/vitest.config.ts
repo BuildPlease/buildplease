@@ -18,6 +18,7 @@ export default defineConfig({
       { find: /^#internal-runtime\/(.*)$/, replacement: `${resolve(rootDir, 'src/internal-runtime')}/$1` },
       { find: /^#internal-shared$/, replacement: resolve(rootDir, 'src/internal-shared/index.ts') },
       { find: /^#internal-shared\/(.*)$/, replacement: `${resolve(rootDir, 'src/internal-shared')}/$1` },
+      { find: /^@test\/(.*)$/, replacement: `${resolve(rootDir, 'test')}/$1` },
     ],
   },
 });

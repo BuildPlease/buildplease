@@ -11,7 +11,8 @@
       "@/*": ["./src/*"],
       "@internal/*": ["./src-internal/*"],
       "@node": ["./src-node/index.ts"],
-      "@node/*": ["./src-node/*"]
+      "@node/*": ["./src-node/*"],
+      "@test/*": ["./test/*"]
     }
   },
   "include": ["src", "src-node", "src-internal", "test", "tsdown.config.ts"],

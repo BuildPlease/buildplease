@@ -1,9 +1,8 @@
 import { basename } from 'node:path';
 
 import { loadApiKitConfiguration, loadConfig } from '@internal/configuration/load-config';
+import { type TemporaryConfigProject, makeTemporaryConfigProject } from '@test/fixtures/configuration/load-config';
 import { afterEach, describe, expect, it } from 'vitest';
-
-import { type TemporaryConfigProject, makeTemporaryConfigProject } from './fixtures';
 
 const CONFIG_SOURCE = `
 export default {

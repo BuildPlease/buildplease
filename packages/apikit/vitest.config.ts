@@ -16,6 +16,7 @@ export default defineConfig({
       { find: /^@\/(.*)$/, replacement: `${resolve(rootDir, 'src')}/$1` },
       { find: /^@cli\/(.*)$/, replacement: `${resolve(rootDir, 'src-cli')}/$1` },
       { find: /^@internal\/(.*)$/, replacement: `${resolve(rootDir, 'src-internal')}/$1` },
+      { find: /^@test\/(.*)$/, replacement: `${resolve(rootDir, 'test')}/$1` },
     ],
   },
 });

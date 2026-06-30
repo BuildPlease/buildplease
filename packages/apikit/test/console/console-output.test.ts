@@ -1,7 +1,6 @@
 import { ConsoleOutput } from '@internal/console/console-output';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-
 const ANSI_PATTERN = /\u001B\[[0-9;]*m/g;
 
 function stripAnsi(value: string): string {

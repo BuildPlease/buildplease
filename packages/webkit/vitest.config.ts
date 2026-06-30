@@ -17,6 +17,7 @@ export default defineConfig({
       { find: /^@internal\/(.*)$/, replacement: `${resolve(rootDir, 'src-internal')}/$1` },
       { find: /^@node$/, replacement: resolve(rootDir, 'src-node/index.ts') },
       { find: /^@node\/(.*)$/, replacement: `${resolve(rootDir, 'src-node')}/$1` },
+      { find: /^@test\/(.*)$/, replacement: `${resolve(rootDir, 'test')}/$1` },
     ],
   },
 });

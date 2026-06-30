@@ -10,7 +10,8 @@
     "paths": {
       "@/*": ["./src/*"],
       "@cli/*": ["./src-cli/*"],
-      "@internal/*": ["./src-internal/*"]
+      "@internal/*": ["./src-internal/*"],
+      "@test/*": ["./test/*"]
     }
   },
   "include": ["src", "src-cli", "src-internal", "types", "test", "tsdown.config.cli.ts", "tsdown.config.src.ts"],

@@ -5,7 +5,7 @@ import path from 'node:path';
 import { consola } from 'consola';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { clean } from '../../../commands/clean.mjs';
+import { clean } from '../../commands/clean.mjs';
 
 async function exists(pathName) {
   try {

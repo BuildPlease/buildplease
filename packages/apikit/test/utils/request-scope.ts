@@ -1,6 +1,6 @@
-import { RequestScope } from '@/request/request-scope';
+import { makeTestRequestMetadata } from '@test/fixtures/request-metadata';
 
-import { makeTestRequestMetadata } from '../fixtures/request-metadata';
+import { RequestScope } from '@/request/request-scope';
 
 export function withTestRequestScope<T>(callback: () => T): T {
   return RequestScope.run(
