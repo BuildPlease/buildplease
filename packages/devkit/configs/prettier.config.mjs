@@ -2,6 +2,8 @@ import ejsPlugin from 'prettier-plugin-ejs';
 import packageJsonPlugin from 'prettier-plugin-packagejson';
 import * as tailwindPlugin from 'prettier-plugin-tailwindcss';
 
+const jsoncFiles = ['**/*.jsonc', '**/tsconfig*.json'];
+
 export default {
   semi: true,
   printWidth: 120,
@@ -12,4 +14,12 @@ export default {
   arrowParens: 'always',
   vueIndentScriptAndStyle: false,
   plugins: [ejsPlugin, packageJsonPlugin, tailwindPlugin],
+  overrides: [
+    {
+      files: jsoncFiles,
+      options: {
+        parser: 'jsonc',
+      },
+    },
+  ],
 };

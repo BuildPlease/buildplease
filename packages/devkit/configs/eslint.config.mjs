@@ -136,21 +136,20 @@ const codeConfig = {
 };
 
 const jsonConfig = [
-  ...jsonc.configs['recommended-with-json'],
+  ...jsonc.configs['recommended-with-jsonc'],
   {
     files: ['**/*.json'],
+    ignores: ['**/tsconfig*.json'],
     rules: {
-      'jsonc/no-comments': 'off',
+      'jsonc/no-comments': 'error',
+      'jsonc/comma-dangle': 'off',
     },
   },
-];
-
-const jsoncConfig = [
-  ...jsonc.configs['recommended-with-jsonc'],
   {
     files: ['**/*.jsonc', '**/tsconfig*.json'],
     rules: {
       'jsonc/no-comments': 'off',
+      'jsonc/comma-dangle': 'off',
     },
   },
 ];
@@ -165,12 +164,4 @@ const yamlConfig = [
   },
 ];
 
-export default [
-  globalIgnores,
-  vueConfig,
-  codeConfig,
-  ...jsonConfig,
-  ...jsoncConfig,
-  ...yamlConfig,
-  eslintConfigPrettier,
-];
+export default [globalIgnores, vueConfig, codeConfig, ...jsonConfig, ...yamlConfig, eslintConfigPrettier];
