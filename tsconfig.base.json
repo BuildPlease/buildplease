@@ -23,7 +23,7 @@
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "resolvePackageJsonExports": true,
-    "allowImportingTsExtensions": true,
+    "allowImportingTsExtensions": false,
 
     /* Decorators */
     "emitDecoratorMetadata": true,
