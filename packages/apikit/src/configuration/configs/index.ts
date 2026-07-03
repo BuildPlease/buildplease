@@ -2,6 +2,7 @@ export * from './basic-auth';
 export * from './build';
 export * from './cors';
 export * from './email';
+export * from './health';
 export * from './i18n';
 export * from './logger';
 export * from './metrics';

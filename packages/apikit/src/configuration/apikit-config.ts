@@ -3,6 +3,7 @@ import {
   type BuildConfiguration,
   type CorsConfiguration,
   type EmailConfiguration,
+  type HealthConfiguration,
   type I18nConfiguration,
   type LoggerConfiguration,
   type MetricsConfiguration,
@@ -26,6 +27,7 @@ export interface DefineApiKitInput {
   readonly server: InputOf<typeof ServerConfiguration>;
   readonly logger?: InputOf<typeof LoggerConfiguration>;
   readonly metrics?: InputOf<typeof MetricsConfiguration>;
+  readonly health?: InputOf<typeof HealthConfiguration>;
   readonly email?: InputOf<typeof EmailConfiguration>;
   readonly i18n?: InputOf<typeof I18nConfiguration>;
   readonly staticFiles?: InputOf<typeof StaticFilesConfiguration>;

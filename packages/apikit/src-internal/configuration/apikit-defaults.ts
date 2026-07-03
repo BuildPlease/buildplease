@@ -47,6 +47,17 @@ interface ApiKitDefaultsSchema {
     clearRegisterOnInit: false;
   };
 
+  health: {
+    enabled: true;
+    url: '/alive';
+    pressure: {
+      maxEventLoopDelay: 0;
+      maxHeapUsedBytes: 0;
+      maxRssBytes: 0;
+      maxEventLoopUtilization: 0;
+    };
+  };
+
   email: {
     enabled: boolean;
     templatesPath: string;
@@ -134,6 +145,17 @@ export const ApiKitDefaults: ApiKitDefaultsSchema = {
       enabled: true,
     },
     clearRegisterOnInit: false,
+  },
+
+  health: {
+    enabled: true,
+    url: '/alive',
+    pressure: {
+      maxEventLoopDelay: 0,
+      maxHeapUsedBytes: 0,
+      maxRssBytes: 0,
+      maxEventLoopUtilization: 0,
+    },
   },
 
   email: {

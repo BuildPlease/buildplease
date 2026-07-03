@@ -37,6 +37,7 @@
     "@fastify/cors": "11.2.0",
     "@fastify/multipart": "10.0.0",
     "@fastify/static": "9.1.3",
+    "@fastify/under-pressure": "9.0.3",
     "@fastify/view": "12.0.0",
     "@meawkit/core": "workspace:^",
     "argon2": "0.44.0",

@@ -80,6 +80,7 @@ export class ServerControllerImpl implements ServerController {
       FastifyPlugins.cors,
       FastifyPlugins.multipart,
       FastifyPlugins.basicAuth,
+      FastifyPlugins.health,
       FastifyPlugins.metrics,
     ] as const;
 

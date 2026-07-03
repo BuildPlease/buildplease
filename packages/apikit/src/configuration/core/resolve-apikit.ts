@@ -4,6 +4,7 @@ import {
   type BuildConfig,
   type CorsConfig,
   type EmailConfig,
+  type HealthConfig,
   type I18nConfig,
   type LoggerConfig,
   type MetricsConfig,
@@ -14,6 +15,7 @@ import {
   BuildConfiguration,
   CorsConfiguration,
   EmailConfiguration,
+  HealthConfiguration,
   I18nConfiguration,
   LoggerConfiguration,
   MetricsConfiguration,
@@ -46,6 +48,7 @@ export interface ResolvedApiKitConfig {
   readonly server: ServerConfig;
   readonly logger: LoggerConfig;
   readonly metrics: MetricsConfig;
+  readonly health: HealthConfig;
   readonly multipart: MultipartConfig;
   readonly email: EmailConfig;
   readonly i18n: I18nConfig;
@@ -89,6 +92,7 @@ export async function resolveApikit(
   const server = await resolveConfigurationContract(ServerConfiguration, config.server, resolveOptions);
   const logger = await resolveConfigurationContract(LoggerConfiguration, config.logger, resolveOptions);
   const metrics = await resolveConfigurationContract(MetricsConfiguration, config.metrics, resolveOptions);
+  const health = await resolveConfigurationContract(HealthConfiguration, config.health, resolveOptions);
   const email = await resolveConfigurationContract(EmailConfiguration, config.email, resolveOptions);
   const i18n = await resolveConfigurationContract(I18nConfiguration, config.i18n, resolveOptions);
   const staticFiles = await resolveConfigurationContract(StaticFilesConfiguration, config.staticFiles, resolveOptions);
@@ -115,6 +119,7 @@ export async function resolveApikit(
     server: server,
     logger: logger,
     metrics: metrics,
+    health: health,
     email: email,
     i18n: i18n,
     staticFiles: staticFiles,

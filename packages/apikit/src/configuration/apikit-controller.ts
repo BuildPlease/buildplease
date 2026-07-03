@@ -5,6 +5,7 @@ import type {
   BuildConfig,
   CorsConfig,
   EmailConfig,
+  HealthConfig,
   I18nConfig,
   LoggerConfig,
   MetricsConfig,
@@ -26,6 +27,7 @@ export interface ApiKitController {
   get logger(): LoggerConfig;
   get server(): ServerConfig;
   get metrics(): MetricsConfig;
+  get health(): HealthConfig;
   get email(): EmailConfig;
   get i18n(): I18nConfig;
   get staticFiles(): StaticFilesConfig;
@@ -61,6 +63,10 @@ export class ApiKitControllerImpl implements ApiKitController {
 
   public get metrics(): MetricsConfig {
     return global.apikit.metricsConfig;
+  }
+
+  public get health(): HealthConfig {
+    return global.apikit.healthConfig;
   }
 
   public get email(): EmailConfig {

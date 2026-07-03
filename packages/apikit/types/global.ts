@@ -4,6 +4,7 @@ import type {
   CorsConfig,
   EmailConfig,
   EnvironmentConfig,
+  HealthConfig,
   I18nConfig,
   LoggerConfig,
   MetricsConfig,
@@ -19,6 +20,7 @@ declare global {
     loggerConfig: LoggerConfig;
     serverConfig: ServerConfig;
     metricsConfig: MetricsConfig;
+    healthConfig: HealthConfig;
     emailConfig: EmailConfig;
     i18nConfig: I18nConfig;
     staticFilesConfig: StaticFilesConfig;

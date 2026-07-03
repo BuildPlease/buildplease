@@ -1,6 +1,7 @@
 import fpBasicAuth from './basic-auth';
 import fpCookie from './cookie';
 import fpCors from './cors';
+import fpHealth from './health';
 import fpIp from './ip';
 import fpLogger from './logger';
 import fpMetadata from './metadata';
@@ -16,6 +17,7 @@ export const FastifyPlugins = {
   basicAuth: fpBasicAuth,
   cookie: fpCookie,
   cors: fpCors,
+  health: fpHealth,
   ip: fpIp,
   logger: fpLogger,
   metadata: fpMetadata,
@@ -34,6 +36,7 @@ export { default as fp } from 'fastify-plugin';
 
 export { default as fastifyBasicAuth } from '@fastify/basic-auth';
 export { default as fastifyCookie } from '@fastify/cookie';
+export { default as fastifyUnderPressure } from '@fastify/under-pressure';
 export { default as fastifyCors } from '@fastify/cors';
 export { default as fastifyMultipart } from '@fastify/multipart';
 export { default as fastifyStatic } from '@fastify/static';

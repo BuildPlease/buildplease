@@ -36,6 +36,7 @@ export async function loadApikitContext(options: LoadApikitContextOptions): Prom
     loggerConfig: resolved.logger,
     serverConfig: resolved.server,
     metricsConfig: resolved.metrics,
+    healthConfig: resolved.health,
     emailConfig: resolved.email,
     i18nConfig: resolved.i18n,
     staticFilesConfig: resolved.staticFiles,
