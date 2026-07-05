@@ -4,7 +4,7 @@ import { type InferConfiguration, defineConfiguration, field } from '@/configura
 
 export const HealthConfiguration = defineConfiguration('apikit.health', {
   enabled: field.boolean().default(ApiKitDefaults.health.enabled),
-  url: field.string().default(ApiKitDefaults.health.url),
+  url: field.string().default(ApiKitDefaults.health.url).map(validateHealthUrl),
   pressure: {
     maxEventLoopDelay: field.number().default(ApiKitDefaults.health.pressure.maxEventLoopDelay),
     maxHeapUsedBytes: field.number().default(ApiKitDefaults.health.pressure.maxHeapUsedBytes),
@@ -14,3 +14,19 @@ export const HealthConfiguration = defineConfiguration('apikit.health', {
 });
 
 export type HealthConfig = InferConfiguration<typeof HealthConfiguration>;
+
+function validateHealthUrl(url: string): string {
+  if (!url.startsWith('/')) {
+    throw new Error('apikit.health.url must start with slash.');
+  }
+
+  if (url === '/') {
+    throw new Error('apikit.health.url must not be root path.');
+  }
+
+  if (url.includes('?') || url.includes('#')) {
+    throw new Error('apikit.health.url must not contain query string or fragment.');
+  }
+
+  return url.length > 1 ? url.replace(/\/+$/, '') : url;
+}

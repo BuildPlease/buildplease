@@ -6,13 +6,17 @@ import fp from 'fastify-plugin';
 
 import type { ServerPluginOptions } from '@/server';
 
-const pluginName = 'apikit-logger';
+import { resolveRequestLoggerIgnoredPaths, shouldSkipRequestLog } from './request-logger-paths';
+
+const pluginName = 'apikit-request-logger';
 const REQUEST_LOG_PREFIX = '[ApiKit:Request]';
 const RESPONSE_LOG_PREFIX = '[ApiKit:Response]';
 
-const loggerPlugin: FastifyPluginAsync<ServerPluginOptions> = async (fastify, options) => {
+const requestLoggerPlugin: FastifyPluginAsync<ServerPluginOptions> = async (fastify, options) => {
   const logger = options.loggerController;
+  const loggerConfig = options.apikitController.logger;
   const debug = options.apikitController.isDebug;
+  const ignoredPaths = resolveRequestLoggerIgnoredPaths(options);
 
   /* Fastify lifecycle (simplified for logging):
      onRequest     → body not parsed yet (only raw stream).
@@ -23,8 +27,14 @@ const loggerPlugin: FastifyPluginAsync<ServerPluginOptions> = async (fastify, op
      onResponse    → after response is sent (payload gone).
   */
 
+  if (!loggerConfig.enabled) {
+    return;
+  }
+
   // MARK: [ORDER]: 1 - onRequest (log metadata)
   fastify.addHook('onRequest', async (request) => {
+    if (shouldSkipRequestLog(request.url, ignoredPaths)) return;
+
     const metadata = request.metadata;
 
     ignoreError(() => {
@@ -34,7 +44,9 @@ const loggerPlugin: FastifyPluginAsync<ServerPluginOptions> = async (fastify, op
 
   // MARK: [ORDER]: 2 - preValidation (log parsed body only if debug)
   fastify.addHook('preValidation', async (request) => {
+    if (shouldSkipRequestLog(request.url, ignoredPaths)) return;
     if (!debug) return;
+
     const metadata = { requestId: request.metadata.requestId };
 
     ignoreError(() => {
@@ -47,6 +59,10 @@ const loggerPlugin: FastifyPluginAsync<ServerPluginOptions> = async (fastify, op
 
   // MARK: [ORDER]: 3 - onSend (log timing, payload only if debug)
   fastify.addHook('onSend', async (request, reply, payload) => {
+    if (shouldSkipRequestLog(request.url, ignoredPaths)) {
+      return payload;
+    }
+
     ignoreError(() => {
       const metadata = { requestId: request.metadata.requestId };
       const details = { elapsedTime: reply.elapsedTime, statusCode: reply.statusCode };
@@ -66,8 +82,9 @@ const loggerPlugin: FastifyPluginAsync<ServerPluginOptions> = async (fastify, op
   });
 };
 
-export default fp(loggerPlugin, {
+export default fp(requestLoggerPlugin, {
   name: pluginName,
+  dependencies: ['apikit-request-metadata'],
 });
 
 function safeSanitize(input: unknown, headers?: Record<string, unknown>) {

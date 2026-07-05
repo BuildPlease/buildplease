@@ -3,11 +3,11 @@ import fpCookie from './cookie';
 import fpCors from './cors';
 import fpHealth from './health';
 import fpIp from './ip';
-import fpLogger from './logger';
-import fpMetadata from './metadata';
 import fpMetrics from './metrics';
 import fpMultipart from './multipart';
-import fpScope from './scope';
+import fpRequestLogger from './request-logger';
+import fpRequestMetadata from './request-metadata';
+import fpRequestScope from './request-scope';
 import fpStaticFiles from './static';
 import fpView from './view';
 
@@ -19,11 +19,11 @@ export const FastifyPlugins = {
   cors: fpCors,
   health: fpHealth,
   ip: fpIp,
-  logger: fpLogger,
-  metadata: fpMetadata,
   metrics: fpMetrics,
   multipart: fpMultipart,
-  scope: fpScope,
+  requestLogger: fpRequestLogger,
+  requestMetadata: fpRequestMetadata,
+  requestScope: fpRequestScope,
   staticFiles: fpStaticFiles,
   view: fpView,
 } as const;

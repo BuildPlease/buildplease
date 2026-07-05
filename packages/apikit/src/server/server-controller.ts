@@ -73,9 +73,9 @@ export class ServerControllerImpl implements ServerController {
     const earlyPlugins = [
       FastifyPlugins.cookie,
       FastifyPlugins.ip,
-      FastifyPlugins.metadata,
-      FastifyPlugins.scope,
-      FastifyPlugins.logger,
+      FastifyPlugins.requestMetadata,
+      FastifyPlugins.requestScope,
+      FastifyPlugins.requestLogger,
 
       FastifyPlugins.cors,
       FastifyPlugins.multipart,

@@ -49,7 +49,7 @@ interface ApiKitDefaultsSchema {
 
   health: {
     enabled: true;
-    url: '/alive';
+    url: '/health';
     pressure: {
       maxEventLoopDelay: 0;
       maxHeapUsedBytes: 0;
@@ -149,7 +149,7 @@ export const ApiKitDefaults: ApiKitDefaultsSchema = {
 
   health: {
     enabled: true,
-    url: '/alive',
+    url: '/health',
     pressure: {
       maxEventLoopDelay: 0,
       maxHeapUsedBytes: 0,
