@@ -1,7 +1,6 @@
 import {
   type ApiKitConfig,
   type BasicAuthConfig,
-  type BuildConfig,
   type CorsConfig,
   type EmailConfig,
   type HealthConfig,
@@ -12,7 +11,6 @@ import {
   type ServerConfig,
   type StaticFilesConfig,
   BasicAuthConfiguration,
-  BuildConfiguration,
   CorsConfiguration,
   EmailConfiguration,
   HealthConfiguration,
@@ -25,12 +23,15 @@ import {
 } from '@/configuration';
 
 import type { EnvironmentConfig } from './environments';
+import { resolveEnvironment } from './environments';
 import { clearResolvedConfigurations, hasResolvedConfiguration, setResolvedConfiguration } from './registry';
-import { resolveConfigurationBinding, resolveConfigurationContract } from './resolve-configuration';
+import {
+  type ResolveConfigurationOptions,
+  resolveConfigurationBinding,
+  resolveConfigurationContract,
+} from './resolve-configuration';
 
-// MARK: - Public
-
-export interface ResolveApikitOptions {
+export interface ApiKitRuntimeContext {
   readonly environment: EnvironmentConfig;
 
   readonly packageJson?: {
@@ -41,7 +42,6 @@ export interface ResolveApikitOptions {
 
 export interface ResolvedApiKitConfig {
   readonly environment: EnvironmentConfig;
-  readonly build: BuildConfig;
 
   readonly basicAuth: BasicAuthConfig;
   readonly cors: CorsConfig;
@@ -55,39 +55,27 @@ export interface ResolvedApiKitConfig {
   readonly staticFiles: StaticFilesConfig;
 }
 
-// MARK: - Internal
+export function resolveRuntimeContext(
+  config: ApiKitConfig,
+  environmentName: string,
+  packageJson?: ApiKitRuntimeContext['packageJson'],
+): ApiKitRuntimeContext {
+  const environment = resolveEnvironment(config.environments, environmentName);
 
-export async function resolveBuildConfiguration(config: ApiKitConfig, environmentName: string): Promise<BuildConfig> {
-  const environmentDefinition = config.environments[environmentName];
-
-  if (!environmentDefinition) {
-    const message = `Unknown environment "${environmentName}". Expected one of ${Object.keys(config.environments).join(', ')}.`;
-    throw new Error(message);
-  }
-
-  const environment: EnvironmentConfig = {
-    name: environmentName,
-    file: environmentDefinition.file,
-    fileDir: environmentDefinition.fileDir ?? process.cwd(),
+  return {
+    environment,
+    packageJson,
   };
-
-  return resolveConfigurationContract(BuildConfiguration, config.build, {
-    environment: environment,
-  });
 }
 
-export async function resolveApikit(
+export async function resolveRuntimeConfig(
   config: ApiKitConfig,
-  options: ResolveApikitOptions,
+  context: ApiKitRuntimeContext,
 ): Promise<ResolvedApiKitConfig> {
   clearResolvedConfigurations();
 
-  const resolveOptions = {
-    environment: options.environment,
-    packageJson: options.packageJson,
-  };
+  const resolveOptions = makeResolveOptions(context);
 
-  const build = await resolveConfigurationContract(BuildConfiguration, config.build, resolveOptions);
   const cors = await resolveConfigurationContract(CorsConfiguration, config.cors, resolveOptions);
   const server = await resolveConfigurationContract(ServerConfiguration, config.server, resolveOptions);
   const logger = await resolveConfigurationContract(LoggerConfiguration, config.logger, resolveOptions);
@@ -114,17 +102,29 @@ export async function resolveApikit(
   }
 
   return {
-    environment: options.environment,
-    build: build,
-    server: server,
-    logger: logger,
-    metrics: metrics,
-    health: health,
-    email: email,
-    i18n: i18n,
-    staticFiles: staticFiles,
-    basicAuth: basicAuth,
-    cors: cors,
-    multipart: multipart,
+    environment: context.environment,
+    server,
+    logger,
+    metrics,
+    health,
+    email,
+    i18n,
+    staticFiles,
+    basicAuth,
+    cors,
+    multipart,
+  };
+}
+
+function makeResolveOptions(context: ApiKitRuntimeContext): ResolveConfigurationOptions {
+  if (context.packageJson) {
+    return {
+      environment: context.environment,
+      packageJson: context.packageJson,
+    };
+  }
+
+  return {
+    environment: context.environment,
   };
 }

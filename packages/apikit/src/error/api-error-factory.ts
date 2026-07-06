@@ -1,201 +1,164 @@
 import merge from 'lodash.merge';
 
-import {
-  type ApiErrorDetails,
-  type LocalizedApiError,
-  type RecursiveErrorTree,
-  ApiError,
-  ApiErrorCodes,
-} from '@/error';
-import { type I18nOptions, I18nProvider } from '@/i18n';
+import { type I18nOptions, I18nFactory } from '@/i18n';
+
+import { type ApiErrorDetails, ApiError } from './api-error';
+import { type LocalizedApiError, type RecursiveErrorTree, ApiErrorCodes } from './api-error-codes';
 
 /**
- * Options for creating a localized API error.
- *
- * @property {string} [overrideMessage]
- *   Override for translated error message.
- * @property {string} [details]
- *   Technical details for debugging or logging.
- * @property {i18n} [i18n]
- *   Interpolation and i18next config
+ * @description Options for creating a localized API error.
  */
 export interface ApiErrorFactoryOptions {
+  /**
+   * @description Explicit message override returned instead of resolving the error i18n key.
+   * @default null
+   */
   overrideMessage?: string | null;
+
+  /**
+   * @description Technical details returned in the API error payload.
+   * @default undefined
+   */
   details?: ApiErrorDetails;
+
+  /**
+   * @description i18next options passed to the active i18n provider.
+   * @default undefined
+   */
   i18n?: I18nOptions;
 }
 
 /**
- * Factory for creating standardized, localized API errors.
+ * @description Factory for creating standardized, localized API errors.
  *
  * @example
- * // Define individual error groups first
- * import { defineErrors } from '@meawkit/apikit';
+ * ```ts
+ * throw ApiErrorFactory.make(I18n.Errors.Validation.BadRequest);
+ * ```
  *
+ * @example
+ * ```ts
  * export const AccountErrors = defineErrors({
- *   ACCOUNT_NOT_FOUND: {
- *     code: 'ACCOUNT_NOT_FOUND',
- *     key: 'errors.account.not_found',
- *     statusCode: 404,
- *   },
- *   ACCOUNT_IS_BLOCKED: {
- *     code: 'ACCOUNT_IS_BLOCKED',
- *     key: 'errors.account.is_blocked',
- *     statusCode: 401,
+ *   BLOCKED: {
+ *     message: I18n.Errors.Account.Blocked,
+ *     code: 'account_blocked',
+ *     statusCode: 403,
  *   },
  * });
  *
- * // Combine groups under a single namespace
- * const ErrorCodes = defineErrors({
- *   Account: AccountErrors,
- * });
- *
- * // Extend ApiErrorFactory with the combined definitions
- * export const ErrorFactory = ApiErrorFactory.extend(ErrorCodes);
- *
- * // Then elsewhere, create errors via:
- * ErrorFactory.make('Account.ACCOUNT_NOT_FOUND');
+ * export const ErrorFactory = ApiErrorFactory.extend({ Account: AccountErrors });
+ * ```
  */
 export class ApiErrorFactory {
   /**
-   * Create an API error from built-in definitions.
-   *
-   * @param {BuiltInKeys} key
-   *   Dot-separated path to error definition (e.g. 'Validation.INVALID_EMAIL').
-   * @param {ApiErrorFactoryOptions} [options]
-   *   Options for message override, details, or locale.
-   *
-   * @returns {ApiError}
-   *   Configured ApiError instance.
-   *
-   * @throws {Error}
-   *   If the key path is invalid.
+   * @description Error metadata tree owned by this factory.
    */
-  static make(key: BuiltInKeys, options: ApiErrorFactoryOptions = {}): ApiError {
-    const error = getErrorByPath(ApiErrorCodes, key);
-    if (!error) throw new Error(`Invalid error key: ${key}`);
+  public static readonly codes: RecursiveErrorTree = ApiErrorCodes;
 
-    const { overrideMessage, details, i18n } = options;
-    const message = overrideMessage ?? I18nProvider.t(error.key, i18n);
+  /**
+   * @description Creates an API error from an i18n error message key.
+   *
+   * @param message Generated i18n error key, usually from `.apikit/i18n.ts`.
+   * @param options Optional message override, details, or i18next options.
+   * @returns Configured `ApiError` instance.
+   *
+   * @throws Error when the message key has no API error metadata.
+   *
+   * @example
+   * ```ts
+   * ApiErrorFactory.make(I18n.Errors.Common.NotFound);
+   * ```
+   */
+  public static make(message: string, options: ApiErrorFactoryOptions = {}): ApiError {
+    const error = getErrorByMessage(this.codes, message);
+    if (!error) throw new Error(`Invalid error message key: ${message}`);
 
-    return new ApiError({
-      code: error.code,
-      statusCode: error.statusCode,
-      message: message,
-      details: details,
-    });
+    return makeApiError(error, options);
   }
 
   /**
-   * Extend the factory with additional error definitions.
+   * @description Creates a new factory with custom error metadata merged over this factory.
    *
-   * @param extra
-   *   Custom error hierarchy to merge.
-   *
-   * @returns
-   *   A new factory class with combined error definitions.
+   * @param extra Custom error metadata tree.
+   * @returns A factory class with merged error metadata.
    *
    * @example
-   * // Using defineErrors to build nested groups:
-   * import { defineErrors } from '@meawkit/apikit';
-   *
-   * export const AccountErrors = defineErrors({
-   *   ACCOUNT_NOT_FOUND: {
-   *     code: 'ACCOUNT_NOT_FOUND',
-   *     key: 'errors.account.not_found',
-   *     statusCode: 404,
-   *   },
+   * ```ts
+   * export const ErrorFactory = ApiErrorFactory.extend({
+   *   Account: AccountErrors,
    * });
-   *
-   * const ErrorCodes = defineErrors({ Account: AccountErrors });
-   * export const ErrorFactory = ApiErrorFactory.extend(ErrorCodes);
-   *
-   * // Now:
-   * ErrorFactory.make('Account.ACCOUNT_NOT_FOUND');
+   * ```
    */
-  static extend<Extra extends Record<string, RecursiveErrorTree>>(extra: Extra) {
-    const mergedCodes = merge({}, ApiErrorCodes, extra) as typeof ApiErrorCodes & Extra;
+  public static extend(extra: RecursiveErrorTree): typeof ApiErrorFactory {
+    const mergedCodes = merge({}, this.codes, extra) as RecursiveErrorTree;
+    assertNoDuplicateMessages(mergedCodes);
 
-    return class ExtendedErrorFactory {
-      /** @readonly Merged error definitions */
-      static readonly codes = mergedCodes;
-
-      /**
-       * Create an error from merged definitions.
-       *
-       * @param {Flatten<typeof mergedCodes>} key
-       *   Dot-separated path in combined error hierarchy.
-       * @param {ApiErrorFactoryOptions} [options]
-       *   Options for message override, details, or locale.
-       *
-       * @returns {ApiError}
-       *   Configured ApiError instance.
-       *
-       * @throws {Error}
-       *   If the key path is invalid.
-       */
-      static make(key: Flatten<typeof mergedCodes>, options: ApiErrorFactoryOptions = {}): ApiError {
-        const error = getErrorByPath(this.codes, key);
-        if (!error) throw new Error(`Invalid extended error key: ${key}`);
-
-        const { overrideMessage, details, i18n } = options;
-        const message = overrideMessage ?? I18nProvider.t(error.key, i18n);
-
-        return new ApiError({
-          code: error.code,
-          statusCode: error.statusCode,
-          message: message,
-          details: details,
-        });
-      }
-
-      /** @inheritDoc ApiErrorFactory.extend */
-      static extend = ApiErrorFactory.extend;
+    return class ExtendedApiErrorFactory extends ApiErrorFactory {
+      public static override readonly codes: RecursiveErrorTree = mergedCodes;
     };
   }
 }
 
 // MARK: - Private Implementation
 
-/**
- * Generate dot-separated paths for nested error keys.
- *
- * @example
- * type Example = Flatten<{
- *   A: { B: LocalizedApiError },
- *   C: { D: { E: LocalizedApiError } }
- * }>;
- * // Result: "A.B" | "C.D.E"
- */
-type Flatten<T> = T extends LocalizedApiError
-  ? ''
-  : {
-        [K in keyof T]: K extends string ? `${K}${T[K] extends LocalizedApiError ? '' : '.'}${Flatten<T[K]>}` : never;
-      }[keyof T] extends infer D
-    ? D extends string
-      ? D
-      : never
-    : never;
+function makeApiError(error: LocalizedApiError, options: ApiErrorFactoryOptions): ApiError {
+  const { overrideMessage, details, i18n } = options;
+  const message = I18nFactory.translateKey(error.message, { overrideMessage, i18n });
 
-/** Union of all valid built-in error paths. */
-type BuiltInKeys = Flatten<typeof ApiErrorCodes>;
+  return new ApiError({
+    code: error.code,
+    statusCode: error.statusCode,
+    message: message,
+    details: details,
+  });
+}
 
-/**
- * Retrieve an error definition by its dot-separated path.
- *
- * @private
- *
- * @param {object} obj
- *   Root error definitions object.
- * @param {string} path
- *   Dot-separated key path.
- *
- * @returns {LocalizedApiError | undefined}
- *   Found LocalizedApiError, or undefined if not found.
- *
- * @example
- * const def = getErrorByPath(ApiErrorCodes, 'Validation.INVALID_EMAIL');
- */
-function getErrorByPath(obj: object, path: string): LocalizedApiError {
-  return path.split('.').reduce<any>((acc, key) => acc?.[key], obj);
+function getErrorByMessage(tree: RecursiveErrorTree, message: string): LocalizedApiError | undefined {
+  for (const value of Object.values(tree)) {
+    if (isLocalizedApiError(value)) {
+      if (value.message === message) return value;
+      continue;
+    }
+
+    const nested = getErrorByMessage(value, message);
+    if (nested) return nested;
+  }
+
+  return undefined;
+}
+
+function assertNoDuplicateMessages(tree: RecursiveErrorTree): void {
+  const messages = new Set<string>();
+
+  visitErrorTree(tree, (error) => {
+    if (messages.has(error.message)) {
+      throw new Error(`Duplicate API error message key: ${error.message}`);
+    }
+
+    messages.add(error.message);
+  });
+}
+
+function visitErrorTree(tree: RecursiveErrorTree, visitor: (error: LocalizedApiError) => void): void {
+  for (const value of Object.values(tree)) {
+    if (isLocalizedApiError(value)) {
+      visitor(value);
+      continue;
+    }
+
+    visitErrorTree(value, visitor);
+  }
+}
+
+function isLocalizedApiError(value: RecursiveErrorTree | LocalizedApiError): value is LocalizedApiError {
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    'message' in value &&
+    typeof value.message === 'string' &&
+    'code' in value &&
+    typeof value.code === 'string' &&
+    'statusCode' in value &&
+    typeof value.statusCode === 'number'
+  );
 }

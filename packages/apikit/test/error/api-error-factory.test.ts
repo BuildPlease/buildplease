@@ -2,11 +2,12 @@ import { TestErrorFactory } from '@test/fixtures/error/api-error-factory';
 import { describe, expect, it } from 'vitest';
 
 import { ApiError } from '@/error/api-error';
+import { ApiErrorCodes } from '@/error/api-error-codes';
 import { ApiErrorFactory } from '@/error/api-error-factory';
 
 describe('ApiErrorFactory', () => {
   it('creates built-in API errors', () => {
-    const error = ApiErrorFactory.make('Validation.BAD_REQUEST', {
+    const error = ApiErrorFactory.make(ApiErrorCodes.Validation.BAD_REQUEST.message, {
       overrideMessage: 'Bad request.',
       details: 'Invalid payload.',
     });
@@ -23,7 +24,7 @@ describe('ApiErrorFactory', () => {
   });
 
   it('creates extended API errors', () => {
-    const error = TestErrorFactory.make('Account.NOT_FOUND', {
+    const error = TestErrorFactory.make('errors.account.not_found', {
       overrideMessage: 'Account not found.',
     });
 
@@ -33,9 +34,11 @@ describe('ApiErrorFactory', () => {
   });
 
   it('rejects invalid error keys', () => {
-    expect(() => ApiErrorFactory.make('Validation.UNKNOWN' as never)).toThrow('Invalid error key: Validation.UNKNOWN');
-    expect(() => TestErrorFactory.make('Account.UNKNOWN' as never)).toThrow(
-      'Invalid extended error key: Account.UNKNOWN',
+    expect(() => ApiErrorFactory.make('errors.validation.unknown')).toThrow(
+      'Invalid error message key: errors.validation.unknown',
+    );
+    expect(() => TestErrorFactory.make('errors.account.unknown')).toThrow(
+      'Invalid error message key: errors.account.unknown',
     );
   });
 });

@@ -4,11 +4,9 @@ import path from 'node:path';
 import dotenvx from '@dotenvx/dotenvx';
 import { ConsoleOutput } from '@internal/console';
 
-import { type EnvironmentConfig, resolveEnvironment } from './core/environments';
+import type { EnvironmentConfig } from './core/environments';
 import { loadConfig } from './core/load-config';
-import { resolveApikit, resolveBuildConfiguration } from './core/resolve-apikit';
-
-// MARK: - Public
+import { resolveRuntimeConfig, resolveRuntimeContext } from './core/resolve-apikit';
 
 export interface LoadApikitContextOptions {
   readonly environment: string;
@@ -17,22 +15,15 @@ export interface LoadApikitContextOptions {
 }
 
 export async function loadApikitContext(options: LoadApikitContextOptions): Promise<void> {
-  const definition = await loadConfig(options.configDir, options.configName);
+  const config = await loadConfig(options.configDir, options.configName);
+  const context = await resolveRuntimeContext(config, options.environment);
 
-  const buildConfig = await resolveBuildConfiguration(definition, options.environment);
-  const environmentConfig = resolveEnvironment(definition.environments, options.environment, {
-    fileDir: buildConfig.environmentFileDir,
-  });
+  initializeEnvironment(context.environment);
 
-  initializeEnvironment(environmentConfig);
-
-  const resolved = await resolveApikit(definition, {
-    environment: environmentConfig,
-  });
+  const resolved = await resolveRuntimeConfig(config, context);
 
   global.apikit = {
     environmentConfig: resolved.environment,
-    buildConfig: resolved.build,
     loggerConfig: resolved.logger,
     serverConfig: resolved.server,
     metricsConfig: resolved.metrics,
@@ -45,10 +36,8 @@ export async function loadApikitContext(options: LoadApikitContextOptions): Prom
     multipartConfig: resolved.multipart,
   };
 
-  ConsoleOutput.success(`[ApiKit] Context created for ${environmentConfig.name} environment`);
+  ConsoleOutput.success(`[ApiKit] Context created for ${context.environment.name} environment`);
 }
-
-// MARK: - Private
 
 function initializeEnvironment(environment: EnvironmentConfig): void {
   const environmentFilePath = path.resolve(environment.fileDir, environment.file);

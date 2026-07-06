@@ -1,6 +1,5 @@
 import type {
   BasicAuthConfig,
-  BuildConfig,
   CorsConfig,
   EmailConfig,
   EnvironmentConfig,
@@ -15,7 +14,6 @@ import type {
 
 declare global {
   var apikit: {
-    buildConfig: BuildConfig;
     environmentConfig: EnvironmentConfig;
     loggerConfig: LoggerConfig;
     serverConfig: ServerConfig;

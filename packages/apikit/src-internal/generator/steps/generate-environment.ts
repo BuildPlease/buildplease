@@ -2,12 +2,10 @@ import path from 'node:path';
 
 import { createFile } from '@meawkit/core/node';
 
-import type { ApiKitConfig } from '@/configuration';
+import type { EnvironmentRegistry } from '@/configuration';
 
-// MARK: - Public
-
-export async function generateEnvironment(config: ApiKitConfig, outputPath: string): Promise<string[]> {
-  const entries = Object.entries(config.environments);
+export async function generateEnvironment(environments: EnvironmentRegistry, outputPath: string): Promise<string[]> {
+  const entries = Object.entries(environments);
 
   const environmentEnum = `export enum Environment {
 ${entries.map(([name]) => `  ${name} = '${name}',`).join('\n')}
@@ -26,8 +24,8 @@ export type EnvironmentType = keyof typeof Environments;`;
 
   const content = `${environmentEnum}\n\n${environmentObject}\n`;
 
-  const baseName = 'environment';
-  createFile(path.join(outputPath, `${baseName}.ts`), content);
+  const moduleName = 'environment';
+  createFile(path.join(outputPath, `${moduleName}.ts`), content);
 
-  return [baseName];
+  return [moduleName];
 }

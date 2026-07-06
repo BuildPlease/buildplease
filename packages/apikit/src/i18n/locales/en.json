@@ -33,7 +33,8 @@
       "invalid_email_new_same_as_old": "The new email must be different from the current one"
     },
     "format": {
-      "unsupported": "Unsupported format"
+      "unsupported": "Unsupported format",
+      "max_size_exceeded": "Payload is too large."
     },
     "image": {
       "max_size_exceeded": "Image is too large. Maximum allowed size is {{specs.maxSize}} {{specs.unit}}."

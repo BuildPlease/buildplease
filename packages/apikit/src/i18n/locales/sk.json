@@ -33,7 +33,8 @@
       "invalid_email_new_same_as_old": "Nový e-mail sa musí líšiť od aktuálneho"
     },
     "format": {
-      "unsupported": "Nepodporovaný formát"
+      "unsupported": "Nepodporovaný formát",
+      "max_size_exceeded": "Súbor je príliš veľký."
     },
     "image": {
       "max_size_exceeded": "Obrázok je príliš veľký. Maximálna povolená veľkosť je {{specs.maxSize}} {{specs.unit}}."

@@ -20,9 +20,7 @@ type I18nFallbackLanguages = Extract<NonNullable<InitOptions<object>['fallbackLn
 
 interface ApiKitDefaultsSchema {
   build: {
-    debug: boolean;
     outDir: string;
-    environmentFileDir: string;
   };
 
   logger: {
@@ -31,6 +29,7 @@ interface ApiKitDefaultsSchema {
   };
 
   server: {
+    debug: boolean;
     trustProxy: false;
   };
 
@@ -120,9 +119,7 @@ interface ApiKitDefaultsSchema {
 
 export const ApiKitDefaults: ApiKitDefaultsSchema = {
   build: {
-    debug: false,
     outDir: '.apikit',
-    environmentFileDir: process.cwd(),
   },
 
   logger: {
@@ -131,6 +128,7 @@ export const ApiKitDefaults: ApiKitDefaultsSchema = {
   },
 
   server: {
+    debug: false,
     trustProxy: false,
   },
 

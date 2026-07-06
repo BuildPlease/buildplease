@@ -1,7 +1,5 @@
 import { ConsoleOutput } from '@internal/console';
 
-import { getBuildOutDir } from '@/configuration/core/build-config';
-
 import { type ApiKitPipelineOptions, ApiKitPipelineContext } from './apikit-pipeline-context';
 
 export interface ApiKitPipelineStep {
@@ -26,11 +24,11 @@ export class ApiKitPipeline {
   public async run(options: ApiKitPipelineOptions): Promise<void> {
     const startedAt = Date.now();
     const context = new ApiKitPipelineContext(options);
-    const config = await context.getConfig();
+    const generatorConfig = await context.getGeneratorConfig();
 
     ConsoleOutput.title('ApiKit', this.name, [
       { label: 'config', value: await context.getConfigFilePath() },
-      { label: 'output', value: getBuildOutDir(config) },
+      { label: 'output', value: generatorConfig.build.outDir },
     ]);
 
     for (const step of this.steps) {

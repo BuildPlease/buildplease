@@ -4,7 +4,7 @@ import { type ZodType, z, ZodError } from 'zod';
 
 import type { ApiKitController } from '@/configuration';
 import { ApiKitSymbols } from '@/di';
-import { ApiErrorFactory } from '@/error';
+import { ApiErrorCodes, ApiErrorFactory } from '@/error';
 import { I18nProvider } from '@/i18n';
 import type { LoggerController } from '@/logger';
 
@@ -105,7 +105,7 @@ export class DtoValidationControllerImpl implements DtoValidationController {
       const details = this.buildValidationDetails(error);
       const overrideMessage = this.buildValidationMessage(error);
 
-      throw ApiErrorFactory.make('Validation.INVALID_PROPERTIES', {
+      throw ApiErrorFactory.make(ApiErrorCodes.Validation.INVALID_PROPERTIES.message, {
         details: details,
         overrideMessage: overrideMessage,
       });

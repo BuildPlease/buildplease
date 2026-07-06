@@ -2,7 +2,6 @@ import { injectable } from 'inversify';
 
 import type {
   BasicAuthConfig,
-  BuildConfig,
   CorsConfig,
   EmailConfig,
   HealthConfig,
@@ -21,7 +20,6 @@ import { getResolvedConfiguration, hasResolvedConfiguration } from './core/regis
 
 export interface ApiKitController {
   get isDebug(): boolean;
-  get build(): BuildConfig;
   get environment(): EnvironmentConfig;
 
   get logger(): LoggerConfig;
@@ -42,11 +40,7 @@ export interface ApiKitController {
 @injectable()
 export class ApiKitControllerImpl implements ApiKitController {
   public get isDebug(): boolean {
-    return global.apikit.buildConfig.debug;
-  }
-
-  public get build(): BuildConfig {
-    return global.apikit.buildConfig;
+    return global.apikit.serverConfig.debug;
   }
 
   public get environment(): EnvironmentConfig {

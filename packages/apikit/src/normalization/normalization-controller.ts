@@ -2,7 +2,7 @@ import { injectable } from 'inversify';
 import { parsePhoneNumberWithError } from 'libphonenumber-js';
 import validator from 'validator';
 
-import { ApiErrorFactory } from '@/error';
+import { ApiErrorCodes, ApiErrorFactory } from '@/error';
 
 export interface NormalizationController {
   normalizeEmail(email: string): string;
@@ -17,7 +17,7 @@ export class NormalizationControllerImpl implements NormalizationController {
     const value = email.trim();
 
     if (!validator.isEmail(value)) {
-      throw ApiErrorFactory.make('Validation.INVALID_EMAIL_FORMAT');
+      throw ApiErrorFactory.make(ApiErrorCodes.Validation.INVALID_EMAIL_FORMAT.message);
     }
 
     const normalizedEmail = validator.normalizeEmail(value, {
@@ -35,7 +35,7 @@ export class NormalizationControllerImpl implements NormalizationController {
     });
 
     if (!normalizedEmail) {
-      throw ApiErrorFactory.make('Validation.INVALID_EMAIL_FORMAT');
+      throw ApiErrorFactory.make(ApiErrorCodes.Validation.INVALID_EMAIL_FORMAT.message);
     }
 
     return normalizedEmail;
@@ -46,7 +46,7 @@ export class NormalizationControllerImpl implements NormalizationController {
       const number = parsePhoneNumberWithError(phoneNumber);
       return number.format('E.164');
     } catch {
-      throw ApiErrorFactory.make('Validation.INVALID_PHONE_NUMBER_FORMAT');
+      throw ApiErrorFactory.make(ApiErrorCodes.Validation.INVALID_PHONE_NUMBER_FORMAT.message);
     }
   }
 
@@ -55,7 +55,7 @@ export class NormalizationControllerImpl implements NormalizationController {
       const number = parsePhoneNumberWithError(phoneNumber);
       return number.format('INTERNATIONAL');
     } catch {
-      throw ApiErrorFactory.make('Validation.INVALID_PHONE_NUMBER_FORMAT');
+      throw ApiErrorFactory.make(ApiErrorCodes.Validation.INVALID_PHONE_NUMBER_FORMAT.message);
     }
   }
 
@@ -64,7 +64,7 @@ export class NormalizationControllerImpl implements NormalizationController {
       const number = parsePhoneNumberWithError(phoneNumber);
       return number.format('NATIONAL').replace(/[^\d]/g, '');
     } catch {
-      throw ApiErrorFactory.make('Validation.INVALID_PHONE_NUMBER_FORMAT');
+      throw ApiErrorFactory.make(ApiErrorCodes.Validation.INVALID_PHONE_NUMBER_FORMAT.message);
     }
   }
 }

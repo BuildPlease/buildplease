@@ -1,6 +1,6 @@
 import mime from 'mime-types';
 
-import { ApiErrorFactory } from '@/error';
+import { ApiErrorCodes, ApiErrorFactory } from '@/error';
 
 /**
  * Wraps both raw MIME strings (e.g. "image/png") and file extensions (e.g. "png", "foo.png")
@@ -17,7 +17,7 @@ import { ApiErrorFactory } from '@/error';
  * export const FormatErrors = defineErrors({
  *   UNSUPPORTED_FORMAT: {
  *     code: 'UNSUPPORTED_FORMAT',
- *     key: 'errors.format.unsupported',
+ *     message: I18n.Errors.Format.Unsupported,
  *     statusCode: 400,
  *   },
  * });
@@ -46,7 +46,7 @@ import { ApiErrorFactory } from '@/error';
  *   console.log(fmt.extension);
  * } catch {
  *   // FormatErrors.UNSUPPORTED_FORMAT was thrown
- *   throw ApiErrorFactory.make('Format.UNSUPPORTED_FORMAT');
+ *   throw ApiErrorFactory.make(ApiErrorCodes.Format.UNSUPPORTED_FORMAT.message);
  * }
  *
  * @example
@@ -57,7 +57,7 @@ import { ApiErrorFactory } from '@/error';
  *     // downstream: use fmt.extension to decide where to store or how to process
  *   } catch {
  *     // rethrow a standardized error for unsupported formats
- *     throw ApiErrorFactory.make('Format.UNSUPPORTED_FORMAT');
+ *     throw ApiErrorFactory.make(ApiErrorCodes.Format.UNSUPPORTED_FORMAT.message);
  *   }
  * }
  */
@@ -68,7 +68,7 @@ export class FormatType {
     // MARK: - “type/subtype”: validate that it’s known
     if (input.includes('/')) {
       if (!mime.extension(input)) {
-        throw ApiErrorFactory.make('Format.UNSUPPORTED_FORMAT');
+        throw ApiErrorFactory.make(ApiErrorCodes.Format.UNSUPPORTED_FORMAT.message);
       }
       this.mimeType = input;
       return;
@@ -77,7 +77,7 @@ export class FormatType {
     // MARK: - Otherwise, treat as filename or extension
     const lookup = mime.lookup(input);
     if (!lookup) {
-      throw ApiErrorFactory.make('Format.UNSUPPORTED_FORMAT');
+      throw ApiErrorFactory.make(ApiErrorCodes.Format.UNSUPPORTED_FORMAT.message);
     }
     this.mimeType = lookup;
   }
@@ -93,7 +93,7 @@ export class FormatType {
    * The canonical file extension for this media type (e.g. "png" for "image/png").
    *
    * @throws {Error}
-   *   ApiErrorFactory.make('Format.UNSUPPORTED_FORMAT') if no extension is found.
+   *   ApiErrorFactory.make(ApiErrorCodes.Format.UNSUPPORTED_FORMAT.message) if no extension is found.
    *
    * @example
    * const fmt = new FormatType('image/gif');
@@ -102,7 +102,7 @@ export class FormatType {
   get extension(): string {
     const ext = mime.extension(this.mimeType);
     if (!ext) {
-      throw ApiErrorFactory.make('Format.UNSUPPORTED_FORMAT');
+      throw ApiErrorFactory.make(ApiErrorCodes.Format.UNSUPPORTED_FORMAT.message);
     }
     return ext;
   }

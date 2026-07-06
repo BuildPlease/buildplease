@@ -12,7 +12,7 @@ import { type ConfigurationResolveContext, type ConfigurationSource, isConfigura
 // MARK: - Public
 
 export interface ResolveConfigurationOptions {
-  readonly environment: EnvironmentConfig;
+  readonly environment?: EnvironmentConfig;
 
   readonly packageJson?: {
     readonly name?: string;
@@ -27,7 +27,7 @@ export async function resolveConfigurationContract<Output, Schema extends Config
   input: ConfigurationInputFromSchema<Schema> | undefined,
   options: ResolveConfigurationOptions,
 ): Promise<Output> {
-  const context: ConfigurationResolveContext = {
+  const context: InternalConfigurationResolveContext = {
     environment: options.environment,
     packageJson: options.packageJson,
   };
@@ -44,10 +44,14 @@ export async function resolveConfigurationBinding<Output>(
 
 // MARK: - Private
 
+type InternalConfigurationResolveContext = Omit<ConfigurationResolveContext, 'environment'> & {
+  readonly environment?: EnvironmentConfig;
+};
+
 async function resolveSchema(
   schema: ConfigurationSchema,
   input: unknown,
-  context: ConfigurationResolveContext,
+  context: InternalConfigurationResolveContext,
   path: string,
 ): Promise<unknown> {
   if (isConfigurationField(schema)) return resolveField(schema, input, context, path);
@@ -71,7 +75,7 @@ async function resolveSchema(
 async function resolveField(
   field: ConfigurationField<unknown, boolean, unknown>,
   input: unknown,
-  context: ConfigurationResolveContext,
+  context: InternalConfigurationResolveContext,
   path: string,
 ): Promise<unknown> {
   const resolved = await resolveValue(input, context, path);
@@ -86,7 +90,11 @@ async function resolveField(
   return field.parse(resolved, path);
 }
 
-async function resolveValue(input: unknown, context: ConfigurationResolveContext, path: string): Promise<unknown> {
+async function resolveValue(
+  input: unknown,
+  context: InternalConfigurationResolveContext,
+  path: string,
+): Promise<unknown> {
   if (isConfigurationSource(input)) return resolveSource(input, context, path);
   if (isConfigurationBinding(input)) return resolveConfigurationBinding(input, context);
 
@@ -109,7 +117,7 @@ async function resolveValue(input: unknown, context: ConfigurationResolveContext
 
 async function resolveSource(
   source: ConfigurationSource,
-  context: ConfigurationResolveContext,
+  context: InternalConfigurationResolveContext,
   path: string,
 ): Promise<unknown> {
   let value: unknown;
@@ -124,6 +132,8 @@ async function resolveSource(
     }
 
     case 'by-environment': {
+      if (!context.environment) throw new Error(`${path} requires runtime environment.`);
+
       const { cases } = source.options as { readonly cases: Record<string, unknown> };
 
       value = cases[context.environment.name];
@@ -132,11 +142,13 @@ async function resolveSource(
     }
 
     case 'compute': {
+      if (!context.environment) throw new Error(`${path} requires runtime environment.`);
+
       const { compute } = source.options as {
         readonly compute: (context: ConfigurationResolveContext) => unknown | Promise<unknown>;
       };
 
-      value = await compute(context);
+      value = await compute(context as ConfigurationResolveContext);
       break;
     }
 
@@ -149,7 +161,9 @@ async function resolveSource(
   }
 
   for (const transform of source.transforms) {
-    value = await transform(value, context);
+    if (!context.environment) throw new Error(`${path} source transforms require runtime environment.`);
+
+    value = await transform(value, context as ConfigurationResolveContext);
   }
 
   return value;
