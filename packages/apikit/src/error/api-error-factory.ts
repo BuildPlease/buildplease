@@ -3,7 +3,13 @@ import merge from 'lodash.merge';
 import { type I18nOptions, I18nFactory } from '@/i18n';
 
 import { type ApiErrorDetails, ApiError } from './api-error';
-import { type LocalizedApiError, type RecursiveErrorTree, ApiErrorCodes } from './api-error-codes';
+import { ApiErrorCodes, defineErrors } from './api-error-codes';
+import {
+  type ApiErrorDefinition,
+  type ApiErrorPath,
+  type ApiErrorTree,
+  isApiErrorDefinition,
+} from './api-error-definition';
 
 /**
  * @description Options for creating a localized API error.
@@ -29,11 +35,38 @@ export interface ApiErrorFactoryOptions {
 }
 
 /**
+ * @description Factory API for creating standardized, localized API errors.
+ */
+export interface ApiErrorFactory<TCodes extends ApiErrorTree> {
+  /**
+   * @description Error metadata tree owned by this factory.
+   */
+  readonly codes: TCodes;
+
+  /**
+   * @description Creates an API error from a typed path in this factory's error tree.
+   *
+   * @param path Dot-separated path to an error definition, for example `Validation.BAD_REQUEST`.
+   * @param options Optional message override, details, or i18next options.
+   * @returns Configured `ApiError` instance.
+   */
+  make(path: ApiErrorPath<TCodes>, options?: ApiErrorFactoryOptions): ApiError;
+
+  /**
+   * @description Creates a new factory with custom error metadata merged over this factory.
+   *
+   * @param extra Custom error metadata tree.
+   * @returns Factory with merged error metadata.
+   */
+  extend<TExtra extends ApiErrorTree>(extra: TExtra): ApiErrorFactory<TCodes & TExtra>;
+}
+
+/**
  * @description Factory for creating standardized, localized API errors.
  *
  * @example
  * ```ts
- * throw ApiErrorFactory.make(I18n.Errors.Validation.BadRequest);
+ * throw ApiErrorFactory.make('Validation.BAD_REQUEST');
  * ```
  *
  * @example
@@ -47,61 +80,34 @@ export interface ApiErrorFactoryOptions {
  * });
  *
  * export const ErrorFactory = ApiErrorFactory.extend({ Account: AccountErrors });
+ * throw ErrorFactory.make('Account.BLOCKED');
  * ```
  */
-export class ApiErrorFactory {
-  /**
-   * @description Error metadata tree owned by this factory.
-   */
-  public static readonly codes: RecursiveErrorTree = ApiErrorCodes;
-
-  /**
-   * @description Creates an API error from an i18n error message key.
-   *
-   * @param message Generated i18n error key, usually from `.apikit/i18n.ts`.
-   * @param options Optional message override, details, or i18next options.
-   * @returns Configured `ApiError` instance.
-   *
-   * @throws Error when the message key has no API error metadata.
-   *
-   * @example
-   * ```ts
-   * ApiErrorFactory.make(I18n.Errors.Common.NotFound);
-   * ```
-   */
-  public static make(message: string, options: ApiErrorFactoryOptions = {}): ApiError {
-    const error = getErrorByMessage(this.codes, message);
-    if (!error) throw new Error(`Invalid error message key: ${message}`);
-
-    return makeApiError(error, options);
-  }
-
-  /**
-   * @description Creates a new factory with custom error metadata merged over this factory.
-   *
-   * @param extra Custom error metadata tree.
-   * @returns A factory class with merged error metadata.
-   *
-   * @example
-   * ```ts
-   * export const ErrorFactory = ApiErrorFactory.extend({
-   *   Account: AccountErrors,
-   * });
-   * ```
-   */
-  public static extend(extra: RecursiveErrorTree): typeof ApiErrorFactory {
-    const mergedCodes = merge({}, this.codes, extra) as RecursiveErrorTree;
-    assertNoDuplicateMessages(mergedCodes);
-
-    return class ExtendedApiErrorFactory extends ApiErrorFactory {
-      public static override readonly codes: RecursiveErrorTree = mergedCodes;
-    };
-  }
-}
+export const ApiErrorFactory = makeApiErrorFactory(ApiErrorCodes);
 
 // MARK: - Private Implementation
 
-function makeApiError(error: LocalizedApiError, options: ApiErrorFactoryOptions): ApiError {
+function makeApiErrorFactory<TCodes extends ApiErrorTree>(codes: TCodes): ApiErrorFactory<TCodes> {
+  return {
+    codes: codes,
+
+    make(path: ApiErrorPath<TCodes>, options: ApiErrorFactoryOptions = {}): ApiError {
+      const error = getApiErrorByPath(codes, path);
+      if (!error) throw new Error(`Invalid API error code path: ${path}`);
+
+      return makeApiError(error, options);
+    },
+
+    extend<TExtra extends ApiErrorTree>(extra: TExtra): ApiErrorFactory<TCodes & TExtra> {
+      const mergedCodes = merge({}, codes, extra) as TCodes & TExtra;
+      defineErrors(mergedCodes);
+
+      return makeApiErrorFactory(mergedCodes);
+    },
+  };
+}
+
+function makeApiError(error: ApiErrorDefinition, options: ApiErrorFactoryOptions): ApiError {
   const { overrideMessage, details, i18n } = options;
   const message = I18nFactory.translateKey(error.message, { overrideMessage, i18n });
 
@@ -113,52 +119,18 @@ function makeApiError(error: LocalizedApiError, options: ApiErrorFactoryOptions)
   });
 }
 
-function getErrorByMessage(tree: RecursiveErrorTree, message: string): LocalizedApiError | undefined {
-  for (const value of Object.values(tree)) {
-    if (isLocalizedApiError(value)) {
-      if (value.message === message) return value;
-      continue;
-    }
+function getApiErrorByPath(tree: ApiErrorTree, path: string): ApiErrorDefinition | undefined {
+  const parts = path.split('.');
+  let current: ApiErrorTree | ApiErrorDefinition | undefined = tree;
 
-    const nested = getErrorByMessage(value, message);
-    if (nested) return nested;
+  for (const part of parts) {
+    if (!current || isApiErrorDefinition(current)) return undefined;
+
+    const next: ApiErrorTree | ApiErrorDefinition | undefined = current[part];
+    current = next;
   }
 
-  return undefined;
-}
+  if (!current || !isApiErrorDefinition(current)) return undefined;
 
-function assertNoDuplicateMessages(tree: RecursiveErrorTree): void {
-  const messages = new Set<string>();
-
-  visitErrorTree(tree, (error) => {
-    if (messages.has(error.message)) {
-      throw new Error(`Duplicate API error message key: ${error.message}`);
-    }
-
-    messages.add(error.message);
-  });
-}
-
-function visitErrorTree(tree: RecursiveErrorTree, visitor: (error: LocalizedApiError) => void): void {
-  for (const value of Object.values(tree)) {
-    if (isLocalizedApiError(value)) {
-      visitor(value);
-      continue;
-    }
-
-    visitErrorTree(value, visitor);
-  }
-}
-
-function isLocalizedApiError(value: RecursiveErrorTree | LocalizedApiError): value is LocalizedApiError {
-  return (
-    typeof value === 'object' &&
-    value !== null &&
-    'message' in value &&
-    typeof value.message === 'string' &&
-    'code' in value &&
-    typeof value.code === 'string' &&
-    'statusCode' in value &&
-    typeof value.statusCode === 'number'
-  );
+  return current;
 }

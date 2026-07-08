@@ -1,5 +1,4 @@
-import { defineErrors } from '@/error/api-error-codes';
-import { ApiErrorFactory } from '@/error/api-error-factory';
+import { ApiErrorFactory, defineErrors } from '@/error';
 
 export const AccountErrors = defineErrors({
   NOT_FOUND: {

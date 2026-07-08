@@ -3,7 +3,7 @@ import { inject, injectable } from 'inversify';
 
 import type { ApiKitController } from '@/configuration';
 import { ApiKitSymbols } from '@/di';
-import { ApiError, ApiErrorCodes, ApiErrorFactory } from '@/error';
+import { ApiError, ApiErrorFactory } from '@/error';
 import type { I18nController } from '@/i18n';
 import { type LoggerController, LogFlag } from '@/logger';
 
@@ -134,7 +134,7 @@ export class ServerControllerImpl implements ServerController {
     }>(async (error, request, reply) => {
       const isValidationError = Array.isArray(error.validation);
       const isInternalError = !error.statusCode || error.statusCode === 500;
-      const internalError = ApiErrorFactory.make(ApiErrorCodes.Server.INTERNAL_SERVER_ERROR.message);
+      const internalError = ApiErrorFactory.make('Server.INTERNAL_SERVER_ERROR');
 
       if (this.configuration.isDebug) {
         this.logger.debug(`${LOG_PREFIX} Error Handler:`, { error });
@@ -148,7 +148,7 @@ export class ServerControllerImpl implements ServerController {
 
         // MARK: - Validation (AJV/Fastify)
         case isValidationError: {
-          const validationError = ApiErrorFactory.make(ApiErrorCodes.Validation.BAD_REQUEST.message);
+          const validationError = ApiErrorFactory.make('Validation.BAD_REQUEST');
           const statusCode = error.statusCode || validationError.statusCode;
 
           const response = new ApiError({

@@ -2,12 +2,12 @@ import { TestErrorFactory } from '@test/fixtures/error/api-error-factory';
 import { describe, expect, it } from 'vitest';
 
 import { ApiError } from '@/error/api-error';
-import { ApiErrorCodes } from '@/error/api-error-codes';
+import { defineErrors } from '@/error/api-error-codes';
 import { ApiErrorFactory } from '@/error/api-error-factory';
 
 describe('ApiErrorFactory', () => {
-  it('creates built-in API errors', () => {
-    const error = ApiErrorFactory.make(ApiErrorCodes.Validation.BAD_REQUEST.message, {
+  it('creates built-in API errors from typed paths', () => {
+    const error = ApiErrorFactory.make('Validation.BAD_REQUEST', {
       overrideMessage: 'Bad request.',
       details: 'Invalid payload.',
     });
@@ -23,8 +23,8 @@ describe('ApiErrorFactory', () => {
     });
   });
 
-  it('creates extended API errors', () => {
-    const error = TestErrorFactory.make('errors.account.not_found', {
+  it('creates extended API errors from typed paths', () => {
+    const error = TestErrorFactory.make('Account.NOT_FOUND', {
       overrideMessage: 'Account not found.',
     });
 
@@ -33,12 +33,25 @@ describe('ApiErrorFactory', () => {
     expect(error.message).toBe('Account not found.');
   });
 
-  it('rejects invalid error keys', () => {
-    expect(() => ApiErrorFactory.make('errors.validation.unknown')).toThrow(
-      'Invalid error message key: errors.validation.unknown',
+  it('rejects invalid API error paths at runtime', () => {
+    expect(() => ApiErrorFactory.make('Validation.DOES_NOT_EXIST' as never)).toThrow(
+      'Invalid API error code path: Validation.DOES_NOT_EXIST',
     );
-    expect(() => TestErrorFactory.make('errors.account.unknown')).toThrow(
-      'Invalid error message key: errors.account.unknown',
+  });
+
+  it('rejects duplicate API error message keys when extending factories', () => {
+    const duplicateErrors = defineErrors({
+      Account: {
+        NOT_FOUND: {
+          code: 'account_not_found',
+          message: 'errors.common.not_found',
+          statusCode: 404,
+        },
+      },
+    });
+
+    expect(() => ApiErrorFactory.extend(duplicateErrors)).toThrow(
+      'Duplicate API error message key: errors.common.not_found',
     );
   });
 });

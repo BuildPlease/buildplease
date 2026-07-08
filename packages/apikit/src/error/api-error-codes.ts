@@ -1,35 +1,10 @@
-/**
- * @description Metadata attached to a localized API error message.
- */
-export interface LocalizedApiError {
-  /**
-   * @description i18n key used for the public error message.
-   */
-  message: string;
-
-  /**
-   * @description Machine-readable error code.
-   */
-  code: string;
-
-  /**
-   * @description Associated HTTP status code.
-   */
-  statusCode: number;
-}
-
-/**
- * @description Recursive object structure for organizing API error definitions.
- */
-export type RecursiveErrorTree = {
-  [key: string]: RecursiveErrorTree | LocalizedApiError;
-};
+import { type ApiErrorDefinition, type ApiErrorTree, isApiErrorDefinition } from './api-error-definition';
 
 /**
  * @description Defines a validated, nested API error metadata tree.
  *
- * @template T Recursive tree where every leaf is a `LocalizedApiError`.
- * @param errors Nested error metadata tree.
+ * @template T Recursive tree where every leaf is an `ApiErrorDefinition`.
+ * @param errors Nested API error metadata tree.
  * @returns The same tree, typed for later reuse.
  *
  * @example
@@ -43,8 +18,8 @@ export type RecursiveErrorTree = {
  * });
  * ```
  */
-export function defineErrors<T extends RecursiveErrorTree>(errors: T): T {
-  assertErrorTree(errors);
+export function defineErrors<T extends ApiErrorTree>(errors: T): T {
+  assertApiErrorTree(errors);
   return errors;
 }
 
@@ -208,10 +183,10 @@ export const ApiErrorCodes = defineErrors({
 
 // MARK: - Private
 
-function assertErrorTree(tree: RecursiveErrorTree): void {
+function assertApiErrorTree(tree: ApiErrorTree): void {
   const messages = new Set<string>();
 
-  visitErrorTree(tree, (error) => {
+  visitApiErrorTree(tree, (error) => {
     if (messages.has(error.message)) {
       throw new Error(`Duplicate API error message key: ${error.message}`);
     }
@@ -220,26 +195,13 @@ function assertErrorTree(tree: RecursiveErrorTree): void {
   });
 }
 
-function visitErrorTree(tree: RecursiveErrorTree, visitor: (error: LocalizedApiError) => void): void {
+function visitApiErrorTree(tree: ApiErrorTree, visitor: (error: ApiErrorDefinition) => void): void {
   for (const value of Object.values(tree)) {
-    if (isLocalizedApiError(value)) {
+    if (isApiErrorDefinition(value)) {
       visitor(value);
       continue;
     }
 
-    visitErrorTree(value, visitor);
+    visitApiErrorTree(value, visitor);
   }
-}
-
-function isLocalizedApiError(value: RecursiveErrorTree | LocalizedApiError): value is LocalizedApiError {
-  return (
-    typeof value === 'object' &&
-    value !== null &&
-    'message' in value &&
-    typeof value.message === 'string' &&
-    'code' in value &&
-    typeof value.code === 'string' &&
-    'statusCode' in value &&
-    typeof value.statusCode === 'number'
-  );
 }

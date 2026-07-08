@@ -6,7 +6,7 @@ import { inject, injectable } from 'inversify';
 import type { Metadata } from 'sharp';
 import sharp from 'sharp';
 
-import { ApiErrorCodes, ApiErrorFactory } from '@/error';
+import { ApiErrorFactory } from '@/error';
 import { FormatType } from '@/formatter';
 
 import type { ImageOptions, SharpFormat, SharpInstance } from './image-options';
@@ -66,7 +66,7 @@ export class ImageNormalizationControllerImpl implements ImageNormalizationContr
     try {
       meta = await imageIn.metadata();
     } catch {
-      throw ApiErrorFactory.make(ApiErrorCodes.Format.UNSUPPORTED_FORMAT.message, {
+      throw ApiErrorFactory.make('Format.UNSUPPORTED_FORMAT', {
         details: 'Invalid or unsupported image file',
       });
     }
@@ -92,13 +92,13 @@ export class ImageNormalizationControllerImpl implements ImageNormalizationContr
 
   private validateInputFormat(format: SharpFormat | undefined, allowed?: SharpFormat[]) {
     if (!format || !sharp.format[format]?.input) {
-      throw ApiErrorFactory.make(ApiErrorCodes.Format.UNSUPPORTED_FORMAT.message, {
+      throw ApiErrorFactory.make('Format.UNSUPPORTED_FORMAT', {
         details: `Unsupported input format: ${format}`,
       });
     }
 
     if (allowed && !allowed.includes(format)) {
-      throw ApiErrorFactory.make(ApiErrorCodes.Format.UNSUPPORTED_FORMAT.message, {
+      throw ApiErrorFactory.make('Format.UNSUPPORTED_FORMAT', {
         details: `Format not allowed: ${format}`,
       });
     }
@@ -114,7 +114,7 @@ export class ImageNormalizationControllerImpl implements ImageNormalizationContr
         decimals: 1,
       });
 
-      throw ApiErrorFactory.make(ApiErrorCodes.Image.MAX_SIZE_EXCEEDED.message, {
+      throw ApiErrorFactory.make('Image.MAX_SIZE_EXCEEDED', {
         i18n: {
           specs: { maxSize: formatted.value, unit: formatted.unit },
         },
@@ -132,7 +132,7 @@ export class ImageNormalizationControllerImpl implements ImageNormalizationContr
 
     if (!formatInfo?.output) {
       const message = `Cannot encode output format: ${format}`;
-      throw ApiErrorFactory.make(ApiErrorCodes.Format.UNSUPPORTED_FORMAT.message, { details: message });
+      throw ApiErrorFactory.make('Format.UNSUPPORTED_FORMAT', { details: message });
     }
     return new FormatType(format);
   }
@@ -173,7 +173,7 @@ export class ImageNormalizationControllerImpl implements ImageNormalizationContr
     const width = meta.width ?? 0;
     const height = meta.height ?? 0;
     if (!(width > 0 && height > 0)) {
-      throw ApiErrorFactory.make(ApiErrorCodes.Validation.INVALID_PROPERTIES.message, {
+      throw ApiErrorFactory.make('Validation.INVALID_PROPERTIES', {
         details: 'Missing image dimensions.',
       });
     }
@@ -239,7 +239,7 @@ export class ImageNormalizationControllerImpl implements ImageNormalizationContr
     }
 
     if (problems.length) {
-      throw ApiErrorFactory.make(ApiErrorCodes.Validation.INVALID_PROPERTIES.message, { details: problems.join('; ') });
+      throw ApiErrorFactory.make('Validation.INVALID_PROPERTIES', { details: problems.join('; ') });
     }
   }
 
