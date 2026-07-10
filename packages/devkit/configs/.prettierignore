@@ -36,6 +36,8 @@ node_modules
 dist
 build
 out
+apikit-app
+apikit-i18n
 .output
 .nuxt
 .next

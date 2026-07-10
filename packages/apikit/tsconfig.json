@@ -11,9 +11,20 @@
       "@/*": ["./src/*"],
       "@cli/*": ["./src-cli/*"],
       "@internal/*": ["./src-internal/*"],
+      "@i18n": ["./apikit-i18n/index.ts"],
+      "@i18n/*": ["./apikit-i18n/*"],
       "@test/*": ["./test/*"]
     }
   },
-  "include": ["src", "src-cli", "src-internal", "types", "test", "tsdown.config.cli.ts", "tsdown.config.src.ts"],
+  "include": [
+    "src",
+    "src-cli",
+    "src-internal",
+    "apikit-i18n",
+    "types",
+    "test",
+    "tsdown.config.cli.ts",
+    "tsdown.config.src.ts"
+  ],
   "exclude": ["node_modules", "dist"]
 }

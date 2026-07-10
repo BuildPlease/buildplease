@@ -1,57 +1,68 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-import { createFile, ensureDirectory, resolvePath } from '@meawkit/core/node';
-import merge from 'lodash.merge';
+import { createDirectory, createFile, ensureDirectory, resolvePath } from '@meawkit/core/node';
+
+import type { ApiKitI18nResources } from '@/configuration/i18n';
 
 import type { I18nGeneratorConfig, I18nGeneratorFileEntry } from '../configuration/i18n-generator-config';
 
+type MutableI18nResources = Record<string, Record<string, unknown>>;
+
 type ResourceEntry = {
   readonly locale: string;
-  readonly namespace: string;
   readonly path: string;
 };
 
-type NamespaceResource = {
-  readonly namespace: string;
-  readonly resource: Record<string, unknown>;
-};
-
 export async function generateI18n(config: I18nGeneratorConfig, outputPath: string): Promise<string[]> {
-  const entries = collectReferenceResourceEntries(config);
-  const resources = mergeResourceEntries(entries);
-  const i18n = makeI18nTree(resources, config);
+  const resources = await makeResources(config);
+  const referenceResource = getReferenceResource(resources, config.defaultLanguage);
+  const i18n = makeI18nTree(referenceResource, config);
 
   createFile(path.join(outputPath, 'i18n.ts'), makeI18nModule(i18n));
 
-  return ['i18n'];
+  if (!config.emitSource) return ['i18n'];
+
+  writeResourceFiles(outputPath, resources);
+  createFile(path.join(outputPath, 'resources.ts'), makeResourcesModule(resources));
+  createFile(path.join(outputPath, 'source.ts'), makeSourceModule(config));
+
+  return ['i18n', 'resources', 'source'];
 }
 
-function collectReferenceResourceEntries(config: I18nGeneratorConfig): ResourceEntry[] {
-  const referenceLanguage = normalizeLocale(config.defaultLanguage);
-  const entries = collectResourceEntries(config).filter((entry) => normalizeLocale(entry.locale) === referenceLanguage);
+async function makeResources(config: I18nGeneratorConfig): Promise<MutableI18nResources> {
+  const resources: MutableI18nResources = {};
 
-  if (!entries.length) {
-    throw new Error(`[ApiKit:I18n] No locale resources found for default language "${config.defaultLanguage}".`);
+  if (config.includeBuiltinResources) {
+    mergeResources(resources, await loadBuiltinResources(), 'builtin');
   }
 
-  return entries;
+  if (config.extends) {
+    mergeResources(resources, config.extends.resources, 'extends');
+  }
+
+  const entries = collectResourceEntries(config);
+  const localResources = mergeResourceEntries(entries);
+
+  mergeResources(resources, localResources, 'local');
+
+  return resources;
 }
 
 function collectResourceEntries(config: I18nGeneratorConfig): ResourceEntry[] {
-  const builtinEntries = collectBuiltinEntries(config);
   const directoryEntries = collectDirectoryEntries(config);
   const fileEntries = collectFileEntries(config);
 
-  return [...builtinEntries, ...directoryEntries, ...fileEntries];
+  return [...directoryEntries, ...fileEntries].sort(compareResourceEntries);
 }
 
-function collectBuiltinEntries(config: I18nGeneratorConfig): ResourceEntry[] {
-  return resolveLocalesFromDir(resolveBuiltinLocalesPath()).map((entry) => ({
-    locale: entry.locale,
-    namespace: config.defaultNamespace,
-    path: entry.path,
-  }));
+async function loadBuiltinResources(): Promise<ApiKitI18nResources> {
+  const moduleName = '@meawkit/apikit/i18n';
+  const module = (await import(moduleName)) as { readonly resources?: ApiKitI18nResources };
+
+  if (!module.resources) throw new Error('[ApiKit:I18n] Built-in generated resources were not found.');
+
+  return module.resources;
 }
 
 function collectDirectoryEntries(config: I18nGeneratorConfig): ResourceEntry[] {
@@ -64,7 +75,6 @@ function collectDirectoryEntries(config: I18nGeneratorConfig): ResourceEntry[] {
     for (const file of files) {
       entries.push({
         locale: file.locale,
-        namespace: directory.namespace ?? config.defaultNamespace,
         path: file.path,
       });
     }
@@ -76,14 +86,16 @@ function collectDirectoryEntries(config: I18nGeneratorConfig): ResourceEntry[] {
 function collectFileEntries(config: I18nGeneratorConfig): ResourceEntry[] {
   return config.files.map((file) => ({
     locale: file.locale,
-    namespace: file.namespace ?? config.defaultNamespace,
     path: resolvePath(process.cwd(), file.path),
   }));
 }
 
 function resolveLocalesFromDir(dir: string): I18nGeneratorFileEntry[] {
   const absolute = ensureDirectory(dir);
-  const files = fs.readdirSync(absolute).filter((file) => file.endsWith('.json'));
+  const files = fs
+    .readdirSync(absolute)
+    .filter((file) => file.endsWith('.json'))
+    .sort();
 
   if (!files.length) throw new Error(`[ApiKit:I18n] No .json files in ${absolute}`);
 
@@ -93,31 +105,52 @@ function resolveLocalesFromDir(dir: string): I18nGeneratorFileEntry[] {
   }));
 }
 
-function resolveBuiltinLocalesPath(): string {
-  const candidates = [
-    resolvePath(import.meta.url, '../../src/i18n/locales'),
-    resolvePath(import.meta.url, '../src/locales'),
-    resolvePath(import.meta.url, '../src/i18n/locales'),
-  ];
-
-  const found = candidates.find((candidate) => fs.existsSync(candidate));
-  if (found) return found;
-
-  throw new Error('[ApiKit:I18n] Built-in locale directory was not found.');
-}
-
-function mergeResourceEntries(entries: readonly ResourceEntry[]): NamespaceResource[] {
-  const resources = new Map<string, Record<string, unknown>>();
+function mergeResourceEntries(entries: readonly ResourceEntry[]): MutableI18nResources {
+  const resources: MutableI18nResources = {};
 
   for (const entry of entries) {
-    const resource = getOrCreate(resources, entry.namespace, () => ({}));
-    merge(resource, readJson(entry.path));
+    const locale = normalizeLocale(entry.locale);
+    const resource = readJson(entry.path);
+    const target = (resources[locale] ??= {});
+
+    mergeObject(target, resource, locale);
   }
 
-  return Array.from(resources.entries()).map(([namespace, resource]) => ({
-    namespace,
-    resource,
-  }));
+  return resources;
+}
+
+function mergeResources(target: MutableI18nResources, source: ApiKitI18nResources, label: string): void {
+  for (const locale of sortedKeys(source)) {
+    const normalizedLocale = normalizeLocale(locale);
+    const targetResource = (target[normalizedLocale] ??= {});
+
+    mergeObject(targetResource, source[locale] as Record<string, unknown>, `${label}:${normalizedLocale}`);
+  }
+}
+
+function mergeObject(target: Record<string, unknown>, source: Record<string, unknown>, _context: string): void {
+  for (const key of sortedKeys(source)) {
+    const value = source[key];
+    const existing = target[key];
+
+    if (isRecord(existing) && isRecord(value)) {
+      mergeObject(existing, value, `${_context}.${key}`);
+      continue;
+    }
+
+    target[key] = clone(value);
+  }
+}
+
+function getReferenceResource(resources: MutableI18nResources, referenceLanguage: string): Record<string, unknown> {
+  const locale = normalizeLocale(referenceLanguage);
+  const resource = resources[locale];
+
+  if (!resource) {
+    throw new Error(`[ApiKit:I18n] No locale resources found for reference language "${referenceLanguage}".`);
+  }
+
+  return resource;
 }
 
 function readJson(filePath: string): Record<string, unknown> {
@@ -128,30 +161,18 @@ function readJson(filePath: string): Record<string, unknown> {
   return parsed;
 }
 
-function makeI18nTree(resources: readonly NamespaceResource[], config: I18nGeneratorConfig): Record<string, unknown> {
-  const tree: Record<string, unknown> = {
-    Messages: {},
-    Errors: {},
-  };
+function makeI18nTree(resource: Record<string, unknown>, config: I18nGeneratorConfig): Record<string, unknown> {
+  const tree: Record<string, unknown> = {};
 
-  for (const resource of resources) {
-    const paths = flattenResourcePaths(resource.resource, config.keySeparator);
+  const paths = flattenResourcePaths(resource, config.keySeparator);
 
-    for (const key of paths) {
-      const value = makeI18nKey(resource.namespace, key, config);
-      const pathParts = key.split(config.keySeparator).map(toPascalCase);
+  for (const key of paths) {
+    const pathParts = key.split(config.keySeparator).map(toPascalCase);
 
-      setGeneratedValue(tree, pathParts, value);
-    }
+    setGeneratedValue(tree, pathParts, key);
   }
 
   return tree;
-}
-
-function makeI18nKey(namespace: string, key: string, config: I18nGeneratorConfig): string {
-  if (namespace === config.defaultNamespace) return key;
-
-  return `${namespace}${config.nsSeparator}${key}`;
 }
 
 function flattenResourcePaths(resource: Record<string, unknown>, keySeparator: string): string[] {
@@ -164,8 +185,8 @@ function flattenResourcePaths(resource: Record<string, unknown>, keySeparator: s
 
 function collectPaths(prefix: string[], value: unknown, paths: string[], keySeparator: string): void {
   if (isRecord(value)) {
-    for (const [key, nested] of Object.entries(value)) {
-      collectPaths([...prefix, key], nested, paths, keySeparator);
+    for (const key of sortedKeys(value)) {
+      collectPaths([...prefix, key], value[key], paths, keySeparator);
     }
 
     return;
@@ -183,7 +204,7 @@ function setGeneratedValue(target: Record<string, unknown>, pathParts: string[],
     if (isLeaf) {
       const existing = cursor[part];
       if (isRecord(existing))
-        throw new Error(`[ApiKit:I18n] Cannot overwrite i18n namespace with key: ${pathParts.join('.')}`);
+        throw new Error(`[ApiKit:I18n] Cannot overwrite i18n branch with key: ${pathParts.join('.')}`);
       if (typeof existing === 'string' && existing !== value)
         throw new Error(`[ApiKit:I18n] Duplicate generated i18n key: ${pathParts.join('.')}`);
 
@@ -193,28 +214,83 @@ function setGeneratedValue(target: Record<string, unknown>, pathParts: string[],
 
     const existing = cursor[part];
     if (typeof existing === 'string')
-      throw new Error(`[ApiKit:I18n] Cannot overwrite i18n key with namespace: ${pathParts.join('.')}`);
+      throw new Error(`[ApiKit:I18n] Cannot overwrite i18n key with branch: ${pathParts.join('.')}`);
 
     cursor = (cursor[part] ||= {}) as Record<string, unknown>;
   }
 }
 
 function makeI18nModule(i18n: Record<string, unknown>): string {
-  return `// Generated by ApiKit. Do not edit manually.\n\nexport const I18n = ${formatObject(i18n)} as const;\n\nexport type I18nCode = DeepValue<typeof I18n>;\nexport type I18nMessageCode = DeepValue<typeof I18n.Messages>;\nexport type I18nErrorCode = DeepValue<typeof I18n.Errors>;\n\ntype DeepValue<T> = T extends object ? DeepValue<T[keyof T]> : T;\n`;
+  return `// Generated by ApiKit. Do not edit manually.
+
+export const I18n = ${formatObject(i18n)} as const;
+
+export type I18nCode = DeepValue<typeof I18n>;
+
+type DeepValue<T> = T extends object ? DeepValue<T[keyof T]> : T;
+`;
+}
+
+function writeResourceFiles(outputPath: string, resources: MutableI18nResources): void {
+  const resourcesPath = path.join(outputPath, 'resources');
+
+  createDirectory(resourcesPath);
+
+  for (const locale of sortedKeys(resources)) {
+    createFile(
+      path.join(resourcesPath, `${encodePathSegment(locale)}.json`),
+      `${JSON.stringify(resources[locale], null, 2)}\n`,
+    );
+  }
+}
+
+function makeResourcesModule(resources: MutableI18nResources): string {
+  const imports: string[] = [];
+  const entries: Record<string, string> = {};
+
+  for (const [index, locale] of sortedKeys(resources).entries()) {
+    const importName = `resource_${index}`;
+    const importPath = `./resources/${encodePathSegment(locale)}.json`;
+
+    imports.push(`import ${importName} from '${importPath}';`);
+    entries[locale] = importName;
+  }
+
+  return `// Generated by ApiKit. Do not edit manually.\n\n${imports.join('\n')}\n\nexport const resources = ${formatResourceImports(entries)} as const;\n`;
+}
+
+function formatResourceImports(entries: Record<string, string>, indent = 0): string {
+  const lines: string[] = [];
+  const pad = '  '.repeat(indent);
+  const childPad = '  '.repeat(indent + 1);
+
+  lines.push('{');
+
+  for (const locale of sortedKeys(entries)) {
+    lines.push(`${childPad}${formatPropertyKey(locale)}: ${entries[locale]},`);
+  }
+
+  lines.push(`${pad}}`);
+
+  return lines.join('\n');
+}
+
+function makeSourceModule(config: I18nGeneratorConfig): string {
+  const name = config.name ? `\n  name: ${JSON.stringify(config.name)},` : '';
+
+  return `// Generated by ApiKit. Do not edit manually.\n\nimport { resources } from './resources.js';\n\nexport const i18n = {${name}\n  resources: resources,\n} as const;\n`;
 }
 
 function formatObject(value: unknown, indent = 0): string {
-  if (typeof value === 'string') return `'${escapeString(value)}'`;
-  if (!isRecord(value)) return JSON.stringify(value);
+  if (typeof value === 'string') return JSON.stringify(value);
+  if (!isRecord(value)) return JSON.stringify(value) ?? 'undefined';
 
-  const entries = Object.entries(value);
+  const entries = sortedKeys(value);
   if (!entries.length) return '{}';
 
   const pad = '  '.repeat(indent);
   const childPad = '  '.repeat(indent + 1);
-  const lines = entries.map(
-    ([key, nested]) => `${childPad}${formatPropertyKey(key)}: ${formatObject(nested, indent + 1)},`,
-  );
+  const lines = entries.map((key) => `${childPad}${formatPropertyKey(key)}: ${formatObject(value[key], indent + 1)},`);
 
   return `{\n${lines.join('\n')}\n${pad}}`;
 }
@@ -228,23 +304,27 @@ function toPascalCase(value: string): string {
 }
 
 function formatPropertyKey(key: string): string {
-  return /^[A-Za-z_$][A-Za-z0-9_$]*$/.test(key) ? key : `'${escapeString(key)}'`;
+  return /^[A-Za-z_$][A-Za-z0-9_$]*$/.test(key) ? key : JSON.stringify(key);
 }
 
-function escapeString(value: string): string {
-  return value.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+function encodePathSegment(value: string): string {
+  return encodeURIComponent(value);
 }
 
 function normalizeLocale(locale: string): string {
   return locale.toLowerCase().replace(/_/g, '-').trim();
 }
 
-function getOrCreate<K, V>(map: Map<K, V>, key: K, factory: () => V): V {
-  const existing = map.get(key);
-  if (existing) return existing;
+function compareResourceEntries(a: ResourceEntry, b: ResourceEntry): number {
+  return normalizeLocale(a.locale).localeCompare(normalizeLocale(b.locale)) || a.path.localeCompare(b.path);
+}
 
-  const value = factory();
-  map.set(key, value);
+function sortedKeys<T extends Record<string, unknown>>(value: T): string[] {
+  return Object.keys(value).sort();
+}
+
+function clone(value: unknown): unknown {
+  if (isRecord(value) || Array.isArray(value)) return JSON.parse(JSON.stringify(value)) as unknown;
 
   return value;
 }

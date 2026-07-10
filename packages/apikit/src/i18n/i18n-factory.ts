@@ -18,11 +18,11 @@ export interface I18nFactoryOptions {
 }
 
 /**
- * @description Resolves generated i18n keys into localized text.
+ * @description Resolves i18n keys into localized text.
  *
  * @example
  * ```ts
- * const message = I18nFactory.make(I18n.Messages.Account.EmailCodeSent);
+ * const message = I18nFactory.make('messages.account.email_code_sent');
  * ```
  *
  * @example
@@ -34,32 +34,22 @@ export interface I18nFactoryOptions {
  */
 export class I18nFactory {
   /**
-   * @description Resolves a generated i18n key into localized text.
+   * @description Resolves an i18n key into localized text.
    *
-   * @param key Generated i18n key, usually from `.apikit/i18n.ts`.
+   * @param key I18n key, for example `errors.common.not_found`.
    * @param options Optional override or i18next options.
    * @returns Localized text from the active i18n provider.
-   *
-   * @example
-   * ```ts
-   * I18nFactory.make(I18n.Messages.Account.EmailCodeSent);
-   * ```
    */
   public static make(key: string, options: I18nFactoryOptions = {}): string {
     return this.translateKey(key, options);
   }
 
   /**
-   * @description Resolves a raw i18n key into localized text.
+   * @description Resolves an i18n key into localized text.
    *
-   * @param key Raw i18n key, for example `errors.common.not_found`.
+   * @param key I18n key, for example `errors.common.not_found`.
    * @param options Optional override or i18next options.
    * @returns Localized text from the active i18n provider.
-   *
-   * @example
-   * ```ts
-   * I18nFactory.translateKey('errors.common.not_found');
-   * ```
    */
   public static translateKey(key: string, options: I18nFactoryOptions = {}): string {
     const { overrideMessage, i18n } = options;

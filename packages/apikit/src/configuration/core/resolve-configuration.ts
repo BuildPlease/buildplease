@@ -81,13 +81,33 @@ async function resolveField(
   const resolved = await resolveValue(input, context, path);
 
   if (resolved === undefined || resolved === null) {
-    if (field.hasDefault) return field.defaultValue;
+    if (field.hasDefault) return cloneDefault(field.defaultValue);
     if (!field.required) return undefined;
 
     throw new Error(`Missing required configuration: ${path}`);
   }
 
   return field.parse(resolved, path);
+}
+
+function cloneDefault(value: unknown): unknown {
+  if (Array.isArray(value)) return value.map((item) => cloneDefault(item));
+
+  if (isPlainObject(value)) {
+    const result: Record<string, unknown> = {};
+
+    for (const [key, nested] of Object.entries(value)) {
+      result[key] = cloneDefault(nested);
+    }
+
+    return result;
+  }
+
+  return value;
+}
+
+function isPlainObject(value: unknown): value is Record<string, unknown> {
+  return Object.prototype.toString.call(value) === '[object Object]';
 }
 
 async function resolveValue(

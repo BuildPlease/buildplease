@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 
-import type { ApiKitController } from '@/configuration/apikit-controller';
-import type { LoggerConfig } from '@/configuration/configs/logger';
+import type { ApiKitController } from '@/configuration/app/app-controller';
+import type { LoggerConfig } from '@/configuration/app/configs/logger';
 import { LogFlag } from '@/logger/log-flag';
 import { LoggerControllerImpl } from '@/logger/logger-controller';
 

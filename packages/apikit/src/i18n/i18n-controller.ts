@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 
+import { resources as apikitResources } from '@i18n/resources';
 import { ensureDirectory, resolvePath } from '@meawkit/core/node';
 import i18next, { type InitOptions } from 'i18next';
 import { inject, injectable } from 'inversify';
@@ -247,13 +248,8 @@ type ResolvedI18nConfig = Required<Omit<I18nConfig, 'directories' | 'files'>> & 
 // MARK: - Locale resources
 
 function makeResources(config: ResolvedI18nConfig): Record<string, any> {
-  const entries: ResourceEntry[] = [
-    ...collectBuiltinEntries(config),
-    ...collectDirectoryEntries(config),
-    ...collectFileEntries(config),
-  ];
-
-  const resources: Record<string, any> = {};
+  const resources = makeBuiltinResources(config);
+  const entries: ResourceEntry[] = [...collectDirectoryEntries(config), ...collectFileEntries(config)];
 
   for (const { locale, ns, path } of entries) {
     const bucket = (resources[locale] ||= {});
@@ -265,15 +261,19 @@ function makeResources(config: ResolvedI18nConfig): Record<string, any> {
   return resources;
 }
 
-function collectBuiltinEntries(config: ResolvedI18nConfig): ResourceEntry[] {
-  const localesPath = resolvePath(import.meta.url, './locales');
-  const files = resolveLocalesFromDir(localesPath);
+function makeBuiltinResources(config: ResolvedI18nConfig): Record<string, any> {
+  const resources: Record<string, any> = {};
 
-  return files.map((file) => ({
-    locale: file.locale,
-    ns: config.defaultNamespace,
-    path: file.path,
-  }));
+  for (const locale of Object.keys(apikitResources).sort()) {
+    const bucket = (resources[locale] ||= {});
+    bucket[config.defaultNamespace] = cloneResource(apikitResources[locale as keyof typeof apikitResources]);
+  }
+
+  return resources;
+}
+
+function cloneResource(resource: unknown): unknown {
+  return JSON.parse(JSON.stringify(resource));
 }
 
 function collectDirectoryEntries(config: ResolvedI18nConfig): ResourceEntry[] {
@@ -305,7 +305,10 @@ function collectFileEntries(config: ResolvedI18nConfig): ResourceEntry[] {
 
 function resolveLocalesFromDir(dir: string): I18nFileEntry[] {
   const absolute = ensureDirectory(dir);
-  const files = fs.readdirSync(absolute).filter((file) => file.endsWith('.json'));
+  const files = fs
+    .readdirSync(absolute)
+    .filter((file) => file.endsWith('.json'))
+    .sort();
 
   if (!files.length) throw new Error(`${LOG_PREFIX} No .json files in ${absolute}`);
 

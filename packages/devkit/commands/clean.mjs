@@ -4,7 +4,7 @@ import path from 'node:path';
 import { consola } from 'consola';
 
 const targets = ['apps', 'packages'];
-const artifactFolders = ['dist', '.output', '.runtime', '.build', '.nuxt'];
+const artifactFolders = ['dist', 'apikit-app', 'apikit-i18n', '.output', '.runtime', '.build', '.nuxt'];
 
 async function directoryExists(pathName) {
   try {

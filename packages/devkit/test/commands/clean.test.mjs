@@ -39,6 +39,8 @@ describe('clean', () => {
   it('removes build artifact folders from workspace projects', async () => {
     await mkdir(path.join(rootDir, 'packages/core/dist'), { recursive: true });
     await mkdir(path.join(rootDir, 'packages/core/.output'), { recursive: true });
+    await mkdir(path.join(rootDir, 'packages/core/apikit-app'), { recursive: true });
+    await mkdir(path.join(rootDir, 'packages/core/apikit-i18n'), { recursive: true });
     await mkdir(path.join(rootDir, 'packages/core/src'), { recursive: true });
 
     process.chdir(rootDir);
@@ -47,6 +49,8 @@ describe('clean', () => {
 
     await expect(exists(path.join(rootDir, 'packages/core/dist'))).resolves.toBe(false);
     await expect(exists(path.join(rootDir, 'packages/core/.output'))).resolves.toBe(false);
+    await expect(exists(path.join(rootDir, 'packages/core/apikit-app'))).resolves.toBe(false);
+    await expect(exists(path.join(rootDir, 'packages/core/apikit-i18n'))).resolves.toBe(false);
     await expect(exists(path.join(rootDir, 'packages/core/src'))).resolves.toBe(true);
   });
 });
