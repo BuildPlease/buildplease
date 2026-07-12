@@ -1,6 +1,6 @@
 import fs from 'node:fs';
-import path from 'node:path';
 
+import { ensureDirectory, resolvePath } from '@meawkit/core/node';
 import { createJiti } from 'jiti';
 
 import type { DevKitConfig } from '../../src/configuration';
@@ -21,7 +21,7 @@ export interface LoadedDevKitConfig {
 }
 
 export async function loadDevKitConfig(options: LoadDevKitConfigOptions = {}): Promise<LoadedDevKitConfig> {
-  const rootDir = options.dir ? path.resolve(process.cwd(), options.dir) : process.cwd();
+  const rootDir = resolveRootDir(options.dir);
   const configFilePath = resolveConfigFilePath(rootDir, options.config ?? CONFIG_NAME);
 
   if (!configFilePath) {
@@ -44,8 +44,16 @@ export async function loadDevKitConfig(options: LoadDevKitConfigOptions = {}): P
   }
 }
 
+function resolveRootDir(dir?: string): string {
+  const rootDir = dir ? resolvePath(process.cwd(), dir) : process.cwd();
+
+  ensureDirectory(rootDir);
+
+  return rootDir;
+}
+
 function resolveConfigFilePath(rootDir: string, configName: string): string | undefined {
-  const configFilePath = path.resolve(rootDir, configName);
+  const configFilePath = resolvePath(rootDir, configName);
 
   for (const extension of CONFIG_EXTENSIONS) {
     const candidate = `${configFilePath}${extension}`;

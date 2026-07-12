@@ -1,91 +1,149 @@
-export const DevKitDefaults = {
-  clean: {
-    targets: ['apps', 'packages'],
-    directories: ['dist'],
-  },
+import type { DevKitConfigMode } from '../../src/configuration';
 
-  prettier: {
-    include: ['.'],
-    ignore: [
-      'logs',
-      'log',
-      '*.log',
-      'npm-debug.log*',
-      'yarn-debug.log*',
-      'yarn-error.log*',
-      'pnpm-debug.log*',
-      'lerna-debug.log*',
-      'report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json',
-      '*.heapsnapshot',
-      '*.heapprofile',
-      '*.cpuprofile',
-      '.env',
-      '.env.*',
-      '!.env.example',
-      '!.env.*.example',
-      '!.env.template',
-      '!.env.*.template',
-      'node_modules',
+export const DevKitDefaults = {
+  mode: 'extend' satisfies DevKitConfigMode,
+
+  ignore: [
+    // System
+    '**/.DS_Store',
+    '**/.AppleDouble',
+    '**/.LSOverride',
+    '**/Thumbs.db',
+    '**/ehthumbs.db',
+    '**/Desktop.ini',
+
+    // Editors / IDEs
+    '**/.idea/**',
+    '**/.vscode/**',
+
+    // Environment / secrets
+    '**/.env',
+    '**/.env.*',
+
+    // Dependencies
+    '**/node_modules/**',
+
+    // Package manager state / caches / lockfiles
+    '**/.npm/**',
+    '**/.pnpm-store/**',
+    '**/.yarn/cache/**',
+    '**/.yarn/unplugged/**',
+    '**/.yarn/build-state.yml',
+    '**/.yarn/install-state.gz',
+    '**/.pnp.*',
+    '**/pnpm-lock.yaml',
+    '**/package-lock.json',
+    '**/npm-shrinkwrap.json',
+    '**/yarn.lock',
+    '**/bun.lock',
+    '**/bun.lockb',
+
+    // Logs / diagnostics
+    '**/logs/**',
+    '**/log/**',
+    '**/*.log',
+    '**/npm-debug.log*',
+    '**/yarn-debug.log*',
+    '**/yarn-error.log*',
+    '**/pnpm-debug.log*',
+    '**/lerna-debug.log*',
+    '**/report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json',
+    '**/*.heapsnapshot',
+    '**/*.heapprofile',
+    '**/*.cpuprofile',
+
+    // Runtime data
+    '**/pids/**',
+    '**/*.pid',
+    '**/*.seed',
+    '**/*.pid.lock',
+
+    // Test / coverage output
+    '**/coverage/**',
+    '**/.nyc_output/**',
+    '**/*.lcov',
+    '**/.tap/**',
+    '**/out.tap',
+    '**/test-results/**',
+    '**/playwright-report/**',
+    '**/blob-report/**',
+
+    // TypeScript / tooling caches
+    '**/*.tsbuildinfo',
+    '**/.eslintcache',
+    '**/.stylelintcache',
+    '**/.cache/**',
+    '**/.parcel-cache/**',
+    '**/.vite/**',
+    '**/.rpt2_cache/**',
+    '**/.rts2_cache_cjs/**',
+    '**/.rts2_cache_es/**',
+    '**/.rts2_cache_umd/**',
+
+    // Framework output
+    '**/.next/**',
+    '**/.nuxt/**',
+    '**/.output/**',
+    '**/.turbo/**',
+    '**/.vercel/**',
+    '**/.netlify/**',
+    '**/.svelte-kit/**',
+    '**/.astro/**',
+    '**/.docusaurus/**',
+    '**/.vuepress/dist/**',
+    '**/storybook-static/**',
+
+    // Archives / generated packages
+    '**/*.tgz',
+    '**/*.zip',
+    '**/*.tar',
+    '**/*.tar.gz',
+
+    // Build output
+    '**/dist/**',
+    '**/build/**',
+    '**/out/**',
+
+    // Generated output
+    '**/.generated/**',
+
+    // Minified / generated bundles
+    '**/*.min.js',
+    '**/*.min.css',
+  ],
+
+  clean: {
+    mode: 'extend' satisfies DevKitConfigMode,
+    targets: ['apps', 'packages'],
+    directories: [
       'dist',
       'build',
       'out',
-      'coverage',
-      '.nyc_output',
-      '.tap',
-      'out.tap',
-      'test-results',
-      'playwright-report',
-      'blob-report',
-      '*.tsbuildinfo',
-      '.eslintcache',
-      '.stylelintcache',
+      '.output',
+      '.generated',
+      '.turbo',
       '.cache',
-      '.parcel-cache',
       '.vite',
       '.next',
       '.nuxt',
-      '.output',
-      '.generated',
-      '.archicat',
-      '.apikit-app',
-      '.apikit-i18n',
-      '.turbo',
-      '.vercel',
-      '.netlify',
       '.svelte-kit',
       '.astro',
+      'coverage',
+      '.nyc_output',
+      'test-results',
+      'playwright-report',
+      'blob-report',
       'storybook-static',
-      '*.tgz',
-      '/*.zip',
-      '/*.tar',
-      '/*.tar.gz',
-      '*.min.js',
-      '*.min.css',
-      'CHANGELOG.md',
     ],
   },
 
-  eslint: {
+  format: {
+    mode: 'extend' satisfies DevKitConfigMode,
     include: ['.'],
-    ignore: [
-      '**/node_modules/**',
-      '**/dist/**',
-      '**/coverage/**',
-      '**/build/**',
-      '**/out/**',
-      '**/.next/**',
-      '**/.nuxt/**',
-      '**/.output/**',
-      '**/.generated/**',
-      '**/.archicat/**',
-      '**/.apikit-app/**',
-      '**/.apikit-i18n/**',
-      '**/.turbo/**',
-      '**/.cache/**',
-      '**/.vercel/**',
-      '**/.netlify/**',
-      '**/.svelte-kit/**',
-      '**/.astro/**',
-    ],
+  },
+
+  lint: {
+    mode: 'extend' satisfies DevKitConfigMode,
+    include: ['.'],
   },
 } as const;

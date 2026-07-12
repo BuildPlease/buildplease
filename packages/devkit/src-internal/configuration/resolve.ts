@@ -2,33 +2,47 @@ import { DevKitDefaults } from './defaults';
 import type { DevKitConfig, DevKitConfigMode } from '../../src/configuration';
 
 export interface ResolvedDevKitConfig {
+  readonly ignore: readonly string[];
   readonly clean: {
     readonly targets: readonly string[];
     readonly directories: readonly string[];
   };
-  readonly prettier: {
+  readonly format: {
     readonly include: readonly string[];
-    readonly ignore: readonly string[];
   };
-  readonly eslint: {
+  readonly lint: {
     readonly include: readonly string[];
-    readonly ignore: readonly string[];
   };
 }
 
 export function resolveDevKitConfig(config: DevKitConfig): ResolvedDevKitConfig {
   return {
+    ignore: resolveList(DevKitDefaults.ignore, config.ignore, DevKitDefaults.mode),
     clean: {
-      targets: DevKitDefaults.clean.targets,
-      directories: resolveList(DevKitDefaults.clean.directories, config.clean.directories, config.clean.mode),
+      targets: resolveList(
+        DevKitDefaults.clean.targets,
+        config.clean.targets,
+        config.clean.mode ?? DevKitDefaults.clean.mode,
+      ),
+      directories: resolveList(
+        DevKitDefaults.clean.directories,
+        config.clean.directories,
+        config.clean.mode ?? DevKitDefaults.clean.mode,
+      ),
     },
-    prettier: {
-      include: resolveList(DevKitDefaults.prettier.include, config.prettier.include, config.prettier.mode),
-      ignore: resolveList(DevKitDefaults.prettier.ignore, config.prettier.ignore, config.prettier.mode),
+    format: {
+      include: resolveList(
+        DevKitDefaults.format.include,
+        config.format.include,
+        config.format.mode ?? DevKitDefaults.format.mode,
+      ),
     },
-    eslint: {
-      include: resolveList(DevKitDefaults.eslint.include, config.eslint.include, config.eslint.mode),
-      ignore: resolveList(DevKitDefaults.eslint.ignore, config.eslint.ignore, config.eslint.mode),
+    lint: {
+      include: resolveList(
+        DevKitDefaults.lint.include,
+        config.lint.include,
+        config.lint.mode ?? DevKitDefaults.lint.mode,
+      ),
     },
   };
 }
@@ -36,7 +50,7 @@ export function resolveDevKitConfig(config: DevKitConfig): ResolvedDevKitConfig 
 function resolveList(
   defaults: readonly string[],
   input: readonly string[] | undefined,
-  mode: DevKitConfigMode | undefined,
+  mode: DevKitConfigMode,
 ): readonly string[] {
   const values = mode === 'override' ? (input ?? []) : [...defaults, ...(input ?? [])];
 

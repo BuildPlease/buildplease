@@ -2,23 +2,25 @@ export type DevKitConfigMode = 'extend' | 'override';
 
 export interface DevKitCleanConfig {
   readonly mode?: DevKitConfigMode;
+  readonly targets?: readonly string[];
   readonly directories?: readonly string[];
 }
 
-export interface DevKitToolConfig {
+export interface DevKitCommandConfig {
   readonly mode?: DevKitConfigMode;
   readonly include?: readonly string[];
-  readonly ignore?: readonly string[];
 }
 
 export interface DefineDevKitInput {
+  readonly ignore?: readonly string[];
   readonly clean?: DevKitCleanConfig;
-  readonly prettier?: DevKitToolConfig;
-  readonly eslint?: DevKitToolConfig;
+  readonly format?: DevKitCommandConfig;
+  readonly lint?: DevKitCommandConfig;
 }
 
 export interface DevKitConfig extends DefineDevKitInput {
+  readonly ignore: readonly string[];
   readonly clean: DevKitCleanConfig;
-  readonly prettier: DevKitToolConfig;
-  readonly eslint: DevKitToolConfig;
+  readonly format: DevKitCommandConfig;
+  readonly lint: DevKitCommandConfig;
 }

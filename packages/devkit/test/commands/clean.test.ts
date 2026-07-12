@@ -46,7 +46,7 @@ describe('clean', () => {
     await clean();
 
     await expect(exists(path.join(rootDir, 'packages/core/dist'))).resolves.toBe(false);
-    await expect(exists(path.join(rootDir, 'packages/core/.output'))).resolves.toBe(true);
+    await expect(exists(path.join(rootDir, 'packages/core/.output'))).resolves.toBe(false);
     await expect(exists(path.join(rootDir, 'packages/core/src'))).resolves.toBe(true);
   });
 });

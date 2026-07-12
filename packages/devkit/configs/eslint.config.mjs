@@ -91,7 +91,7 @@ const loadedDevKitConfig = await loadDevKitConfig();
 const resolvedDevKitConfig = resolveDevKitConfig(loadedDevKitConfig.config);
 
 const globalIgnores = {
-  ignores: resolvedDevKitConfig.eslint.ignore,
+  ignores: resolvedDevKitConfig.ignore,
 };
 
 const vueConfig = {
