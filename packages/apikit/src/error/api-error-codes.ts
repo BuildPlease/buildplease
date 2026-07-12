@@ -1,4 +1,4 @@
-import { I18n } from '@i18n';
+import { I18n } from '@i18n/index';
 
 import { type ApiErrorDefinition, type ApiErrorTree, isApiErrorDefinition } from './api-error-definition';
 

@@ -1,6 +1,6 @@
 export const ApiKitI18nDefaults = {
   build: {
-    outDir: 'apikit-i18n',
+    outDir: '.apikit-i18n',
   },
 
   resources: {

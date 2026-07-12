@@ -10,7 +10,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 const CONFIG_SOURCE = `
 export default {
   build: {
-    outDir: 'apikit-i18n',
+    outDir: '.apikit-i18n',
   },
   resources: {
     directories: [

@@ -11,8 +11,7 @@
       "@/*": ["./src/*"],
       "@cli/*": ["./src-cli/*"],
       "@internal/*": ["./src-internal/*"],
-      "@i18n": ["./apikit-i18n/index.ts"],
-      "@i18n/*": ["./apikit-i18n/*"],
+      "@i18n/*": ["./.apikit-i18n/*"],
       "@test/*": ["./test/*"]
     }
   },
@@ -20,7 +19,7 @@
     "src",
     "src-cli",
     "src-internal",
-    "apikit-i18n",
+    ".apikit-i18n",
     "types",
     "test",
     "tsdown.config.cli.ts",
