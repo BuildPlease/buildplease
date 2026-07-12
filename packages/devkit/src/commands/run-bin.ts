@@ -7,15 +7,19 @@ import { execa } from 'execa';
 const require = createRequire(import.meta.url);
 
 export class CommandFailedError extends Error {
-  constructor(command, exitCode) {
+  readonly exitCode: number;
+
+  constructor(command: string, exitCode: number) {
     super(`${command} exited with code ${exitCode}`);
     this.exitCode = exitCode;
   }
 }
 
-function resolvePackageBin(packageName, binName) {
+function resolvePackageBin(packageName: string, binName: string): string {
   const packageJsonPath = require.resolve(`${packageName}/package.json`);
-  const packageJson = JSON.parse(readFileSync(packageJsonPath, 'utf8'));
+  const packageJson = JSON.parse(readFileSync(packageJsonPath, 'utf8')) as {
+    readonly bin?: string | Record<string, string>;
+  };
   const bin = typeof packageJson.bin === 'string' ? packageJson.bin : packageJson.bin?.[binName];
 
   if (!bin) {
@@ -25,23 +29,23 @@ function resolvePackageBin(packageName, binName) {
   return path.resolve(path.dirname(packageJsonPath), bin);
 }
 
-export async function runExecutable(command, args) {
+export async function runExecutable(command: string, args: readonly string[]): Promise<void> {
   try {
-    await execa(command, args, {
+    await execa(command, [...args], {
       cwd: process.cwd(),
       env: process.env,
       stdio: 'inherit',
     });
   } catch (error) {
-    if (typeof error?.exitCode === 'number') {
-      throw new CommandFailedError(command, error.exitCode);
+    if (typeof (error as { readonly exitCode?: unknown })?.exitCode === 'number') {
+      throw new CommandFailedError(command, (error as { readonly exitCode: number }).exitCode);
     }
 
     throw error;
   }
 }
 
-export async function runNodeBin(packageName, binName, args) {
+export async function runNodeBin(packageName: string, binName: string, args: readonly string[]): Promise<void> {
   const binPath = resolvePackageBin(packageName, binName);
   await runExecutable(process.execPath, [binPath, ...args]);
 }

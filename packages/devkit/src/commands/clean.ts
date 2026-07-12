@@ -3,10 +3,9 @@ import path from 'node:path';
 
 import { consola } from 'consola';
 
-const targets = ['apps', 'packages'];
-const artifactFolders = ['dist', 'apikit-app', 'apikit-i18n', '.output', '.runtime', '.build', '.nuxt'];
+import { loadDevKitConfig, resolveDevKitConfig } from '../../src-internal/configuration';
 
-async function directoryExists(pathName) {
+async function directoryExists(pathName: string): Promise<boolean> {
   try {
     const result = await stat(pathName);
     return result.isDirectory();
@@ -15,10 +14,10 @@ async function directoryExists(pathName) {
   }
 }
 
-async function listDirectories(pathName) {
+async function listDirectories(pathName: string): Promise<readonly string[]> {
   try {
     const entries = await readdir(pathName, { withFileTypes: true });
-    const directories = [];
+    const directories: string[] = [];
 
     for (const entry of entries) {
       if (!entry.isDirectory()) continue;
@@ -31,17 +30,17 @@ async function listDirectories(pathName) {
   }
 }
 
-function displayPath(pathName) {
+function displayPath(pathName: string): string {
   return path.relative(process.cwd(), pathName) || '.';
 }
 
-async function cleanProject(projectPath) {
+async function cleanProject(projectPath: string, directories: readonly string[]) {
   consola.info(`Cleaning ${displayPath(projectPath)}`);
 
   let deletedCount = 0;
   let skippedCount = 0;
 
-  for (const folderName of artifactFolders) {
+  for (const folderName of directories) {
     const folderPath = path.join(projectPath, folderName);
     const exists = await directoryExists(folderPath);
 
@@ -63,13 +62,16 @@ async function cleanProject(projectPath) {
   return { deletedCount, skippedCount };
 }
 
-export async function clean() {
+export async function clean(): Promise<void> {
+  const loaded = await loadDevKitConfig();
+  const config = resolveDevKitConfig(loaded.config);
+
   consola.start('Cleaning build artifacts');
 
   let totalDeleted = 0;
   let totalSkipped = 0;
 
-  for (const base of targets) {
+  for (const base of config.clean.targets) {
     if (!(await directoryExists(base))) continue;
 
     const projects = await listDirectories(base);
@@ -77,7 +79,7 @@ export async function clean() {
     if (projects.length === 0) continue;
 
     for (const projectPath of projects) {
-      const result = await cleanProject(projectPath);
+      const result = await cleanProject(projectPath, config.clean.directories);
       totalDeleted += result.deletedCount;
       totalSkipped += result.skippedCount;
     }

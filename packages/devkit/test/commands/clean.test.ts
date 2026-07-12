@@ -5,9 +5,9 @@ import path from 'node:path';
 import { consola } from 'consola';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { clean } from '../../commands/clean.mjs';
+import { clean } from '../../src/commands/clean';
 
-async function exists(pathName) {
+async function exists(pathName: string): Promise<boolean> {
   try {
     await stat(pathName);
     return true;
@@ -17,8 +17,8 @@ async function exists(pathName) {
 }
 
 describe('clean', () => {
-  let originalCwd;
-  let rootDir;
+  let originalCwd: string;
+  let rootDir: string;
 
   beforeEach(async () => {
     originalCwd = process.cwd();
@@ -36,11 +36,9 @@ describe('clean', () => {
     vi.restoreAllMocks();
   });
 
-  it('removes build artifact folders from workspace projects', async () => {
+  it('removes package build output folders from workspace projects', async () => {
     await mkdir(path.join(rootDir, 'packages/core/dist'), { recursive: true });
     await mkdir(path.join(rootDir, 'packages/core/.output'), { recursive: true });
-    await mkdir(path.join(rootDir, 'packages/core/apikit-app'), { recursive: true });
-    await mkdir(path.join(rootDir, 'packages/core/apikit-i18n'), { recursive: true });
     await mkdir(path.join(rootDir, 'packages/core/src'), { recursive: true });
 
     process.chdir(rootDir);
@@ -48,9 +46,7 @@ describe('clean', () => {
     await clean();
 
     await expect(exists(path.join(rootDir, 'packages/core/dist'))).resolves.toBe(false);
-    await expect(exists(path.join(rootDir, 'packages/core/.output'))).resolves.toBe(false);
-    await expect(exists(path.join(rootDir, 'packages/core/apikit-app'))).resolves.toBe(false);
-    await expect(exists(path.join(rootDir, 'packages/core/apikit-i18n'))).resolves.toBe(false);
+    await expect(exists(path.join(rootDir, 'packages/core/.output'))).resolves.toBe(true);
     await expect(exists(path.join(rootDir, 'packages/core/src'))).resolves.toBe(true);
   });
 });

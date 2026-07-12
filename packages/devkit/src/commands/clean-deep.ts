@@ -3,15 +3,20 @@ import path from 'node:path';
 
 import { consola } from 'consola';
 
-import { runExecutable } from './run-bin.mjs';
+import { runExecutable } from './run-bin';
 
 const ignoredDirectories = new Set(['.git']);
 
-function pnpmCommand() {
+export interface CleanDeepOptions {
+  readonly clearCache: boolean;
+  readonly clearLock: boolean;
+}
+
+function pnpmCommand(): string {
   return process.platform === 'win32' ? 'pnpm.cmd' : 'pnpm';
 }
 
-function formatPlan(options) {
+function formatPlan(options: CleanDeepOptions): string {
   return [
     'clean-deep plan:',
     '  remove all node_modules directories under the current repo',
@@ -21,11 +26,11 @@ function formatPlan(options) {
   ].join('\n');
 }
 
-function logPlan(options) {
+function logPlan(options: CleanDeepOptions): void {
   consola.info(formatPlan(options));
 }
 
-async function findNodeModulesDirectories(directory) {
+async function findNodeModulesDirectories(directory: string): Promise<readonly string[]> {
   let entries;
 
   try {
@@ -34,7 +39,7 @@ async function findNodeModulesDirectories(directory) {
     return [];
   }
 
-  const directories = [];
+  const directories: string[] = [];
 
   for (const entry of entries) {
     if (!entry.isDirectory()) continue;
@@ -53,7 +58,7 @@ async function findNodeModulesDirectories(directory) {
   return directories;
 }
 
-async function removeNodeModules() {
+async function removeNodeModules(): Promise<void> {
   const directories = await findNodeModulesDirectories(process.cwd());
 
   for (const directory of directories) {
@@ -63,7 +68,7 @@ async function removeNodeModules() {
   consola.success(`Removed node_modules directories: ${directories.length}`);
 }
 
-async function removeLockFileIfNeeded(clearLock) {
+async function removeLockFileIfNeeded(clearLock: boolean): Promise<void> {
   if (!clearLock) {
     consola.info('Skipped pnpm-lock.yaml removal');
     return;
@@ -74,7 +79,7 @@ async function removeLockFileIfNeeded(clearLock) {
   consola.success('Removed pnpm-lock.yaml');
 }
 
-async function clearPnpmCacheIfNeeded(clearCache) {
+async function clearPnpmCacheIfNeeded(clearCache: boolean): Promise<void> {
   if (!clearCache) {
     consola.info('Skipped PNPM cache clear');
     return;
@@ -85,7 +90,7 @@ async function clearPnpmCacheIfNeeded(clearCache) {
   await runExecutable(pnpmCommand(), ['cache', 'delete']);
 }
 
-export async function cleanDeep(options) {
+export async function cleanDeep(options: CleanDeepOptions): Promise<void> {
   logPlan(options);
   consola.start('Starting clean-deep');
 

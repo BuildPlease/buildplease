@@ -10,6 +10,8 @@ import yml from 'eslint-plugin-yml';
 import globals from 'globals';
 import vueParser from 'vue-eslint-parser';
 
+import { loadDevKitConfig, resolveDevKitConfig } from '../dist/src-internal/configuration/index.mjs';
+
 const codeRules = {
   ...tsPlugin.configs.recommended.rules,
 
@@ -85,17 +87,11 @@ const vueRules = {
   ],
 };
 
+const loadedDevKitConfig = await loadDevKitConfig();
+const resolvedDevKitConfig = resolveDevKitConfig(loadedDevKitConfig.config);
+
 const globalIgnores = {
-  ignores: [
-    '**/node_modules/**',
-    '**/dist/**',
-    '**/coverage/**',
-    '**/apikit-app/**',
-    '**/apikit-i18n/**',
-    '**/.nuxt/**',
-    '**/.output/**',
-    '**/.build/**',
-  ],
+  ignores: resolvedDevKitConfig.eslint.ignore,
 };
 
 const vueConfig = {

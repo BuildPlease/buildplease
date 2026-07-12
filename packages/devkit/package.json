@@ -6,18 +6,35 @@
   "license": "UNLICENSED",
   "author": "Simon Rastislav Kovačič",
   "type": "module",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/src/index.d.mts",
+        "default": "./dist/src/index.mjs"
+      },
+      "require": {
+        "types": "./dist/src/index.d.cts",
+        "default": "./dist/src/index.cjs"
+      }
+    }
+  },
   "bin": {
     "devkit": "./bin/devkit.mjs"
   },
   "files": [
     "bin",
-    "commands",
-    "configs"
+    "configs",
+    "dist"
   ],
   "scripts": {
-    "test": "vitest run"
+    "build": "pnpm run build:cli && pnpm run build:src",
+    "build:cli": "tsdown --config tsdown.config.cli.ts --config-loader unrun",
+    "build:src": "tsdown --config tsdown.config.src.ts --config-loader unrun",
+    "test": "vitest run",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
+    "@meawkit/core": "workspace:^",
     "@typescript-eslint/eslint-plugin": "8.61.1",
     "@typescript-eslint/parser": "8.61.1",
     "citty": "0.2.2",
@@ -32,6 +49,7 @@
     "eslint-plugin-yml": "3.4.0",
     "execa": "9.6.1",
     "globals": "17.6.0",
+    "jiti": "2.7.0",
     "npm-check-updates": "22.2.3",
     "prettier": "3.8.4",
     "prettier-plugin-ejs": "1.0.3",
