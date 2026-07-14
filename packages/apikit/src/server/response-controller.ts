@@ -42,11 +42,7 @@ export class ResponseControllerImpl implements ResponseController {
   ): Promise<void> {
     const headers = this.createResponseHeaders(response.headers);
 
-    return reply
-      .headers(headers)
-      .type('application/json')
-      .status(response.statusCode || 500)
-      .send(response.data);
+    return reply.headers(headers).type('application/json').status(response.statusCode).send(response.data);
   }
 
   private async sendFileResponse(
@@ -75,8 +71,9 @@ export class ResponseControllerImpl implements ResponseController {
 
   private createResponseHeaders(responseHeaders?: HttpHeaders): HttpHeaders {
     const baseHeaders: HttpHeaders = {
-      'cache-control': 'max-age=3600',
+      'cache-control': 'no-store',
     };
+
     return { ...baseHeaders, ...(responseHeaders || {}) };
   }
 }
