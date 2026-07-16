@@ -12,6 +12,7 @@ import type {
   TransportOptions,
 } from '@/configuration';
 import { ApiKitSymbols } from '@/di';
+import { HttpHeaders } from '@/http';
 import type { LogOptions } from '@/logger';
 import type { RequestMetadata } from '@/request';
 
@@ -90,10 +91,10 @@ export class LoggerControllerImpl implements LoggerController {
 
   private formatMetadata(metadata: Partial<RequestMetadata>): object | undefined {
     const selectedHeaders = {
-      'user-agent': metadata.headers?.['user-agent'],
-      'content-type': metadata.headers?.['content-type'],
-      'accept-language': metadata.headers?.['accept-language'],
-      accept: metadata.headers?.accept,
+      [HttpHeaders.userAgent]: metadata.headers?.[HttpHeaders.userAgent],
+      [HttpHeaders.contentType]: metadata.headers?.[HttpHeaders.contentType],
+      [HttpHeaders.acceptLanguage]: metadata.headers?.[HttpHeaders.acceptLanguage],
+      [HttpHeaders.accept]: metadata.headers?.[HttpHeaders.accept],
     };
 
     const input = {

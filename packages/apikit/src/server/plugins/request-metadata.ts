@@ -2,6 +2,7 @@ import { isNullOrEmpty } from '@meawkit/core';
 import type { FastifyPluginAsync } from 'fastify';
 import fp from 'fastify-plugin';
 
+import { HttpHeaders } from '@/http';
 import type { RequestMetadata } from '@/request';
 import type { ServerPluginOptions } from '@/server';
 
@@ -19,7 +20,7 @@ const requestMetadataPlugin: FastifyPluginAsync<ServerPluginOptions> = async (fa
       query: request.query,
       params: request.params,
       ip: !isNullOrEmpty(request.ip) ? request.ip : (request.ips?.[0] ?? request.ip),
-      locale: i18n.parseLocale(request.headers['accept-language']),
+      locale: i18n.parseLocale(request.headers[HttpHeaders.acceptLanguage]),
       headers: request.headers,
     };
 

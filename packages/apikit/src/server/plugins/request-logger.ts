@@ -4,6 +4,7 @@ import { ignoreError, isDefinedAndNotNull } from '@meawkit/core';
 import type { FastifyPluginAsync } from 'fastify';
 import fp from 'fastify-plugin';
 
+import { HttpHeaders } from '@/http';
 import type { ServerPluginOptions } from '@/server';
 
 import { resolveRequestLoggerIgnoredPaths, shouldSkipRequestLog } from './request-logger-paths';
@@ -88,7 +89,7 @@ export default fp(requestLoggerPlugin, {
 });
 
 function safeSanitize(input: unknown, headers?: Record<string, unknown>) {
-  const contentType = String(headers?.['content-type'] ?? '').toLowerCase();
+  const contentType = String(headers?.[HttpHeaders.contentType] ?? '').toLowerCase();
   if (contentType.includes('multipart/form-data')) {
     return '[Multipart]';
   }

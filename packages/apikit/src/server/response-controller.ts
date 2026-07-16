@@ -2,13 +2,7 @@ import type { FastifyReply, FastifyRequest } from 'fastify';
 import { inject, injectable } from 'inversify';
 
 import { ApiKitSymbols } from '@/di';
-import {
-  type FileHttpResponse,
-  type HttpHeaders,
-  type HttpResponse,
-  type JSONHttpResponse,
-  ResponseType,
-} from '@/http';
+import { type FileHttpResponse, type HttpResponse, type JSONHttpResponse, HttpHeaders, ResponseType } from '@/http';
 import type { LoggerController } from '@/logger';
 
 const LOG_PREFIX = '[ApiKit:Response]';
@@ -71,7 +65,7 @@ export class ResponseControllerImpl implements ResponseController {
 
   private createResponseHeaders(responseHeaders?: HttpHeaders): HttpHeaders {
     const baseHeaders: HttpHeaders = {
-      'cache-control': 'no-store',
+      [HttpHeaders.cacheControl]: 'no-store',
     };
 
     return { ...baseHeaders, ...(responseHeaders || {}) };
