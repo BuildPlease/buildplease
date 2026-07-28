@@ -6,15 +6,30 @@ import {
   Address,
   Contacts,
   Coordinates,
+  DateTime,
   LineString,
   MultiLineString,
   MultiPoint,
   MultiPolygon,
+  ObjectId,
   OpeningHour,
   Point,
   Polygon,
 } from '@/model';
 import type { ValidationSchemaI18nParams } from '@/validation';
+
+/* MARK: - Primitives */
+const UUIDSchema = z.uuid();
+const DateTimeSchema = z.iso.datetime().transform((value) => new DateTime(value));
+const ObjectIdSchema = z
+  .string()
+  .trim()
+  .min(1)
+  .transform((value) => new ObjectId(value));
+
+export type UUIDDto = z.input<typeof UUIDSchema>;
+export type DateTimeDto = z.input<typeof DateTimeSchema>;
+export type ObjectIdDto = z.input<typeof ObjectIdSchema>;
 
 /* MARK: - Primitives: Longitude & Latitude */
 const LongitudeSchema = z.number().min(-180).max(180);
@@ -218,6 +233,11 @@ export type AddressDto = z.input<typeof AddressSchema>;
 
 /* MARK: - Export */
 export const ValidationSchemas = {
+  // Primitives
+  UUID: UUIDSchema,
+  DateTime: DateTimeSchema,
+  ObjectId: ObjectIdSchema,
+
   // Coordinates
   Longitude: LongitudeSchema,
   Latitude: LatitudeSchema,
