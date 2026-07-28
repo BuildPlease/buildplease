@@ -3,11 +3,14 @@ import type { Nuxt } from '@nuxt/schema';
 import type { NuxtKitContext } from '../context';
 
 export async function prepareHooks(_context: NuxtKitContext, nuxt: Nuxt) {
-  nuxt.options.vite.esbuild = {
-    tsconfigRaw: {
-      compilerOptions: {
-        experimentalDecorators: true,
-      },
+  const oxc = nuxt.options.vite.oxc === false ? {} : nuxt.options.vite.oxc;
+
+  nuxt.options.vite.oxc = {
+    ...oxc,
+    decorator: {
+      ...oxc?.decorator,
+      legacy: true,
+      emitDecoratorMetadata: true,
     },
   };
 

@@ -1,3 +1,7 @@
+packages:
+  - packages/*
+  - packages/*/playground
+
 # Save exact versions without ^/~ ranges.
 saveExact: true
 
@@ -7,22 +11,32 @@ shamefullyHoist: true
 # Auto-install resolvable peer dependencies.
 autoInstallPeers: true
 
-# Fail install on invalid or missing peer dependencies.
-strictPeerDependencies: true
-
 # Disable pnpm minimum release age checks for this workspace.
 minimumReleaseAge: 0
 
 # Do not auto-run install before scripts.
 verifyDepsBeforeRun: false
 
-packages:
-  - packages/*
-  - packages/*/playground
+# Fail install on invalid or missing peer dependencies.
+strictPeerDependencies: true
+
+peerDependencyRules:
+  allowedVersions:
+    # Temporary fix
+    unbuild@3.6.1>typescript: 6.0.3
+
+    # Temporary fix
+    tsconfck@3.1.6>typescript: 6.0.3
+
+    # Temporary fix
+    '@nuxt/module-builder@1.0.3>typescript': 6.0.3
+
+    # Temporary fix
+    mkdist@2.4.1>vue-sfc-transformer: 0.2.5
 
 overrides:
-  unrun: 0.3.1
-  tsdown: 0.22.3
+  # Temporary fix
+  '@napi-rs/wasm-runtime@': 1.1.6
 
 allowBuilds:
   '@parcel/watcher': true
@@ -32,10 +46,3 @@ allowBuilds:
   nx: true
   sharp: true
   vue-demi: true
-
-# Temporary TypeScript 6 compatibility allowance for build tooling, until upstream peer ranges declare TS6 support.
-peerDependencyRules:
-  allowedVersions:
-    tsconfck>typescript: 6.0.3
-    unbuild>typescript: 6.0.3
-    '@nuxt/module-builder>typescript': 6.0.3
