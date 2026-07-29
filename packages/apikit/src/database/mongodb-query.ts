@@ -5,9 +5,7 @@ export type MongoDbFieldQuery<T> = {
 };
 
 export type MongoDbFieldValue<V> =
-  | V
-  | MongoDbComparisonOperators<V>
-  | (V extends object ? MongoDbFieldQuery<V> : never);
+  V | MongoDbComparisonOperators<V> | (V extends object ? MongoDbFieldQuery<V> : never);
 
 export type MongoDbLogicalOperators<T> = {
   $and?: MongoDbQuery<T>[];

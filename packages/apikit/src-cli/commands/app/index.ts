@@ -1,4 +1,4 @@
-import { appConfigTask, loadConfigForTask } from '@internal/configuration';
+import { loadAppConfig } from '@internal/configuration';
 import { ConsoleOutput } from '@internal/console';
 import { generateApp } from '@internal/generator';
 import { resolveAppGeneratorConfig } from '@internal/generator/configuration/app-generator-config';
@@ -30,7 +30,7 @@ export const buildAppCommand = defineCommand({
 
 async function runApp(args: CommandOptions): Promise<void> {
   try {
-    const loaded = await loadConfigForTask(appConfigTask, { dir: args.dir, config: args.config });
+    const loaded = await loadAppConfig({ dir: args.dir, config: args.config });
     const generatorConfig = await resolveAppGeneratorConfig(loaded.config);
     const startedAt = Date.now();
 

@@ -1,22 +1,17 @@
-import {
-  type ApiKitConfig,
-  type BuildConfig,
-  type I18nConfig,
-  BuildConfiguration,
-  I18nConfiguration,
-} from '@/configuration';
-import { resolveConfigurationContract } from '@/configuration/core/resolve-configuration';
+import { resolveConfiguration } from '@internal/configuration';
 
-import type { I18nGeneratorConfig } from './i18n-generator-config';
+import { type ApiKitConfig, type I18nConfig, BuildConfiguration, I18nConfiguration } from '@/configuration';
 
-export interface AppGeneratorConfig {
-  readonly build: BuildConfig;
-  readonly i18n: I18nGeneratorConfig;
+import type { GeneratorConfig } from './generator-config';
+import type { I18nGenerationConfig } from './i18n-generator-config';
+
+export interface AppGeneratorConfig extends GeneratorConfig {
+  readonly i18n: I18nGenerationConfig;
 }
 
 export async function resolveAppGeneratorConfig(config: ApiKitConfig): Promise<AppGeneratorConfig> {
-  const build = await resolveConfigurationContract(BuildConfiguration, config.build, {});
-  const i18n = await resolveConfigurationContract(I18nConfiguration, config.i18n, {});
+  const build = await resolveConfiguration(BuildConfiguration, config.build, {});
+  const i18n = await resolveConfiguration(I18nConfiguration, config.i18n, {});
 
   return {
     build: build,
@@ -24,7 +19,7 @@ export async function resolveAppGeneratorConfig(config: ApiKitConfig): Promise<A
   };
 }
 
-function makeI18nGeneratorConfig(config: I18nConfig): I18nGeneratorConfig {
+function makeI18nGeneratorConfig(config: I18nConfig): I18nGenerationConfig {
   return {
     name: undefined,
     extends: undefined,

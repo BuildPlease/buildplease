@@ -2,14 +2,7 @@
  * @description Built-in alphabet presets for random string generation.
  */
 export type RandomValueAlphabetPreset =
-  | 'decimal'
-  | 'lowercase'
-  | 'uppercase'
-  | 'letters'
-  | 'alphanumeric'
-  | 'hex'
-  | 'base64'
-  | 'base64url';
+  'decimal' | 'lowercase' | 'uppercase' | 'letters' | 'alphanumeric' | 'hex' | 'base64' | 'base64url';
 
 /**
  * @description Custom alphabet used for random string generation.

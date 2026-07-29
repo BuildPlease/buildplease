@@ -8,9 +8,7 @@ import { ApiKitAppDefaults } from '@internal/configuration/app';
 import { type InferConfiguration, defineConfiguration, field } from '@/configuration/core';
 
 export type MultipartOptions =
-  | FastifyMultipartBaseOptions
-  | FastifyMultipartOptions
-  | FastifyMultipartAttachFieldsToBodyOptions;
+  FastifyMultipartBaseOptions | FastifyMultipartOptions | FastifyMultipartAttachFieldsToBodyOptions;
 
 export const MultipartConfiguration = defineConfiguration('apikit.multipart', {
   enabled: field.boolean().default(ApiKitAppDefaults.multipart.enabled),

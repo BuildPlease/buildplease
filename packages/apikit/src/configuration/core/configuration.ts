@@ -9,8 +9,7 @@ const CONFIGURATION_BINDING = Symbol('apikit.configuration.binding');
 // MARK: - Public
 
 export type ConfigurationSchema =
-  | ConfigurationField<any, boolean, any>
-  | { readonly [key: string]: ConfigurationSchema };
+  ConfigurationField<any, boolean, any> | { readonly [key: string]: ConfigurationSchema };
 
 export type InferSchemaOutput<Schema> =
   Schema extends ConfigurationField<infer Output, any, any>
@@ -31,8 +30,7 @@ export type InferSchemaInput<Schema> =
       : never;
 
 export type ConfigurationValueInput<T> =
-  | ConfigurationSource<T | undefined>
-  | (T extends unknown ? ConfigurationValueInputValue<T> : never);
+  ConfigurationSource<T | undefined> | (T extends unknown ? ConfigurationValueInputValue<T> : never);
 
 export type ConfigurationInputFromSchema<Schema> =
   | ConfigurationSource<InferSchemaInput<Schema> | undefined>

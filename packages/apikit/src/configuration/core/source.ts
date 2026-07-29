@@ -1,3 +1,4 @@
+import type { BuildMetadata } from './build-metadata';
 import type { EnvironmentConfig } from './environments';
 
 // MARK: - Symbols
@@ -11,10 +12,7 @@ export type ConfigurationSourceKind = 'env' | 'by-environment' | 'compute' | 'st
 export interface ConfigurationResolveContext<EnvironmentName extends string = string> {
   readonly environment: EnvironmentConfig<EnvironmentName>;
 
-  readonly packageJson?: {
-    readonly name?: string;
-    readonly version?: string;
-  };
+  readonly buildMetadata: BuildMetadata;
 }
 
 export interface ConfigurationSource<Output = unknown> {

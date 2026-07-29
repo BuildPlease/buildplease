@@ -1,6 +1,6 @@
 import { basename } from 'node:path';
 
-import { appConfigTask, loadConfigForTask } from '@internal/configuration';
+import { loadAppConfig } from '@internal/configuration';
 import {
   type TemporaryConfigurationProject,
   makeTemporaryConfigurationProject,
@@ -21,7 +21,7 @@ export default {
 };
 `;
 
-describe('loadAppConfigForTask', () => {
+describe('loadAppConfig', () => {
   let project: TemporaryConfigurationProject | undefined;
 
   afterEach(async () => {
@@ -29,11 +29,11 @@ describe('loadAppConfigForTask', () => {
     project = undefined;
   });
 
-  it('loads the app config and returns resolved metadata', async () => {
+  it('loads the default app config', async () => {
     project = await makeTemporaryConfigurationProject();
     await project.writeConfig('apikit.app.config.ts', CONFIG_SOURCE);
 
-    const result = await loadConfigForTask(appConfigTask, { dir: project.rootDir });
+    const result = await loadAppConfig({ dir: project.rootDir });
 
     expect(result.rootDir).toBe(project.rootDir);
     expect(basename(result.configFilePath)).toBe('apikit.app.config.ts');
@@ -46,7 +46,7 @@ describe('loadAppConfigForTask', () => {
     project = await makeTemporaryConfigurationProject();
     await project.writeConfig('custom.config.ts', CONFIG_SOURCE);
 
-    const result = await loadConfigForTask(appConfigTask, { dir: project.rootDir, config: 'custom.config.ts' });
+    const result = await loadAppConfig({ dir: project.rootDir, config: 'custom.config.ts' });
 
     expect(result.config.server).toMatchObject({
       identifier: 'test',

@@ -1,3 +1,5 @@
+export type { BuildMetadata } from './build-metadata';
+
 export { type ConfigurationContract, type InferConfiguration, defineConfiguration } from './configuration';
 
 export {

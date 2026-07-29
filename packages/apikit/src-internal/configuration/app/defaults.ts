@@ -12,9 +12,7 @@ import type { Level } from 'pino';
 type CorsOptions = FastifyCorsOptions;
 
 type MultipartOptions =
-  | FastifyMultipartBaseOptions
-  | FastifyMultipartOptions
-  | FastifyMultipartAttachFieldsToBodyOptions;
+  FastifyMultipartBaseOptions | FastifyMultipartOptions | FastifyMultipartAttachFieldsToBodyOptions;
 
 type I18nFallbackLanguages = Extract<NonNullable<InitOptions<object>['fallbackLng']>, string | readonly string[]>;
 

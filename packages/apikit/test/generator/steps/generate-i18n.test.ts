@@ -2,12 +2,12 @@ import { mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
-import { generateApiKitI18n, resolveApiKitI18nGeneratorConfig } from '@internal/generator';
+import { generateI18n, resolveI18nGeneratorConfig } from '@internal/generator';
 import { describe, expect, it } from 'vitest';
 
 import { defineApiKitI18n, defineApiKitI18nSource } from '@/configuration/i18n';
 
-describe('generateApiKitI18n', () => {
+describe('generateI18n', () => {
   it('generates chainable resources and i18n codes from merged locale resources', async () => {
     const rootDir = await mkdtemp(join(tmpdir(), 'apikit-generate-i18n-'));
     const previousCwd = process.cwd();
@@ -64,8 +64,8 @@ describe('generateApiKitI18n', () => {
 
       process.chdir(rootDir);
 
-      await generateApiKitI18n({
-        generatorConfig: resolveApiKitI18nGeneratorConfig(config),
+      await generateI18n({
+        generatorConfig: resolveI18nGeneratorConfig(config),
       });
 
       const resources = JSON.parse(await readFile(join(rootDir, 'generated/resources/en.json'), 'utf8')) as {
@@ -88,10 +88,10 @@ describe('generateApiKitI18n', () => {
 
       expect(i18n).toContain('Errors: {');
       expect(i18n).toContain('Category: {');
-      expect(i18n).toContain('NotFound: "errors.common.not_found"');
-      expect(i18n).toContain('UnknownError: "errors.common.unknown_error"');
-      expect(i18n).toContain('LoginCodeSubject: "email.login_code_subject"');
-      expect(i18n).toContain('Nested: "feature.nested"');
+      expect(i18n).toContain("NotFound: 'errors.common.not_found'");
+      expect(i18n).toContain("UnknownError: 'errors.common.unknown_error'");
+      expect(i18n).toContain("LoginCodeSubject: 'email.login_code_subject'");
+      expect(i18n).toContain("Nested: 'feature.nested'");
       expect(i18n).not.toContain('Child not found');
       expect(i18n).toContain('export type I18nCode = DeepValue<typeof I18n>;');
       expect(i18n).not.toContain('I18nMessage');

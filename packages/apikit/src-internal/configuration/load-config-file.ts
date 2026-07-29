@@ -5,40 +5,42 @@ import { createJiti } from 'jiti';
 
 const CONFIG_EXTENSIONS = ['.ts', '.mts', '.cts', '.js', '.mjs', '.cjs', '.json'] as const;
 
-export interface ConfigTask<Config> {
+export interface ConfigFileDefinition<Config> {
   readonly name: string;
-  readonly configName: string;
-  readonly assert: (input: unknown, filePath: string) => Config;
+  readonly defaultName: string;
+  readonly validate: (input: unknown, filePath: string) => Config;
 }
 
-export interface LoadConfigOptions {
+export interface LoadConfigFileOptions {
   readonly dir?: string;
   readonly config?: string;
 }
 
-export interface LoadedConfig<Config> {
+export interface LoadedConfigFile<Config> {
   readonly config: Config;
   readonly configFilePath: string;
   readonly rootDir: string;
 }
 
-export async function loadConfigForTask<Config>(
-  task: ConfigTask<Config>,
-  options: LoadConfigOptions = {},
-): Promise<LoadedConfig<Config>> {
+export async function loadConfigFile<Config>(
+  definition: ConfigFileDefinition<Config>,
+  options: LoadConfigFileOptions = {},
+): Promise<LoadedConfigFile<Config>> {
   const rootDir = resolveRootDir(options.dir);
-  const configFilePath = resolveConfigFilePath(rootDir, options.config ?? task.configName);
+  const configFilePath = resolveConfigFilePath(rootDir, options.config ?? definition.defaultName);
 
   try {
-    const config = await loadConfigExport<unknown>(rootDir, configFilePath);
+    const config = await loadConfigExport(rootDir, configFilePath);
 
     return {
-      config: task.assert(config, configFilePath),
+      config: definition.validate(config, configFilePath),
       configFilePath: configFilePath,
       rootDir: rootDir,
     };
   } catch (error) {
-    throw new Error(`Failed to load ${task.name} config: ${error instanceof Error ? error.message : String(error)}`);
+    throw new Error(
+      `Failed to load ${definition.name} config: ${error instanceof Error ? error.message : String(error)}`,
+    );
   }
 }
 
@@ -62,7 +64,7 @@ function resolveConfigFilePath(rootDir: string, configName: string): string {
   return configFilePath;
 }
 
-async function loadConfigExport<Config>(rootDir: string, configFilePath: string): Promise<Config> {
+async function loadConfigExport(rootDir: string, configFilePath: string): Promise<unknown> {
   const jiti = createJiti(rootDir, {
     interopDefault: true,
     extensions: [...CONFIG_EXTENSIONS],
@@ -71,5 +73,5 @@ async function loadConfigExport<Config>(rootDir: string, configFilePath: string)
   return jiti.import(configFilePath, {
     try: true,
     default: true,
-  }) as Promise<Config>;
+  });
 }

@@ -1,14 +1,14 @@
-import type { ApiKitI18nGeneratorConfig } from './configuration/i18n-generator-config';
-import { generateBarrelExport, prepareGeneratedDirectory } from './generator-output';
-import { generateI18n } from './steps/generate-i18n';
+import type { I18nGeneratorConfig } from './configuration';
+import { makeGeneratorOptions } from './generator-options';
+import { generateBarrel, generateI18nModules } from './steps';
 
 export interface GenerateI18nInput {
-  readonly generatorConfig: ApiKitI18nGeneratorConfig;
+  readonly generatorConfig: I18nGeneratorConfig;
 }
 
-export async function generateApiKitI18n(input: GenerateI18nInput): Promise<void> {
-  const outputPath = await prepareGeneratedDirectory(input.generatorConfig.build.outDir);
-  const generatedModules = await generateI18n(input.generatorConfig.i18n, outputPath);
+export async function generateI18n(input: GenerateI18nInput): Promise<void> {
+  const options = makeGeneratorOptions(input.generatorConfig);
+  const generatedModules = await generateI18nModules(input.generatorConfig.i18n, options);
 
-  await generateBarrelExport(outputPath, generatedModules);
+  await generateBarrel(options, generatedModules);
 }

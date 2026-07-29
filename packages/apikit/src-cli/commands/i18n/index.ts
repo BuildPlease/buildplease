@@ -1,7 +1,7 @@
-import { i18nConfigTask, loadConfigForTask } from '@internal/configuration';
+import { loadI18nConfig } from '@internal/configuration';
 import { ConsoleOutput } from '@internal/console';
-import { generateApiKitI18n } from '@internal/generator';
-import { resolveApiKitI18nGeneratorConfig } from '@internal/generator/configuration/i18n-generator-config';
+import { generateI18n } from '@internal/generator';
+import { resolveI18nGeneratorConfig } from '@internal/generator/configuration/i18n-generator-config';
 import { defineCommand } from 'citty';
 
 import { type CommandOptions, commandArgs, fail, formatPath, runInDirectory } from '../shared';
@@ -30,8 +30,8 @@ export const buildI18nCommand = defineCommand({
 
 async function runI18n(args: CommandOptions): Promise<void> {
   try {
-    const loaded = await loadConfigForTask(i18nConfigTask, { dir: args.dir, config: args.config });
-    const generatorConfig = resolveApiKitI18nGeneratorConfig(loaded.config);
+    const loaded = await loadI18nConfig({ dir: args.dir, config: args.config });
+    const generatorConfig = resolveI18nGeneratorConfig(loaded.config);
     const startedAt = Date.now();
 
     ConsoleOutput.title('ApiKit', 'i18n', [
@@ -39,7 +39,7 @@ async function runI18n(args: CommandOptions): Promise<void> {
       { label: 'output', value: generatorConfig.build.outDir },
     ]);
 
-    await runInDirectory(loaded.rootDir, () => generateApiKitI18n({ generatorConfig: generatorConfig }));
+    await runInDirectory(loaded.rootDir, () => generateI18n({ generatorConfig: generatorConfig }));
 
     ConsoleOutput.success(ConsoleOutput.step('i18n', `Generated ${generatorConfig.build.outDir}`));
     ConsoleOutput.success(ConsoleOutput.step('done', `Completed in ${ConsoleOutput.duration(Date.now() - startedAt)}`));

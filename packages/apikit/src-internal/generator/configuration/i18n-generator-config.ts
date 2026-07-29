@@ -2,6 +2,8 @@ import { ApiKitI18nDefaults } from '@internal/configuration/i18n';
 
 import type { ApiKitI18nConfig, ApiKitI18nSource } from '@/configuration/i18n';
 
+import type { GeneratorConfig } from './generator-config';
+
 export interface I18nGeneratorDirectoryEntry {
   readonly path: string;
 }
@@ -11,7 +13,7 @@ export interface I18nGeneratorFileEntry {
   readonly path: string;
 }
 
-export interface I18nGeneratorConfig {
+export interface I18nGenerationConfig {
   readonly name?: string;
   readonly extends?: ApiKitI18nSource;
   readonly directories: readonly I18nGeneratorDirectoryEntry[];
@@ -22,14 +24,11 @@ export interface I18nGeneratorConfig {
   readonly emitSource: boolean;
 }
 
-export interface ApiKitI18nGeneratorConfig {
-  readonly build: {
-    readonly outDir: string;
-  };
-  readonly i18n: I18nGeneratorConfig;
+export interface I18nGeneratorConfig extends GeneratorConfig {
+  readonly i18n: I18nGenerationConfig;
 }
 
-export function resolveApiKitI18nGeneratorConfig(config: ApiKitI18nConfig): ApiKitI18nGeneratorConfig {
+export function resolveI18nGeneratorConfig(config: ApiKitI18nConfig): I18nGeneratorConfig {
   const defaults = ApiKitI18nDefaults;
   const build = config.build ?? {};
   const resources = config.resources ?? {};

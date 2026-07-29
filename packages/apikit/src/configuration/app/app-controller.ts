@@ -12,13 +12,14 @@ import type {
   ServerConfig,
   StaticFilesConfig,
 } from './configs';
+import type { BuildMetadata } from '../core/build-metadata';
 import type { ConfigurationContract } from '../core/configuration';
 import type { EnvironmentConfig } from '../core/environments';
-import { getResolvedConfiguration, hasResolvedConfiguration } from '../core/registry';
 
 // MARK: - Public
 
 export interface ApiKitController {
+  get build(): BuildMetadata;
   get isDebug(): boolean;
   get environment(): EnvironmentConfig;
 
@@ -39,6 +40,10 @@ export interface ApiKitController {
 
 @injectable()
 export class ApiKitControllerImpl implements ApiKitController {
+  public get build(): BuildMetadata {
+    return global.apikit.build;
+  }
+
   public get isDebug(): boolean {
     return global.apikit.serverConfig.debug;
   }
@@ -88,14 +93,14 @@ export class ApiKitControllerImpl implements ApiKitController {
   }
 
   public get<T>(configuration: ConfigurationContract<T, any>): T {
-    if (!hasResolvedConfiguration(configuration)) {
+    if (!global.apikit.configurations.has(configuration.key)) {
       throw new Error(`Configuration "${configuration.key}" is missing.`);
     }
 
-    return getResolvedConfiguration(configuration) as T;
+    return global.apikit.configurations.get(configuration.key) as T;
   }
 
   public optional<T>(configuration: ConfigurationContract<T, any>): T | undefined {
-    return getResolvedConfiguration(configuration);
+    return global.apikit.configurations.get(configuration.key) as T | undefined;
   }
 }

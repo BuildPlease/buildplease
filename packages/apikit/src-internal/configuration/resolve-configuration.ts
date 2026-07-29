@@ -1,35 +1,32 @@
+import type { BuildMetadata } from '@/configuration/core/build-metadata';
 import {
   type ConfigurationBinding,
   type ConfigurationContract,
   type ConfigurationInputFromSchema,
   type ConfigurationSchema,
   isConfigurationBinding,
-} from './configuration';
-import type { EnvironmentConfig } from './environments';
-import { type ConfigurationField, isConfigurationField } from './field';
-import { type ConfigurationResolveContext, type ConfigurationSource, isConfigurationSource } from './source';
-
-// MARK: - Public
+} from '@/configuration/core/configuration';
+import type { EnvironmentConfig } from '@/configuration/core/environments';
+import { type ConfigurationField, isConfigurationField } from '@/configuration/core/field';
+import {
+  type ConfigurationResolveContext,
+  type ConfigurationSource,
+  isConfigurationSource,
+} from '@/configuration/core/source';
 
 export interface ResolveConfigurationOptions {
+  readonly buildMetadata?: BuildMetadata;
   readonly environment?: EnvironmentConfig;
-
-  readonly packageJson?: {
-    readonly name?: string;
-    readonly version?: string;
-  };
 }
 
-// MARK: - Internal
-
-export async function resolveConfigurationContract<Output, Schema extends ConfigurationSchema>(
+export async function resolveConfiguration<Output, Schema extends ConfigurationSchema>(
   contract: ConfigurationContract<Output, Schema>,
   input: ConfigurationInputFromSchema<Schema> | undefined,
-  options: ResolveConfigurationOptions,
+  options: ResolveConfigurationOptions = {},
 ): Promise<Output> {
-  const context: InternalConfigurationResolveContext = {
+  const context: InternalResolveContext = {
+    buildMetadata: options.buildMetadata,
     environment: options.environment,
-    packageJson: options.packageJson,
   };
 
   return resolveSchema(contract.schema, input, context, contract.key) as Promise<Output>;
@@ -39,19 +36,18 @@ export async function resolveConfigurationBinding<Output>(
   binding: ConfigurationBinding<Output>,
   options: ResolveConfigurationOptions,
 ): Promise<Output> {
-  return resolveConfigurationContract(binding.contract, binding.input, options);
+  return resolveConfiguration(binding.contract, binding.input, options);
 }
 
-// MARK: - Private
-
-type InternalConfigurationResolveContext = Omit<ConfigurationResolveContext, 'environment'> & {
+type InternalResolveContext = Omit<ConfigurationResolveContext, 'buildMetadata' | 'environment'> & {
+  readonly buildMetadata?: BuildMetadata;
   readonly environment?: EnvironmentConfig;
 };
 
 async function resolveSchema(
   schema: ConfigurationSchema,
   input: unknown,
-  context: InternalConfigurationResolveContext,
+  context: InternalResolveContext,
   path: string,
 ): Promise<unknown> {
   if (isConfigurationField(schema)) return resolveField(schema, input, context, path);
@@ -75,7 +71,7 @@ async function resolveSchema(
 async function resolveField(
   field: ConfigurationField<unknown, boolean, unknown>,
   input: unknown,
-  context: InternalConfigurationResolveContext,
+  context: InternalResolveContext,
   path: string,
 ): Promise<unknown> {
   const resolved = await resolveValue(input, context, path);
@@ -90,31 +86,7 @@ async function resolveField(
   return field.parse(resolved, path);
 }
 
-function cloneDefault(value: unknown): unknown {
-  if (Array.isArray(value)) return value.map((item) => cloneDefault(item));
-
-  if (isPlainObject(value)) {
-    const result: Record<string, unknown> = {};
-
-    for (const [key, nested] of Object.entries(value)) {
-      result[key] = cloneDefault(nested);
-    }
-
-    return result;
-  }
-
-  return value;
-}
-
-function isPlainObject(value: unknown): value is Record<string, unknown> {
-  return Object.prototype.toString.call(value) === '[object Object]';
-}
-
-async function resolveValue(
-  input: unknown,
-  context: InternalConfigurationResolveContext,
-  path: string,
-): Promise<unknown> {
+async function resolveValue(input: unknown, context: InternalResolveContext, path: string): Promise<unknown> {
   if (isConfigurationSource(input)) return resolveSource(input, context, path);
   if (isConfigurationBinding(input)) return resolveConfigurationBinding(input, context);
 
@@ -137,7 +109,7 @@ async function resolveValue(
 
 async function resolveSource(
   source: ConfigurationSource,
-  context: InternalConfigurationResolveContext,
+  context: InternalResolveContext,
   path: string,
 ): Promise<unknown> {
   let value: unknown;
@@ -156,13 +128,13 @@ async function resolveSource(
 
       const { cases } = source.options as { readonly cases: Record<string, unknown> };
 
-      value = cases[context.environment.name];
-      value = await resolveValue(value, context, path);
+      value = await resolveValue(cases[context.environment.name], context, path);
       break;
     }
 
     case 'compute': {
       if (!context.environment) throw new Error(`${path} requires runtime environment.`);
+      if (!context.buildMetadata) throw new Error(`${path} requires build metadata.`);
 
       const { compute } = source.options as {
         readonly compute: (context: ConfigurationResolveContext) => unknown | Promise<unknown>;
@@ -182,9 +154,30 @@ async function resolveSource(
 
   for (const transform of source.transforms) {
     if (!context.environment) throw new Error(`${path} source transforms require runtime environment.`);
+    if (!context.buildMetadata) throw new Error(`${path} source transforms require build metadata.`);
 
     value = await transform(value, context as ConfigurationResolveContext);
   }
 
   return value;
+}
+
+function cloneDefault(value: unknown): unknown {
+  if (Array.isArray(value)) return value.map((item) => cloneDefault(item));
+
+  if (isPlainObject(value)) {
+    const result: Record<string, unknown> = {};
+
+    for (const [key, nested] of Object.entries(value)) {
+      result[key] = cloneDefault(nested);
+    }
+
+    return result;
+  }
+
+  return value;
+}
+
+function isPlainObject(value: unknown): value is Record<string, unknown> {
+  return Object.prototype.toString.call(value) === '[object Object]';
 }

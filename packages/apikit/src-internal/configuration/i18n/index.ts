@@ -1,2 +1,2 @@
 export * from './defaults';
-export * from './task';
+export * from './load-i18n-config';

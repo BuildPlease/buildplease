@@ -1,9 +1,8 @@
 import type { ApiKitConfig } from '@/configuration';
 
-import type { AppGeneratorConfig } from './configuration/app-generator-config';
-import { generateBarrelExport, prepareGeneratedDirectory } from './generator-output';
-import { generateEnvironment } from './steps/generate-environment';
-import { generateI18n } from './steps/generate-i18n';
+import type { AppGeneratorConfig } from './configuration';
+import { makeGeneratorOptions } from './generator-options';
+import { generateBarrel, generateBuildMetadata, generateEnvironment, generateI18nModules } from './steps';
 
 export interface GenerateAppInput {
   readonly config: ApiKitConfig;
@@ -11,11 +10,13 @@ export interface GenerateAppInput {
 }
 
 export async function generateApp(input: GenerateAppInput): Promise<void> {
-  const outputPath = await prepareGeneratedDirectory(input.generatorConfig.build.outDir);
+  const options = makeGeneratorOptions(input.generatorConfig);
+
   const generatedModules = [
-    ...(await generateEnvironment(input.config.environments, outputPath)),
-    ...(await generateI18n(input.generatorConfig.i18n, outputPath)),
+    ...(await generateBuildMetadata(options)),
+    ...(await generateEnvironment(input.config.environments, options)),
+    ...(await generateI18nModules(input.generatorConfig.i18n, options)),
   ];
 
-  await generateBarrelExport(outputPath, generatedModules);
+  await generateBarrel(options, generatedModules);
 }

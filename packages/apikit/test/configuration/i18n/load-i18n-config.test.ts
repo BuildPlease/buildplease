@@ -1,6 +1,6 @@
 import { basename } from 'node:path';
 
-import { i18nConfigTask, loadConfigForTask } from '@internal/configuration';
+import { loadI18nConfig } from '@internal/configuration';
 import {
   type TemporaryConfigurationProject,
   makeTemporaryConfigurationProject,
@@ -22,7 +22,7 @@ export default {
 };
 `;
 
-describe('loadI18nConfigForTask', () => {
+describe('loadI18nConfig', () => {
   let project: TemporaryConfigurationProject | undefined;
 
   afterEach(async () => {
@@ -30,11 +30,11 @@ describe('loadI18nConfigForTask', () => {
     project = undefined;
   });
 
-  it('loads the i18n config and returns resolved metadata', async () => {
+  it('loads the default i18n config', async () => {
     project = await makeTemporaryConfigurationProject();
     await project.writeConfig('apikit.i18n.config.ts', CONFIG_SOURCE);
 
-    const result = await loadConfigForTask(i18nConfigTask, { dir: project.rootDir });
+    const result = await loadI18nConfig({ dir: project.rootDir });
 
     expect(result.rootDir).toBe(project.rootDir);
     expect(basename(result.configFilePath)).toBe('apikit.i18n.config.ts');
