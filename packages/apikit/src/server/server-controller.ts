@@ -1,4 +1,4 @@
-import Fastify, { type FastifyBaseLogger, type FastifyInstance } from 'fastify';
+import Fastify, { type FastifyBaseLogger, type FastifyInstance, LogController } from 'fastify';
 import { inject, injectable } from 'inversify';
 
 import type { ApiKitController } from '@/configuration';
@@ -45,8 +45,11 @@ export class ServerControllerImpl implements ServerController {
     private configuration: ApiKitController,
   ) {
     this.server = Fastify({
-      disableRequestLogging: true,
       loggerInstance: this.logger.instance as FastifyBaseLogger,
+      logController: new LogController({
+        disableRequestLogging: true,
+        requestIdLogLabel: 'requestId',
+      }),
       ajv: {
         customOptions: {
           strict: true,
