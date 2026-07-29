@@ -1,20 +1,29 @@
 import z from 'zod';
 
 // MARK: - PackageName (identity)
-export type PackageNameModel = z.output<typeof PackageNameSchema>;
+export interface PackageNameModel {
+  readonly original: string;
+  readonly prefix: string | undefined;
+  readonly base: string;
+
+  readonly kebab: string;
+  readonly snake: string;
+  readonly camel: string;
+  readonly pascal: string;
+}
 
 export const PackageNameSchema = z
   .string()
   .trim()
   .min(1)
-  .transform((original) => {
+  .transform((original): PackageNameModel => {
     const { prefix, base } = splitScope(original);
     const words = normalizeWords(base);
 
     return {
-      original, //e.g. "@package/app-name"
-      prefix, //e.g. "package" | undefined
-      base, //e.g. "app-name"
+      original: original, // e.g. "@package/app-name"
+      prefix: prefix, // e.g. "package" | undefined
+      base: base, // e.g. "app-name"
 
       kebab: toKebab(words),
       snake: toSnake(words),
