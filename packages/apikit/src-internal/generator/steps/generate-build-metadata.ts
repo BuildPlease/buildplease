@@ -18,13 +18,13 @@ export async function generateBuildMetadata(options: GeneratorOptions): Promise<
   writer.indent(() => {
     writer.writeLine('name: {');
     writer.indent(() => {
-      writer.write('original: ').quote(buildMetadata.name.original).writeLine(',');
-      writer.write('base: ').quote(buildMetadata.name.base).writeLine(',');
+      writer.write('original: ').quote(buildMetadata.name.original).write(',').newLine();
+      writer.write('base: ').quote(buildMetadata.name.base).write(',').newLine();
     });
     writer.writeLine('},');
-    writer.write('version: ').quote(buildMetadata.version).writeLine(',');
-    writer.write('id: ').quote(buildMetadata.id).writeLine(',');
-    writer.write('createdAt: ').quote(buildMetadata.createdAt).writeLine(',');
+    writer.write('version: ').quote(buildMetadata.version).write(',').newLine();
+    writer.write('id: ').quote(buildMetadata.id).write(',').newLine();
+    writer.write('createdAt: ').quote(buildMetadata.createdAt).write(',').newLine();
   });
   writer.writeLine('} as const satisfies BuildMetadataContract;');
 

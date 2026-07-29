@@ -8,7 +8,7 @@ export async function generateBarrel(options: GeneratorOptions, generatedModules
   const writer = new options.writer();
 
   for (const moduleName of generatedModules) {
-    writer.write('export * from ').quote(`./${moduleName}.js`).writeLine(';');
+    writer.write('export * from ').quote(`./${moduleName}.js`).write(';').newLine();
   }
 
   createFile(path.join(options.outputPath, 'index.ts'), writer.toString());

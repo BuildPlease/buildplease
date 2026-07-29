@@ -16,7 +16,7 @@ export async function generateEnvironment(
   writer.writeLine('export enum Environment {');
   writer.indent(() => {
     for (const [name] of entries) {
-      writer.write(`${name} = `).quote(name).writeLine(',');
+      writer.write(`${name} = `).quote(name).write(',').newLine();
     }
   });
   writer.writeLine('}');
@@ -27,11 +27,12 @@ export async function generateEnvironment(
       writer.writeLine(`${name}: {`);
       writer.indent(() => {
         writer.writeLine(`name: Environment.${name},`);
-        writer.write('file: ').quote(environment.file).writeLine(',');
+        writer.write('file: ').quote(environment.file).write(',').newLine();
         writer
           .write('fileDir: ')
           .quote(environment.fileDir ?? '')
-          .writeLine(',');
+          .write(',')
+          .newLine();
       });
       writer.writeLine('},');
     }

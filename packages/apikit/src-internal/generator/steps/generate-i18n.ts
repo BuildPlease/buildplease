@@ -264,7 +264,7 @@ function writeResourcesModule(resources: MutableI18nResources, options: Generato
     const importName = `resource_${index}`;
     const importPath = `./resources/${encodePathSegment(locale)}.json`;
 
-    writer.write(`import ${importName} from `).quote(importPath).writeLine(';');
+    writer.write(`import ${importName} from `).quote(importPath).write(';').newLine();
     entries[locale] = importName;
   }
 
@@ -280,7 +280,7 @@ function writeResourceImports(writer: GeneratorWriter, entries: Record<string, s
   writer.inlineBlock(() => {
     for (const locale of sortedKeys(entries)) {
       writePropertyKey(writer, locale);
-      writer.write(`: ${entries[locale]}`).writeLine(',');
+      writer.write(`: ${entries[locale]}`).write(',').newLine();
     }
   });
 }
@@ -295,7 +295,7 @@ function writeSourceModule(i18nConfig: I18nGenerationConfig, options: GeneratorO
   writer.writeLine('export const i18n = {');
   writer.indent(() => {
     if (i18nConfig.name) {
-      writer.write('name: ').quote(i18nConfig.name).writeLine(',');
+      writer.write('name: ').quote(i18nConfig.name).write(',').newLine();
     }
 
     writer.writeLine('resources: resources,');
@@ -327,7 +327,7 @@ function writeObject(writer: GeneratorWriter, value: unknown): void {
       writePropertyKey(writer, key);
       writer.write(': ');
       writeObject(writer, value[key]);
-      writer.writeLine(',');
+      writer.write(',').newLine();
     }
   });
 }
