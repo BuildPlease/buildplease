@@ -9,8 +9,4 @@ export class ConversionError extends Error {
     this.field = field;
     if (cause !== undefined) this.cause = cause;
   }
-
-  public static override [Symbol.hasInstance](v: unknown): boolean {
-    return v instanceof Error && (v as any).name === ConversionError.name;
-  }
 }

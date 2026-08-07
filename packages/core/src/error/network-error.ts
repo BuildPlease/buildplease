@@ -7,8 +7,4 @@ export class NetworkError extends Error {
     this.name = 'NetworkError';
     if (cause !== undefined) this.cause = cause;
   }
-
-  public static override [Symbol.hasInstance](v: unknown): boolean {
-    return v instanceof Error && (v as any).name === NetworkError.name;
-  }
 }

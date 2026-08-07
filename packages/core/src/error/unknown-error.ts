@@ -7,8 +7,4 @@ export class UnknownError extends Error {
     this.name = 'UnknownError';
     if (cause !== undefined) this.cause = cause;
   }
-
-  public static override [Symbol.hasInstance](v: unknown): boolean {
-    return v instanceof Error && (v as any).name === UnknownError.name;
-  }
 }

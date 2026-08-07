@@ -37,9 +37,6 @@ export interface HttpErrorOptions {
  * A specialized `Error` carrying an HTTP status code, machine‐readable code,
  * human‐readable message, and optional debug details.
  *
- * Can be used interchangeably with `instanceof HttpError` even across module
- * boundaries, thanks to the custom `Symbol.hasInstance` override.
- *
  * @example
  * // Basic usage
  * throw new HttpError({
@@ -71,27 +68,5 @@ export class HttpError extends Error {
     this.statusCode = options.statusCode;
     this.code = options.code;
     this.details = options.details;
-  }
-
-  /**
-   * Customizes the behavior of `instanceof` so that even if consuming app
-   * ends up with multiple copies of this class (e.g. from different bundles),
-   * it can still reliably detect an `HttpError` by duck‐typing:
-   *
-   * - Must be an `Error`
-   * - `name` must be `"HttpError"`
-   * - Has a numeric `statusCode`
-   * - Has a string `code`
-   *
-   * @param value - The object to test.
-   * @returns `true` if `value` quacks like an `HttpError`.
-   */
-  public static override [Symbol.hasInstance](value: unknown): boolean {
-    return (
-      value instanceof Error &&
-      (value as any).name === HttpError.name &&
-      typeof (value as any).statusCode === 'number' &&
-      (typeof (value as any).code === 'string' || (value as any).code == null)
-    );
   }
 }

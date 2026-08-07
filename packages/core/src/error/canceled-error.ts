@@ -7,8 +7,4 @@ export class CanceledError extends Error {
     this.name = 'CanceledError';
     if (cause !== undefined) this.cause = cause;
   }
-
-  public static override [Symbol.hasInstance](v: unknown): boolean {
-    return v instanceof Error && (v as any).name === CanceledError.name;
-  }
 }
