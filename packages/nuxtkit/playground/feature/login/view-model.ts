@@ -44,11 +44,7 @@ export class LoginViewModel extends ViewModel<LoginState> {
       return;
     }
 
-    try {
-      await this.loginController.onLogin(this.state.email, this.state.password);
-    } catch (error) {
-      useErrorNotifier(error);
-    }
+    await this.loginController.onLogin(this.state.email, this.state.password);
   }
 
   public override async onBeforeMount(): Promise<void> {

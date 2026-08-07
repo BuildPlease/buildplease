@@ -1,5 +1,7 @@
 import { fileURLToPath } from 'node:url';
 
+import { DEFAULT_LOCALE_CODE, LOCALES } from './i18n/index';
+
 const r = (p: string) => fileURLToPath(new URL(p, import.meta.url));
 
 export default defineNuxtConfig({
@@ -10,8 +12,17 @@ export default defineNuxtConfig({
 
   devtools: { enabled: true },
   compatibilityDate: '2025-09-01',
-  modules: ['@meawkit/nuxtkit', '@nuxtjs/i18n', '@nuxt/ui'],
+  modules: ['@meawkit/nuxtkit'],
   css: ['~/assets/styles/main.css'],
+
+  icon: {
+    clientBundle: {
+      scan: true,
+    },
+    serverBundle: {
+      collections: ['lucide'],
+    },
+  },
 
   alias: {
     '@di': r('./di'),
@@ -34,57 +45,21 @@ export default defineNuxtConfig({
       prefix: 'NuxtKit',
     },
     unauthorizedStatusCodes: [401],
-    errors: {
-      genericErrorKey: 'error.generic',
-      unauthorizedKey: 'error.unauthorized',
-    },
-    zodI18n: {
-      useModuleLocale: true,
-    },
   },
 
   i18n: {
     vueI18n: r('./i18n.config.ts'),
     types: 'composition',
-    defaultLocale: 'en-GB',
+    defaultLocale: DEFAULT_LOCALE_CODE,
     defaultDirection: 'ltr',
     strategy: 'prefix_except_default',
-    langDir: 'i18n',
-    restructureDir: './app',
-    locales: [
-      {
-        code: 'en-GB',
-        dir: 'ltr',
-        file: 'en-GB.json',
-        isCatchallLocale: true,
-        language: 'en-GB',
-        name: 'English',
-        flag: 'gb',
-      },
-      {
-        code: 'sk',
-        dir: 'ltr',
-        file: 'sk.json',
-        language: 'sk-SK',
-        name: 'Slovenčina',
-        flag: 'sk',
-      },
-      {
-        code: 'cs',
-        dir: 'ltr',
-        file: 'cs.json',
-        language: 'cs-CZ',
-        name: 'Čeština',
-        flag: 'cz',
-      },
-      {
-        code: 'fr-FR',
-        dir: 'ltr',
-        file: 'fr-FR.json',
-        language: 'fr-FR',
-        name: 'French',
-        flag: 'fr',
-      },
-    ],
+    langDir: 'locales',
+    detectBrowserLanguage: {
+      useCookie: true,
+      cookieKey: 'nuxtkit_playground_i18n_redirected',
+      redirectOn: 'root',
+      fallbackLocale: DEFAULT_LOCALE_CODE,
+    },
+    locales: LOCALES,
   },
 });

@@ -17,7 +17,7 @@ export interface UnauthorizedRedirectOptions {
   /**
    * Replace the current history entry instead of pushing.
    * Prevents user from going back to the unauthorized page.
-   * @default false
+   * @default true
    */
   replace?: boolean;
 }

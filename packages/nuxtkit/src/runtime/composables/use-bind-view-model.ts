@@ -65,22 +65,22 @@ export function useBindViewModel<T extends Record<string, any>>(viewModel: ViewM
   // MARK: - Router Guards
   // Only register if this component is actually inside a <router-view>.
   if (isRoutedComponent()) {
-    onBeforeRouteLeave((to, from, next) => {
-      Promise.resolve(viewModel.beforeRouteLeave(to, from))
-        .then((result) => next(result === false ? false : undefined))
-        .catch((error) => {
-          viewModel.onError(error, 'beforeRouteLeave');
-          next(false);
-        });
+    onBeforeRouteLeave(async (to, from) => {
+      try {
+        return await viewModel.beforeRouteLeave(to, from);
+      } catch (error) {
+        viewModel.onError(error, 'beforeRouteLeave');
+        return false;
+      }
     });
 
-    onBeforeRouteUpdate((to, from, next) => {
-      Promise.resolve(viewModel.beforeRouteUpdate(to, from))
-        .then((result) => next(result === false ? false : undefined))
-        .catch((error) => {
-          viewModel.onError(error, 'beforeRouteUpdate');
-          next(false);
-        });
+    onBeforeRouteUpdate(async (to, from) => {
+      try {
+        return await viewModel.beforeRouteUpdate(to, from);
+      } catch (error) {
+        viewModel.onError(error, 'beforeRouteUpdate');
+        return false;
+      }
     });
   }
 

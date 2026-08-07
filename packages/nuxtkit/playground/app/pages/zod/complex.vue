@@ -3,9 +3,9 @@
     <div class="mb-6 flex w-full max-w-2xl flex-col items-center">
       <div class="mb-6 flex w-full items-center justify-between">
         <div class="flex w-full flex-col items-start">
-          <h1 class="text-xl font-semibold">Complex Validation</h1>
+          <h1 class="text-xl font-semibold">{{ t('page.complexValidation.title') }}</h1>
           <p class="w-full text-left text-sm opacity-70">
-            Strings, numbers, dates, enums, arrays, objects, unions, refine
+            {{ t('page.complexValidation.description') }}
           </p>
         </div>
         <div class="flex items-center gap-2">
@@ -15,7 +15,7 @@
             class="h-10 w-auto whitespace-nowrap"
             @click="fillInvalid"
           >
-            Fill Invalid
+            {{ t('page.complexValidation.actions.fillInvalid') }}
           </UButton>
           <UButton
             size="xs"
@@ -23,7 +23,7 @@
             class="h-10 w-auto whitespace-nowrap"
             @click="fillValid"
           >
-            Fill Valid
+            {{ t('page.complexValidation.actions.fillValid') }}
           </UButton>
           <UButton
             size="xs"
@@ -31,7 +31,7 @@
             class="h-10 w-auto whitespace-nowrap"
             @click="resetForm"
           >
-            Reset
+            {{ t('page.complexValidation.actions.reset') }}
           </UButton>
         </div>
       </div>
@@ -47,102 +47,102 @@
       <!-- String Fields Section -->
       <UCard class="mx-auto mb-4 w-full max-w-2xl p-6">
         <template #header>
-          <h2 class="mb-3 text-sm font-medium opacity-80">String Fields</h2>
+          <h2 class="mb-3 text-sm font-medium opacity-80">{{ t('page.complexValidation.sections.stringFields') }}</h2>
         </template>
         <div class="space-y-4">
           <UFormField
             name="stringFields.stringMin1"
-            label="String Min 1 (min 1 char)"
+            :label="t('page.complexValidation.fields.stringMin1.label')"
           >
             <UInput
               v-model="state.stringFields.stringMin1"
               class="w-full"
-              placeholder="At least 1 character"
+              :placeholder="t('page.complexValidation.fields.stringMin1.placeholder')"
             />
           </UFormField>
           <UFormField
             name="stringFields.stringMin2"
-            label="String Min 2 (min 2 chars)"
+            :label="t('page.complexValidation.fields.stringMin2.label')"
           >
             <UInput
               v-model="state.stringFields.stringMin2"
               class="w-full"
-              placeholder="At least 2 characters"
+              :placeholder="t('page.complexValidation.fields.stringMin2.placeholder')"
             />
           </UFormField>
           <UFormField
             name="stringFields.stringMin5"
-            label="String Min 5 (min 5 chars)"
+            :label="t('page.complexValidation.fields.stringMin5.label')"
           >
             <UInput
               v-model="state.stringFields.stringMin5"
               class="w-full"
-              placeholder="At least 5 characters"
+              :placeholder="t('page.complexValidation.fields.stringMin5.placeholder')"
             />
           </UFormField>
 
           <UFormField
             name="stringFields.stringMax1"
-            label="String Max 1 (max 1 char)"
+            :label="t('page.complexValidation.fields.stringMax1.label')"
           >
             <UInput
               v-model="state.stringFields.stringMax1"
               class="w-full"
-              placeholder="At most 1 character"
+              :placeholder="t('page.complexValidation.fields.stringMax1.placeholder')"
             />
           </UFormField>
 
           <UFormField
             name="stringFields.stringMax2"
-            label="String Max 2 (max 2 chars)"
+            :label="t('page.complexValidation.fields.stringMax2.label')"
           >
             <UInput
               v-model="state.stringFields.stringMax2"
               class="w-full"
-              placeholder="At most 2 characters"
+              :placeholder="t('page.complexValidation.fields.stringMax2.placeholder')"
             />
           </UFormField>
 
           <UFormField
             name="stringFields.stringMax5"
-            label="String Max 5 (max 5 chars)"
+            :label="t('page.complexValidation.fields.stringMax5.label')"
           >
             <UInput
               v-model="state.stringFields.stringMax5"
               class="w-full"
-              placeholder="At most 5 characters"
+              :placeholder="t('page.complexValidation.fields.stringMax5.placeholder')"
             />
           </UFormField>
 
           <UFormField
             name="stringFields.regexLowercased"
-            label="Lowercase Format"
+            :label="t('page.complexValidation.fields.regexLowercased.label')"
           >
             <UInput
               v-model="state.stringFields.regexLowercased"
               class="w-full"
-              placeholder="Lowercase letters only"
+              :placeholder="t('page.complexValidation.fields.regexLowercased.placeholder')"
             />
           </UFormField>
           <UFormField
             name="stringFields.regexUppercased"
-            label="Uppercase Format"
+            :label="t('page.complexValidation.fields.regexUppercased.label')"
           >
             <UInput
               v-model="state.stringFields.regexUppercased"
               class="w-full"
-              placeholder="Uppercase letters only"
+              :placeholder="t('page.complexValidation.fields.regexUppercased.placeholder')"
             />
           </UFormField>
           <UFormField
             name="stringFields.email"
-            label="Email Format"
+            :label="t('page.complexValidation.fields.email.label')"
           >
             <UInput
               v-model="state.stringFields.email"
               type="email"
               class="w-full"
-              placeholder="Valid email"
+              :placeholder="t('page.complexValidation.fields.email.placeholder')"
             />
           </UFormField>
         </div>
@@ -151,13 +151,13 @@
       <!-- Date Fields Section -->
       <UCard class="mx-auto mb-4 w-full max-w-2xl p-6">
         <template #header>
-          <h2 class="mb-3 text-sm font-medium opacity-80">Date Fields</h2>
+          <h2 class="mb-3 text-sm font-medium opacity-80">{{ t('page.complexValidation.sections.dateFields') }}</h2>
         </template>
         <div class="space-y-4">
           <!-- Simple Date -->
           <UFormField
             name="dates.date"
-            label="Date"
+            :label="t('page.complexValidation.fields.date.label')"
           >
             <UPopover>
               <UButton
@@ -165,12 +165,17 @@
                 variant="subtle"
                 icon="i-lucide-calendar"
               >
-                {{ dateModel ? dateFormatter.format(dateModel.toDate(getLocalTimeZone())) : 'Select a date' }}
+                {{
+                  dateModel
+                    ? dateFormatter.format(dateModel.toDate(getLocalTimeZone()))
+                    : t('page.complexValidation.fields.date.placeholder')
+                }}
               </UButton>
 
               <template #content>
                 <UCalendar
                   v-model="dateModel"
+                  :locale="locale"
                   class="p-2"
                 />
               </template>
@@ -180,7 +185,7 @@
           <!-- Date with Min -->
           <UFormField
             name="dates.dateMin"
-            label="Date With Min (After 2000-01-01)"
+            :label="t('page.complexValidation.fields.dateMin.label')"
           >
             <UPopover>
               <UButton
@@ -188,12 +193,17 @@
                 variant="subtle"
                 icon="i-lucide-calendar"
               >
-                {{ dateMinModel ? dateFormatter.format(dateMinModel.toDate(getLocalTimeZone())) : 'Select a date' }}
+                {{
+                  dateMinModel
+                    ? dateFormatter.format(dateMinModel.toDate(getLocalTimeZone()))
+                    : t('page.complexValidation.fields.dateMin.placeholder')
+                }}
               </UButton>
 
               <template #content>
                 <UCalendar
                   v-model="dateMinModel"
+                  :locale="locale"
                   class="p-2"
                 />
               </template>
@@ -203,7 +213,7 @@
           <!-- Date with Max -->
           <UFormField
             name="dates.dateMax"
-            label="Date With Max (Before 2030-01-01)"
+            :label="t('page.complexValidation.fields.dateMax.label')"
           >
             <UPopover>
               <UButton
@@ -211,12 +221,17 @@
                 variant="subtle"
                 icon="i-lucide-calendar"
               >
-                {{ dateMaxModel ? dateFormatter.format(dateMaxModel.toDate(getLocalTimeZone())) : 'Select a date' }}
+                {{
+                  dateMaxModel
+                    ? dateFormatter.format(dateMaxModel.toDate(getLocalTimeZone()))
+                    : t('page.complexValidation.fields.dateMax.placeholder')
+                }}
               </UButton>
 
               <template #content>
                 <UCalendar
                   v-model="dateMaxModel"
+                  :locale="locale"
                   class="p-2"
                 />
               </template>
@@ -226,12 +241,13 @@
           <!-- Date Range -->
           <UFormField
             name="dates.dateRange"
-            label="Date Range"
+            :label="t('page.complexValidation.fields.dateRange.label')"
             :error-pattern="/^dates.dateRange\.(start|end)$/"
           >
             <UCalendar
-              range
               v-model="dateRangeModel"
+              range
+              :locale="locale"
               class="p-2"
               selectionMode="range"
             />
@@ -240,12 +256,12 @@
           <!-- ISO Date -->
           <UFormField
             name="dates.dateISO"
-            label="ISO Date"
+            :label="t('page.complexValidation.fields.dateISO.label')"
           >
             <UInput
               v-model="state.dates.dateISO"
               class="w-full"
-              placeholder="Valid ISO date (YYYY-MM-DD)"
+              :placeholder="t('page.complexValidation.fields.dateISO.placeholder')"
             />
           </UFormField>
         </div>
@@ -254,7 +270,7 @@
       <!-- Submit Button -->
       <div class="mt-6 flex justify-center gap-3">
         <UButton
-          label="Validate"
+          :label="t('page.complexValidation.actions.validate')"
           type="submit"
           color="primary"
         />
@@ -270,14 +286,14 @@
         v-if="result.ok"
         color="success"
         variant="subtle"
-        title="Valid!"
+        :title="t('page.complexValidation.result.valid')"
         class="w-full max-w-sm"
       />
       <UAlert
         v-else
         color="error"
         variant="soft"
-        :title="`Errors (${result.errors.length})`"
+        :title="t('page.complexValidation.result.errors', { count: result.errors.length })"
         class="w-full max-w-sm"
       />
       <pre class="mt-2 w-full max-w-sm overflow-auto text-left text-xs opacity-80">{{ resultPretty }}</pre>
@@ -293,10 +309,11 @@ import type { DateRange } from 'reka-ui';
 import { computed, reactive, ref } from 'vue';
 
 const schema = complexSchema;
+const { locale, t } = useI18n();
 const result = ref<{ ok: boolean; errors: any[] } | null>(null);
 const resultPretty = computed(() => (result.value ? JSON.stringify(result.value, null, 2) : ''));
 
-const dateFormatter = new DateFormatter('en-US', { dateStyle: 'medium' });
+const dateFormatter = computed(() => new DateFormatter(locale.value, { dateStyle: 'medium' }));
 const timezone = getLocalTimeZone();
 
 const dateModel = computed<CalendarDate | undefined>({

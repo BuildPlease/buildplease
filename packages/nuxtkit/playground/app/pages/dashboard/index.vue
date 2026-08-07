@@ -228,6 +228,7 @@ const router = useRouter();
 const localePath = useLocalePath();
 
 const viewModel = useInstance<DashboardViewModel>(Symbols.DI.Feature.Dashboard.ViewModel);
+const notifyError = useErrorNotifier();
 
 const state = viewModel.state;
 useBindViewModel(viewModel);
@@ -243,7 +244,7 @@ async function onTestUnauthorized() {
 }
 
 function onTestErrorNotifier() {
-  useErrorNotifier(new Error('Simulated test error'));
+  notifyError(new Error('Simulated test error'));
 }
 
 // MARK: - Queue Test

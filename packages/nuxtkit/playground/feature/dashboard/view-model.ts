@@ -40,7 +40,7 @@ export class DashboardViewModel extends ViewModel<DashboardState> {
     try {
       await this.unauthorizedOperation.execute();
     } catch (error) {
-      useErrorNotifier(error);
+      if (!(error instanceof CanceledError)) throw error;
     } finally {
       this.state.isLoading = false;
     }

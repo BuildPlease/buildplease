@@ -3,39 +3,19 @@
     <UButton
       variant="outline"
       color="neutral"
-      trailing-icon="i-lucide-chevron-down"
     >
-      <UIcon
-        v-if="currentFlag"
-        :name="currentFlag"
-        dynamic
-      />
+      <span v-if="currentFlag">{{ currentFlag }}</span>
       {{ currentLabel }}
     </UButton>
-
-    <template #item="{ item }">
-      <UIcon
-        v-if="item.icon"
-        :name="item.icon"
-        dynamic
-      />
-      <span class="truncate">{{ item.label }}</span>
-    </template>
   </UDropdownMenu>
 </template>
 
 <script setup lang="ts">
 import type { DropdownMenuItem } from '@nuxt/ui';
+import type { LocaleObject } from '@nuxtjs/i18n';
 import { computed } from 'vue';
 
-import { useNuxtApp, useRuntimeConfig } from '#app';
-import { normalizeLocale, useCurrentLocale } from '#nuxtkit/composables';
-
-type LocaleItem = {
-  code: string;
-  name?: string;
-  flag?: string;
-};
+import { useI18n } from '#imports';
 
 const props = withDefaults(
   defineProps<{
@@ -48,75 +28,58 @@ const props = withDefaults(
   },
 );
 
-const config = useRuntimeConfig();
+const { locale: currentCode, locales, setLocale } = useI18n();
 
-const availableLocales = computed<LocaleItem[]>(() => {
-  const value = config.public.i18n?.locales;
+const availableLocales = computed<LocaleObject[]>(() => {
+  const configuredLocales: readonly (string | LocaleObject)[] = locales.value;
 
-  if (!Array.isArray(value)) return [];
-
-  return value.map((entry) => {
-    if (typeof entry === 'string') {
-      return {
-        code: entry,
-        name: entry.toUpperCase(),
-        flag: entry.toLowerCase(),
-      };
-    }
-
-    return {
-      code: entry.code,
-      name: entry.name,
-      flag: (entry as { flag?: string }).flag,
-    };
-  });
-});
-
-const currentCodeFull = useCurrentLocale({ withRegion: true });
-const currentCodeBase = computed(() => normalizeLocale(currentCodeFull.value, { preserveRegion: false }));
-
-const currentLocale = computed(() => {
-  const matchFull = availableLocales.value.find(
-    (locale) => normalizeLocale(locale.code, { preserveRegion: true }) === currentCodeFull.value,
-  );
-  if (matchFull) return matchFull;
-
-  return availableLocales.value.find(
-    (locale) => normalizeLocale(locale.code, { preserveRegion: false }) === currentCodeBase.value,
+  return configuredLocales.map((locale) =>
+    typeof locale === 'string'
+      ? {
+          code: locale,
+          language: locale,
+          name: locale.toUpperCase(),
+        }
+      : locale,
   );
 });
+
+const currentLocale = computed(() => availableLocales.value.find((locale) => locale.code === currentCode.value));
 
 const currentLabel = computed(() => {
   const locale = currentLocale.value;
-  if (!locale) return currentCodeFull.value;
+  if (!locale) return currentCode.value;
 
-  if (props.labelField === 'name') return locale.name ?? locale.code;
-  return locale.code;
+  return props.labelField === 'name' ? (locale.name ?? locale.code) : locale.code;
 });
 
 const currentFlag = computed(() => {
-  if (!props.displayFlag) return undefined;
-  const locale = currentLocale.value;
-  if (!locale?.flag) return undefined;
-  return `i-flag-${locale.flag}-4x3`;
+  if (!props.displayFlag || !currentLocale.value) return undefined;
+  return getFlag(currentLocale.value);
 });
 
-const items = computed<DropdownMenuItem[]>(() => {
-  const selected = currentLocale.value?.code;
+const items = computed<DropdownMenuItem[]>(() =>
+  availableLocales.value
+    .filter((locale) => locale.code !== currentCode.value)
+    .map((locale) => {
+      const label = props.labelField === 'name' ? (locale.name ?? locale.code) : locale.code;
+      const flag = props.displayFlag ? getFlag(locale) : undefined;
 
-  return availableLocales.value
-    .filter((locale) => locale.code !== selected)
-    .map((locale) => ({
-      label: props.labelField === 'name' ? (locale.name ?? locale.code) : locale.code,
-      to: switchLocalePath(locale.code),
-      icon: props.displayFlag && locale.flag ? `i-flag-${locale.flag}-4x3` : undefined,
-    }));
-});
+      return {
+        label: flag ? `${flag} ${label}` : label,
+        onSelect: async () => {
+          await setLocale(locale.code);
+        },
+      };
+    }),
+);
 
-function switchLocalePath(localeCode: string): string {
-  const app = useNuxtApp();
-  const fn = app.$switchLocalePath as unknown;
-  if (typeof fn === 'function') return (fn as (locale: string) => string)(localeCode);
-  return '/';
+function getFlag(locale: LocaleObject): string | undefined {
+  if (!locale.language) return undefined;
+
+  const region = new Intl.Locale(locale.language).region;
+  if (!region || region.length !== 2) return undefined;
+
+  return String.fromCodePoint(...Array.from(region.toUpperCase()).map((character) => 127397 + character.charCodeAt(0)));
 }
 </script>

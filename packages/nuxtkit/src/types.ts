@@ -35,8 +35,8 @@ export interface NuxtKitOptions {
   errors: {
     /**
      * i18n key for a generic error.
-     * @default "errors.generic"
-     * @example "errors.generic"
+     * @default "meawkit.error.generic"
+     * @example "meawkit.error.generic"
      */
     genericErrorKey?: string;
 
@@ -49,15 +49,15 @@ export interface NuxtKitOptions {
 
     /**
      * i18n key for an unauthorized error.
-     * @default "errors.unauthorized"
-     * @example "errors.unauthorized"
+     * @default "meawkit.error.unauthorized"
+     * @example "meawkit.error.unauthorized"
      */
     unauthorizedKey?: string;
 
     /**
      * Fallback when the unauthorized key is missing.
-     * @default "Access denied"
-     * @example "Unauthorized"
+     * @default "Access denied."
+     * @example "Access denied."
      */
     unauthorizedMessageFallback?: string;
   };
@@ -71,46 +71,9 @@ export interface NuxtKitOptions {
 }
 
 /**
- * Base options shared by Zod i18n variants.
+ * Zod i18n options.
  */
 export interface ZodI18nOptions {
-  /**
-   * Register module’s built-in locales into @nuxtjs/i18n.
-   * Can be still overriden/extended via own files; i18n merges and later files win.
-   *
-   * - true  → auto-register built-ins for the app’s active locales (recommended default)
-   * - false → do not register; you must provide all strings
-   *
-   * @default true
-   */
-  useModuleLocale?: boolean;
-
-  /**
-   * Region → base language grouping used during locale normalization.
-   * Map a **base** language code to an array of its **region variants**.
-   * This lets the module treat, for example, `en-GB` and `en-US` as `en`
-   * when selecting Zod locales.
-   *
-   * @default
-   * {
-   *   en: ['en-GB', 'en-US'],
-   *   sk: ['sk-SK'],
-   *   cs: ['cs-CZ']
-   * }
-   *
-   * @example
-   * // Group common regioned locales under their base:
-   * {
-   *   en: ['en-GB', 'en-US'],
-   *   pt: ['pt-BR', 'pt-PT'],
-   * }
-   *
-   * @example
-   * // Minimal setup (only base codes used in the app):
-   * {}
-   */
-  languageAlias?: Record<string, string[]>;
-
   /**
    * Common key prefix where all Zod error strings live in your i18n files.
    * We’ll resolve keys like:
@@ -119,7 +82,7 @@ export interface ZodI18nOptions {
    *   `${keyPrefix}.size.max.exclusive`
    *   ...
    *
-   * @default "zod"
+   * @default "meawkit.zod"
    * @example
    * // If your translations live under "errors.validation.zod.*":
    * keyPrefix: "errors.validation.zod"

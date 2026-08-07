@@ -2,6 +2,7 @@ import { CanceledError, HttpError } from '@meawkit/webkit';
 
 import { useNuxtApp } from '#app';
 import { useNuxtKit } from '#internal-runtime';
+import { resolveI18nMessage } from '#nuxtkit/i18n';
 
 export interface ErrorHandlerOptions {
   /**
@@ -27,13 +28,12 @@ export interface ErrorHandlerOptions {
  * Resolve any error into a localized, user-facing message.
  *
  * Steps:
- * 1. If `options.handle` is provided, its result is returned (full override).
- * 2. If the error is an `CanceledError`, return null.
+ * 1. If the error is a `CanceledError`, return null.
+ * 2. If `options.handle` is provided, return its result.
  * 3. If the error is a `HttpError`, return its message.
- * 4. If the error is a generic `Error`, return its message.
- * 5. Otherwise, return the generic i18n key or fallback.
+ * 4. Otherwise, resolve the configured generic i18n key and literal fallback.
  *
- * @param error - The error object to handle (may be `HttpError`, `UnauthorizedHttpError`, `Error`, or anything).
+ * @param error - The error object to handle.
  * @param options - Optional configuration for custom handling and logging.
  * @returns A localized string suitable for user-facing display.
  *
@@ -69,13 +69,9 @@ export function useErrorHandler(error: unknown, options: ErrorHandlerOptions = D
 
   // Step 3: Fallback
   const app = useNuxtApp();
-  const { t, te } = app.$i18n;
-
   const errors = kit.config.errors;
-  const genericKey = errors.genericErrorKey;
-  const genericFallback = errors.genericMessageFallback;
 
-  return te(genericKey) ? t(genericKey) : genericFallback;
+  return resolveI18nMessage(app.$i18n, errors.genericErrorKey, errors.genericMessageFallback);
 }
 
 const DEFAULTS: ErrorHandlerOptions = {

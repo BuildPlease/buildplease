@@ -3,7 +3,7 @@ import type { Nuxt } from '@nuxt/schema';
 
 import type { NuxtKitContext } from '../context';
 
-export async function prepareRuntime(context: NuxtKitContext, nuxt: Nuxt) {
+export async function prepareRuntime(context: NuxtKitContext, nuxt: Nuxt): Promise<void> {
   const { resolver } = context;
   const r = (p: string) => resolver.resolve(p);
 

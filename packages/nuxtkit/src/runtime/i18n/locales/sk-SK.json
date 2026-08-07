@@ -1,0 +1,120 @@
+{
+  "meawkit": {
+    "error": {
+      "generic": "Niečo sa pokazilo",
+      "unauthorized": "Prístup zamietnutý."
+    },
+    "zod": {
+      "units": {
+        "string": {
+          "singular": "znak",
+          "few": "znaky",
+          "many": "znakov",
+          "verb": "mať"
+        },
+        "file": {
+          "singular": "bajt",
+          "few": "bajty",
+          "many": "bajtov",
+          "verb": "mať"
+        },
+        "array": {
+          "singular": "prvok",
+          "few": "prvky",
+          "many": "prvkov",
+          "verb": "mať"
+        },
+        "set": {
+          "singular": "prvok",
+          "few": "prvky",
+          "many": "prvkov",
+          "verb": "mať"
+        }
+      },
+      "nouns": {
+        "regex": "regulárny výraz",
+        "email": "e-mailová adresa",
+        "url": "URL",
+        "emoji": "emoji",
+        "uuid": "UUID",
+        "uuidv4": "UUIDv4",
+        "uuidv6": "UUIDv6",
+        "nanoid": "nanoid",
+        "guid": "GUID",
+        "cuid": "cuid",
+        "cuid2": "cuid2",
+        "ulid": "ULID",
+        "xid": "XID",
+        "ksuid": "KSUID",
+        "datetime": "dátum a čas v ISO formáte",
+        "date": "dátum v ISO formáte",
+        "time": "čas v ISO formáte",
+        "duration": "trvanie v ISO formáte",
+        "ipv4": "adresa IPv4",
+        "ipv6": "adresa IPv6",
+        "cidrv4": "rozsah IPv4",
+        "cidrv6": "rozsah IPv6",
+        "base64": "reťazec kódovaný base64",
+        "base64url": "reťazec kódovaný base64url",
+        "json_string": "reťazec vo formáte JSON",
+        "e164": "číslo vo formáte E.164",
+        "jwt": "JWT",
+        "template_literal": "vstup"
+      },
+      "common": {
+        "invalid": "Neplatná hodnota.",
+        "empty": "Nesmie byť prázdne."
+      },
+      "invalid_value": {
+        "single": "Použite hodnotu {value}.",
+        "one_of": "Vyberte jednu z možností: {values}."
+      },
+      "date": {
+        "exact": "Musí byť presne {date}.",
+        "min": {
+          "inclusive": "Musí byť najskôr {date}.",
+          "exclusive": "Musí byť po {date}."
+        },
+        "max": {
+          "inclusive": "Musí byť najneskôr {date}.",
+          "exclusive": "Musí byť pred {date}."
+        }
+      },
+      "size": {
+        "exact": "Musí mať presne {count} {unit}.",
+        "min": {
+          "inclusive": "Aspoň {count} {unit}.",
+          "exclusive": "Viac ako {count} {unit}."
+        },
+        "max": {
+          "inclusive": "Najviac {count} {unit}.",
+          "exclusive": "Menej ako {count} {unit}."
+        }
+      },
+      "value": {
+        "exact": "Musí byť presne {count}.",
+        "min": {
+          "inclusive": "Minimálna hodnota je {count}.",
+          "exclusive": "Musí byť väčšia ako {count}."
+        },
+        "max": {
+          "inclusive": "Maximálna hodnota je {count}.",
+          "exclusive": "Musí byť menšia ako {count}."
+        }
+      },
+      "format": {
+        "starts_with": "Musí sa začínať na „{prefix}“.",
+        "ends_with": "Musí sa končiť na „{suffix}“.",
+        "includes": "Musí obsahovať „{includes}“.",
+        "regex": "Neplatný formát.",
+        "generic": "Neplatný formát: {noun}."
+      },
+      "multiple_of": "Musí byť násobkom {divisor}.",
+      "unrecognized_keys": "Neznáme položky: {keys}.",
+      "invalid_key": "Neplatná položka v {origin}.",
+      "invalid_union": "Neplatná hodnota.",
+      "invalid_element": "Neplatná hodnota v {origin}.",
+      "custom": "Neplatná hodnota."
+    }
+  }
+}

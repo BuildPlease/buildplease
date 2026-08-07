@@ -1,0 +1,148 @@
+{
+  "common": {
+    "email": "Email",
+    "password": "Password",
+    "login": "Login",
+    "add": "Add",
+    "clear": "Clear",
+    "run": "Run",
+    "copyright": "© {year} All rights reserved."
+  },
+  "placeholder": {
+    "email": "Your email",
+    "password": "Your password"
+  },
+  "navigation": {
+    "dashboard": "Dashboard",
+    "complexValidation": "Complex Validation"
+  },
+  "operation": {
+    "label": {
+      "operations": "Operations",
+      "queueTest": "Operation queue test"
+    },
+    "input": {
+      "delayMs": "Delay (ms)"
+    },
+    "action": {
+      "runQueue": "Run queue",
+      "testUnauthorized": "Test unauthorized (real redirect)",
+      "testErrorNotifier": "Test error notifier"
+    },
+    "status": {
+      "idle": "Idle",
+      "running": "Running",
+      "success": "Success",
+      "error": "Error",
+      "canceled": "Canceled"
+    },
+    "mode": {
+      "success": "Success",
+      "unauthorized": "Unauthorized",
+      "error": "Error"
+    },
+    "count": {
+      "empty": "No operations",
+      "value": "{count} operation | {count} operations"
+    }
+  },
+  "page": {
+    "home": {
+      "title": "Welcome",
+      "description": "This is the landing page for the NuxtKit Playground. Explore MVVM + Clean Architecture with Nuxt UI components."
+    },
+    "login": {
+      "title": "Login",
+      "button": "Login"
+    },
+    "dashboard": {
+      "welcomeBack": "Welcome back!",
+      "loginSuccess": "You have successfully logged in.",
+      "goHome": "Go Back to Home",
+      "sections": {
+        "basicOperations": {
+          "title": "Basic operations"
+        },
+        "queueTest": {
+          "title": "Queue test",
+          "description": "Configure an operation queue. If any operation fails with Unauthorized, all following operations are cancelled. Success and Error operations continue normally."
+        }
+      }
+    },
+    "complexValidation": {
+      "title": "Complex Validation",
+      "description": "Strings, numbers, dates, enums, arrays, objects, unions, refine",
+      "actions": {
+        "fillInvalid": "Fill Invalid",
+        "fillValid": "Fill Valid",
+        "reset": "Reset",
+        "validate": "Validate"
+      },
+      "sections": {
+        "stringFields": "String Fields",
+        "dateFields": "Date Fields"
+      },
+      "fields": {
+        "stringMin1": {
+          "label": "String Min 1 (min 1 char)",
+          "placeholder": "At least 1 character"
+        },
+        "stringMin2": {
+          "label": "String Min 2 (min 2 chars)",
+          "placeholder": "At least 2 characters"
+        },
+        "stringMin5": {
+          "label": "String Min 5 (min 5 chars)",
+          "placeholder": "At least 5 characters"
+        },
+        "stringMax1": {
+          "label": "String Max 1 (max 1 char)",
+          "placeholder": "At most 1 character"
+        },
+        "stringMax2": {
+          "label": "String Max 2 (max 2 chars)",
+          "placeholder": "At most 2 characters"
+        },
+        "stringMax5": {
+          "label": "String Max 5 (max 5 chars)",
+          "placeholder": "At most 5 characters"
+        },
+        "regexLowercased": {
+          "label": "Lowercase Format",
+          "placeholder": "Lowercase letters only"
+        },
+        "regexUppercased": {
+          "label": "Uppercase Format",
+          "placeholder": "Uppercase letters only"
+        },
+        "email": {
+          "label": "Email Format",
+          "placeholder": "Valid email"
+        },
+        "date": {
+          "label": "Date",
+          "placeholder": "Select a date"
+        },
+        "dateMin": {
+          "label": "Date With Min (After 2000-01-01)",
+          "placeholder": "Select a date"
+        },
+        "dateMax": {
+          "label": "Date With Max (Before 2030-01-01)",
+          "placeholder": "Select a date"
+        },
+        "dateRange": {
+          "label": "Date Range"
+        },
+        "dateISO": {
+          "label": "ISO Date",
+          "placeholder": "Valid ISO date (YYYY-MM-DD)"
+        }
+      },
+      "result": {
+        "valid": "Valid!",
+        "errors": "Errors ({count})"
+      }
+    }
+  }
+}

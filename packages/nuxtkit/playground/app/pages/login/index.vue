@@ -75,11 +75,16 @@ import type { FormSubmitEvent } from '#ui/types';
 
 const { t } = useI18n();
 const viewModel = useInstance<LoginViewModel>(Symbols.DI.Feature.Login.ViewModel);
+const notifyError = useErrorNotifier();
 const state = viewModel.state;
 
 useBindViewModel(viewModel);
 
 async function onSubmit(event: FormSubmitEvent<LoginDto>) {
-  await viewModel.onSubmit(event.data);
+  try {
+    await viewModel.onSubmit(event.data);
+  } catch (error) {
+    notifyError(error);
+  }
 }
 </script>

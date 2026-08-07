@@ -6,7 +6,7 @@ import { MODULE_CONFIG_KEY_NAME } from '#internal-shared';
 import type { NuxtKitContext } from '../context';
 import type { NuxtKitPublicRuntimeConfig } from '../types';
 
-export async function prepareRuntimeConfig(context: NuxtKitContext, nuxt: Nuxt) {
+export async function prepareRuntimeConfig(context: NuxtKitContext, nuxt: Nuxt): Promise<void> {
   const options = context.options;
 
   const defaults = {

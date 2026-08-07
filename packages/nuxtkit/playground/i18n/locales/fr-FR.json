@@ -1,0 +1,148 @@
+{
+  "common": {
+    "email": "E-mail",
+    "password": "Mot de passe",
+    "login": "Se connecter",
+    "add": "Ajouter",
+    "clear": "Effacer",
+    "run": "Lancer",
+    "copyright": "© {year} Tous droits réservés."
+  },
+  "placeholder": {
+    "email": "Votre e-mail",
+    "password": "Votre mot de passe"
+  },
+  "navigation": {
+    "dashboard": "Tableau de bord",
+    "complexValidation": "Validation complexe"
+  },
+  "operation": {
+    "label": {
+      "operations": "Opérations",
+      "queueTest": "Test de file d’opérations"
+    },
+    "input": {
+      "delayMs": "Délai (ms)"
+    },
+    "action": {
+      "runQueue": "Lancer la file",
+      "testUnauthorized": "Tester une opération non autorisée (redirection)",
+      "testErrorNotifier": "Tester la notification d’erreur"
+    },
+    "status": {
+      "idle": "Inactif",
+      "running": "En cours",
+      "success": "Succès",
+      "error": "Erreur",
+      "canceled": "Annulé"
+    },
+    "mode": {
+      "success": "Succès",
+      "unauthorized": "Non autorisé",
+      "error": "Erreur"
+    },
+    "count": {
+      "empty": "Aucune opération",
+      "value": "{count} opération | {count} opérations"
+    }
+  },
+  "page": {
+    "home": {
+      "title": "Bienvenue",
+      "description": "Ceci est la page d’accueil du NuxtKit Playground. Découvrez MVVM et une architecture propre avec les composants Nuxt UI."
+    },
+    "login": {
+      "title": "Connexion",
+      "button": "Se connecter"
+    },
+    "dashboard": {
+      "welcomeBack": "Bon retour !",
+      "loginSuccess": "Vous vous êtes connecté avec succès.",
+      "goHome": "Retour à l’accueil",
+      "sections": {
+        "basicOperations": {
+          "title": "Opérations de base"
+        },
+        "queueTest": {
+          "title": "Test de file",
+          "description": "Configurez une file d’opérations. Si une opération échoue avec une erreur Unauthorized, toutes les opérations suivantes sont annulées. Les opérations Success et Error continuent normalement."
+        }
+      }
+    },
+    "complexValidation": {
+      "title": "Validation complexe",
+      "description": "Chaînes, nombres, dates, énumérations, tableaux, objets, unions, affinements",
+      "actions": {
+        "fillInvalid": "Remplir avec des valeurs invalides",
+        "fillValid": "Remplir avec des valeurs valides",
+        "reset": "Réinitialiser",
+        "validate": "Valider"
+      },
+      "sections": {
+        "stringFields": "Champs de texte",
+        "dateFields": "Champs de date"
+      },
+      "fields": {
+        "stringMin1": {
+          "label": "Texte min. 1 (1 caractère min.)",
+          "placeholder": "Au moins 1 caractère"
+        },
+        "stringMin2": {
+          "label": "Texte min. 2 (2 caractères min.)",
+          "placeholder": "Au moins 2 caractères"
+        },
+        "stringMin5": {
+          "label": "Texte min. 5 (5 caractères min.)",
+          "placeholder": "Au moins 5 caractères"
+        },
+        "stringMax1": {
+          "label": "Texte max. 1 (1 caractère max.)",
+          "placeholder": "Au plus 1 caractère"
+        },
+        "stringMax2": {
+          "label": "Texte max. 2 (2 caractères max.)",
+          "placeholder": "Au plus 2 caractères"
+        },
+        "stringMax5": {
+          "label": "Texte max. 5 (5 caractères max.)",
+          "placeholder": "Au plus 5 caractères"
+        },
+        "regexLowercased": {
+          "label": "Format en minuscules",
+          "placeholder": "Lettres minuscules uniquement"
+        },
+        "regexUppercased": {
+          "label": "Format en majuscules",
+          "placeholder": "Lettres majuscules uniquement"
+        },
+        "email": {
+          "label": "Format e-mail",
+          "placeholder": "E-mail valide"
+        },
+        "date": {
+          "label": "Date",
+          "placeholder": "Sélectionner une date"
+        },
+        "dateMin": {
+          "label": "Date minimale (après 2000-01-01)",
+          "placeholder": "Sélectionner une date"
+        },
+        "dateMax": {
+          "label": "Date maximale (avant 2030-01-01)",
+          "placeholder": "Sélectionner une date"
+        },
+        "dateRange": {
+          "label": "Plage de dates"
+        },
+        "dateISO": {
+          "label": "Date ISO",
+          "placeholder": "Date ISO valide (AAAA-MM-JJ)"
+        }
+      },
+      "result": {
+        "valid": "Valide !",
+        "errors": "Erreurs ({count})"
+      }
+    }
+  }
+}

@@ -1,0 +1,148 @@
+{
+  "common": {
+    "email": "Email",
+    "password": "Heslo",
+    "login": "Prihlásiť sa",
+    "add": "Pridať",
+    "clear": "Vymazať",
+    "run": "Spustiť",
+    "copyright": "© {year} Všetky práva vyhradené."
+  },
+  "placeholder": {
+    "email": "Váš email",
+    "password": "Vaše heslo"
+  },
+  "navigation": {
+    "dashboard": "Prehľad",
+    "complexValidation": "Komplexná validácia"
+  },
+  "operation": {
+    "label": {
+      "operations": "Operácie",
+      "queueTest": "Test fronty operácií"
+    },
+    "input": {
+      "delayMs": "Oneskorenie (ms)"
+    },
+    "action": {
+      "runQueue": "Spustiť frontu",
+      "testUnauthorized": "Otestovať nepovolenú operáciu (presmerovanie)",
+      "testErrorNotifier": "Otestovať chybové hlásenie"
+    },
+    "status": {
+      "idle": "Nečinné",
+      "running": "Prebieha",
+      "success": "Úspešné",
+      "error": "Chyba",
+      "canceled": "Zrušené"
+    },
+    "mode": {
+      "success": "Úspech",
+      "unauthorized": "Nepovolené",
+      "error": "Chyba"
+    },
+    "count": {
+      "empty": "Žiadne operácie",
+      "value": "{count} operácia | {count} operácie | {count} operácií"
+    }
+  },
+  "page": {
+    "home": {
+      "title": "Vitajte",
+      "description": "Toto je úvodná stránka NuxtKit Playground. Objavujte MVVM + čistú architektúru s komponentmi Nuxt UI."
+    },
+    "login": {
+      "title": "Prihlásenie",
+      "button": "Prihlásiť sa"
+    },
+    "dashboard": {
+      "welcomeBack": "Vitajte späť!",
+      "loginSuccess": "Úspešne ste sa prihlásili.",
+      "goHome": "Späť na domov",
+      "sections": {
+        "basicOperations": {
+          "title": "Základné operácie"
+        },
+        "queueTest": {
+          "title": "Test fronty",
+          "description": "Nastavte front operácií. Ak niektorá operácia zlyhá na Unauthorized, všetky nasledujúce operácie sa zrušia. Success a Error operácie pokračujú normálne."
+        }
+      }
+    },
+    "complexValidation": {
+      "title": "Komplexná validácia",
+      "description": "Reťazce, čísla, dátumy, enumy, polia, objekty, uniony, refine",
+      "actions": {
+        "fillInvalid": "Vyplniť neplatné",
+        "fillValid": "Vyplniť platné",
+        "reset": "Obnoviť",
+        "validate": "Validovať"
+      },
+      "sections": {
+        "stringFields": "Textové polia",
+        "dateFields": "Dátumové polia"
+      },
+      "fields": {
+        "stringMin1": {
+          "label": "Text min. 1 (min. 1 znak)",
+          "placeholder": "Aspoň 1 znak"
+        },
+        "stringMin2": {
+          "label": "Text min. 2 (min. 2 znaky)",
+          "placeholder": "Aspoň 2 znaky"
+        },
+        "stringMin5": {
+          "label": "Text min. 5 (min. 5 znakov)",
+          "placeholder": "Aspoň 5 znakov"
+        },
+        "stringMax1": {
+          "label": "Text max. 1 (max. 1 znak)",
+          "placeholder": "Najviac 1 znak"
+        },
+        "stringMax2": {
+          "label": "Text max. 2 (max. 2 znaky)",
+          "placeholder": "Najviac 2 znaky"
+        },
+        "stringMax5": {
+          "label": "Text max. 5 (max. 5 znakov)",
+          "placeholder": "Najviac 5 znakov"
+        },
+        "regexLowercased": {
+          "label": "Formát malých písmen",
+          "placeholder": "Iba malé písmená"
+        },
+        "regexUppercased": {
+          "label": "Formát veľkých písmen",
+          "placeholder": "Iba veľké písmená"
+        },
+        "email": {
+          "label": "Formát e-mailu",
+          "placeholder": "Platný e-mail"
+        },
+        "date": {
+          "label": "Dátum",
+          "placeholder": "Vyberte dátum"
+        },
+        "dateMin": {
+          "label": "Minimálny dátum (po 2000-01-01)",
+          "placeholder": "Vyberte dátum"
+        },
+        "dateMax": {
+          "label": "Maximálny dátum (pred 2030-01-01)",
+          "placeholder": "Vyberte dátum"
+        },
+        "dateRange": {
+          "label": "Rozsah dátumov"
+        },
+        "dateISO": {
+          "label": "ISO dátum",
+          "placeholder": "Platný ISO dátum (RRRR-MM-DD)"
+        }
+      },
+      "result": {
+        "valid": "Platné!",
+        "errors": "Chyby ({count})"
+      }
+    }
+  }
+}

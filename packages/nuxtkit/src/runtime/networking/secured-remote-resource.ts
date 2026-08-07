@@ -1,12 +1,12 @@
 import { type RemoteEndpoint, type RemoteRequestConfig, HttpError } from '@meawkit/webkit';
-import { sendRedirect } from 'h3';
 import { decorate, injectable } from 'inversify';
 
-import { type NuxtApp, useNuxtApp, useRouter } from '#app';
-import { abortNavigation, isSSR, navigateTo } from '#imports';
+import { type NuxtApp, useNuxtApp } from '#app';
+import { navigateTo } from '#imports';
 import { useNuxtKit } from '#internal-runtime';
 import { MODULE_HOOK_UNAUTHORIZED_NAME } from '#internal-shared';
 import { useOperationQueue } from '#nuxtkit/composables';
+import { resolveI18nMessage } from '#nuxtkit/i18n';
 import { NuxtKitRemoteResource } from '#nuxtkit/networking';
 
 export class SecuredRemoteResource<Input, Output> extends NuxtKitRemoteResource<Input, Output> {
@@ -51,11 +51,9 @@ export class SecuredRemoteResource<Input, Output> extends NuxtKitRemoteResource<
 
   private makeUnauthorizedHttpError(app: NuxtApp, error: HttpError): HttpError {
     const errors = this.kit.config.errors;
-    const { t, te } = app.$i18n;
-
     const key = errors.unauthorizedKey;
     const fallback = errors.unauthorizedMessageFallback;
-    const message = te(key) ? t(key) : fallback;
+    const message = resolveI18nMessage(app.$i18n, key, fallback);
 
     return new HttpError({
       statusCode: error.statusCode,
@@ -69,20 +67,9 @@ export class SecuredRemoteResource<Input, Output> extends NuxtKitRemoteResource<
     return async (to: string, options?: { replace?: boolean }) => {
       const shouldReplace = options?.replace ?? true;
 
-      if (isSSR) {
-        const event = app.ssrContext?.event;
-        if (!event) throw new Error('Missing SSR event');
-        await sendRedirect(event, to, 302);
-        abortNavigation();
-        return;
-      }
-
-      if (shouldReplace) {
-        await useRouter().replace(to);
-        return;
-      }
-
-      await navigateTo(to);
+      await app.runWithContext(async () => {
+        await navigateTo(to, { replace: shouldReplace });
+      });
     };
   }
 }
