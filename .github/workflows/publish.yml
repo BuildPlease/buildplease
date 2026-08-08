@@ -15,6 +15,9 @@ jobs:
       contents: write
       packages: write
 
+    env:
+      NODE_OPTIONS: --max-old-space-size=4096
+
     steps:
       # MARK: - Checkout
       - name: Checkout repository
