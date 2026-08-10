@@ -1,6 +1,7 @@
 # Infrastructure
 
-- Keep topology, non-secret configuration, and secrets as separate concerns.
+- Keep topology, non-secret configuration and secrets as separate concerns.
+- Infrastructure is the source of truth for deployment topology.
 - Templates render explicit inputs; orchestration coordinates steps.
 - Generated runtime configuration must match the consuming application's typed configuration contract.
 - Resolve an explicit target before destructive operations.

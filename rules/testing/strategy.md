@@ -5,8 +5,8 @@ Tests protect behavior that is expensive to rediscover in production.
 Priority:
 
 1. Public contracts and reusable behavior.
-2. Security, transactions, resource lifecycle, and concurrency-sensitive behavior.
-3. Configuration parsing, validation, and resolution.
+2. Security, transactions, resource lifecycle and concurrency-sensitive behavior.
+3. Configuration parsing, validation and resolution.
 4. Complex application or domain branching.
 5. Transport adaptation.
 6. Trivial mapping only when it is itself a public contract.
@@ -18,7 +18,7 @@ Do not chase test count or line coverage for its own sake.
 Use one test per behavior.
 
 ```ts
-it('rejects invalid input before starting the resource', async () => {
+it('rolls back the transaction when the operation throws', async () => {
   // arrange
   // act
   // assert observable state
@@ -26,7 +26,7 @@ it('rejects invalid input before starting the resource', async () => {
 ```
 
 - Name tests after behavior, not implementation methods.
-- Test success, expected failure, and boundary conditions.
+- Test success, expected failure and boundary conditions.
 - Verify interactions only when the interaction itself is the side effect being protected.
 - Prefer deterministic fixtures.
 - Keep fixture builders close to tests until reuse is real.

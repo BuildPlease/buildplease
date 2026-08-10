@@ -4,7 +4,7 @@ import '@/utils/extensions/string-extensions';
 
 describe('String extensions', () => {
   it('capitalizes strings', () => {
-    expect('meawkit'.capitalized()).toBe('Meawkit');
+    expect('sample'.capitalized()).toBe('Sample');
     expect('   '.capitalized()).toBe('');
   });
 });

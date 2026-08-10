@@ -17,7 +17,7 @@ export type DependencyBundlingMatcher = string | RegExp;
  * Minimal package manifest shape required to create a dependency bundling policy.
  *
  * The helper intentionally depends only on standard package manifest dependency
- * fields, not on a MeawKit-specific package model.
+ * fields, not on a framework-specific package model.
  */
 export type DependencyBundlingPackageJSON = {
   /**

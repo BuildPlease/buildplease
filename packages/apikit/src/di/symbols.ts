@@ -33,6 +33,10 @@ const I18n = {
   Controller: Symbol.for(`${prefix}.I18n.Controller`),
 };
 
+const Notification = {
+  Controller: Symbol.for(`${prefix}.Notification.Controller`),
+};
+
 const Normalization = {
   Controller: Symbol.for(`${prefix}.Normalization.Controller`),
 };
@@ -69,6 +73,7 @@ export const ApiKitSymbols = {
     Validation,
     OpenAPI,
     I18n,
+    Notification,
     Normalization,
     Formatter,
     Generator,

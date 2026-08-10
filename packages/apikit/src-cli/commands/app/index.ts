@@ -1,4 +1,3 @@
-
 import { loadAppConfig } from '@internal/configuration';
 import { generateApp } from '@internal/generator';
 import { resolveAppGeneratorConfig } from '@internal/generator/configuration/app-generator-config';

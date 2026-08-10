@@ -1,5 +1,9 @@
 # Rules
 
+Read this file before changing source code.
+
+## Priorities
+
 1. Correctness and security.
 2. Existing architecture and ownership.
 3. KISS and predictable control flow.
@@ -12,13 +16,14 @@
 - Fail fast on broken internal contracts; map expected user or dependency failures explicitly.
 - Add abstractions only for real boundaries or proven reuse.
 - Do not move code into shared modules or packages for hypothetical reuse.
-- Do not redesign architecture to satisfy formatting, linting, or a desire to remove every cast.
-- Keep rules short, stable, and focused on engineering decisions rather than implementation history.
+- Do not redesign architecture to satisfy formatting, linting or a desire to remove every cast.
+- Keep rules short, stable and focused on engineering decisions rather than implementation history.
 - Update rules only when the intended engineering contract changes.
 
-| Area              | Covers                                                                   |
-| ----------------- | ------------------------------------------------------------------------ |
-| `architecture/`   | Layers, TypeScript, naming, constructors, configuration and dependencies |
-| `packages/`       | Reusable mechanisms and package boundaries                               |
-| `testing/`        | Test priorities and test shape                                           |
-| `infrastructure/` | Deployment and runtime infrastructure                                    |
+## Structure
+
+- `architecture/` owns cross-cutting architecture, naming, identity, localization, configuration and dependency rules.
+- `packages/` owns reusable package boundaries and package testing rules.
+- `testing/` owns repository-wide testing strategy.
+- `infrastructure/` owns deployment and runtime infrastructure rules.
+- Projects may add focused domain or technology rule directories when those rules are not generic enough to belong above.

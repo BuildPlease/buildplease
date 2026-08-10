@@ -2,7 +2,6 @@ import { type Logger, type LoggerOptions, LoggerImpl } from '@node/logger';
 
 import { type Assembly, type AssemblyContainer, CoreSymbols } from '@/di';
 
-
 export class LoggerAssembly implements Assembly {
   public constructor(private readonly options: LoggerOptions) {}
 

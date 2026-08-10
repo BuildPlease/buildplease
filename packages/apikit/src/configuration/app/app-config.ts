@@ -8,6 +8,7 @@ import {
   type LoggerConfiguration,
   type MetricsConfiguration,
   type MultipartConfiguration,
+  type NotificationConfiguration,
   type ServerConfiguration,
   type StaticFilesConfiguration,
 } from './configs';
@@ -29,6 +30,7 @@ export interface DefineApiKitInput {
   readonly metrics?: InputOf<typeof MetricsConfiguration>;
   readonly health?: InputOf<typeof HealthConfiguration>;
   readonly email?: InputOf<typeof EmailConfiguration>;
+  readonly notification?: InputOf<typeof NotificationConfiguration>;
   readonly i18n?: InputOf<typeof I18nConfiguration>;
   readonly staticFiles?: InputOf<typeof StaticFilesConfiguration>;
   readonly basicAuth?: InputOf<typeof BasicAuthConfiguration>;

@@ -22,7 +22,7 @@ describe('tool commands', () => {
 
   beforeEach(async () => {
     originalCwd = process.cwd();
-    rootDir = await mkdtemp(path.join(tmpdir(), 'meawkit-devkit-'));
+    rootDir = await mkdtemp(path.join(tmpdir(), 'devkit-'));
     process.chdir(rootDir);
     mocks.runNodeBin.mockClear();
   });

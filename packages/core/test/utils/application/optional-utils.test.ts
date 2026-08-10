@@ -5,10 +5,10 @@ import { isDefinedAndNotNull, optional } from '@/utils/application/optional-util
 describe('Optional', () => {
   it('maps present values', () => {
     expect(
-      optional('meawkit')
+      optional('value')
         .map((value) => value.toUpperCase())
         .orThrow(),
-    ).toBe('MEAWKIT');
+    ).toBe('VALUE');
   });
 
   it('uses defaults for missing values', () => {

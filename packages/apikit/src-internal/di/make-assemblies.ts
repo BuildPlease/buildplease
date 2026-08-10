@@ -9,6 +9,7 @@ import { GeneratorAssembly } from './assemblies/generator';
 import { I18nAssembly } from './assemblies/i18n';
 import { ImageAssembly } from './assemblies/image';
 import { NormalizationAssembly } from './assemblies/normalization';
+import { NotificationAssembly } from './assemblies/notification';
 import { OpenAPIAssembly } from './assemblies/openapi';
 import { SecurityAssembly } from './assemblies/security';
 import { ServerAssembly } from './assemblies/server';
@@ -25,6 +26,7 @@ export function makeAssemblies(): Assembly[] {
     new I18nAssembly(),
     new ImageAssembly(),
     new NormalizationAssembly(),
+    new NotificationAssembly(),
     new OpenAPIAssembly(),
     new SecurityAssembly(),
     new ServerAssembly(),

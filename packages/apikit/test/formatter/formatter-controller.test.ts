@@ -7,11 +7,11 @@ describe('FormatterController', () => {
 
   it('applies field transformations', () => {
     const result = controller
-      .format({ name: ' simon ', age: 30 })
+      .format({ name: ' value ', age: 30 })
       .apply({ name: (value: string) => value.trim() })
       .exec();
 
-    expect(result).toEqual({ name: 'simon', age: 30 });
+    expect(result).toEqual({ name: 'value', age: 30 });
   });
 
   it('filters undefined values deeply', () => {

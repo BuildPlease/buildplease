@@ -7,5 +7,6 @@ export * from './i18n';
 export * from './logger';
 export * from './metrics';
 export * from './multipart';
+export * from './notification';
 export * from './server';
 export * from './static-files';

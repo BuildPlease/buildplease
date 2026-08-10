@@ -22,7 +22,7 @@ describe('clean', () => {
 
   beforeEach(async () => {
     originalCwd = process.cwd();
-    rootDir = await mkdtemp(path.join(tmpdir(), 'meawkit-devkit-'));
+    rootDir = await mkdtemp(path.join(tmpdir(), 'devkit-'));
 
     vi.spyOn(Console.prototype, 'start').mockImplementation(() => undefined);
     vi.spyOn(Console.prototype, 'info').mockImplementation(() => undefined);

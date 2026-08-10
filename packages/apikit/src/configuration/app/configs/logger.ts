@@ -1,7 +1,6 @@
 import { ApiKitAppDefaults } from '@internal/configuration/app';
 import type { LoggerTransportOptions } from '@meawkit/core/node';
 
-
 import { type InferConfiguration, defineConfiguration, field } from '@/configuration/core';
 
 export interface LoggerRequestOptions {

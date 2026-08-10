@@ -45,6 +45,7 @@ describe('loadApiKitContext', () => {
     expect(global.apikit.serverConfig.identifier).toBe('@test/example-api:development');
     expect(global.apikit.serverConfig.debug).toBe(false);
     expect(global.apikit.serverConfig.trustProxy).toBe(false);
+    expect(global.apikit.notificationConfig).toEqual({ enabled: false });
   });
 
   it('fails when generated build metadata is missing', async () => {

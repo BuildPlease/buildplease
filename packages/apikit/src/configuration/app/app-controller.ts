@@ -9,6 +9,7 @@ import type {
   LoggerConfig,
   MetricsConfig,
   MultipartConfig,
+  NotificationConfig,
   ServerConfig,
   StaticFilesConfig,
 } from './configs';
@@ -28,6 +29,7 @@ export interface ApiKitController {
   get metrics(): MetricsConfig;
   get health(): HealthConfig;
   get email(): EmailConfig;
+  get notification(): NotificationConfig;
   get i18n(): I18nConfig;
   get staticFiles(): StaticFilesConfig;
   get basicAuth(): BasicAuthConfig;
@@ -70,6 +72,10 @@ export class ApiKitControllerImpl implements ApiKitController {
 
   public get email(): EmailConfig {
     return global.apikit.emailConfig;
+  }
+
+  public get notification(): NotificationConfig {
+    return global.apikit.notificationConfig;
   }
 
   public get i18n(): I18nConfig {

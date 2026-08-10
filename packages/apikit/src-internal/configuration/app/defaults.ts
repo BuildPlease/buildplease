@@ -56,6 +56,10 @@ export const ApiKitAppDefaults = {
     },
   },
 
+  notification: {
+    enabled: false,
+  },
+
   email: {
     enabled: false,
     templatesPath: './src/templates',

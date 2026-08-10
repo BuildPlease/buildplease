@@ -17,13 +17,13 @@ describe('MongoDbQueryFormatter', () => {
     expect(
       formatter.format<UserQuery>({
         profile: {
-          name: 'Simon',
+          name: 'Test User',
           age: { $gte: 18 },
         },
         status: undefined,
       }),
     ).toEqual({
-      'profile.name': 'Simon',
+      'profile.name': 'Test User',
       'profile.age': { $gte: 18 },
     });
   });
@@ -31,10 +31,10 @@ describe('MongoDbQueryFormatter', () => {
   it('preserves logical operators', () => {
     expect(
       formatter.format<UserQuery>({
-        $or: [{ profile: { name: 'Simon' } }, { status: 'active' }],
+        $or: [{ profile: { name: 'Test User' } }, { status: 'active' }],
       }),
     ).toEqual({
-      $or: [{ 'profile.name': 'Simon' }, { status: 'active' }],
+      $or: [{ 'profile.name': 'Test User' }, { status: 'active' }],
     });
   });
 });

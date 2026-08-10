@@ -9,7 +9,7 @@ import {
 
 describe('string utils', () => {
   it('detects non-empty strings', () => {
-    expect(isNonEmptyString(' meawkit ')).toBe(true);
+    expect(isNonEmptyString(' value ')).toBe(true);
     expect(isNonEmptyString('   ')).toBe(false);
     expect(isNonEmptyString(undefined)).toBe(false);
   });
@@ -28,7 +28,7 @@ describe('string utils', () => {
   });
 
   it('capitalizes non-empty strings', () => {
-    expect(capitalized('meawkit')).toBe('Meawkit');
+    expect(capitalized('sample')).toBe('Sample');
     expect(capitalized('')).toBeNull();
   });
 });

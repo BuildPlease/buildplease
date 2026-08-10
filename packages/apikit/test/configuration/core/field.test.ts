@@ -39,7 +39,7 @@ describe('field', () => {
   it('maps parsed values', () => {
     const mapped = field.string().map((value) => value.toUpperCase());
 
-    expect(mapped.parse('meawkit', 'app.name')).toBe('MEAWKIT');
+    expect(mapped.parse('sample', 'app.name')).toBe('SAMPLE');
   });
 
   it('marks configuration fields', () => {

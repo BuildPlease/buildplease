@@ -1,4 +1,3 @@
-
 import { loadI18nConfig } from '@internal/configuration';
 import { generateI18n } from '@internal/generator';
 import { resolveI18nGeneratorConfig } from '@internal/generator/configuration/i18n-generator-config';

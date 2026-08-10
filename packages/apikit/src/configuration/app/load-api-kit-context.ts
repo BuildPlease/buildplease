@@ -11,7 +11,7 @@ import {
 } from '@internal/configuration';
 import { Console } from '@meawkit/core/node';
 
-
+import type { ApiKitConfig } from './app-config';
 import {
   BasicAuthConfiguration,
   BuildConfiguration,
@@ -22,6 +22,7 @@ import {
   LoggerConfiguration,
   MetricsConfiguration,
   MultipartConfiguration,
+  NotificationConfiguration,
   ServerConfiguration,
   StaticFilesConfiguration,
 } from './configs';
@@ -38,57 +39,48 @@ export interface LoadApiKitContextOptions {
 }
 
 export async function loadApiKitContext(options: LoadApiKitContextOptions): Promise<void> {
-  // MARK: App
   const loaded = await loadAppConfig();
   const buildConfiguration = await resolveConfiguration(BuildConfiguration, loaded.config.build);
   const build = await loadAppBuild(loaded.rootDir, buildConfiguration.outDir);
-
-  // MARK: Environment
   const environment = resolveEnvironment(loaded.config.environments, options.environment, {
     fileDir: loaded.rootDir,
   });
 
   initializeEnvironment(environment);
 
-  // MARK: Configuration
   const resolveOptions = {
     buildMetadata: build,
     environment: environment,
   };
+  const configuration = await resolveApiKitConfigurations(loaded.config, resolveOptions);
 
-  const server = await resolveConfiguration(ServerConfiguration, loaded.config.server, resolveOptions);
-  const logger = await resolveConfiguration(LoggerConfiguration, loaded.config.logger, resolveOptions);
-  const metrics = await resolveConfiguration(MetricsConfiguration, loaded.config.metrics, resolveOptions);
-  const health = await resolveConfiguration(HealthConfiguration, loaded.config.health, resolveOptions);
-  const email = await resolveConfiguration(EmailConfiguration, loaded.config.email, resolveOptions);
-  const i18n = await resolveConfiguration(I18nConfiguration, loaded.config.i18n, resolveOptions);
-  const staticFiles = await resolveConfiguration(StaticFilesConfiguration, loaded.config.staticFiles, resolveOptions);
-  const basicAuth = await resolveConfiguration(BasicAuthConfiguration, loaded.config.basicAuth, resolveOptions);
-  const cors = await resolveConfiguration(CorsConfiguration, loaded.config.cors, resolveOptions);
-  const multipart = await resolveConfiguration(MultipartConfiguration, loaded.config.multipart, resolveOptions);
-  const configurations = await resolveExtensions(loaded.config.configurations, resolveOptions);
-
-  // MARK: Runtime
   global.apikit = {
     build: build,
     environmentConfig: environment,
-    loggerConfig: logger,
-    serverConfig: server,
-    metricsConfig: metrics,
-    healthConfig: health,
-    emailConfig: email,
-    i18nConfig: i18n,
-    staticFilesConfig: staticFiles,
-    basicAuthConfig: basicAuth,
-    corsConfig: cors,
-    multipartConfig: multipart,
-    configurations: configurations,
+    ...configuration,
   };
 
   cli.success(`[ApiKit] Context created for ${environment.name} environment`);
 }
 
 // MARK: - Private
+
+async function resolveApiKitConfigurations(config: ApiKitConfig, options: ResolveConfigurationOptions) {
+  return {
+    serverConfig: await resolveConfiguration(ServerConfiguration, config.server, options),
+    loggerConfig: await resolveConfiguration(LoggerConfiguration, config.logger, options),
+    metricsConfig: await resolveConfiguration(MetricsConfiguration, config.metrics, options),
+    healthConfig: await resolveConfiguration(HealthConfiguration, config.health, options),
+    emailConfig: await resolveConfiguration(EmailConfiguration, config.email, options),
+    notificationConfig: await resolveConfiguration(NotificationConfiguration, config.notification, options),
+    i18nConfig: await resolveConfiguration(I18nConfiguration, config.i18n, options),
+    staticFilesConfig: await resolveConfiguration(StaticFilesConfiguration, config.staticFiles, options),
+    basicAuthConfig: await resolveConfiguration(BasicAuthConfiguration, config.basicAuth, options),
+    corsConfig: await resolveConfiguration(CorsConfiguration, config.cors, options),
+    multipartConfig: await resolveConfiguration(MultipartConfiguration, config.multipart, options),
+    configurations: await resolveExtensions(config.configurations, options),
+  };
+}
 
 async function resolveExtensions(
   bindings: readonly ConfigurationBinding[],

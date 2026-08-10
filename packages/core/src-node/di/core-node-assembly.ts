@@ -3,7 +3,6 @@ import type { LoggerOptions } from '@node/logger';
 
 import type { Assembly } from '@/di';
 
-
 import { LoggerAssembly } from './assemblies/logger';
 
 export interface CoreNodeAssemblyOptions {

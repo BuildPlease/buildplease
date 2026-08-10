@@ -10,8 +10,9 @@ packages     = reusable mechanisms + stable shared contracts
 A package may be technology-specific. Technology-specific is not application-specific.
 
 - Keep reusable mechanisms independent of one consumer application.
-- Keep generic registries, providers, and factories generic across registered resources.
+- Keep generic registries, providers and factories generic across registered resources.
 - Keep package public APIs small and explicit.
+- Share stable semantics required by multiple consumers or explicitly owned as cross-application contracts.
 - Treat removal or narrowing of an intentional public contract as an API design change.
 - Keep implementation-only helpers in the package-private source area.
 - Do not export something only because tests or another internal module need it.

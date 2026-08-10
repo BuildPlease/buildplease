@@ -21,6 +21,7 @@ export * from './http';
 export * from './i18n';
 export * from './image';
 export * from './normalization';
+export * from './notification';
 export * from './openapi';
 export * from './request';
 export * from './security';
