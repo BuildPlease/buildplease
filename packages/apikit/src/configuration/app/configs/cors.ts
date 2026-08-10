@@ -9,7 +9,14 @@ export const CorsConfiguration = defineConfiguration('apikit.cors', {
   enabled: field.boolean().default(ApiKitAppDefaults.cors.enabled),
   allowAllOrigins: field.boolean().default(ApiKitAppDefaults.cors.allowAllOrigins),
   includeWwwSubdomain: field.boolean().default(ApiKitAppDefaults.cors.includeWwwSubdomain),
-  options: field.custom<CorsOptions>().default(ApiKitAppDefaults.cors.options),
+  options: field.custom<CorsOptions>().default({}).map(resolveCorsOptions),
 });
 
 export type CorsConfig = InferConfiguration<typeof CorsConfiguration>;
+
+function resolveCorsOptions(options: CorsOptions): CorsOptions {
+  return {
+    ...ApiKitAppDefaults.cors.options,
+    ...options,
+  };
+}

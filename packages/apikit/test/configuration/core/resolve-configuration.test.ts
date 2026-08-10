@@ -1,20 +1,15 @@
 import { resolveConfiguration } from '@internal/configuration';
+import { testEnvironment, testEnvironments } from '@test/fixtures/configuration/environment';
 import { describe, expect, it } from 'vitest';
 
 import type { BuildMetadata } from '@/configuration/core/build-metadata';
 import { defineConfiguration } from '@/configuration/core/configuration';
-import { defineEnvironments, resolveEnvironment } from '@/configuration/core/environments';
 import { field } from '@/configuration/core/field';
 import { defineSource } from '@/configuration/core/source';
 
 describe('resolveConfiguration', () => {
-  const environments = defineEnvironments({
-    development: { file: '.env.development' },
-    production: { file: '.env.production' },
-  });
-
-  const from = defineSource(environments);
-  const environment = resolveEnvironment(environments, 'development');
+  const from = defineSource(testEnvironments);
+  const environment = testEnvironment();
 
   it('resolves nested schemas and fields', async () => {
     const Configuration = defineConfiguration('app.server', {
