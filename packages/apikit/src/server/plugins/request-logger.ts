@@ -5,6 +5,7 @@ import type { FastifyPluginAsync } from 'fastify';
 import fp from 'fastify-plugin';
 
 import { HttpHeaders } from '@/http';
+import { RequestLogMetadata } from '@/request';
 import type { ServerPluginOptions } from '@/server';
 
 import { resolveRequestLoggerIgnoredPaths, shouldSkipRequestLog } from './request-logger-paths';
@@ -14,7 +15,7 @@ const REQUEST_LOG_PREFIX = '[ApiKit:Request]';
 const RESPONSE_LOG_PREFIX = '[ApiKit:Response]';
 
 const requestLoggerPlugin: FastifyPluginAsync<ServerPluginOptions> = async (fastify, options) => {
-  const logger = options.loggerController;
+  const logger = options.logger;
   const loggerConfig = options.apikitController.logger;
   const debug = options.apikitController.isDebug;
   const ignoredPaths = resolveRequestLoggerIgnoredPaths(options);
@@ -36,7 +37,7 @@ const requestLoggerPlugin: FastifyPluginAsync<ServerPluginOptions> = async (fast
   fastify.addHook('onRequest', async (request) => {
     if (shouldSkipRequestLog(request.url, ignoredPaths)) return;
 
-    const metadata = request.metadata;
+    const metadata = new RequestLogMetadata(request.metadata);
 
     ignoreError(() => {
       logger.info(`${REQUEST_LOG_PREFIX} onRequest`, { metadata });
@@ -48,7 +49,7 @@ const requestLoggerPlugin: FastifyPluginAsync<ServerPluginOptions> = async (fast
     if (shouldSkipRequestLog(request.url, ignoredPaths)) return;
     if (!debug) return;
 
-    const metadata = { requestId: request.metadata.requestId };
+    const metadata = new RequestLogMetadata({ requestId: request.metadata.requestId });
 
     ignoreError(() => {
       logger.debug(`${REQUEST_LOG_PREFIX} preValidation`, {
@@ -65,7 +66,7 @@ const requestLoggerPlugin: FastifyPluginAsync<ServerPluginOptions> = async (fast
     }
 
     ignoreError(() => {
-      const metadata = { requestId: request.metadata.requestId };
+      const metadata = new RequestLogMetadata({ requestId: request.metadata.requestId });
       const details = { elapsedTime: reply.elapsedTime, statusCode: reply.statusCode };
 
       if (debug) {

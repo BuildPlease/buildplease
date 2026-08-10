@@ -2,7 +2,7 @@ import { mkdir, mkdtemp, rm, stat } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 
-import { consola } from 'consola';
+import { Console } from '@meawkit/core/node';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { clean } from '../../src/commands/clean';
@@ -24,10 +24,10 @@ describe('clean', () => {
     originalCwd = process.cwd();
     rootDir = await mkdtemp(path.join(tmpdir(), 'meawkit-devkit-'));
 
-    vi.spyOn(consola, 'start').mockImplementation(() => undefined);
-    vi.spyOn(consola, 'info').mockImplementation(() => undefined);
-    vi.spyOn(consola, 'log').mockImplementation(() => undefined);
-    vi.spyOn(consola, 'success').mockImplementation(() => undefined);
+    vi.spyOn(Console.prototype, 'start').mockImplementation(() => undefined);
+    vi.spyOn(Console.prototype, 'info').mockImplementation(() => undefined);
+    vi.spyOn(Console.prototype, 'log').mockImplementation(() => undefined);
+    vi.spyOn(Console.prototype, 'success').mockImplementation(() => undefined);
   });
 
   afterEach(async () => {

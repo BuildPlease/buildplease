@@ -1,11 +1,12 @@
-import { ignoreErrorAsync } from '@meawkit/core';
+import { CoreSymbols, ignoreErrorAsync } from '@meawkit/core';
+import { type Logger, LogFlag } from '@meawkit/core/node';
 import type { FastifyReply, FastifyRequest } from 'fastify';
 import { inject, injectable } from 'inversify';
 
 import { ApiKitSymbols } from '@/di';
 import { ApiError } from '@/error';
 import { type HttpResponse } from '@/http';
-import { type LoggerController, LogFlag } from '@/logger';
+import { RequestLogMetadata } from '@/request';
 import type { ResponseController } from '@/server';
 
 const LOG_PREFIX = '[ApiKit:Request]';
@@ -27,8 +28,8 @@ export interface RequestController {
 @injectable()
 export class RequestControllerImpl implements RequestController {
   constructor(
-    @inject(ApiKitSymbols.DI.Logger.Controller)
-    private logger: LoggerController,
+    @inject(CoreSymbols.DI.Logger)
+    private logger: Logger,
     @inject(ApiKitSymbols.DI.Server.ResponseController)
     private responseController: ResponseController,
   ) {}
@@ -66,12 +67,15 @@ export class RequestControllerImpl implements RequestController {
       const requestId = request.metadata.requestId;
 
       if (error instanceof ApiError) {
-        this.logger.info(`${LOG_PREFIX} Api error response`, { error: error, metadata: { requestId: requestId } });
+        this.logger.info(`${LOG_PREFIX} Api error response`, {
+          error: error,
+          metadata: new RequestLogMetadata({ requestId }),
+        });
       } else {
         this.logger.error(`${LOG_PREFIX} Unexpected error`, {
           flag: LogFlag.Important,
           error: error,
-          metadata: { requestId: requestId },
+          metadata: new RequestLogMetadata({ requestId }),
         });
       }
     });

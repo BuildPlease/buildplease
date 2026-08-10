@@ -1,9 +1,11 @@
 import { readdir, rm, stat } from 'node:fs/promises';
 import path from 'node:path';
 
-import { consola } from 'consola';
+import { Console } from '@meawkit/core/node';
 
 import { loadDevKitConfig, resolveDevKitConfig } from '../../src-internal/configuration';
+
+const cli = new Console();
 
 async function directoryExists(pathName: string): Promise<boolean> {
   try {
@@ -35,7 +37,7 @@ function displayPath(pathName: string): string {
 }
 
 async function cleanProject(projectPath: string, directories: readonly string[]) {
-  consola.info(`Cleaning ${displayPath(projectPath)}`);
+  cli.info(`Cleaning ${displayPath(projectPath)}`);
 
   let deletedCount = 0;
   let skippedCount = 0;
@@ -45,18 +47,18 @@ async function cleanProject(projectPath: string, directories: readonly string[])
     const exists = await directoryExists(folderPath);
 
     if (!exists) {
-      consola.log(`  skip ${folderName}`);
+      cli.log(`  skip ${folderName}`);
       skippedCount += 1;
       continue;
     }
 
     await rm(folderPath, { recursive: true, force: true });
-    consola.success(`  deleted ${folderName}`);
+    cli.success(`  deleted ${folderName}`);
     deletedCount += 1;
   }
 
   if (deletedCount === 0) {
-    consola.log('  nothing to clean');
+    cli.log('  nothing to clean');
   }
 
   return { deletedCount, skippedCount };
@@ -66,7 +68,7 @@ export async function clean(): Promise<void> {
   const loaded = await loadDevKitConfig();
   const config = resolveDevKitConfig(loaded.config);
 
-  consola.start('Cleaning build artifacts');
+  cli.start('Cleaning build artifacts');
 
   let totalDeleted = 0;
   let totalSkipped = 0;
@@ -85,5 +87,5 @@ export async function clean(): Promise<void> {
     }
   }
 
-  consola.success(`Clean complete. Deleted: ${totalDeleted}. Skipped: ${totalSkipped}.`);
+  cli.success(`Clean complete. Deleted: ${totalDeleted}. Skipped: ${totalSkipped}.`);
 }

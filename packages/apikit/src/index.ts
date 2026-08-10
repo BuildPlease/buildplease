@@ -1,6 +1,7 @@
 import 'reflect-metadata';
 import { makeAssemblies } from '@internal/di';
-import { type Assembly, coreAssembly } from '@meawkit/core';
+import type { Assembly } from '@meawkit/core';
+import { type LoggerOptions, coreNodeAssembly } from '@meawkit/core/node';
 
 import '../types';
 
@@ -19,7 +20,6 @@ export * from './generator';
 export * from './http';
 export * from './i18n';
 export * from './image';
-export * from './logger';
 export * from './normalization';
 export * from './openapi';
 export * from './request';
@@ -28,8 +28,17 @@ export * from './server';
 export * from './validation';
 
 export function apikitAssembly(): Assembly[] {
-  const core = coreAssembly();
-  const assemblies = makeAssemblies();
+  const logger = global.apikit.loggerConfig;
+  const loggerOptions: LoggerOptions = logger.enabled
+    ? {
+        enabled: true,
+        debug: global.apikit.serverConfig.debug,
+        transports: logger.transports,
+      }
+    : {
+        enabled: false,
+        debug: global.apikit.serverConfig.debug,
+      };
 
-  return [...core, ...assemblies];
+  return [...coreNodeAssembly({ logger: loggerOptions }), ...makeAssemblies()];
 }

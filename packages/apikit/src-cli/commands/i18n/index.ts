@@ -1,10 +1,13 @@
+
 import { loadI18nConfig } from '@internal/configuration';
-import { ConsoleOutput } from '@internal/console';
 import { generateI18n } from '@internal/generator';
 import { resolveI18nGeneratorConfig } from '@internal/generator/configuration/i18n-generator-config';
+import { Console } from '@meawkit/core/node';
 import { defineCommand } from 'citty';
 
 import { type CommandOptions, commandArgs, fail, formatPath, runInDirectory } from '../shared';
+
+const cli = new Console();
 
 export const buildI18nCommand = defineCommand({
   meta: {
@@ -34,16 +37,16 @@ async function runI18n(args: CommandOptions): Promise<void> {
     const generatorConfig = resolveI18nGeneratorConfig(loaded.config);
     const startedAt = Date.now();
 
-    ConsoleOutput.title('ApiKit', 'i18n', [
+    cli.title('ApiKit', 'i18n', [
       { label: 'config', value: formatPath(loaded.configFilePath) },
       { label: 'output', value: generatorConfig.build.outDir },
     ]);
 
     await runInDirectory(loaded.rootDir, () => generateI18n({ generatorConfig: generatorConfig }));
 
-    ConsoleOutput.success(ConsoleOutput.step('i18n', `Generated ${generatorConfig.build.outDir}`));
-    ConsoleOutput.success(ConsoleOutput.step('done', `Completed in ${ConsoleOutput.duration(Date.now() - startedAt)}`));
-    ConsoleOutput.emptyLine();
+    cli.success(cli.step('i18n', `Generated ${generatorConfig.build.outDir}`));
+    cli.success(cli.step('done', `Completed in ${cli.duration(Date.now() - startedAt)}`));
+    cli.emptyLine();
   } catch (error) {
     fail('ApiKit i18n generation failed', error);
   }

@@ -7,7 +7,6 @@ import type {
 } from '@fastify/multipart';
 import type { FastifyStaticOptions } from '@fastify/static';
 import type { InitOptions } from 'i18next';
-import type { Level } from 'pino';
 
 type CorsOptions = FastifyCorsOptions;
 
@@ -26,7 +25,6 @@ export const ApiKitAppDefaults = {
 
   logger: {
     enabled: false,
-    defaultLevel: 'info' as Level,
   },
 
   server: {

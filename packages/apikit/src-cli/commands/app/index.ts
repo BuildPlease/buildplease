@@ -1,10 +1,13 @@
+
 import { loadAppConfig } from '@internal/configuration';
-import { ConsoleOutput } from '@internal/console';
 import { generateApp } from '@internal/generator';
 import { resolveAppGeneratorConfig } from '@internal/generator/configuration/app-generator-config';
+import { Console } from '@meawkit/core/node';
 import { defineCommand } from 'citty';
 
 import { type CommandOptions, commandArgs, fail, formatPath, runInDirectory } from '../shared';
+
+const cli = new Console();
 
 export const buildAppCommand = defineCommand({
   meta: {
@@ -34,14 +37,14 @@ async function runApp(args: CommandOptions): Promise<void> {
     const generatorConfig = await resolveAppGeneratorConfig(loaded.config);
     const startedAt = Date.now();
 
-    ConsoleOutput.title('ApiKit', 'app', [
+    cli.title('ApiKit', 'app', [
       { label: 'config', value: formatPath(loaded.configFilePath) },
       { label: 'output', value: generatorConfig.build.outDir },
     ]);
 
     const environments = Object.entries(loaded.config.environments);
 
-    ConsoleOutput.panel(
+    cli.panel(
       'environments',
       environments.map(([name, environment]) => ({
         label: name,
@@ -54,9 +57,9 @@ async function runApp(args: CommandOptions): Promise<void> {
       generateApp({ config: loaded.config, generatorConfig: generatorConfig }),
     );
 
-    ConsoleOutput.success(ConsoleOutput.step('app', `Generated ${generatorConfig.build.outDir}`));
-    ConsoleOutput.success(ConsoleOutput.step('done', `Completed in ${ConsoleOutput.duration(Date.now() - startedAt)}`));
-    ConsoleOutput.emptyLine();
+    cli.success(cli.step('app', `Generated ${generatorConfig.build.outDir}`));
+    cli.success(cli.step('done', `Completed in ${cli.duration(Date.now() - startedAt)}`));
+    cli.emptyLine();
   } catch (error) {
     fail('ApiKit app build failed', error);
   }

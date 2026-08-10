@@ -9,7 +9,8 @@ import {
   resolveConfiguration,
   resolveConfigurationBinding,
 } from '@internal/configuration';
-import { ConsoleOutput } from '@internal/console';
+import { Console } from '@meawkit/core/node';
+
 
 import {
   BasicAuthConfiguration,
@@ -27,6 +28,8 @@ import {
 import type { ConfigurationBinding } from '../core/configuration';
 import type { EnvironmentConfig } from '../core/environments';
 import { resolveEnvironment } from '../core/environments';
+
+const cli = new Console();
 
 // MARK: - Public
 
@@ -82,7 +85,7 @@ export async function loadApiKitContext(options: LoadApiKitContextOptions): Prom
     configurations: configurations,
   };
 
-  ConsoleOutput.success(`[ApiKit] Context created for ${environment.name} environment`);
+  cli.success(`[ApiKit] Context created for ${environment.name} environment`);
 }
 
 // MARK: - Private

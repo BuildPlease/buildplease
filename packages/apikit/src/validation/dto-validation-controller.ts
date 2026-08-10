@@ -1,4 +1,5 @@
-import type { ValidationSchemaI18nParams } from '@meawkit/core';
+import { type ValidationSchemaI18nParams, CoreSymbols } from '@meawkit/core';
+import type { Logger } from '@meawkit/core/node';
 import { inject, injectable } from 'inversify';
 import { type ZodType, z, ZodError } from 'zod';
 
@@ -6,7 +7,6 @@ import type { ApiKitController } from '@/configuration';
 import { ApiKitSymbols } from '@/di';
 import { ApiErrorFactory } from '@/error';
 import { I18nProvider } from '@/i18n';
-import type { LoggerController } from '@/logger';
 
 const LOG_PREFIX = '[ApiKit:Validation]';
 
@@ -74,8 +74,8 @@ export class DtoValidationControllerImpl implements DtoValidationController {
   constructor(
     @inject(ApiKitSymbols.DI.Configuration.Controller)
     private configuration: ApiKitController,
-    @inject(ApiKitSymbols.DI.Logger.Controller)
-    private logger: LoggerController,
+    @inject(CoreSymbols.DI.Logger)
+    private logger: Logger,
   ) {}
 
   public validate<Output>(schema: ZodType<Output, any, any>, data: unknown): Output {

@@ -1,3 +1,5 @@
+import { CoreSymbols } from '@meawkit/core';
+import { type Logger, LogFlag } from '@meawkit/core/node';
 import Fastify, { type FastifyBaseLogger, type FastifyInstance, LogController } from 'fastify';
 import { inject, injectable } from 'inversify';
 
@@ -5,7 +7,7 @@ import type { ApiKitController } from '@/configuration';
 import { ApiKitSymbols } from '@/di';
 import { ApiError, ApiErrorFactory } from '@/error';
 import type { I18nController } from '@/i18n';
-import { type LoggerController, LogFlag } from '@/logger';
+import { RequestLogMetadata } from '@/request';
 
 import { FastifyPlugins } from './plugins';
 
@@ -15,7 +17,7 @@ const LOG_PREFIX = '[Server]';
 
 export interface ServerPluginBaseOptions {
   i18nController: I18nController;
-  loggerController: LoggerController;
+  logger: Logger;
   apikitController: ApiKitController;
 }
 
@@ -39,8 +41,8 @@ export class ServerControllerImpl implements ServerController {
   constructor(
     @inject(ApiKitSymbols.DI.I18n.Controller)
     private i18n: I18nController,
-    @inject(ApiKitSymbols.DI.Logger.Controller)
-    private logger: LoggerController,
+    @inject(CoreSymbols.DI.Logger)
+    private logger: Logger,
     @inject(ApiKitSymbols.DI.Configuration.Controller)
     private configuration: ApiKitController,
   ) {
@@ -69,7 +71,7 @@ export class ServerControllerImpl implements ServerController {
   public async preparePlugins(externalHook: ServerPluginExternalHook = async () => {}): Promise<void> {
     const options: ServerPluginOptions = {
       i18nController: this.i18n,
-      loggerController: this.logger,
+      logger: this.logger,
       apikitController: this.configuration,
     };
 
@@ -167,7 +169,7 @@ export class ServerControllerImpl implements ServerController {
         case isInternalError: {
           this.logger.error(`${LOG_PREFIX} Internal Server Error`, {
             flag: LogFlag.Important,
-            metadata: { requestId: request.metadata.requestId },
+            metadata: new RequestLogMetadata({ requestId: request.metadata.requestId }),
             error: error,
           });
 

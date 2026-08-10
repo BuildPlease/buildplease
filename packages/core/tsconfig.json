@@ -12,9 +12,11 @@
       "@internal/*": ["./src-internal/*"],
       "@node": ["./src-node/index.ts"],
       "@node/*": ["./src-node/*"],
+      "@node-test": ["./src-node-test/index.ts"],
+      "@node-test/*": ["./src-node-test/*"],
       "@test/*": ["./test/*"]
     }
   },
-  "include": ["src", "src-node", "src-internal", "test", "tsdown.config.ts"],
+  "include": ["src", "src-node", "src-node-test", "src-internal", "test", "tsdown.config.ts"],
   "exclude": ["node_modules", "dist"]
 }

@@ -1,9 +1,11 @@
 import { readdir, rm } from 'node:fs/promises';
 import path from 'node:path';
 
-import { consola } from 'consola';
+import { Console } from '@meawkit/core/node';
 
 import { runExecutable } from './run-bin';
+
+const cli = new Console();
 
 const ignoredDirectories = new Set(['.git']);
 
@@ -27,7 +29,7 @@ function formatPlan(options: CleanDeepOptions): string {
 }
 
 function logPlan(options: CleanDeepOptions): void {
-  consola.info(formatPlan(options));
+  cli.info(formatPlan(options));
 }
 
 async function findNodeModulesDirectories(directory: string): Promise<readonly string[]> {
@@ -65,41 +67,41 @@ async function removeNodeModules(): Promise<void> {
     await rm(directory, { recursive: true, force: true });
   }
 
-  consola.success(`Removed node_modules directories: ${directories.length}`);
+  cli.success(`Removed node_modules directories: ${directories.length}`);
 }
 
 async function removeLockFileIfNeeded(clearLock: boolean): Promise<void> {
   if (!clearLock) {
-    consola.info('Skipped pnpm-lock.yaml removal');
+    cli.info('Skipped pnpm-lock.yaml removal');
     return;
   }
 
   const lockPath = path.join(process.cwd(), 'pnpm-lock.yaml');
   await rm(lockPath, { force: true });
-  consola.success('Removed pnpm-lock.yaml');
+  cli.success('Removed pnpm-lock.yaml');
 }
 
 async function clearPnpmCacheIfNeeded(clearCache: boolean): Promise<void> {
   if (!clearCache) {
-    consola.info('Skipped PNPM cache clear');
+    cli.info('Skipped PNPM cache clear');
     return;
   }
 
-  consola.start('Clearing PNPM store and cache');
+  cli.start('Clearing PNPM store and cache');
   await runExecutable(pnpmCommand(), ['store', 'prune', '--force']);
   await runExecutable(pnpmCommand(), ['cache', 'delete']);
 }
 
 export async function cleanDeep(options: CleanDeepOptions): Promise<void> {
   logPlan(options);
-  consola.start('Starting clean-deep');
+  cli.start('Starting clean-deep');
 
   await removeNodeModules();
   await removeLockFileIfNeeded(options.clearLock);
   await clearPnpmCacheIfNeeded(options.clearCache);
 
-  consola.start('Installing dependencies');
+  cli.start('Installing dependencies');
   await runExecutable(pnpmCommand(), ['install']);
 
-  consola.success('clean-deep complete');
+  cli.success('clean-deep complete');
 }

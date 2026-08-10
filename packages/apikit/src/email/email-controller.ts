@@ -2,6 +2,8 @@ import { existsSync } from 'node:fs';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 
+import { CoreSymbols } from '@meawkit/core';
+import type { Logger } from '@meawkit/core/node';
 import ejs from 'ejs';
 import { inject, injectable } from 'inversify';
 import nodemailer from 'nodemailer';
@@ -9,7 +11,6 @@ import nodemailer from 'nodemailer';
 import type { ApiKitController, EmailConfig } from '@/configuration';
 import { ApiKitSymbols } from '@/di';
 import type { EmailTemplate } from '@/email';
-import type { LoggerController } from '@/logger';
 
 const LOG_PREFIX = '[Email]';
 
@@ -36,8 +37,8 @@ export class EmailControllerImpl implements EmailController {
   constructor(
     @inject(ApiKitSymbols.DI.Configuration.Controller)
     private readonly configuration: ApiKitController,
-    @inject(ApiKitSymbols.DI.Logger.Controller)
-    private readonly logger: LoggerController,
+    @inject(CoreSymbols.DI.Logger)
+    private readonly logger: Logger,
   ) {
     this.isEnabled = this.configuration.email.enabled;
     this.smtpConfig = makeSmtpConfig(this.configuration.email);

@@ -1,9 +1,10 @@
+import { CoreSymbols } from '@meawkit/core';
+import type { Logger } from '@meawkit/core/node';
 import type { FastifyReply, FastifyRequest } from 'fastify';
 import { inject, injectable } from 'inversify';
 
-import { ApiKitSymbols } from '@/di';
 import { type FileHttpResponse, type HttpResponse, type JSONHttpResponse, HttpHeaders, ResponseType } from '@/http';
-import type { LoggerController } from '@/logger';
+import { RequestLogMetadata } from '@/request';
 
 const LOG_PREFIX = '[ApiKit:Response]';
 
@@ -14,8 +15,8 @@ export interface ResponseController {
 @injectable()
 export class ResponseControllerImpl implements ResponseController {
   constructor(
-    @inject(ApiKitSymbols.DI.Logger.Controller)
-    private logger: LoggerController,
+    @inject(CoreSymbols.DI.Logger)
+    private logger: Logger,
   ) {}
 
   async sendResponse(request: FastifyRequest, reply: FastifyReply, response: HttpResponse): Promise<void> {
@@ -57,7 +58,10 @@ export class ResponseControllerImpl implements ResponseController {
       }
     } catch (error) {
       const requestId = request.metadata.requestId;
-      this.logger.error(`${LOG_PREFIX} File response failed`, { error: error, metadata: { requestId: requestId } });
+      this.logger.error(`${LOG_PREFIX} File response failed`, {
+        error: error,
+        metadata: new RequestLogMetadata({ requestId }),
+      });
 
       throw error;
     }

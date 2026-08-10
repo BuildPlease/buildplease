@@ -50,10 +50,6 @@ const Image = {
   NormalizationController: Symbol.for(`${prefix}.Image.NormalizationController`),
 };
 
-const Logger = {
-  Controller: Symbol.for(`${prefix}.Logger.Controller`),
-};
-
 const Server = {
   Controller: Symbol.for(`${prefix}.Server.Controller`),
   RequestController: Symbol.for(`${prefix}.Server.RequestController`),
@@ -77,7 +73,6 @@ export const ApiKitSymbols = {
     Formatter,
     Generator,
     Image,
-    Logger,
     Server,
     Security,
   },

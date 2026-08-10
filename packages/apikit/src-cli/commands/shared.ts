@@ -1,6 +1,8 @@
 import path from 'node:path';
 
-import { ConsoleOutput } from '@internal/console';
+import { Console } from '@meawkit/core/node';
+
+const cli = new Console();
 
 export interface CommandOptions {
   readonly dir?: string;
@@ -44,8 +46,8 @@ export async function runInDirectory<T>(dir: string, task: () => Promise<T>): Pr
 }
 
 export function fail(title: string, error: unknown): never {
-  ConsoleOutput.error(title);
-  ConsoleOutput.error(error instanceof Error ? error.message : String(error));
+  cli.error(title);
+  cli.error(error instanceof Error ? error.message : String(error));
 
   process.exit(1);
 }
