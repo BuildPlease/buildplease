@@ -1,4 +1,4 @@
-import { withTestRequestScope } from '@test/utils/request-scope';
+import { withTestRequestScope } from '@node-test/request/request-scope';
 import { describe, expect, it } from 'vitest';
 
 import { ApiError } from '@/error/api-error';

@@ -7,7 +7,6 @@ import type { Assembly, AssemblyContainer } from '@meawkit/core';
 import { ApiKitSymbols } from '@/di';
 import type { NotificationController } from '@/notification';
 
-
 export class NotificationAssembly implements Assembly {
   public assemble(container: AssemblyContainer): void {
     this.assembleChannelControllers(container);

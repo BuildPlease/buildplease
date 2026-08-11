@@ -1,6 +1,6 @@
 import type { RequestMetadata } from '@/request/request-metadata';
 
-export function makeTestRequestMetadata(overrides: Partial<RequestMetadata> = {}): RequestMetadata {
+export function makeRequestMetadataFixture(overrides: Partial<RequestMetadata> = {}): RequestMetadata {
   return {
     requestId: 'test-request-id',
     method: 'GET',

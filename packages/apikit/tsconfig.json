@@ -12,6 +12,7 @@
       "@cli/*": ["./src-cli/*"],
       "@internal/*": ["./src-internal/*"],
       "@i18n/*": ["./.apikit-i18n/*"],
+      "@node-test/*": ["./src-node-test/*"],
       "@test/*": ["./test/*"]
     }
   },
@@ -19,6 +20,7 @@
     "src",
     "src-cli",
     "src-internal",
+    "src-node-test",
     ".apikit-i18n",
     "types",
     "test",

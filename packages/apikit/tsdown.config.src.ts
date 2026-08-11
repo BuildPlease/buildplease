@@ -41,4 +41,11 @@ export default defineConfig([
     outDir: 'dist/src/i18n',
     clean: false,
   },
+  // MARK: - Node test entry
+  {
+    ...baseConfig,
+    entry: './src-node-test/index.ts',
+    outDir: 'dist/src-node-test',
+    clean: false,
+  },
 ]);
