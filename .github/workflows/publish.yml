@@ -5,6 +5,7 @@ on:
 
 jobs:
   publish:
+    if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-22.04
 
     strategy:
@@ -53,22 +54,22 @@ jobs:
       - name: Test packages
         run: pnpm run test
 
-      # MARK: - Publish (Lerna)
+      # MARK: - Publish Packages
       - name: Publish packages
-        run: npx lerna publish from-package --yes --summary-file ./lerna-publish-summary.json
+        run: pnpm -r publish --no-git-checks --report-summary
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # MARK: - Git Tags
       - name: Create git tags
         run: |
-          SUMMARY_FILE="./lerna-publish-summary.json"
+          SUMMARY_FILE="./pnpm-publish-summary.json"
 
           if [ ! -f "$SUMMARY_FILE" ]; then
             exit 0
           fi
 
-          PACKAGES=$(jq -r '.[] | "\(.packageName)@\(.version)"' "$SUMMARY_FILE")
+          PACKAGES=$(jq -r '.publishedPackages[] | "\(.name)@\(.version)"' "$SUMMARY_FILE")
 
           for PACKAGE in $PACKAGES; do
             if git rev-parse "$PACKAGE" >/dev/null 2>&1; then

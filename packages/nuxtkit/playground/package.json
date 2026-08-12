@@ -6,16 +6,18 @@
     "build": "nuxi build",
     "clean": "nuxi cleanup",
     "dev": "nuxi dev",
-    "generate": "nuxi generate"
+    "generate": "nuxi generate",
+    "typecheck": "vue-tsc --noEmit"
   },
   "dependencies": {
-    "zod": "4.4.3"
+    "zod": "catalog:"
   },
   "devDependencies": {
     "@iconify-json/lucide": "1.2.120",
     "@meawkit/nuxtkit": "workspace:^",
-    "@nuxt/ui": "4.10.0",
-    "@nuxtjs/i18n": "10.5.0",
-    "nuxt": "4.5.1"
+    "@nuxt/ui": "catalog:",
+    "@nuxtjs/i18n": "catalog:",
+    "nuxt": "catalog:",
+    "vue-tsc": "catalog:"
   }
 }

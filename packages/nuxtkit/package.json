@@ -31,12 +31,11 @@
     "prepack": "nuxt-module-build build",
     "test": "vitest run",
     "test:watch": "vitest watch",
-    "typecheck": "vue-tsc --noEmit && cd playground && vue-tsc --noEmit"
+    "typecheck": "vue-tsc --noEmit"
   },
   "dependencies": {
     "@meawkit/webkit": "workspace:^",
     "@nuxt/kit": "4.5.1",
-    "consola": "3.4.2",
     "defu": "6.1.7"
   },
   "devDependencies": {
@@ -44,20 +43,17 @@
     "@nuxt/devtools": "3.3.1",
     "@nuxt/module-builder": "1.0.3",
     "@nuxt/schema": "4.5.1",
-    "nuxt": "4.5.1",
+    "nuxt": "catalog:",
     "unbuild": "3.6.1",
-    "vue-tsc": "3.3.8"
+    "vue-tsc": "catalog:"
   },
   "peerDependencies": {
-    "@nuxt/ui": "^4.10.0",
-    "@nuxtjs/i18n": "^10.5.0",
-    "inversify": "^8.2.3",
-    "reflect-metadata": "^0.2.2",
-    "vue-i18n": "^11.4.8",
-    "zod": "^4.4.3"
-  },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
+    "@nuxt/ui": "catalog:",
+    "@nuxtjs/i18n": "catalog:",
+    "inversify": "catalog:",
+    "reflect-metadata": "catalog:",
+    "vue-i18n": "11.4.8",
+    "zod": "catalog:"
   },
   "unbuild": {
     "failOnWarn": false

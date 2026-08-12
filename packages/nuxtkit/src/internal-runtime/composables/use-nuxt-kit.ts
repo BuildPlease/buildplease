@@ -1,6 +1,4 @@
 import { isObject } from '@meawkit/webkit';
-import { type ConsolaInstance, createConsola } from 'consola';
-import { colors } from 'consola/utils';
 
 import { isCSR, isSSR, useRuntimeConfig } from '#imports';
 import { MODULE_NAME, MODULE_SYMBOL_NAME } from '#internal-shared';
@@ -26,65 +24,44 @@ function makeSymbol(key: string): symbol {
 
 // MARK: - Logger
 
-type ConsolaLogObject = Parameters<ConsolaInstance['log']>[0];
-type LoggerOptions = { force?: boolean } & Partial<ConsolaLogObject>;
-
-let sharedConsola: ConsolaInstance | null = null;
-
-function getConsola() {
-  if (sharedConsola) return sharedConsola;
-
-  sharedConsola = createConsola({
-    formatOptions: { colors: true },
-  }).withTag(MODULE_NAME);
-
-  return sharedConsola;
-}
+type LoggerMethod = 'log' | 'info' | 'warn' | 'error' | 'debug';
+type LoggerOptions = { force?: boolean };
 
 export class Logger {
-  private isDebugEnabled: boolean;
-  private consola: ConsolaInstance;
+  public constructor(private readonly isDebugEnabled: boolean) {}
 
-  constructor(isDebugEnabled: boolean) {
-    this.isDebugEnabled = isDebugEnabled;
-    this.consola = getConsola();
+  public log(input: unknown, options?: LoggerOptions) {
+    this.emit('log', input, options);
   }
 
-  log(input: unknown, options?: LoggerOptions) {
-    this.emit(this.consola.log, input, options);
+  public info(input: unknown, options?: LoggerOptions) {
+    this.emit('info', input, options);
   }
 
-  info(input: unknown, options?: LoggerOptions) {
-    this.emit(this.consola.info, input, options);
+  public warn(input: unknown, options?: LoggerOptions) {
+    this.emit('warn', input, options);
   }
 
-  warn(input: unknown, options?: LoggerOptions) {
-    this.emit(this.consola.warn, input, options);
+  public error(input: unknown, options?: LoggerOptions) {
+    this.emit('error', input, options);
   }
 
-  error(input: unknown, options?: LoggerOptions) {
-    this.emit(this.consola.error, input, options);
-  }
-
-  debug(input: unknown, options?: LoggerOptions) {
-    this.emit(this.consola.debug, input, options);
+  public debug(input: unknown, options?: LoggerOptions) {
+    this.emit('debug', input, options);
   }
 
   private shouldLog(options?: LoggerOptions) {
     return this.isDebugEnabled || options?.force;
   }
 
-  private emit(fn: (log: ConsolaLogObject) => void, input: unknown, options?: LoggerOptions) {
+  private emit(method: LoggerMethod, input: unknown, options?: LoggerOptions) {
     if (!this.shouldLog(options)) return;
 
-    const prefix = isSSR ? colors.magenta('[NuxtKit:SSR]') : colors.green('[NuxtKit:CSR]');
+    const scope = isSSR ? 'SSR' : 'CSR';
+    const prefix = `[${MODULE_NAME}:${scope}]`;
     const message = this.formatInput(input);
-    const { force: _force, ...consolaOptions } = options ?? {};
 
-    fn({
-      ...consolaOptions,
-      args: [`${prefix} ${message}`],
-    });
+    console[method](`${prefix} ${message}`);
   }
 
   private formatInput(input: unknown) {

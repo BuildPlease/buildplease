@@ -1,53 +1,54 @@
-# Lerna Publish Modes Cheat Sheet
+# MeawKit
 
-This table summarizes the three main `lerna publish` modes, explaining their behaviors, use cases, and drawbacks.
-
----
-
-| Mode                          | Behavior                                                                                        | Use Case                                                                                     | Drawbacks                                                                                            |
-| ----------------------------- | ----------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
-| **from-package** ✅ (Current) | Publishes only packages that have a newer version or dependencies updated in the registry.      | Ideal for automated CI/CD workflows where versions are already bumped manually.              | No Git tags are created automatically; relies on versions already set in `package.json`.             |
-| **from-git**                  | Publishes packages explicitly tagged in Git.                                                    | Suitable for scenarios where you want manual control over tagging and then publish the tags. | Requires Git tags to be pushed manually before publishing.                                           |
-| **default**                   | Runs `lerna version` internally, bumps versions, creates Git tags, and then publishes packages. | Best for simpler workflows where automatic versioning and tagging are preferred.             | Bumps all versions—even those without changes—if dependencies are linked, potentially causing drift. |
-
----
-
-## Mode Details and Commands
-
-### 1. from-package (Automated Publishing, No Tags) ✅ (Current Setup)
-
-```bash
-npx lerna publish from-package --yes
+```text
+                                ___..........__
+          _,...._           _."'_,.++8n.n8898n.`"._        _....._
+        .'       `".     _.'_.'" _.98n.68n. `"88n. `'.   ,"       `.
+       /        .   `. ,'. "  -'" __.68`""'""=._`+8.  `.'     .     `.
+      .       `   .   `.   ,d86+889" 8"""+898n, j8 9 ,"    .          \
+     :     '       .,   ,d"'"   _..d88b..__ `"868' .'  . '            :
+     :     .      .    _    ,n8""88":8"888."8.  "               '     :
+      \     , '  , . .88" ,8P'     ,d8. _   `"8n  `+.      `.   .     '
+       `.  .. .     d89' "  _..n689+^'8n88n.._ `+  . `  .  , '      ,'
+         `.  . , '  8'    .d88+"    j:""' `886n.    b`.  ' .' .   ."
+          '       , .j            ,d'8.         `  ."8.`.   `.  ':
+           .    .' n8    ,_      .f A 6.      ,..    `8b, '.   .'_
+         .' _    ,88'   :8"8    6'.d`i.`b.   d8"8     688.  ".    `'
+       ," .88  .d868  _         ,9:' `8.`8   "'  ` _  8+""      b   `,
+     _.  d8P  d'  .d :88.     .8'`j   ;+. "     n888b 8  .     ,88.   .
+    `   :68' ,8   88     `.   '   :   l `     .'   `" jb  .`   688b.   ',
+   .'  .688  6P   98  =+""`.      `   '       ,-"`+"'+88b 'b.  8689  `   '
+  ;  .'"888 .8;  ."+b. : `" ;               .: "' ; ,n  `8 q8, '88:       \
+  .   . 898  8:  :    `.`--"8.              d8`--' '   .d'  ;8  898        '
+ ,      689  9:  8._       ,68 .        .  :89    ..n88+'   89  689,' `     .
+ :     ,88'  88  `+88n  -   . .           .        " _.     6:  `868     '   '
+ , '  .68h.  68      `"    . . .        .  . .             ,8'   8P'      .   .
+ .      '88  'q.    _.f       .          .  .    '  .._,. .8"   .889        ,
+.'     `898   _8hnd8p'  ,  . ..           . .    ._   `89,8P    j"'  _   `
+ \  `   .88, `q9868' ,9      ..           . .  .   8n .8 d8'   +'   n8. ,  '
+ ,'    ,+"88n  `"8 .8'     . ..           . .       `8688P"   9'  ,d868'   .  .
+ .      . `86b.    " .       .            ..          68'      _.698689;      :
+  . '     ,889_.n8. ,  ` .   .___      ___.     .n"  `86n8b._  `8988'b      .,6
+   '       q8689'`68.   . `  `:. `.__,' .:'  ,   +   +88 `"688n  `q8 q8.     88
+   , .   '  "     `+8 n    .   `:.    .;'   . '    . ,89           "  `q,    `8
+  .   .   ,        .    + c  ,   `:.,:"        , "   d8'               d8.    :
+   . '  8n           ` , .         ::    . ' "  .  .68h.             .8'`8`.  6
+    ,    8b.__. ,  .n8688b., .    .;:._     .___nn898868n.         n868b "`   8
+     `.  `6889868n8898886888688898"' "+89n88898868868889'         688898b    .8
+      :    q68   `""+8688898P ` " ' . ` '  ' `+688988P"          d8+8P'  `. .d8
+      ,     88b.       `+88.     `   ` '     .889"'           ,.88'        .,88
+       :    '988b        "88b.._  ,_      . n8p'           .d8"'      '     689
+       '.     "888n._,      `"8"+88888n.8,88:`8 .     _ .n88P'   .  `      ;88'
+        :8.     "q888.  .            "+888P"  "+888n,8n8'"      .  .     ,d986
+        :.`8:     `88986                          `q8"           ,      :688"
+        ;.  '8,      "88b .d                        '                  ,889'
+        :..   `6n      '8988                                         b.89p
+        :. .    '8.      `88b                                        988'
+        :. .      8b       `q8.        '                     . '   .d89      '
+        . .        `8:       `86n,.       " . ,        , "        ,98P      ,
+        .. .         '6n.       +86b.        .      .         _,.n88'     .
+          .            `"8b.      'q98n.        ,     .  _..n868688'          .
+         ' . .            `"98.     `8868.       .  _.n688868898p"            d
+          . .                '88.      "688.       q89888688868"            ,86
+        mh '. .                 88.     `8898        " .889"'              .988
 ```
-
-- Checks for unpublished versions in the registry and publishes them.
-- **Tags**: No Git tags are created by this mode.
-- **Use Case**: CI/CD pipelines where versions are already manually updated.
-
----
-
-### 2. from-git (Tag-Based Publishing)
-
-```bash
-npx lerna publish from-git --yes
-```
-
-- Publishes packages that are explicitly **tagged** in Git.
-- **Tags Format**: `@scope/package@1.0.0`
-  - Example: `@meawkit/webkit@1.0.0`
-- **Use Case**: Manual control over versioning and tagging before publishing.
-
----
-
-### 3. Default Mode (Auto-Versioning + Tags)
-
-```bash
-npx lerna publish --yes
-```
-
-- Automatically **bumps versions**, **creates Git tags**, and **publishes** packages.
-- **Tags Format**: `v1.0.0` or `@scope/package@1.0.0`
-- **Use Case**: Simple workflows where automated versioning and tagging are preferred.
-- **Drawback**: May cause **version drift** if dependencies are linked.
-
----

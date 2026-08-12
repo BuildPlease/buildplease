@@ -1,8 +1,11 @@
 # Dependencies
 
-- Declare install dependencies with exact versions; do not use `^` or `~`.
+- Declare external dependencies with exact versions; do not use `^` or `~`.
+- Use the default pnpm catalog for external dependencies shared by multiple workspace projects and for repository-wide toolchain versions.
+- Keep single-owner external dependency versions in the manifest of the project that owns the usage.
+- When an external dependency is catalog-owned, reference the same catalog entry consistently from dependencies, dev dependencies, peer dependencies and optional dependencies.
 - Use the repository workspace protocol consistently for workspace-owned packages.
-- Peer dependency ranges may describe an intentional public compatibility contract.
+- Keep shared workspace registry configuration in `pnpm-workspace.yaml`; use package-level `publishConfig` only for verified package-specific publishing behavior.
 - Keep dependencies in the manifest of the project that owns the usage.
 - Use workspace overrides only for verified transitive incompatibilities or temporary workarounds.
 - Keep temporary overrides documented and remove them when upstream is fixed.

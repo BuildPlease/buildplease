@@ -61,11 +61,8 @@
     "@types/ms": "2.1.0"
   },
   "peerDependencies": {
-    "inversify": "^8.2.3",
-    "reflect-metadata": "^0.2.2",
-    "zod": "^4.4.3"
-  },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
+    "inversify": "catalog:",
+    "reflect-metadata": "catalog:",
+    "zod": "catalog:"
   }
 }

@@ -8,7 +8,7 @@
   "author": "Simon Rastislav Kovačič",
   "type": "module",
   "scripts": {
-    "build": "lerna run build",
+    "build": "turbo run build",
     "clean": "devkit run clean",
     "clean:deep": "devkit run clean-deep",
     "dep:check": "devkit run dep-check",
@@ -18,17 +18,17 @@
     "preinstall": "npx only-allow pnpm",
     "lint": "devkit run lint",
     "lint:fix": "devkit run lint-fix",
-    "test": "lerna run test --stream",
-    "typecheck": "lerna run typecheck"
+    "test": "turbo run test",
+    "typecheck": "turbo run typecheck"
   },
   "devDependencies": {
     "@meawkit/devkit": "workspace:*",
-    "@types/node": "26.1.2",
-    "lerna": "9.0.7",
-    "tsdown": "0.22.14",
-    "typescript": "6.0.3",
-    "unrun": "0.3.1",
-    "vitest": "4.1.10"
+    "@types/node": "catalog:",
+    "tsdown": "catalog:",
+    "turbo": "catalog:",
+    "typescript": "catalog:",
+    "unrun": "catalog:",
+    "vitest": "catalog:"
   },
   "packageManager": "pnpm@11.20.0"
 }
