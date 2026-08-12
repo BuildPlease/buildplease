@@ -1,11 +1,18 @@
 #!/usr/bin/env node
-import { fileURLToPath } from 'node:url';
+import path from 'node:path';
+
+import { loadPackageJSON, resolvePath } from '@meawkit/core/node';
 
 import { runMain } from '../dist/cli/index.mjs';
 
-globalThis.__apikit_cli__ = {
-  startTime: Date.now(),
-  entry: fileURLToPath(import.meta.url),
-};
+const packageRoot = resolvePath(import.meta.url, '..');
+const pkg = loadPackageJSON(path.join(packageRoot, 'package.json'));
 
-runMain();
+runMain({
+  startTime: Date.now(),
+  package: {
+    name: pkg.name.original,
+    version: pkg.version,
+  },
+  resourcesPath: path.join(packageRoot, 'resources'),
+});

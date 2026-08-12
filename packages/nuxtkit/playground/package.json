@@ -13,7 +13,7 @@
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@iconify-json/lucide": "1.2.120",
+    "@iconify-json/lucide": "1.2.123",
     "@meawkit/nuxtkit": "workspace:^",
     "@nuxt/ui": "catalog:",
     "@nuxtjs/i18n": "catalog:",

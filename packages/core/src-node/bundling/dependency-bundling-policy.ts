@@ -67,8 +67,9 @@ export type DependencyBundlingPolicy = {
    * Bundled dependencies are forced into the generated output even when the
    * bundler would normally externalize them.
    *
-   * Use this for private/internal packages or selected small runtime helpers that
-   * should not leak into the published dependency contract.
+   * Use this only for packages that would otherwise stay external but must be
+   * shipped inside the generated artifact. Imported dev dependencies already
+   * bundle by default in tsdown and do not need to be forced here.
    */
   bundle: DependencyBundlingMatcher[];
 };
@@ -80,12 +81,13 @@ export type MakeDependencyBundlingPolicyOptions = {
   /**
    * Dependency/module ids that must be bundled into the output.
    *
-   * Use this for private internal packages or selected CLI/runtime helpers that
-   * should be shipped inside the generated bundle.
+   * Use this only when manifest classification would otherwise externalize a
+   * package that must be shipped inside the generated artifact. Imported dev
+   * dependencies already bundle by default in tsdown.
    *
    * @example
    * ```ts
-   * bundle: ['@meawkit/identity']
+   * bundle: ['some-runtime-dependency']
    * ```
    */
   bundle?: readonly string[];

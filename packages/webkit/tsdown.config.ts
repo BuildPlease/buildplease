@@ -6,12 +6,10 @@ const pkg = loadPackageJSON(resolvePath(import.meta.url, './package.json'));
 
 const browserPolicy = makeDependencyBundlingPolicy(pkg, {
   includeNodeBuiltins: false,
-  bundle: ['@meawkit/identity'],
 });
 
 const nodePolicy = makeDependencyBundlingPolicy(pkg, {
   includeNodeBuiltins: true,
-  bundle: ['@meawkit/identity'],
 });
 
 export default defineConfig([
@@ -35,8 +33,7 @@ export default defineConfig([
 
     deps: {
       neverBundle: browserPolicy.external,
-      alwaysBundle: browserPolicy.bundle,
-      onlyBundle: browserPolicy.bundle,
+      onlyBundle: false,
     },
   },
 
@@ -60,7 +57,6 @@ export default defineConfig([
 
     deps: {
       neverBundle: nodePolicy.external,
-      alwaysBundle: nodePolicy.bundle,
       onlyBundle: nodePolicy.bundle,
     },
   },

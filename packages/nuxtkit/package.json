@@ -35,14 +35,14 @@
   },
   "dependencies": {
     "@meawkit/webkit": "workspace:^",
-    "@nuxt/kit": "4.5.1",
+    "@nuxt/kit": "4.5.2",
     "defu": "6.1.7"
   },
   "devDependencies": {
     "@meawkit/identity": "workspace:^",
-    "@nuxt/devtools": "3.3.1",
+    "@nuxt/devtools": "3.4.1",
     "@nuxt/module-builder": "1.0.3",
-    "@nuxt/schema": "4.5.1",
+    "@nuxt/schema": "4.5.2",
     "nuxt": "catalog:",
     "unbuild": "3.6.1",
     "vue-tsc": "catalog:"

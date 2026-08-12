@@ -1,6 +1,6 @@
 import { FrameworkIdentity } from '@meawkit/identity';
 
-const prefix = `${FrameworkIdentity.moduleName}.ApiKit.DI`;
+const prefix = `${FrameworkIdentity.name}.ApiKit.DI`;
 
 const Configuration = {
   Controller: Symbol.for(`${prefix}.Configuration.Controller`),

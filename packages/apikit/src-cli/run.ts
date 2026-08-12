@@ -1,5 +1,8 @@
 import { runMain as _runMain } from 'citty';
 
-import { main } from './main';
+import { createMain } from './main';
+import type { CliRuntime } from './runtime';
 
-export const runMain = () => _runMain(main);
+export function runMain(runtime: CliRuntime) {
+  return _runMain(createMain(runtime));
+}

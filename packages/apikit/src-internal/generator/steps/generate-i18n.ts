@@ -1,12 +1,14 @@
-import fs from 'node:fs';
+import { promises as fs } from 'node:fs';
 import path from 'node:path';
 
 import { createDirectory, createFile, ensureDirectory, resolvePath } from '@meawkit/core/node';
 
 import type { ApiKitI18nResources } from '@/configuration/i18n';
 
-import type { I18nGenerationConfig, I18nGeneratorFileEntry } from '../configuration/i18n-generator-config';
+import type { I18nGenerationConfig } from '../configuration/i18n-generator-config';
 import type { GeneratorOptions, GeneratorWriter } from '../generator-options';
+
+const LOG_PREFIX = '[ApiKit:I18n]';
 
 type MutableI18nResources = Record<string, Record<string, unknown>>;
 
@@ -18,8 +20,9 @@ type ResourceEntry = {
 export async function generateI18nModules(
   i18nConfig: I18nGenerationConfig,
   options: GeneratorOptions,
+  resourcesPath?: string,
 ): Promise<string[]> {
-  const resources = await makeResources(i18nConfig);
+  const resources = await makeResources(i18nConfig, resourcesPath);
   const referenceResource = getReferenceResource(resources, i18nConfig.defaultLanguage);
   const i18n = makeI18nTree(referenceResource, i18nConfig);
 
@@ -34,54 +37,48 @@ export async function generateI18nModules(
   return ['i18n', 'resources', 'source'];
 }
 
-async function makeResources(config: I18nGenerationConfig): Promise<MutableI18nResources> {
+async function makeResources(config: I18nGenerationConfig, resourcesPath?: string): Promise<MutableI18nResources> {
   const resources: MutableI18nResources = {};
 
   if (config.includeBuiltinResources) {
-    mergeResources(resources, await loadBuiltinResources(), 'builtin');
+    if (!resourcesPath) throw new Error(`${LOG_PREFIX} Built-in resources path is required.`);
+
+    const builtinResources = await loadBuiltinResources(resourcesPath);
+    mergeResources(resources, builtinResources, 'builtin');
   }
 
   if (config.extends) {
     mergeResources(resources, config.extends.resources, 'extends');
   }
 
-  const entries = collectResourceEntries(config);
-  const localResources = mergeResourceEntries(entries);
+  const entries = await collectResourceEntries(config);
+  const localResources = await loadResourceEntries(entries);
 
   mergeResources(resources, localResources, 'local');
 
   return resources;
 }
 
-function collectResourceEntries(config: I18nGenerationConfig): ResourceEntry[] {
-  const directoryEntries = collectDirectoryEntries(config);
+async function loadBuiltinResources(resourcesPath: string): Promise<MutableI18nResources> {
+  const directoryPath = path.join(resourcesPath, 'i18n');
+  const entries = await collectResourceDirectory(directoryPath);
+
+  return loadResourceEntries(entries);
+}
+
+async function collectResourceEntries(config: I18nGenerationConfig): Promise<ResourceEntry[]> {
+  const directoryEntries = await collectDirectoryEntries(config);
   const fileEntries = collectFileEntries(config);
 
   return [...directoryEntries, ...fileEntries].sort(compareResourceEntries);
 }
 
-async function loadBuiltinResources(): Promise<ApiKitI18nResources> {
-  const moduleName = '@meawkit/apikit/i18n';
-  const module = (await import(moduleName)) as { readonly resources?: ApiKitI18nResources };
-
-  if (!module.resources) throw new Error('[ApiKit:I18n] Built-in generated resources were not found.');
-
-  return module.resources;
-}
-
-function collectDirectoryEntries(config: I18nGenerationConfig): ResourceEntry[] {
+async function collectDirectoryEntries(config: I18nGenerationConfig): Promise<ResourceEntry[]> {
   const entries: ResourceEntry[] = [];
 
   for (const directory of config.directories) {
     const directoryPath = resolvePath(process.cwd(), directory.path);
-    const files = resolveLocalesFromDir(directoryPath);
-
-    for (const file of files) {
-      entries.push({
-        locale: file.locale,
-        path: file.path,
-      });
-    }
+    entries.push(...(await collectResourceDirectory(directoryPath)));
   }
 
   return entries;
@@ -94,27 +91,27 @@ function collectFileEntries(config: I18nGenerationConfig): ResourceEntry[] {
   }));
 }
 
-function resolveLocalesFromDir(dir: string): I18nGeneratorFileEntry[] {
-  const absolute = ensureDirectory(dir);
-  const files = fs
-    .readdirSync(absolute)
-    .filter((file) => file.endsWith('.json'))
+async function collectResourceDirectory(directoryPath: string): Promise<ResourceEntry[]> {
+  const absolute = ensureDirectory(directoryPath);
+  const files = (await fs.readdir(absolute, { withFileTypes: true }))
+    .filter((entry) => entry.isFile() && path.extname(entry.name) === '.json')
+    .map((entry) => entry.name)
     .sort();
 
-  if (!files.length) throw new Error(`[ApiKit:I18n] No .json files in ${absolute}`);
+  if (!files.length) throw new Error(`${LOG_PREFIX} No .json files in ${absolute}`);
 
   return files.map((file) => ({
-    locale: file.replace(/\.json$/, ''),
-    path: resolvePath(absolute, file),
+    locale: path.basename(file, '.json'),
+    path: path.join(absolute, file),
   }));
 }
 
-function mergeResourceEntries(entries: readonly ResourceEntry[]): MutableI18nResources {
+async function loadResourceEntries(entries: readonly ResourceEntry[]): Promise<MutableI18nResources> {
   const resources: MutableI18nResources = {};
 
   for (const entry of entries) {
     const locale = normalizeLocale(entry.locale);
-    const resource = readJson(entry.path);
+    const resource = await readJson(entry.path);
     const target = (resources[locale] ??= {});
 
     mergeObject(target, resource, locale);
@@ -151,16 +148,16 @@ function getReferenceResource(resources: MutableI18nResources, referenceLanguage
   const resource = resources[locale];
 
   if (!resource) {
-    throw new Error(`[ApiKit:I18n] No locale resources found for reference language "${referenceLanguage}".`);
+    throw new Error(`${LOG_PREFIX} No locale resources found for reference language "${referenceLanguage}".`);
   }
 
   return resource;
 }
 
-function readJson(filePath: string): Record<string, unknown> {
-  const parsed = JSON.parse(fs.readFileSync(filePath, 'utf-8')) as unknown;
+async function readJson(filePath: string): Promise<Record<string, unknown>> {
+  const parsed = JSON.parse(await fs.readFile(filePath, 'utf-8')) as unknown;
 
-  if (!isRecord(parsed)) throw new Error(`[ApiKit:I18n] Locale file must contain a JSON object: ${filePath}`);
+  if (!isRecord(parsed)) throw new Error(`${LOG_PREFIX} Locale file must contain a JSON object: ${filePath}`);
 
   return parsed;
 }
@@ -208,9 +205,9 @@ function setGeneratedValue(target: Record<string, unknown>, pathParts: string[],
     if (isLeaf) {
       const existing = cursor[part];
       if (isRecord(existing))
-        throw new Error(`[ApiKit:I18n] Cannot overwrite i18n branch with key: ${pathParts.join('.')}`);
+        throw new Error(`${LOG_PREFIX} Cannot overwrite i18n branch with key: ${pathParts.join('.')}`);
       if (typeof existing === 'string' && existing !== value)
-        throw new Error(`[ApiKit:I18n] Duplicate generated i18n key: ${pathParts.join('.')}`);
+        throw new Error(`${LOG_PREFIX} Duplicate generated i18n key: ${pathParts.join('.')}`);
 
       cursor[part] = value;
       return;
@@ -218,7 +215,7 @@ function setGeneratedValue(target: Record<string, unknown>, pathParts: string[],
 
     const existing = cursor[part];
     if (typeof existing === 'string')
-      throw new Error(`[ApiKit:I18n] Cannot overwrite i18n key with branch: ${pathParts.join('.')}`);
+      throw new Error(`${LOG_PREFIX} Cannot overwrite i18n key with branch: ${pathParts.join('.')}`);
 
     cursor = (cursor[part] ||= {}) as Record<string, unknown>;
   }

@@ -1,5 +1,5 @@
 export const FrameworkIdentity = {
+  name: 'meawkit',
   displayName: 'MeawKit',
-  moduleName: 'meawkit',
-  scopeName: '@meawkit',
+  scope: '@meawkit',
 } as const;

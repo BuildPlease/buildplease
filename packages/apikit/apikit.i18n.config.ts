@@ -7,7 +7,7 @@ export default defineApiKitI18n({
   resources: {
     directories: [
       {
-        path: resolvePath(import.meta.url, './src/i18n/locales'),
+        path: resolvePath(import.meta.url, './resources/i18n'),
       },
     ],
   },

@@ -43,7 +43,7 @@
   },
   "dependencies": {
     "@meawkit/core": "workspace:^",
-    "axios": "1.18.1"
+    "axios": "1.19.0"
   },
   "devDependencies": {
     "@meawkit/identity": "workspace:^"

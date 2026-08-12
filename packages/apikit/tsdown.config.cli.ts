@@ -8,7 +8,7 @@ const policy = makeDependencyBundlingPolicy(pkg, {
   includeNodeBuiltins: true,
   includePeers: true,
   includeDependencies: true,
-  bundle: ['@meawkit/identity', 'code-block-writer'],
+  bundle: ['code-block-writer'],
 });
 
 export default defineConfig({

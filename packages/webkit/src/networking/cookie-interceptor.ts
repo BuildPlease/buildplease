@@ -7,7 +7,7 @@ export class CookieInterceptor implements RemoteRequestInterceptor {
   order = -10;
 
   hash(): Identity {
-    return Symbol.for(`${FrameworkIdentity.scopeName}.webkit.networking.interceptor.cookie`);
+    return Symbol.for(`${FrameworkIdentity.scope}.webkit.networking.interceptor.cookie`);
   }
 
   equals(other: unknown): boolean {

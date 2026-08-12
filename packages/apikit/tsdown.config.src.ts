@@ -5,7 +5,6 @@ const pkg = loadPackageJSON(resolvePath(import.meta.url, './package.json'));
 
 const policy = makeDependencyBundlingPolicy(pkg, {
   includeNodeBuiltins: true,
-  bundle: ['@meawkit/identity'],
 });
 
 const baseConfig: UserConfig = {
@@ -23,18 +22,19 @@ const baseConfig: UserConfig = {
 
   deps: {
     neverBundle: policy.external,
-    alwaysBundle: policy.bundle,
-    onlyBundle: policy.bundle,
+    onlyBundle: false,
   },
 };
 
 export default defineConfig([
+  // MARK: - SRC entry
   {
     ...baseConfig,
     entry: './src/index.ts',
     outDir: 'dist/src',
     clean: true,
   },
+  // MARK: - I18n entry
   {
     ...baseConfig,
     entry: './src/i18n/index.ts',

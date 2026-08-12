@@ -9,12 +9,10 @@ const pkg = loadPackageJSON(resolvePath(import.meta.url, './package.json'));
 
 const neutralPolicy = makeDependencyBundlingPolicy(pkg, {
   includeNodeBuiltins: false,
-  bundle: ['@meawkit/identity'],
 });
 
 const nodePolicy = makeDependencyBundlingPolicy(pkg, {
   includeNodeBuiltins: true,
-  bundle: ['@meawkit/identity'],
 });
 
 export default defineConfig([
@@ -38,8 +36,7 @@ export default defineConfig([
 
     deps: {
       neverBundle: neutralPolicy.external,
-      alwaysBundle: neutralPolicy.bundle,
-      onlyBundle: neutralPolicy.bundle,
+      onlyBundle: false,
     },
   },
   // MARK: - Node entry
@@ -62,7 +59,6 @@ export default defineConfig([
 
     deps: {
       neverBundle: nodePolicy.external,
-      alwaysBundle: nodePolicy.bundle,
       onlyBundle: nodePolicy.bundle,
     },
   },
@@ -87,7 +83,6 @@ export default defineConfig([
 
     deps: {
       neverBundle: nodePolicy.external,
-      alwaysBundle: nodePolicy.bundle,
       onlyBundle: nodePolicy.bundle,
     },
   },

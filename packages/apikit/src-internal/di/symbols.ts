@@ -1,6 +1,6 @@
 import { FrameworkIdentity } from '@meawkit/identity';
 
-const prefix = `${FrameworkIdentity.moduleName}.ApiKit.Internal.DI`;
+const prefix = `${FrameworkIdentity.name}.ApiKit.Internal.DI`;
 
 const Notification = {
   ChannelController: Symbol.for(`${prefix}.Notification.ChannelController`),
