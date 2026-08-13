@@ -35,8 +35,8 @@ export interface NuxtKitOptions {
   errors: {
     /**
      * i18n key for a generic error.
-     * @default "meawkit.error.generic"
-     * @example "meawkit.error.generic"
+     * @default "nuxtkit.error.generic"
+     * @example "error.generic"
      */
     genericErrorKey?: string;
 
@@ -49,8 +49,8 @@ export interface NuxtKitOptions {
 
     /**
      * i18n key for an unauthorized error.
-     * @default "meawkit.error.unauthorized"
-     * @example "meawkit.error.unauthorized"
+     * @default "nuxtkit.error.unauthorized"
+     * @example "error.unauthorized"
      */
     unauthorizedKey?: string;
 
@@ -82,7 +82,7 @@ export interface ZodI18nOptions {
    *   `${keyPrefix}.size.max.exclusive`
    *   ...
    *
-   * @default "meawkit.zod"
+   * @default "nuxtkit.zod"
    * @example
    * // If your translations live under "errors.validation.zod.*":
    * keyPrefix: "errors.validation.zod"

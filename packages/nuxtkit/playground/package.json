@@ -15,6 +15,7 @@
   "devDependencies": {
     "@iconify-json/lucide": "1.2.123",
     "@meawkit/nuxtkit": "workspace:^",
+    "@meawkit/webkit": "workspace:^",
     "@nuxt/ui": "catalog:",
     "@nuxtjs/i18n": "catalog:",
     "nuxt": "catalog:",

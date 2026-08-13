@@ -34,13 +34,6 @@ export default defineConfig([
     outDir: 'dist/src',
     clean: true,
   },
-  // MARK: - I18n entry
-  {
-    ...baseConfig,
-    entry: './src/i18n/index.ts',
-    outDir: 'dist/src/i18n',
-    clean: false,
-  },
   // MARK: - Node test entry
   {
     ...baseConfig,

@@ -17,16 +17,6 @@
         "default": "./dist/src/index.cjs"
       }
     },
-    "./i18n": {
-      "import": {
-        "types": "./dist/src/i18n/index.d.mts",
-        "default": "./dist/src/i18n/index.mjs"
-      },
-      "require": {
-        "types": "./dist/src/i18n/index.d.cts",
-        "default": "./dist/src/i18n/index.cjs"
-      }
-    },
     "./node/test": {
       "import": {
         "types": "./dist/src-node-test/index.d.mts",
@@ -36,7 +26,8 @@
         "types": "./dist/src-node-test/index.d.cts",
         "default": "./dist/src-node-test/index.cjs"
       }
-    }
+    },
+    "./resources/*": "./resources/*"
   },
   "bin": {
     "apikit": "./bin/apikit.mjs"
@@ -47,12 +38,11 @@
     "resources"
   ],
   "scripts": {
-    "build": "pnpm run build:i18n && pnpm run build:cli && pnpm run build:src",
+    "build": "pnpm run build:cli && pnpm run build:src",
     "build:cli": "tsdown --config tsdown.config.cli.ts --config-loader unrun",
-    "build:i18n": "unrun src-cli/bin.ts build:i18n",
     "build:src": "tsdown --config tsdown.config.src.ts --config-loader unrun",
-    "test": "pnpm run build:i18n && vitest run",
-    "typecheck": "pnpm run build:i18n && tsc -p tsconfig.json --noEmit"
+    "test": "vitest run",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
     "@dotenvx/dotenvx": "2.21.0",

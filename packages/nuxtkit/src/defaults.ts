@@ -3,7 +3,7 @@ import type { NuxtKitOptions } from './types';
 export const DEFAULT_OPTIONS = {
   debug: false,
   zodI18n: {
-    keyPrefix: 'meawkit.zod',
+    keyPrefix: 'nuxtkit.zod',
     dateFormat: {
       day: 'numeric',
       month: 'long',
@@ -14,9 +14,9 @@ export const DEFAULT_OPTIONS = {
     prefix: '',
   },
   errors: {
-    genericErrorKey: 'meawkit.error.generic',
+    genericErrorKey: 'nuxtkit.error.generic',
     genericMessageFallback: 'Something went wrong',
-    unauthorizedKey: 'meawkit.error.unauthorized',
+    unauthorizedKey: 'nuxtkit.error.unauthorized',
     unauthorizedMessageFallback: 'Access denied.',
   },
   unauthorizedStatusCodes: [401],

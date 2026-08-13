@@ -1,0 +1,93 @@
+{
+  "common": {
+    "actions": {
+      "save": "Uložit",
+      "cancel": "Zrušit",
+      "delete": "Odstranit",
+      "confirm": "Potvrdit",
+      "close": "Zavřít",
+      "back": "Zpět",
+      "next": "Další"
+    },
+    "date_time": {
+      "relative": {
+        "today": "Dnes",
+        "tomorrow": "Zítra",
+        "yesterday": "Včera"
+      },
+      "interval": {
+        "second": {
+          "one": "sekunda",
+          "few": "sekundy",
+          "many": "sekundy",
+          "other": "sekund"
+        },
+        "minute": {
+          "one": "minuta",
+          "few": "minuty",
+          "many": "minuty",
+          "other": "minut"
+        },
+        "hour": {
+          "one": "hodina",
+          "few": "hodiny",
+          "many": "hodiny",
+          "other": "hodin"
+        },
+        "day": {
+          "one": "den",
+          "few": "dny",
+          "many": "dny",
+          "other": "dní"
+        },
+        "week": {
+          "one": "týden",
+          "few": "týdny",
+          "many": "týdny",
+          "other": "týdnů"
+        },
+        "month": {
+          "one": "měsíc",
+          "few": "měsíce",
+          "many": "měsíce",
+          "other": "měsíců"
+        },
+        "year": {
+          "one": "rok",
+          "few": "roky",
+          "many": "roky",
+          "other": "let"
+        }
+      },
+      "weekday": {
+        "monday": "Pondělí",
+        "tuesday": "Úterý",
+        "wednesday": "Středa",
+        "thursday": "Čtvrtek",
+        "friday": "Pátek",
+        "saturday": "Sobota",
+        "sunday": "Neděle"
+      },
+      "month": {
+        "january": "Leden",
+        "february": "Únor",
+        "march": "Březen",
+        "april": "Duben",
+        "may": "Květen",
+        "june": "Červen",
+        "july": "Červenec",
+        "august": "Srpen",
+        "september": "Září",
+        "october": "Říjen",
+        "november": "Listopad",
+        "december": "Prosinec"
+      }
+    },
+    "validation": {
+      "opening_hours": {
+        "time_required": "Zadejte čas otevření i zavření nebo interval odstraňte.",
+        "time_range_incomplete": "Interval je neúplný. Vyplňte čas otevření i zavření."
+      }
+    }
+  }
+}

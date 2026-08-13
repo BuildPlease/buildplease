@@ -11,17 +11,18 @@
       "@/*": ["./src/*"],
       "@cli/*": ["./src-cli/*"],
       "@internal/*": ["./src-internal/*"],
-      "@i18n/*": ["./.apikit-i18n/*"],
+      "@resources": ["./resources.config.ts"],
+
       "@node-test/*": ["./src-node-test/*"],
       "@test/*": ["./test/*"]
     }
   },
   "include": [
+    "resources.config.ts",
     "src",
     "src-cli",
     "src-internal",
     "src-node-test",
-    ".apikit-i18n",
     "types",
     "test",
     "tsdown.config.cli.ts",

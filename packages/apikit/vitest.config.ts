@@ -16,9 +16,9 @@ export default defineConfig({
       { find: /^@\/(.*)$/, replacement: `${resolve(rootDir, 'src')}/$1` },
       { find: /^@cli\/(.*)$/, replacement: `${resolve(rootDir, 'src-cli')}/$1` },
       { find: /^@internal\/(.*)$/, replacement: `${resolve(rootDir, 'src-internal')}/$1` },
-      { find: /^@i18n\/(.*)$/, replacement: `${resolve(rootDir, '.apikit-i18n')}/$1` },
       { find: /^@node-test\/(.*)$/, replacement: `${resolve(rootDir, 'src-node-test')}/$1` },
       { find: /^@test\/(.*)$/, replacement: `${resolve(rootDir, 'test')}/$1` },
+      { find: /^@resources$/, replacement: resolve(rootDir, 'resources.config.ts') },
     ],
   },
 });

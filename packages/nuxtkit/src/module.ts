@@ -5,7 +5,7 @@ import { type MODULE_HOOK_UNAUTHORIZED_NAME, MODULE_CONFIG_KEY_NAME, MODULE_NAME
 
 import { prepareContext } from './context';
 import { DEFAULT_OPTIONS } from './defaults';
-import { prepareAutoImports, prepareHooks, prepareI18nLocales, prepareRuntime, prepareRuntimeConfig } from './prepare';
+import { prepareAutoImports, prepareHooks, prepareI18n, prepareRuntime, prepareRuntimeConfig } from './prepare';
 import type { UnauthorizedHookContext } from './runtime/types';
 import type { NuxtKitOptions, NuxtKitPublicRuntimeConfig } from './types';
 
@@ -34,7 +34,7 @@ export default defineNuxtModule<ModuleOptions>({
 
     await prepareHooks(context, nuxt);
     await prepareRuntimeConfig(context, nuxt);
-    await prepareI18nLocales(context, nuxt);
+    await prepareI18n(context, nuxt);
     await prepareRuntime(context, nuxt);
     await prepareAutoImports(context, nuxt);
   },

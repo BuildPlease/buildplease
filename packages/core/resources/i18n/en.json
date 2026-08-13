@@ -1,0 +1,93 @@
+{
+  "common": {
+    "actions": {
+      "save": "Save",
+      "cancel": "Cancel",
+      "delete": "Delete",
+      "confirm": "Confirm",
+      "close": "Close",
+      "back": "Back",
+      "next": "Next"
+    },
+    "date_time": {
+      "relative": {
+        "today": "Today",
+        "tomorrow": "Tomorrow",
+        "yesterday": "Yesterday"
+      },
+      "interval": {
+        "second": {
+          "one": "second",
+          "few": "seconds",
+          "many": "seconds",
+          "other": "seconds"
+        },
+        "minute": {
+          "one": "minute",
+          "few": "minutes",
+          "many": "minutes",
+          "other": "minutes"
+        },
+        "hour": {
+          "one": "hour",
+          "few": "hours",
+          "many": "hours",
+          "other": "hours"
+        },
+        "day": {
+          "one": "day",
+          "few": "days",
+          "many": "days",
+          "other": "days"
+        },
+        "week": {
+          "one": "week",
+          "few": "weeks",
+          "many": "weeks",
+          "other": "weeks"
+        },
+        "month": {
+          "one": "month",
+          "few": "months",
+          "many": "months",
+          "other": "months"
+        },
+        "year": {
+          "one": "year",
+          "few": "years",
+          "many": "years",
+          "other": "years"
+        }
+      },
+      "weekday": {
+        "monday": "Monday",
+        "tuesday": "Tuesday",
+        "wednesday": "Wednesday",
+        "thursday": "Thursday",
+        "friday": "Friday",
+        "saturday": "Saturday",
+        "sunday": "Sunday"
+      },
+      "month": {
+        "january": "January",
+        "february": "February",
+        "march": "March",
+        "april": "April",
+        "may": "May",
+        "june": "June",
+        "july": "July",
+        "august": "August",
+        "september": "September",
+        "october": "October",
+        "november": "November",
+        "december": "December"
+      }
+    },
+    "validation": {
+      "opening_hours": {
+        "time_required": "Please specify both opening and closing time, or remove the interval.",
+        "time_range_incomplete": "This interval is incomplete. Please fill in both opening and closing time."
+      }
+    }
+  }
+}

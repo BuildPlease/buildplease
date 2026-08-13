@@ -8,7 +8,7 @@ export async function prepareRuntime(context: NuxtKitContext, nuxt: Nuxt): Promi
   const r = (p: string) => resolver.resolve(p);
 
   addPlugin({ src: r('./runtime/plugins/di'), mode: 'all', order: 0 });
-  addPlugin({ src: r('./runtime/plugins/zod-i18n'), mode: 'all', order: 1 });
+  addPlugin({ src: r('./runtime/plugins/zod-i18n'), mode: 'client', order: 1 });
 
   type Entry = Readonly<{ alias: string; path: string }>;
 

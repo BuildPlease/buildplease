@@ -10,13 +10,13 @@
     "paths": {
       "@/*": ["./src/*"],
       "@internal/*": ["./src-internal/*"],
-      "@node": ["./src-node/index.ts"],
       "@node/*": ["./src-node/*"],
-      "@node-test": ["./src-node-test/index.ts"],
+      "@resources": ["./resources.config.ts"],
+
       "@node-test/*": ["./src-node-test/*"],
       "@test/*": ["./test/*"]
     }
   },
-  "include": ["src", "src-node", "src-node-test", "src-internal", "test", "tsdown.config.ts"],
+  "include": ["src", "src-node", "src-node-test", "src-internal", "test", "tsdown.config.ts", "resources.config.ts"],
   "exclude": ["node_modules", "dist"]
 }

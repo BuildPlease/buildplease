@@ -18,6 +18,7 @@ export default defineConfig({
       { find: /^@node$/, replacement: resolve(rootDir, 'src-node/index.ts') },
       { find: /^@node\/(.*)$/, replacement: `${resolve(rootDir, 'src-node')}/$1` },
       { find: /^@test\/(.*)$/, replacement: `${resolve(rootDir, 'test')}/$1` },
+      { find: /^@resources$/, replacement: resolve(rootDir, 'resources.config.ts') },
     ],
   },
 });

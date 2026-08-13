@@ -1,4 +1,4 @@
-import { type Resolver, addComponentsDir, addImports, addImportsDir } from '@nuxt/kit';
+import { type Resolver, addComponentsDir, addImports } from '@nuxt/kit';
 import type { Nuxt } from '@nuxt/schema';
 
 import type { NuxtKitContext } from '../context';
@@ -24,11 +24,68 @@ export async function prepareComponents(context: NuxtKitContext): Promise<void> 
 }
 
 async function prepareNetworkingImports(resolver: Resolver): Promise<void> {
-  addImportsDir([resolver.resolve('./runtime/networking')]);
+  addImports([
+    {
+      name: 'LanguageInterceptor',
+      from: resolver.resolve('./runtime/networking/language-interceptor'),
+    },
+    {
+      name: 'NuxtKitRemoteResource',
+      from: resolver.resolve('./runtime/networking/nuxtkit-remote-resource'),
+    },
+    {
+      name: 'OperationQueueController',
+      from: resolver.resolve('./runtime/networking/operation-queue-controller'),
+      type: true,
+    },
+    {
+      name: 'OperationQueueControllerImpl',
+      from: resolver.resolve('./runtime/networking/operation-queue-controller'),
+    },
+    {
+      name: 'RunOptions',
+      from: resolver.resolve('./runtime/networking/operation-queue-controller'),
+      type: true,
+    },
+    {
+      name: 'PublicRemoteResource',
+      from: resolver.resolve('./runtime/networking/public-remote-resource'),
+    },
+    {
+      name: 'SecuredRemoteResource',
+      from: resolver.resolve('./runtime/networking/secured-remote-resource'),
+    },
+    {
+      name: 'SSRRequestCookiesInterceptor',
+      from: resolver.resolve('./runtime/networking/ssr-request-cookies-interceptor'),
+    },
+  ]);
 }
 
 async function prepareInfrastructureImports(resolver: Resolver): Promise<void> {
-  addImportsDir([resolver.resolve('./runtime/infrastructure')]);
+  addImports([
+    {
+      name: 'isSSR',
+      from: resolver.resolve('./runtime/infrastructure/environment'),
+    },
+    {
+      name: 'isCSR',
+      from: resolver.resolve('./runtime/infrastructure/environment'),
+    },
+    {
+      name: 'isDev',
+      from: resolver.resolve('./runtime/infrastructure/environment'),
+    },
+    {
+      name: 'isHydrating',
+      from: resolver.resolve('./runtime/infrastructure/environment'),
+    },
+    {
+      name: 'Lifecycle',
+      from: resolver.resolve('./runtime/infrastructure/lifecycle'),
+      type: true,
+    },
+  ]);
 }
 
 async function prepareArchitectureImports(resolver: Resolver): Promise<void> {

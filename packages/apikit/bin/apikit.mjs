@@ -14,5 +14,4 @@ runMain({
     name: pkg.name.original,
     version: pkg.version,
   },
-  resourcesPath: path.join(packageRoot, 'resources'),
 });

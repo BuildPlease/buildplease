@@ -4,7 +4,7 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**", ".output/**", ".nuxt/**", "playground/.nuxt/**", ".apikit-i18n/**"],
+      "outputs": ["dist/**", ".output/**", ".nuxt/**", "playground/.nuxt/**"],
     },
     "typecheck": {
       "dependsOn": ["^typecheck"],

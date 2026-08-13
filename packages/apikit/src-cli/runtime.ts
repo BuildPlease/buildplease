@@ -4,5 +4,4 @@ export interface CliRuntime {
     readonly name: string;
     readonly version: string;
   };
-  readonly resourcesPath: string;
 }

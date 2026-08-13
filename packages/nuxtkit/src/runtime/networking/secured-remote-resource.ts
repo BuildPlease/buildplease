@@ -9,14 +9,14 @@ import { useOperationQueue } from '#nuxtkit/composables';
 import { resolveI18nMessage } from '#nuxtkit/i18n';
 import { NuxtKitRemoteResource } from '#nuxtkit/networking';
 
-export class SecuredRemoteResource<Input, Output> extends NuxtKitRemoteResource<Input, Output> {
+export class SecuredRemoteResource<TInput, TOutput> extends NuxtKitRemoteResource<TInput, TOutput> {
   private readonly kit = useNuxtKit();
 
-  constructor(endpoint: RemoteEndpoint<Input, any, Output, any>) {
+  constructor(endpoint: RemoteEndpoint<TInput, any, TOutput, any>) {
     super(endpoint);
   }
 
-  override async execute(input: Input, options?: RemoteRequestConfig): Promise<Output> {
+  override async execute(input: TInput, options?: RemoteRequestConfig): Promise<TOutput> {
     const queue = useOperationQueue();
 
     return queue.run(() => super.execute(input, options), {

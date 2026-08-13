@@ -10,6 +10,7 @@ export * from './device';
 export * from './di';
 export * from './error';
 export * from './formatter';
+export * from './i18n';
 export * from './foundation';
 export * from './localization';
 export * from './model';

@@ -1,5 +1,5 @@
 {
-  "meawkit": {
+  "nuxtkit": {
     "error": {
       "generic": "Něco se pokazilo",
       "unauthorized": "Přístup odepřen."

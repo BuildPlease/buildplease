@@ -56,6 +56,6 @@
     "zod": "catalog:"
   },
   "unbuild": {
-    "failOnWarn": false
+    "failOnWarn": true
   }
 }

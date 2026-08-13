@@ -2,12 +2,11 @@ import type { ApiKitConfig } from '@/configuration';
 
 import type { AppGeneratorConfig } from './configuration';
 import { makeGeneratorOptions } from './generator-options';
-import { generateBarrel, generateBuildMetadata, generateEnvironment, generateI18nModules } from './steps';
+import { generateBarrel, generateBuildMetadata, generateEnvironment } from './steps';
 
 export interface GenerateAppInput {
   readonly config: ApiKitConfig;
   readonly generatorConfig: AppGeneratorConfig;
-  readonly resourcesPath: string;
 }
 
 export async function generateApp(input: GenerateAppInput): Promise<void> {
@@ -16,7 +15,6 @@ export async function generateApp(input: GenerateAppInput): Promise<void> {
   const generatedModules = [
     ...(await generateBuildMetadata(options)),
     ...(await generateEnvironment(input.config.environments, options)),
-    ...(await generateI18nModules(input.generatorConfig.i18n, options, input.resourcesPath)),
   ];
 
   await generateBarrel(options, generatedModules);

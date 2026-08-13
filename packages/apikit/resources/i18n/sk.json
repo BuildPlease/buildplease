@@ -38,10 +38,6 @@
     },
     "image": {
       "max_size_exceeded": "Obrázok je príliš veľký. Maximálna povolená veľkosť je {{specs.maxSize}} {{specs.unit}}."
-    },
-    "opening_hours": {
-      "time_required": "Zadajte čas otvorenia aj zatvorenia alebo interval odstráňte.",
-      "time_range_incomplete": "Interval je neúplný. Vyplňte čas otvorenia aj zatvorenia."
     }
   }
 }

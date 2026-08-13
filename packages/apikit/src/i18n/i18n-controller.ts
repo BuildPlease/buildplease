@@ -1,6 +1,5 @@
 import fs from 'node:fs';
 
-import { resources as apikitResources } from '@i18n/resources';
 import { ensureDirectory, resolvePath } from '@meawkit/core/node';
 import i18next, { type InitOptions } from 'i18next';
 import { inject, injectable } from 'inversify';
@@ -9,6 +8,7 @@ import merge from 'lodash.merge';
 import type { ApiKitController, I18nConfig, I18nFileEntry } from '@/configuration';
 import { ApiKitSymbols } from '@/di';
 
+import { ApiKitI18nResource } from './resources';
 import { normalizeLocale, splitBaseRegion } from './utils';
 
 const LOG_PREFIX = '[ApiKit:I18n]';
@@ -264,9 +264,11 @@ function makeResources(config: ResolvedI18nConfig): Record<string, any> {
 function makeBuiltinResources(config: ResolvedI18nConfig): Record<string, any> {
   const resources: Record<string, any> = {};
 
-  for (const locale of Object.keys(apikitResources).sort()) {
+  for (const locale of Object.keys(ApiKitI18nResource.resources).sort()) {
     const bucket = (resources[locale] ||= {});
-    bucket[config.defaultNamespace] = cloneResource(apikitResources[locale as keyof typeof apikitResources]);
+    bucket[config.defaultNamespace] = cloneResource(
+      ApiKitI18nResource.resources[locale as keyof typeof ApiKitI18nResource.resources],
+    );
   }
 
   return resources;

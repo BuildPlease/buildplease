@@ -2,10 +2,17 @@ import { describe, expect, it } from 'vitest';
 import { createI18n } from 'vue-i18n';
 
 import { DEFAULT_OPTIONS } from '@/src/defaults';
-import enMessages from '@/src/runtime/i18n/locales/en-US.json';
 import { resolveI18nMessage } from '@/src/runtime/i18n/resolve-message';
 
-const DEFAULT_LOCALE = 'en-US';
+const DEFAULT_LOCALE = 'en';
+const enMessages = {
+  nuxtkit: {
+    error: {
+      generic: 'Something went wrong',
+      unauthorized: 'Access denied.',
+    },
+  },
+};
 
 describe('resolveI18nMessage', () => {
   it('resolves the built-in NuxtKit translation', () => {
@@ -36,7 +43,7 @@ describe('resolveI18nMessage', () => {
     });
 
     i18n.global.mergeLocaleMessage(DEFAULT_LOCALE, {
-      meawkit: {
+      nuxtkit: {
         error: {
           generic: 'Consumer error message',
         },

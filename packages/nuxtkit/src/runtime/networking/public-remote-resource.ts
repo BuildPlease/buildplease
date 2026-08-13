@@ -4,12 +4,12 @@ import { decorate, injectable } from 'inversify';
 import { useOperationQueue } from '#nuxtkit/composables';
 import { NuxtKitRemoteResource } from '#nuxtkit/networking';
 
-export class PublicRemoteResource<Input, Output> extends NuxtKitRemoteResource<Input, Output> {
-  constructor(endpoint: RemoteEndpoint<Input, any, Output, any>) {
+export class PublicRemoteResource<TInput, TOutput> extends NuxtKitRemoteResource<TInput, TOutput> {
+  constructor(endpoint: RemoteEndpoint<TInput, any, TOutput, any>) {
     super(endpoint);
   }
 
-  override async execute(input: Input, options?: RemoteRequestConfig): Promise<Output> {
+  override async execute(input: TInput, options?: RemoteRequestConfig): Promise<TOutput> {
     const queue = useOperationQueue();
     return queue.enqueue(() => super.execute(input, options));
   }

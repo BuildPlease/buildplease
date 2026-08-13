@@ -10,8 +10,8 @@
     "paths": {
       "@/*": ["./src/*"],
       "@internal/*": ["./src-internal/*"],
-      "@node": ["./src-node/index.ts"],
       "@node/*": ["./src-node/*"],
+
       "@test/*": ["./test/*"]
     }
   },

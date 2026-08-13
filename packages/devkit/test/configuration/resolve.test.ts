@@ -14,7 +14,6 @@ describe('resolveDevKitConfig', () => {
 
     expect(config.ignore).not.toContain('**/.archicat/**');
     expect(config.ignore).not.toContain('**/.apikit-app/**');
-    expect(config.ignore).not.toContain('**/.apikit-i18n/**');
   });
 
   it('extends ignore entries from consumer config', () => {
@@ -43,7 +42,6 @@ describe('resolveDevKitConfig', () => {
 
     expect(config.clean.directories).not.toContain('.archicat');
     expect(config.clean.directories).not.toContain('.apikit-app');
-    expect(config.clean.directories).not.toContain('.apikit-i18n');
   });
 
   it('extends clean targets and directories from consumer config by default', () => {

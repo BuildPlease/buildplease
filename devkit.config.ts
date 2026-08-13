@@ -1,9 +1,9 @@
 import { defineDevKitConfig } from '@meawkit/devkit';
 
 export default defineDevKitConfig({
-  ignore: ['**/.apikit-app/**', '**/.apikit-i18n/**'],
+  ignore: ['**/.apikit-app/**'],
 
   clean: {
-    directories: ['.apikit-app', '.apikit-i18n'],
+    directories: ['.apikit-app'],
   },
 });

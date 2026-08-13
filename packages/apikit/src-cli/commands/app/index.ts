@@ -58,7 +58,6 @@ async function runApp(args: CommandOptions, runtime: CliRuntime): Promise<void> 
       generateApp({
         config: loaded.config,
         generatorConfig: generatorConfig,
-        resourcesPath: runtime.resourcesPath,
       }),
     );
 

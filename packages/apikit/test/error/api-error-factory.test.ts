@@ -2,7 +2,7 @@ import { TestErrorFactory } from '@test/fixtures/error/api-error-factory';
 import { describe, expect, it } from 'vitest';
 
 import { ApiError } from '@/error/api-error';
-import { defineErrors } from '@/error/api-error-codes';
+import { ApiErrorCodes, defineErrors } from '@/error/api-error-codes';
 import { ApiErrorFactory } from '@/error/api-error-factory';
 
 describe('ApiErrorFactory', () => {
@@ -44,14 +44,14 @@ describe('ApiErrorFactory', () => {
       Account: {
         NOT_FOUND: {
           code: 'account_not_found',
-          message: 'errors.common.not_found',
+          message: ApiErrorCodes.Common.NOT_FOUND.message,
           statusCode: 404,
         },
       },
     });
 
     expect(() => ApiErrorFactory.extend(duplicateErrors)).toThrow(
-      'Duplicate API error message key: errors.common.not_found',
+      `Duplicate API error message key: ${ApiErrorCodes.Common.NOT_FOUND.message}`,
     );
   });
 });
