@@ -61,7 +61,7 @@ catalog:
   # Dev
   '@types/node': 26.2.0
   tsdown: 0.22.14
-  turbo: 2.10.9
+  turbo: 2.10.10
   typescript: 6.0.3
   unrun: 0.3.1
   vitest: 4.1.10
