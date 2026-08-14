@@ -53,7 +53,7 @@ export default defineNuxtConfig({
     defaultLocale: DEFAULT_LOCALE_CODE,
     defaultDirection: 'ltr',
     strategy: 'prefix_except_default',
-    langDir: 'locales',
+    langDir: '../l10n',
     detectBrowserLanguage: {
       useCookie: true,
       cookieKey: 'nuxtkit_playground_i18n_redirected',

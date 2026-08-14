@@ -16,7 +16,7 @@ import {
  */
 export interface ApiErrorFactoryOptions {
   /**
-   * @description Explicit message override returned instead of resolving the error i18n key.
+   * @description Explicit message override returned instead of resolving the error L10n key.
    * @default null
    */
   overrideMessage?: string | null;
@@ -73,7 +73,7 @@ export interface ApiErrorFactory<TCodes extends ApiErrorTree> {
  * ```ts
  * export const AccountErrors = defineErrors({
  *   BLOCKED: {
- *     message: I18n.Errors.Account.Blocked,
+ *     message: L10n.Errors.Account.Blocked,
  *     code: 'account_blocked',
  *     statusCode: 403,
  *   },

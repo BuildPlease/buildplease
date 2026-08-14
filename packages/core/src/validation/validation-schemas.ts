@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { CoreI18n } from '@/i18n';
+import { CoreL10n } from '@/l10n';
 import {
   type Geometry,
   type OpeningHourInterval,
@@ -161,13 +161,13 @@ const OpeningHourIntervalSchema = z
     };
 
     if (!hasOpen && !hasClose) {
-      addIssue(CoreI18n.Core.Common.Validation.OpeningHours.TimeRequired, ['open']);
+      addIssue(CoreL10n.Core.Common.Validation.OpeningHours.TimeRequired, ['open']);
       return;
     }
 
     if (hasOpen !== hasClose) {
       const missingPath = hasOpen ? ['close'] : ['open'];
-      addIssue(CoreI18n.Core.Common.Validation.OpeningHours.TimeRangeIncomplete, missingPath);
+      addIssue(CoreL10n.Core.Common.Validation.OpeningHours.TimeRangeIncomplete, missingPath);
     }
   }) satisfies z.ZodType<OpeningHourInterval>;
 

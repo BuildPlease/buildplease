@@ -17,6 +17,6 @@
       "@test/*": ["./test/*"]
     }
   },
-  "include": ["src", "src-node", "src-node-test", "src-internal", "test", "tsdown.config.ts", "resources.config.ts"],
+  "include": ["src", "src-node", "src-node-test", "src-internal", "test", "tsdown.config.ts"],
   "exclude": ["node_modules", "dist"]
 }

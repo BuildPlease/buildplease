@@ -7,8 +7,8 @@ import merge from 'lodash.merge';
 
 import type { ApiKitController, I18nConfig, I18nFileEntry } from '@/configuration';
 import { ApiKitSymbols } from '@/di';
+import { ApiKitL10nResource } from '@/l10n';
 
-import { ApiKitI18nResource } from './resources';
 import { normalizeLocale, splitBaseRegion } from './utils';
 
 const LOG_PREFIX = '[ApiKit:I18n]';
@@ -264,10 +264,10 @@ function makeResources(config: ResolvedI18nConfig): Record<string, any> {
 function makeBuiltinResources(config: ResolvedI18nConfig): Record<string, any> {
   const resources: Record<string, any> = {};
 
-  for (const locale of Object.keys(ApiKitI18nResource.resources).sort()) {
+  for (const locale of Object.keys(ApiKitL10nResource.resources).sort()) {
     const bucket = (resources[locale] ||= {});
     bucket[config.defaultNamespace] = cloneResource(
-      ApiKitI18nResource.resources[locale as keyof typeof ApiKitI18nResource.resources],
+      ApiKitL10nResource.resources[locale as keyof typeof ApiKitL10nResource.resources],
     );
   }
 

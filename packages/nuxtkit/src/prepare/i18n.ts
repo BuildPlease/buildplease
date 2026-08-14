@@ -16,7 +16,7 @@ type ConfiguredLocale = string | LocaleObject;
  * Register NuxtKit locale resources through the Nuxt I18n module hook.
  */
 export async function prepareI18n(context: NuxtKitContext, nuxt: Nuxt): Promise<void> {
-  const langDir = context.resolver.resolve('./runtime/i18n/locales');
+  const langDir = context.resolver.resolve('./runtime/l10n/locales');
 
   nuxt.hook('i18n:registerModule', (register) => {
     const locales = resolveModuleLocales(nuxt.options.i18n?.locales ?? []);

@@ -66,7 +66,7 @@ async function writeProjectFiles(project: TemporaryConfigurationProject): Promis
   await project.writeConfig('apikit.app.config.ts', makeConfigSource());
   await writeFile(join(project.rootDir, '.env.development'), '', 'utf8');
 
-  const buildDir = join(project.rootDir, '.apikit-app');
+  const buildDir = join(project.rootDir, '.apikit');
   await mkdir(buildDir, { recursive: true });
   await writeFile(join(buildDir, 'build-metadata.ts'), makeBuildMetadataSource(), 'utf8');
 }

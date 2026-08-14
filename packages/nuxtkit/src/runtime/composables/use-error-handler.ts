@@ -31,7 +31,7 @@ export interface ErrorHandlerOptions {
  * 1. If the error is a `CanceledError`, return null.
  * 2. If `options.handle` is provided, return its result.
  * 3. If the error is a `HttpError`, return its message.
- * 4. Otherwise, resolve the configured generic i18n key and literal fallback.
+ * 4. Otherwise, resolve the configured generic L10n key and literal fallback.
  *
  * @param error - The error object to handle.
  * @param options - Optional configuration for custom handling and logging.

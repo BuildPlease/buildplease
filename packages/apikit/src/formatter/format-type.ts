@@ -17,7 +17,7 @@ import { ApiErrorFactory } from '@/error';
  * export const FormatErrors = defineErrors({
  *   UNSUPPORTED_FORMAT: {
  *     code: 'UNSUPPORTED_FORMAT',
- *     message: I18n.Errors.Format.Unsupported,
+ *     message: L10n.Errors.Format.Unsupported,
  *     statusCode: 400,
  *   },
  * });

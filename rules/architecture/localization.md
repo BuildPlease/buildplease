@@ -2,11 +2,12 @@
 
 Localization follows ownership.
 
-- Every reusable message has one authoritative owner at the lowest layer that semantically owns it.
-- Shared/reusable layers own messages reused by multiple consumers; applications own only application-specific messages.
-- Compose owned resource sets instead of copying or mirroring keys into higher layers.
+- `I18n` names the internationalization mechanism: runtime services, adapters, configuration and framework integrations such as i18next and Vue I18n.
+- `L10n` names localization content: authored locale data, typed localization resources and localization key trees.
+- Keep authored localization content under `resources/l10n` when a package owns physical locale files.
+- Shared/reusable layers own localization reused by multiple consumers.
+- Compose owned L10n sets instead of copying or mirroring keys into higher layers.
+- I18n runtime adapters consume L10n content.
 - Do not repeat product or framework identity in copy when the surrounding context already establishes it.
 - Keep locale codes and mappings explicit at the boundary that owns them.
-- Framework adapters translate localization contracts into framework runtime behavior; framework types do not leak into runtime-neutral contracts.
-- Parity tests belong to the package or module that owns a reusable resource set. Consumers do not repeat parity tests for inherited resources.
-- Keep localization keys stable and semantic; do not encode presentation layout or temporary implementation details into key names.
+- Keep localization keys stable and semantic.

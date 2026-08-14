@@ -20,7 +20,7 @@ type I18nPreload = NonNullable<InitOptions<object>['preload']>;
 
 export const ApiKitAppDefaults = {
   build: {
-    outDir: '.apikit-app',
+    outDir: '.apikit',
   },
 
   logger: {

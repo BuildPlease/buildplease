@@ -3,7 +3,7 @@
  */
 export interface ApiErrorDefinition {
   /**
-   * @description i18n key used for the public error message.
+   * @description L10n key used for the public error message.
    */
   message: string;
 

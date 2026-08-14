@@ -34,7 +34,7 @@ export interface NuxtKitOptions {
    */
   errors: {
     /**
-     * i18n key for a generic error.
+     * L10n key for a generic error.
      * @default "nuxtkit.error.generic"
      * @example "error.generic"
      */
@@ -48,7 +48,7 @@ export interface NuxtKitOptions {
     genericMessageFallback?: string;
 
     /**
-     * i18n key for an unauthorized error.
+     * L10n key for an unauthorized error.
      * @default "nuxtkit.error.unauthorized"
      * @example "error.unauthorized"
      */

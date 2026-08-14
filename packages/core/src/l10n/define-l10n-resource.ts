@@ -1,12 +1,12 @@
-import type { I18nResources } from './i18n';
+import type { L10nResources } from './l10n';
 
-type I18nDeepMerge<TLeft, TRight> =
+type L10nDeepMerge<TLeft, TRight> =
   TLeft extends Record<string, unknown>
     ? TRight extends Record<string, unknown>
       ? {
           readonly [TKey in keyof TLeft | keyof TRight]: TKey extends keyof TRight
             ? TKey extends keyof TLeft
-              ? I18nDeepMerge<TLeft[TKey], TRight[TKey]>
+              ? L10nDeepMerge<TLeft[TKey], TRight[TKey]>
               : TRight[TKey]
             : TKey extends keyof TLeft
               ? TLeft[TKey]
@@ -15,33 +15,33 @@ type I18nDeepMerge<TLeft, TRight> =
       : TRight
     : TRight;
 
-export class I18nResource<TResources extends I18nResources> {
+export class L10nResource<TResources extends L10nResources> {
   public constructor(public readonly resources: TResources) {}
 
-  public extend<const TExtension extends I18nResources>(options: {
+  public extend<const TExtension extends L10nResources>(options: {
     resources: TExtension;
-  }): I18nResource<I18nDeepMerge<TResources, TExtension>> {
+  }): L10nResource<L10nDeepMerge<TResources, TExtension>> {
     const resources = mergeResources(this.resources, options.resources);
-    return new I18nResource(resources as I18nDeepMerge<TResources, TExtension>);
+    return new L10nResource(resources as L10nDeepMerge<TResources, TExtension>);
   }
 }
 
-export function defineI18nResource<const TResources extends I18nResources>(options: {
+export function defineL10nResource<const TResources extends L10nResources>(options: {
   resources: TResources;
-}): I18nResource<TResources> {
-  return new I18nResource(options.resources);
+}): L10nResource<TResources> {
+  return new L10nResource(options.resources);
 }
 
-function mergeResources<TLeft extends I18nResources, TRight extends I18nResources>(
+function mergeResources<TLeft extends L10nResources, TRight extends L10nResources>(
   left: TLeft,
   right: TRight,
-): I18nDeepMerge<TLeft, TRight> {
+): L10nDeepMerge<TLeft, TRight> {
   const result: Record<string, Record<string, unknown>> = {};
 
   mergeResource(result, left);
   mergeResource(result, right);
 
-  return result as I18nDeepMerge<TLeft, TRight>;
+  return result as L10nDeepMerge<TLeft, TRight>;
 }
 
 function mergeResource(target: Record<string, unknown>, source: Readonly<Record<string, unknown>>): void {

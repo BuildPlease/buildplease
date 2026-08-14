@@ -1,7 +1,7 @@
 import type { ApiKitConfig } from '@/configuration';
 
 import type { AppGeneratorConfig } from './configuration';
-import { makeGeneratorOptions } from './generator-options';
+import { makeGeneratorOptions, prepareGeneratorOutput } from './generator-options';
 import { generateBarrel, generateBuildMetadata, generateEnvironment } from './steps';
 
 export interface GenerateAppInput {
@@ -11,6 +11,7 @@ export interface GenerateAppInput {
 
 export async function generateApp(input: GenerateAppInput): Promise<void> {
   const options = makeGeneratorOptions(input.generatorConfig);
+  prepareGeneratorOutput(options);
 
   const generatedModules = [
     ...(await generateBuildMetadata(options)),

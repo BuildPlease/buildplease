@@ -1,4 +1,4 @@
-import { ApiKitI18n } from '@/i18n/resources';
+import { ApiKitL10n } from '@/l10n';
 
 import { type ApiErrorDefinition, type ApiErrorTree, isApiErrorDefinition } from './api-error-definition';
 
@@ -13,7 +13,7 @@ import { type ApiErrorDefinition, type ApiErrorTree, isApiErrorDefinition } from
  * ```ts
  * export const AccountErrors = defineErrors({
  *   BLOCKED: {
- *     message: I18n.Errors.Account.Blocked,
+ *     message: L10n.Errors.Account.Blocked,
  *     code: 'account_blocked',
  *     statusCode: 403,
  *   },
@@ -29,22 +29,22 @@ export function defineErrors<T extends ApiErrorTree>(errors: T): T {
 
 export const CommonErrors = defineErrors({
   NOT_FOUND: {
-    message: ApiKitI18n.Apikit.Errors.Common.NotFound,
+    message: ApiKitL10n.Apikit.Errors.Common.NotFound,
     code: 'RESOURCE_NOT_FOUND',
     statusCode: 404,
   },
   UNKNOWN_ERROR: {
-    message: ApiKitI18n.Apikit.Errors.Common.UnknownError,
+    message: ApiKitL10n.Apikit.Errors.Common.UnknownError,
     code: 'UNKNOWN_ERROR',
     statusCode: 500,
   },
   UNABLE_TO_PROCESS_REQUEST: {
-    message: ApiKitI18n.Apikit.Errors.Common.UnableToProcessRequest,
+    message: ApiKitL10n.Apikit.Errors.Common.UnableToProcessRequest,
     code: 'UNABLE_TO_PROCESS_REQUEST',
     statusCode: 500,
   },
   RESOURCE_ALREADY_EXISTS: {
-    message: ApiKitI18n.Apikit.Errors.Common.AlreadyExists,
+    message: ApiKitL10n.Apikit.Errors.Common.AlreadyExists,
     code: 'RESOURCE_ALREADY_EXISTS',
     statusCode: 409,
   },
@@ -52,22 +52,22 @@ export const CommonErrors = defineErrors({
 
 export const ServerErrors = defineErrors({
   INTERNAL_SERVER_ERROR: {
-    message: ApiKitI18n.Apikit.Errors.Server.Internal,
+    message: ApiKitL10n.Apikit.Errors.Server.Internal,
     code: 'INTERNAL_SERVER_ERROR',
     statusCode: 500,
   },
   SERVICE_UNAVAILABLE: {
-    message: ApiKitI18n.Apikit.Errors.Server.Unavailable,
+    message: ApiKitL10n.Apikit.Errors.Server.Unavailable,
     code: 'SERVICE_UNAVAILABLE',
     statusCode: 503,
   },
   DEPENDENCY_FAILED: {
-    message: ApiKitI18n.Apikit.Errors.Server.DependencyFailed,
+    message: ApiKitL10n.Apikit.Errors.Server.DependencyFailed,
     code: 'DEPENDENCY_FAILED',
     statusCode: 424,
   },
   TIMEOUT: {
-    message: ApiKitI18n.Apikit.Errors.Server.Timeout,
+    message: ApiKitL10n.Apikit.Errors.Server.Timeout,
     code: 'TIMEOUT',
     statusCode: 504,
   },
@@ -75,7 +75,7 @@ export const ServerErrors = defineErrors({
 
 export const LimitErrors = defineErrors({
   TOO_MANY_REQUESTS: {
-    message: ApiKitI18n.Apikit.Errors.Limit.TooManyRequests,
+    message: ApiKitL10n.Apikit.Errors.Limit.TooManyRequests,
     code: 'TOO_MANY_REQUESTS',
     statusCode: 429,
   },
@@ -83,12 +83,12 @@ export const LimitErrors = defineErrors({
 
 export const AuthorizationErrors = defineErrors({
   UNAUTHORIZED: {
-    message: ApiKitI18n.Apikit.Errors.Auth.Unauthorized,
+    message: ApiKitL10n.Apikit.Errors.Auth.Unauthorized,
     code: 'UNAUTHORIZED',
     statusCode: 401,
   },
   FORBIDDEN: {
-    message: ApiKitI18n.Apikit.Errors.Auth.Forbidden,
+    message: ApiKitL10n.Apikit.Errors.Auth.Forbidden,
     code: 'FORBIDDEN',
     statusCode: 403,
   },
@@ -96,57 +96,57 @@ export const AuthorizationErrors = defineErrors({
 
 export const ValidationErrors = defineErrors({
   BAD_REQUEST: {
-    message: ApiKitI18n.Apikit.Errors.Validation.BadRequest,
+    message: ApiKitL10n.Apikit.Errors.Validation.BadRequest,
     code: 'BAD_REQUEST',
     statusCode: 400,
   },
   INVALID_JSON_SYNTAX: {
-    message: ApiKitI18n.Apikit.Errors.Validation.InvalidJsonSyntax,
+    message: ApiKitL10n.Apikit.Errors.Validation.InvalidJsonSyntax,
     code: 'JSON_SYNTAX_ERROR',
     statusCode: 400,
   },
   INVALID_PROPERTIES: {
-    message: ApiKitI18n.Apikit.Errors.Validation.InvalidProperties,
+    message: ApiKitL10n.Apikit.Errors.Validation.InvalidProperties,
     code: 'INVALID_PROPERTIES',
     statusCode: 400,
   },
   INVALID_FORMAT: {
-    message: ApiKitI18n.Apikit.Errors.Validation.InvalidFormat,
+    message: ApiKitL10n.Apikit.Errors.Validation.InvalidFormat,
     code: 'INVALID_FORMAT',
     statusCode: 400,
   },
   INVALID_DATE_FORMAT: {
-    message: ApiKitI18n.Apikit.Errors.Validation.InvalidDateFormat,
+    message: ApiKitL10n.Apikit.Errors.Validation.InvalidDateFormat,
     code: 'INVALID_DATE_FORMAT',
     statusCode: 400,
   },
   INVALID_PASSWORD: {
-    message: ApiKitI18n.Apikit.Errors.Validation.InvalidPassword,
+    message: ApiKitL10n.Apikit.Errors.Validation.InvalidPassword,
     code: 'INVALID_PASSWORD',
     statusCode: 403,
   },
   INVALID_PASSWORD_NEW_SAME_AS_OLD: {
-    message: ApiKitI18n.Apikit.Errors.Validation.InvalidPasswordNewSameAsOld,
+    message: ApiKitL10n.Apikit.Errors.Validation.InvalidPasswordNewSameAsOld,
     code: 'INVALID_PASSWORD_NEW_SAME_AS_OLD',
     statusCode: 409,
   },
   INVALID_PHONE_NUMBER_FORMAT: {
-    message: ApiKitI18n.Apikit.Errors.Validation.InvalidPhoneNumberFormat,
+    message: ApiKitL10n.Apikit.Errors.Validation.InvalidPhoneNumberFormat,
     code: 'INVALID_PHONE_NUMBER_FORMAT',
     statusCode: 400,
   },
   INVALID_PHONE_NEW_SAME_AS_OLD: {
-    message: ApiKitI18n.Apikit.Errors.Validation.InvalidPhoneNewSameAsOld,
+    message: ApiKitL10n.Apikit.Errors.Validation.InvalidPhoneNewSameAsOld,
     code: 'INVALID_PHONE_NEW_SAME_AS_OLD',
     statusCode: 409,
   },
   INVALID_EMAIL_FORMAT: {
-    message: ApiKitI18n.Apikit.Errors.Validation.InvalidEmailFormat,
+    message: ApiKitL10n.Apikit.Errors.Validation.InvalidEmailFormat,
     code: 'INVALID_EMAIL_FORMAT',
     statusCode: 400,
   },
   INVALID_EMAIL_NEW_SAME_AS_OLD: {
-    message: ApiKitI18n.Apikit.Errors.Validation.InvalidEmailNewSameAsOld,
+    message: ApiKitL10n.Apikit.Errors.Validation.InvalidEmailNewSameAsOld,
     code: 'INVALID_EMAIL_NEW_SAME_AS_OLD',
     statusCode: 409,
   },
@@ -154,12 +154,12 @@ export const ValidationErrors = defineErrors({
 
 export const FormatErrors = defineErrors({
   UNSUPPORTED_FORMAT: {
-    message: ApiKitI18n.Apikit.Errors.Format.Unsupported,
+    message: ApiKitL10n.Apikit.Errors.Format.Unsupported,
     code: 'UNSUPPORTED_FORMAT',
     statusCode: 400,
   },
   MAX_SIZE_EXCEEDED: {
-    message: ApiKitI18n.Apikit.Errors.Format.MaxSizeExceeded,
+    message: ApiKitL10n.Apikit.Errors.Format.MaxSizeExceeded,
     code: 'MAX_SIZE_EXCEEDED',
     statusCode: 413,
   },
@@ -167,7 +167,7 @@ export const FormatErrors = defineErrors({
 
 export const ImageErrors = defineErrors({
   MAX_SIZE_EXCEEDED: {
-    message: ApiKitI18n.Apikit.Errors.Image.MaxSizeExceeded,
+    message: ApiKitL10n.Apikit.Errors.Image.MaxSizeExceeded,
     code: 'IMAGE_MAX_SIZE_EXCEEDED',
     statusCode: 413,
   },

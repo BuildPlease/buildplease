@@ -1,5 +1,11 @@
-import { fileURLToPath } from 'node:url';
+import cs from './resources/l10n/cs.json';
+import en from './resources/l10n/en.json';
+import sk from './resources/l10n/sk.json';
 
 export const Resources = {
-  I18n: fileURLToPath(new URL('./resources/i18n/', import.meta.url)),
+  L10n: {
+    en: en,
+    sk: sk,
+    cs: cs,
+  },
 } as const;

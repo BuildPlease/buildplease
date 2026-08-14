@@ -31,12 +31,10 @@
         "types": "./dist/src-node/index.d.cts",
         "default": "./dist/src-node/index.cjs"
       }
-    },
-    "./resources/*": "./resources/*"
+    }
   },
   "files": [
-    "dist",
-    "resources"
+    "dist"
   ],
   "scripts": {
     "build": "tsdown --config-loader unrun",

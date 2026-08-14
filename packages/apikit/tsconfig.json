@@ -18,7 +18,6 @@
     }
   },
   "include": [
-    "resources.config.ts",
     "src",
     "src-cli",
     "src-internal",

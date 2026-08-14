@@ -6,7 +6,7 @@ import { type Assembly, coreAssembly } from '@meawkit/core';
 
 export * from '@meawkit/core';
 export * from './di';
-export * from './i18n';
+export * from './l10n';
 export * from './model';
 export * from './networking';
 

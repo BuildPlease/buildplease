@@ -5,7 +5,7 @@ import { type I18nOptions, I18nProvider } from './i18n-provider';
  */
 export interface I18nFactoryOptions {
   /**
-   * @description Explicit message override returned instead of resolving the i18n key.
+   * @description Explicit message override returned instead of resolving the L10n key.
    * @default null
    */
   overrideMessage?: string | null;
@@ -18,7 +18,7 @@ export interface I18nFactoryOptions {
 }
 
 /**
- * @description Resolves i18n keys into localized text.
+ * @description Resolves L10n keys into localized text.
  *
  * @example
  * ```ts
@@ -27,16 +27,16 @@ export interface I18nFactoryOptions {
  *
  * @example
  * ```ts
- * const message = I18nFactory.make(I18n.Errors.Common.NotFound, {
+ * const message = I18nFactory.make(L10n.Errors.Common.NotFound, {
  *   i18n: { resource: 'account' },
  * });
  * ```
  */
 export class I18nFactory {
   /**
-   * @description Resolves an i18n key into localized text.
+   * @description Resolves an L10n key into localized text.
    *
-   * @param key I18n key, for example `errors.common.not_found`.
+   * @param key L10n key, for example `errors.common.not_found`.
    * @param options Optional override or i18next options.
    * @returns Localized text from the active i18n provider.
    */
@@ -45,9 +45,9 @@ export class I18nFactory {
   }
 
   /**
-   * @description Resolves an i18n key into localized text.
+   * @description Resolves an L10n key into localized text.
    *
-   * @param key I18n key, for example `errors.common.not_found`.
+   * @param key L10n key, for example `errors.common.not_found`.
    * @param options Optional override or i18next options.
    * @returns Localized text from the active i18n provider.
    */

@@ -59,7 +59,7 @@ describe('resolveI18nMessage', () => {
     expect(message).toBe('Consumer error message');
   });
 
-  it('resolves a configured consumer i18n key', () => {
+  it('resolves a configured consumer L10n key', () => {
     const i18n = createI18n({
       legacy: false,
       locale: DEFAULT_LOCALE,

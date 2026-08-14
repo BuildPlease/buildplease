@@ -24,11 +24,13 @@ export function makeGeneratorOptions(config: GeneratorConfig): GeneratorOptions 
 
   if (outputPath === process.cwd()) throw new Error('Cannot use root directory as output path.');
 
-  removePath(outputPath, { recursive: true, force: true });
-  createDirectory(outputPath);
-
   return {
     outputPath: outputPath,
     writer: GeneratorWriter,
   };
+}
+
+export function prepareGeneratorOutput(options: GeneratorOptions): void {
+  removePath(options.outputPath, { recursive: true, force: true });
+  createDirectory(options.outputPath);
 }

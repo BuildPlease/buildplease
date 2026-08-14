@@ -19,6 +19,7 @@ export * from './formatter';
 export * from './generator';
 export * from './http';
 export * from './i18n';
+export * from './l10n';
 export * from './image';
 export * from './normalization';
 export * from './notification';
