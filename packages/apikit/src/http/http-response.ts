@@ -21,7 +21,7 @@ export class JSONHttpResponse extends HttpResponse {
   readonly responseType = ResponseType.JSON;
 
   constructor({ statusCode, data, headers }: { statusCode: number; data: any; headers?: HttpHeaders }) {
-    super({ statusCode, headers });
+    super({ statusCode: statusCode, headers: headers });
     this.data = data;
   }
 }
@@ -45,7 +45,7 @@ export class FileHttpResponse extends HttpResponse {
     headers?: HttpHeaders;
     data?: any;
   }) {
-    super({ statusCode, headers });
+    super({ statusCode: statusCode, headers: headers });
     this.filePath = filePath;
     this.shouldRender = shouldRender;
     this.data = data;

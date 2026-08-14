@@ -37,7 +37,7 @@ export async function removePathAsync(
   if (cleanOnly && stat.isDirectory()) {
     const entries = await fs.readdir(abs);
     for (const entry of entries) {
-      await fs.rm(path.join(abs, entry), { recursive, force });
+      await fs.rm(path.join(abs, entry), { recursive: recursive, force: force });
     }
     return;
   }
@@ -49,7 +49,7 @@ export async function removePathAsync(
 
   await fs.rm(abs, {
     recursive: stat.isDirectory() ? recursive : false,
-    force,
+    force: force,
     maxRetries: 3,
     retryDelay: 100,
   });

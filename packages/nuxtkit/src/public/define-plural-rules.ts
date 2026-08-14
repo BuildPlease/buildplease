@@ -142,7 +142,7 @@ export enum PluralState {
  * Get the pluralization state for a given count and locale.
  *
  * @param count - The number for which to determine the plural form.
- * @param locale - The current locale without region (e.g., 'sk', 'cs', 'en').
+ * @param locale - The current locale without region (e.g., 'sk', 'cs').
  * @returns The pluralization state (Singular, Few, Many).
  */
 export function getPluralState(count: number, locale: string): PluralState {

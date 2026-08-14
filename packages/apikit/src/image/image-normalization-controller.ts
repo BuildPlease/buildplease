@@ -28,13 +28,13 @@ export class ImageNormalizationControllerImpl implements ImageNormalizationContr
   async processBufferToBuffer(input: Buffer, options?: ImageOptions) {
     const { processed, type } = await this.transform(sharp(input), options);
     const buffer = await processed.toBuffer();
-    return { buffer, type };
+    return { buffer: buffer, type: type };
   }
 
   async processBufferToStream(input: Buffer, options?: ImageOptions) {
     const { processed, type } = await this.transform(sharp(input), options);
     const stream = this.asReadable(processed);
-    return { stream, type };
+    return { stream: stream, type: type };
   }
 
   async processStreamToBuffer(input: Readable, options?: ImageOptions) {
@@ -42,7 +42,7 @@ export class ImageNormalizationControllerImpl implements ImageNormalizationContr
     await pipelineAsync(input, image);
     const { processed, type } = await this.transform(image, options);
     const buffer = await processed.toBuffer();
-    return { buffer, type };
+    return { buffer: buffer, type: type };
   }
 
   async processStreamToStream(input: Readable, options?: ImageOptions) {
@@ -50,7 +50,7 @@ export class ImageNormalizationControllerImpl implements ImageNormalizationContr
     await pipelineAsync(input, image);
     const { processed, type } = await this.transform(image, options);
     const stream = this.asReadable(processed);
-    return { stream, type };
+    return { stream: stream, type: type };
   }
 
   // MARK: - Private
@@ -87,7 +87,7 @@ export class ImageNormalizationControllerImpl implements ImageNormalizationContr
     }
 
     const type = this.toFormatType(options.outputFormat);
-    return { processed: instance, type };
+    return { processed: instance, type: type };
   }
 
   private validateInputFormat(format: SharpFormat | undefined, allowed?: SharpFormat[]) {
@@ -192,7 +192,7 @@ export class ImageNormalizationControllerImpl implements ImageNormalizationContr
       const left = Math.max(0, Math.floor((width - cropW) / 2));
       const top = Math.max(0, Math.floor((height - cropH) / 2));
 
-      instance = instance.extract({ left, top, width: cropW, height: cropH });
+      instance = instance.extract({ left: left, top: top, width: cropW, height: cropH });
       currentWidth = cropW;
     }
 

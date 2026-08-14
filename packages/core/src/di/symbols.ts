@@ -10,7 +10,7 @@ const Logger = Symbol.for(`${prefix}.Logger`);
 
 export const CoreSymbols = {
   DI: {
-    Formatter,
-    Logger,
+    Formatter: Formatter,
+    Logger: Logger,
   },
 };

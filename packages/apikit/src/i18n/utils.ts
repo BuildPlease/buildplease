@@ -26,5 +26,5 @@ export function normalizeLocale(input?: string): string {
  */
 export function splitBaseRegion(input: string): { base: string; region?: string } {
   const [base, region] = input.split('-');
-  return { base: base || '', region };
+  return { base: base || '', region: region };
 }

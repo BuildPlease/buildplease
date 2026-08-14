@@ -3,10 +3,25 @@ import type { L10nResources } from './l10n';
 
 type L10nLocaleResource = Readonly<Record<string, unknown>>;
 
+type L10nUnionKeys<TValue> = TValue extends TValue ? keyof TValue : never;
+
+type L10nUnionValue<TValue, TKey extends PropertyKey> = TValue extends TValue
+  ? TKey extends keyof TValue
+    ? TValue[TKey]
+    : never
+  : never;
+
+type L10nChildResource<TResource, TKey extends PropertyKey> = Extract<
+  L10nUnionValue<TResource, TKey>,
+  L10nLocaleResource
+>;
+
 type L10nKeyTree<TResource, TPrefix extends string = ''> = {
-  readonly [TKey in keyof TResource & string as L10nPascalCase<TKey>]: TResource[TKey] extends Record<string, unknown>
-    ? L10nKeyTree<TResource[TKey], L10nJoin<TPrefix, TKey>>
-    : L10nJoin<TPrefix, TKey>;
+  readonly [TKey in L10nUnionKeys<TResource> & string as L10nPascalCase<TKey>]: [
+    L10nChildResource<TResource, TKey>,
+  ] extends [never]
+    ? L10nJoin<TPrefix, TKey>
+    : L10nKeyTree<L10nChildResource<TResource, TKey>, L10nJoin<TPrefix, TKey>>;
 };
 
 type L10nJoin<TPrefix extends string, TKey extends string> = TPrefix extends '' ? TKey : `${TPrefix}.${TKey}`;
@@ -20,30 +35,20 @@ type L10nPascalCase<
     : `${TCapitalizeNext extends true ? Uppercase<TCharacter> : TCharacter}${L10nPascalCase<TRest, false>}`
   : '';
 
-export function defineL10n<const TResources extends L10nResources & { readonly en: L10nLocaleResource }>(
+export function defineL10n<const TResources extends L10nResources>(
   resource: L10nResource<TResources>,
-): L10nKeyTree<TResources['en']>;
-export function defineL10n<
-  const TResources extends L10nResources,
-  const TReferenceLocale extends keyof TResources & string,
->(resource: L10nResource<TResources>, referenceLocale: TReferenceLocale): L10nKeyTree<TResources[TReferenceLocale]>;
-export function defineL10n(
-  resource: L10nResource<L10nResources>,
-  referenceLocale: string = 'en',
-): L10nKeyTree<L10nLocaleResource> {
-  const referenceResource = resource.resources[referenceLocale];
-
-  if (!referenceResource) {
-    throw new Error(`Missing L10n reference locale: ${referenceLocale}`);
-  }
-
-  return makeKeyTree(referenceResource) as L10nKeyTree<L10nLocaleResource>;
+): L10nKeyTree<TResources[keyof TResources]> {
+  return makeKeyTree(Object.values(resource.resources)) as L10nKeyTree<TResources[keyof TResources]>;
 }
 
-function makeKeyTree(resource: L10nLocaleResource, prefix: readonly string[] = []): Record<string, unknown> {
+function makeKeyTree(
+  resources: readonly L10nLocaleResource[],
+  prefix: readonly string[] = [],
+): Record<string, unknown> {
   const result: Record<string, unknown> = {};
+  const keys = new Set(resources.flatMap((resource) => Object.keys(resource)));
 
-  for (const [key, value] of Object.entries(resource)) {
+  for (const key of keys) {
     const path = [...prefix, key];
     const property = toPascalCase(key);
 
@@ -51,12 +56,8 @@ function makeKeyTree(resource: L10nLocaleResource, prefix: readonly string[] = [
       throw new Error(`Duplicate L10n key property: ${[...prefix.map(toPascalCase), property].join('.')}`);
     }
 
-    if (isRecord(value)) {
-      result[property] = makeKeyTree(value, path);
-      continue;
-    }
-
-    result[property] = path.join('.');
+    const children = resources.map((resource) => resource[key]).filter(isRecord);
+    result[property] = children.length > 0 ? makeKeyTree(children, path) : path.join('.');
   }
 
   return result;

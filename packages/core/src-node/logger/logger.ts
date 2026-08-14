@@ -160,7 +160,7 @@ export class LoggerImpl implements Logger {
     const level = this.makeGlobalLogLevel(transports);
 
     const options: PinoLoggerOptions = {
-      level,
+      level: level,
       enabled: true,
       timestamp: true,
       transport: {
@@ -192,7 +192,7 @@ export class LoggerImpl implements Logger {
 
     return {
       target: 'pino-pretty',
-      level,
+      level: level,
       options: config.pretty,
     };
   }
@@ -207,8 +207,8 @@ export class LoggerImpl implements Logger {
 
     return {
       target: 'pino/file',
-      level,
-      options: { destination },
+      level: level,
+      options: { destination: destination },
     };
   }
 

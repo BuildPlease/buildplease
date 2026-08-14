@@ -4,7 +4,7 @@ import { type RemoteRequestInterceptor, InterceptorSet } from '@/networking/remo
 
 function interceptor(name: string, order: number): RemoteRequestInterceptor {
   const item: RemoteRequestInterceptor = {
-    order,
+    order: order,
     hash: () => Symbol.for(`test.interceptor.${name}`),
     equals: (other) => other === item,
     intercept: (config) => config,

@@ -8,7 +8,7 @@ describe('RequestScope', () => {
   it('exposes request metadata inside lifecycle', () => {
     const metadata = makeRequestMetadataFixture({ requestId: 'request-1', locale: 'sk' });
 
-    RequestScope.run({ metadata }, () => {
+    RequestScope.run({ metadata: metadata }, () => {
       expect(RequestScope.metadata).toBe(metadata);
       expect(RequestScope.requestId).toBe('request-1');
       expect(RequestScope.locale).toBe('sk');
@@ -33,7 +33,7 @@ describe('RequestScope', () => {
     const secondRuntime = await import('@/request/request-scope');
     const metadata = makeRequestMetadataFixture({ requestId: 'shared-request' });
 
-    firstRuntime.RequestScope.run({ metadata }, () => {
+    firstRuntime.RequestScope.run({ metadata: metadata }, () => {
       expect(secondRuntime.RequestScope.requestId).toBe('shared-request');
     });
   });

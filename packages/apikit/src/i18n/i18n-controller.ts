@@ -102,13 +102,13 @@ export class I18nControllerImpl implements I18nController {
 
       if (!ignoreRegion && supported.has(lang)) {
         if (!bestExact || q > bestExact.q || (q === bestExact.q && idx < bestExact.idx)) {
-          bestExact = { code: lang, q, idx };
+          bestExact = { code: lang, q: q, idx: idx };
         }
       }
 
       if (supported.has(base)) {
         if (!bestBase || q > bestBase.q || (q === bestBase.q && idx < bestBase.idx)) {
-          bestBase = { code: base, q, idx };
+          bestBase = { code: base, q: q, idx: idx };
         }
       }
 

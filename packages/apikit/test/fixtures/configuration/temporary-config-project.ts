@@ -12,7 +12,7 @@ export async function makeTemporaryConfigurationProject(): Promise<TemporaryConf
   const rootDir = await mkdtemp(join(tmpdir(), 'apikit-config-'));
 
   return {
-    rootDir,
+    rootDir: rootDir,
 
     writeConfig(name, content) {
       return writeFile(join(rootDir, name), content, 'utf8');

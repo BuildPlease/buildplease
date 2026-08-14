@@ -83,7 +83,7 @@ function resolveLoggerConfiguration(input: LoggerConfigurationValue): LoggerConf
   return {
     enabled: true,
     transports: input.transports,
-    ...(request ? { request } : {}),
+    ...(request ? { request: request } : {}),
   };
 }
 

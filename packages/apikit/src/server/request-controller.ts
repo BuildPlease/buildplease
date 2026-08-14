@@ -69,13 +69,13 @@ export class RequestControllerImpl implements RequestController {
       if (error instanceof ApiError) {
         this.logger.info(`${LOG_PREFIX} Api error response`, {
           error: error,
-          metadata: new RequestLogMetadata({ requestId }),
+          metadata: new RequestLogMetadata({ requestId: requestId }),
         });
       } else {
         this.logger.error(`${LOG_PREFIX} Unexpected error`, {
           flag: LogFlag.Important,
           error: error,
-          metadata: new RequestLogMetadata({ requestId }),
+          metadata: new RequestLogMetadata({ requestId: requestId }),
         });
       }
     });

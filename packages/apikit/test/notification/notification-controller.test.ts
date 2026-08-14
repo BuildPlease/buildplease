@@ -8,7 +8,7 @@ import { type NotificationChannelRequest, NotificationChannel } from '@/notifica
 describe('NotificationController', () => {
   it('delivers every requested channel and returns per-delivery results', async () => {
     const send = vi.fn(async (): Promise<void> => {});
-    const controller = makeController([{ channel: NotificationChannel.Telegram, send }]);
+    const controller = makeController([{ channel: NotificationChannel.Telegram, send: send }]);
 
     const result = await controller.send({
       channels: [
@@ -48,7 +48,7 @@ describe('NotificationController', () => {
   it('rejects the first delivery failure when throwOnFailure is enabled', async () => {
     const error = new Error('delivery failed');
     const send = vi.fn(makeSequencedSend([error, undefined]));
-    const controller = makeController([{ channel: NotificationChannel.Telegram, send }]);
+    const controller = makeController([{ channel: NotificationChannel.Telegram, send: send }]);
 
     await expect(
       controller.send(

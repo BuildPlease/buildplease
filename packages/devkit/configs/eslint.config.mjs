@@ -38,6 +38,13 @@ const codeRules = {
 
   'no-multiple-empty-lines': ['error', { max: 1 }],
   'no-multi-spaces': ['error', { ignoreEOLComments: true }],
+  'no-restricted-syntax': [
+    'error',
+    {
+      selector: 'ObjectExpression > Property[shorthand=true]',
+      message: 'Use explicit object properties (for example, foo: foo).',
+    },
+  ],
 
   '@typescript-eslint/no-empty-object-type': 'off',
   '@typescript-eslint/no-explicit-any': 'off',
@@ -111,7 +118,7 @@ const vueConfig = {
     '@typescript-eslint': tsPlugin,
     import: importPlugin,
     'check-file': checkFile,
-    unicorn,
+    unicorn: unicorn,
   },
   rules: vueRules,
 };
@@ -127,7 +134,7 @@ const codeConfig = {
   plugins: {
     '@typescript-eslint': tsPlugin,
     import: importPlugin,
-    unicorn,
+    unicorn: unicorn,
   },
   rules: codeRules,
 };

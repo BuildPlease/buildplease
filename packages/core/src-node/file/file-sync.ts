@@ -65,7 +65,7 @@ export function removePath(
 
   if (cleanOnly && stat.isDirectory()) {
     for (const entry of fs.readdirSync(abs)) {
-      fs.rmSync(path.join(abs, entry), { recursive, force });
+      fs.rmSync(path.join(abs, entry), { recursive: recursive, force: force });
     }
     return;
   }
@@ -77,7 +77,7 @@ export function removePath(
 
   fs.rmSync(abs, {
     recursive: stat.isDirectory() ? recursive : false,
-    force,
+    force: force,
     maxRetries: 3,
     retryDelay: 100,
   });

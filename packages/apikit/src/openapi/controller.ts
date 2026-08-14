@@ -38,7 +38,7 @@ export class OpenAPISchemaControllerImpl implements OpenAPISchemaController {
     return Object.entries(contents).reduce<Record<OpenAPIMediaType, { schema: any; examples?: Record<string, any> }>>(
       (acc, [type, { schema, examples }]) => {
         acc[type as OpenAPIMediaType] = {
-          schema,
+          schema: schema,
           examples: examples ? this.constructExamples(examples) : undefined,
         };
         return acc;

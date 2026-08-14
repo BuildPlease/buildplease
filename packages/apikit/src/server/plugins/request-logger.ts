@@ -40,7 +40,7 @@ const requestLoggerPlugin: FastifyPluginAsync<ServerPluginOptions> = async (fast
     const metadata = new RequestLogMetadata(request.metadata);
 
     ignoreError(() => {
-      logger.info(`${REQUEST_LOG_PREFIX} onRequest`, { metadata });
+      logger.info(`${REQUEST_LOG_PREFIX} onRequest`, { metadata: metadata });
     });
   });
 
@@ -75,7 +75,7 @@ const requestLoggerPlugin: FastifyPluginAsync<ServerPluginOptions> = async (fast
           details: { ...details, body: safeSanitize(payload, reply.getHeaders()) },
         });
       } else {
-        logger.info(`${RESPONSE_LOG_PREFIX} onSend`, { metadata, details });
+        logger.info(`${RESPONSE_LOG_PREFIX} onSend`, { metadata: metadata, details: details });
       }
     });
 

@@ -8,8 +8,8 @@ import { depCheck, depUpdate, format, formatFix, lint, lintFix } from '../src/co
 function createPassthroughCommand(name: string, description: string, run: (args: readonly string[]) => Promise<void>) {
   return defineCommand({
     meta: {
-      name,
-      description,
+      name: name,
+      description: description,
     },
     run(context) {
       return run(normalizePassthroughArgs(context.rawArgs));
@@ -51,8 +51,8 @@ function parseCleanDeepRawArgs(rawArgs: readonly string[]): CleanDeepOptions {
   }
 
   return {
-    clearCache,
-    clearLock,
+    clearCache: clearCache,
+    clearLock: clearLock,
   };
 }
 
@@ -105,7 +105,7 @@ export const main = defineCommand({
     description: 'Shared DevKit repository hygiene toolkit.',
   },
   subCommands: {
-    run,
+    run: run,
   },
 });
 

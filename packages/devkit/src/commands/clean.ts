@@ -61,7 +61,7 @@ async function cleanProject(projectPath: string, directories: readonly string[])
     cli.log('  nothing to clean');
   }
 
-  return { deletedCount, skippedCount };
+  return { deletedCount: deletedCount, skippedCount: skippedCount };
 }
 
 export async function clean(): Promise<void> {

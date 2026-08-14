@@ -142,7 +142,7 @@ export class ServerControllerImpl implements ServerController {
       const internalError = ApiErrorFactory.make('Server.INTERNAL_SERVER_ERROR');
 
       if (this.configuration.isDebug) {
-        this.logger.debug(`${LOG_PREFIX} Error Handler:`, { error });
+        this.logger.debug(`${LOG_PREFIX} Error Handler:`, { error: error });
       }
 
       switch (true) {
@@ -216,7 +216,7 @@ export class ServerControllerImpl implements ServerController {
       }
 
       if (error) {
-        this.logger.error(`${LOG_PREFIX} 🚨 Fatal error during shutdown`, { error });
+        this.logger.error(`${LOG_PREFIX} 🚨 Fatal error during shutdown`, { error: error });
       }
 
       process.exit(error ? 1 : 0);

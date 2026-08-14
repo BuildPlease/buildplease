@@ -60,7 +60,7 @@ export class ResponseControllerImpl implements ResponseController {
       const requestId = request.metadata.requestId;
       this.logger.error(`${LOG_PREFIX} File response failed`, {
         error: error,
-        metadata: new RequestLogMetadata({ requestId }),
+        metadata: new RequestLogMetadata({ requestId: requestId }),
       });
 
       throw error;

@@ -26,6 +26,7 @@ it('rolls back the transaction when the operation throws', async () => {
 ```
 
 - Name tests after behavior, not implementation methods.
+- Test behavior at the layer that implements it; consumers test only their own behavior or integration.
 - Test success, expected failure and boundary conditions.
 - Verify interactions only when the interaction itself is the side effect being protected.
 - Prefer deterministic fixtures.

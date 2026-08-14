@@ -109,7 +109,7 @@ function makeApiErrorFactory<TCodes extends ApiErrorTree>(codes: TCodes): ApiErr
 
 function makeApiError(error: ApiErrorDefinition, options: ApiErrorFactoryOptions): ApiError {
   const { overrideMessage, details, i18n } = options;
-  const message = I18nFactory.translateKey(error.message, { overrideMessage, i18n });
+  const message = I18nFactory.translateKey(error.message, { overrideMessage: overrideMessage, i18n: i18n });
 
   return new ApiError({
     code: error.code,

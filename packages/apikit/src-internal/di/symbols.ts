@@ -8,6 +8,6 @@ const Notification = {
 
 export const InternalApiKitSymbols = {
   DI: {
-    Notification,
+    Notification: Notification,
   },
 };

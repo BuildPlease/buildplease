@@ -36,7 +36,7 @@ export function makeErrorMap(i18n: Composer): $ZodErrorMap {
           }
           if (hasSizeUnits(issue.origin)) {
             const unit = unitFor(i18n, makeKey, issue.origin, Number(issue.maximum));
-            return t(makeKey('size.exact'), { count: String(issue.maximum), unit });
+            return t(makeKey('size.exact'), { count: String(issue.maximum), unit: unit });
           }
           return t(makeKey('value.exact'), { count: String(issue.maximum) });
         }
@@ -50,7 +50,7 @@ export function makeErrorMap(i18n: Composer): $ZodErrorMap {
           const unit = unitFor(i18n, makeKey, issue.origin, Number(issue.maximum));
           return t(makeKey(issue.inclusive ? 'size.max.inclusive' : 'size.max.exclusive'), {
             count: String(issue.maximum),
-            unit,
+            unit: unit,
           });
         }
         return t(makeKey(issue.inclusive ? 'value.max.inclusive' : 'value.max.exclusive'), {
@@ -85,7 +85,7 @@ export function makeErrorMap(i18n: Composer): $ZodErrorMap {
             const unit = unitFor(i18n, makeKey, issue.origin, Number(issue.minimum));
             return t(makeKey('size.exact'), {
               count: String(issue.minimum),
-              unit,
+              unit: unit,
             });
           }
 
@@ -101,7 +101,7 @@ export function makeErrorMap(i18n: Composer): $ZodErrorMap {
 
           return t(makeKey(key), {
             count: String(issue.minimum),
-            unit,
+            unit: unit,
           });
         }
 

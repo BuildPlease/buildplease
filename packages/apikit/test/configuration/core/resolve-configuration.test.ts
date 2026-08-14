@@ -25,7 +25,7 @@ describe('resolveConfiguration', () => {
           host: 'localhost',
           port: '30100',
         },
-        { environment },
+        { environment: environment },
       ),
     ).resolves.toEqual({
       host: 'localhost',
@@ -48,7 +48,7 @@ describe('resolveConfiguration', () => {
             production: 'https://myssless.com',
           }),
         },
-        { environment },
+        { environment: environment },
       ),
     ).resolves.toEqual({
       origin: 'http://localhost:3000',
@@ -79,8 +79,8 @@ describe('resolveConfiguration', () => {
           }),
         },
         {
-          buildMetadata,
-          environment,
+          buildMetadata: buildMetadata,
+          environment: environment,
         },
       ),
     ).resolves.toEqual({
@@ -94,8 +94,8 @@ describe('resolveConfiguration', () => {
       nested: field.custom<{ readonly values: string[] }>().default({ values: [] }),
     });
 
-    const first = await resolveConfiguration(Configuration, {}, { environment });
-    const second = await resolveConfiguration(Configuration, {}, { environment });
+    const first = await resolveConfiguration(Configuration, {}, { environment: environment });
+    const second = await resolveConfiguration(Configuration, {}, { environment: environment });
 
     expect(first.items).not.toBe(second.items);
     expect(first.nested).not.toBe(second.nested);
@@ -107,8 +107,8 @@ describe('resolveConfiguration', () => {
       token: field.string(),
     });
 
-    await expect(resolveConfiguration(Configuration, from.static(undefined), { environment })).rejects.toThrow(
-      'Missing required configuration: app.required.token',
-    );
+    await expect(
+      resolveConfiguration(Configuration, from.static(undefined), { environment: environment }),
+    ).rejects.toThrow('Missing required configuration: app.required.token');
   });
 });

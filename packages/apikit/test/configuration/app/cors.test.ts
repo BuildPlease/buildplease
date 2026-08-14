@@ -9,7 +9,7 @@ describe('CorsConfiguration', () => {
   const environment = testEnvironment();
 
   it('keeps CORS disabled while resolving default options when omitted', async () => {
-    await expect(resolveConfiguration(CorsConfiguration, {}, { environment })).resolves.toEqual({
+    await expect(resolveConfiguration(CorsConfiguration, {}, { environment: environment })).resolves.toEqual({
       enabled: false,
       allowAllOrigins: false,
       includeWwwSubdomain: true,
@@ -18,7 +18,7 @@ describe('CorsConfiguration', () => {
   });
 
   it('uses framework CORS options when enabled without consumer overrides', async () => {
-    const resolved = await resolveConfiguration(CorsConfiguration, { enabled: true }, { environment });
+    const resolved = await resolveConfiguration(CorsConfiguration, { enabled: true }, { environment: environment });
 
     expect(resolved.enabled).toBe(true);
     expect(resolved.options).toEqual(ApiKitAppDefaults.cors.options);
@@ -32,15 +32,15 @@ describe('CorsConfiguration', () => {
       {
         enabled: true,
         options: {
-          origin,
+          origin: origin,
         },
       },
-      { environment },
+      { environment: environment },
     );
 
     expect(resolved.options).toEqual({
       ...ApiKitAppDefaults.cors.options,
-      origin,
+      origin: origin,
     });
   });
 
@@ -53,7 +53,7 @@ describe('CorsConfiguration', () => {
           credentials: false,
         },
       },
-      { environment },
+      { environment: environment },
     );
 
     expect(resolved.options).toEqual({

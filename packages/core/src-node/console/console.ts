@@ -37,7 +37,7 @@ export class Console {
     this.printPanel({
       title: `${product} ${command}`.trim(),
       renderedTitle: `${colors.cyan(colors.bold(product))}${command ? ` ${colors.dim(command)}` : ''}`,
-      rows,
+      rows: rows,
       formatValue: colors.green,
     });
   }
@@ -48,7 +48,7 @@ export class Console {
       renderedTitle: `${colors.cyan(colors.bold(title))}${
         badge === undefined ? '' : ` ${colors.green(String(badge))}`
       }`,
-      rows,
+      rows: rows,
       formatValue: colors.dim,
     });
   }
