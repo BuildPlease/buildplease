@@ -1,4 +1,4 @@
-import { ApiKitAppDefaults } from '@internal/configuration/app';
+import { ApiKitDefaults } from '@internal/configuration';
 
 import { type InferConfiguration, defineConfiguration, field } from '@/configuration/core';
 
@@ -26,7 +26,7 @@ export const NotificationConfiguration = defineConfiguration(
   field
     .custom<NotificationConfigurationValue>()
     .default({
-      enabled: ApiKitAppDefaults.notification.enabled,
+      enabled: ApiKitDefaults.notification.enabled,
     })
     .map(resolveNotificationConfiguration),
 );

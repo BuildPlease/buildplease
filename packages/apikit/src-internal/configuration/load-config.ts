@@ -1,4 +1,4 @@
-import type { ApiKitConfig } from '@/configuration/app';
+import type { ApiKitConfig } from '@/configuration';
 
 import { type LoadConfigFileOptions, loadConfigFile } from './load-config-file';
 

@@ -1,5 +1,5 @@
-import type { ApiKitConfig, DefineApiKitInput } from './app-config';
-import type { EnvironmentRegistry } from '../core/environments';
+import type { ApiKitConfig, DefineApiKitInput } from './config';
+import type { EnvironmentRegistry } from './core/environments';
 
 // MARK: - Public
 

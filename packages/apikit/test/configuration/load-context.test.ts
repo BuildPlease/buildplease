@@ -7,7 +7,7 @@ import {
 } from '@test/fixtures/configuration/temporary-config-project';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { loadApiKitContext } from '@/configuration/app/load-api-kit-context';
+import { loadApiKitContext } from '@/configuration/load-context';
 
 const BUILD_METADATA = {
   name: {
@@ -52,9 +52,10 @@ describe('loadApiKitContext', () => {
     project = await makeTemporaryConfigurationProject();
     await writeProjectFiles(project, 'custom.config.ts');
 
+    vi.spyOn(process, 'cwd').mockReturnValue(project.rootDir);
+
     await loadApiKitContext({
       environment: 'development',
-      dir: project.rootDir,
       config: 'custom.config.ts',
     });
 
@@ -72,7 +73,7 @@ describe('loadApiKitContext', () => {
       loadApiKitContext({
         environment: 'development',
       }),
-    ).rejects.toThrow('Run ApiKit app build first.');
+    ).rejects.toThrow('Run "apikit build:app" first.');
   });
 });
 

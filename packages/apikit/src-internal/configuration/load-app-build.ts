@@ -11,7 +11,7 @@ export async function loadAppBuild(rootDir: string, outDir: string): Promise<Bui
   const filePath = path.resolve(rootDir, outDir, APP_BUILD_ENTRY);
 
   if (!fs.existsSync(filePath)) {
-    throw new Error(`ApiKit app build "${filePath}" does not exist. Run ApiKit app build first.`);
+    throw new Error(`ApiKit build metadata "${filePath}" does not exist. Run "apikit build:app" first.`);
   }
 
   const jiti = createJiti(rootDir, {

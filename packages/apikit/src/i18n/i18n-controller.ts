@@ -23,7 +23,7 @@ export interface ParseLocaleOptions {
 }
 
 export interface I18nController {
-  /** Initializes i18next with merged built-in and app-provided translations. */
+  /** Initializes i18next with merged built-in and consumer-provided translations. */
   prepare(): Promise<void>;
 
   /**

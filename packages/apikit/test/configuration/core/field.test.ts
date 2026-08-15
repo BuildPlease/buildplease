@@ -4,11 +4,11 @@ import { field, isConfigurationField } from '@/configuration/core/field';
 
 describe('field', () => {
   it('parses and trims strings', () => {
-    expect(field.string().parse('  value  ', 'app.name')).toBe('value');
+    expect(field.string().parse('  value  ', 'example.name')).toBe('value');
   });
 
   it('rejects empty strings', () => {
-    expect(() => field.string().parse('   ', 'app.name')).toThrow('app.name must not be empty.');
+    expect(() => field.string().parse('   ', 'example.name')).toThrow('example.name must not be empty.');
   });
 
   it('parses numbers from strings', () => {
@@ -39,7 +39,7 @@ describe('field', () => {
   it('maps parsed values', () => {
     const mapped = field.string().map((value) => value.toUpperCase());
 
-    expect(mapped.parse('sample', 'app.name')).toBe('SAMPLE');
+    expect(mapped.parse('sample', 'example.name')).toBe('SAMPLE');
   });
 
   it('marks configuration fields', () => {

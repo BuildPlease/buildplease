@@ -6,9 +6,8 @@
 - Use the default pnpm catalog when the same external dependency is declared by multiple workspace projects.
 - Declare repository-wide CLI tools once in the root manifest when packages only execute them through `pnpm run`; do not duplicate those tool dependencies in child manifests.
 - Use the repository workspace protocol consistently for workspace-owned packages.
-- Keep the default pnpm isolated layout. Do not enable `shamefullyHoist`; add a narrow compatibility hoist only for a verified tool requirement.
 - Use workspace overrides only for verified transitive incompatibilities or temporary workarounds, document them, and remove them when upstream is fixed.
-- Keep shared workspace registry configuration in `pnpm-workspace.yaml`; use package-level `publishConfig` only for verified package-specific publishing behavior.
+- Keep shared workspace registry configuration in `pnpm-workspace.yaml`
 - Consume packages through their declared public exports.
 - Treat the lockfile as generated output and update it through pnpm.
 

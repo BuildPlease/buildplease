@@ -11,7 +11,7 @@ import {
 } from '@internal/configuration';
 import { Console } from '@meawkit/core/node';
 
-import type { ApiKitConfig } from './app-config';
+import type { ApiKitConfig } from './config';
 import {
   BasicAuthConfiguration,
   BuildConfiguration,
@@ -26,9 +26,9 @@ import {
   ServerConfiguration,
   StaticFilesConfiguration,
 } from './configs';
-import type { ConfigurationBinding } from '../core/configuration';
-import type { EnvironmentConfig } from '../core/environments';
-import { resolveEnvironment } from '../core/environments';
+import type { ConfigurationBinding } from './core/configuration';
+import type { EnvironmentConfig } from './core/environments';
+import { resolveEnvironment } from './core/environments';
 
 const cli = new Console();
 
@@ -36,13 +36,11 @@ const cli = new Console();
 
 export interface LoadApiKitContextOptions {
   readonly environment: string;
-  readonly dir?: string;
   readonly config?: string;
 }
 
 export async function loadApiKitContext(options: LoadApiKitContextOptions): Promise<void> {
   const loaded = await loadApiKitConfig({
-    dir: options.dir,
     config: options.config,
   });
   const buildConfiguration = await resolveConfiguration(BuildConfiguration, loaded.config.build);

@@ -1,4 +1,4 @@
-import { ApiKitAppDefaults } from '@internal/configuration/app';
+import { ApiKitDefaults } from '@internal/configuration';
 
 import { type InferConfiguration, defineConfiguration, field } from '@/configuration/core';
 
@@ -6,10 +6,10 @@ export type TrustProxy = boolean | string | number | string[] | ((address: strin
 
 export const ServerConfiguration = defineConfiguration('apikit.server', {
   identifier: field.string(),
-  debug: field.boolean().default(ApiKitAppDefaults.server.debug),
+  debug: field.boolean().default(ApiKitDefaults.server.debug),
   host: field.string(),
   port: field.number(),
-  trustProxy: field.custom<TrustProxy>().default(ApiKitAppDefaults.server.trustProxy),
+  trustProxy: field.custom<TrustProxy>().default(ApiKitDefaults.server.trustProxy),
 });
 
 export type ServerConfig = InferConfiguration<typeof ServerConfiguration>;

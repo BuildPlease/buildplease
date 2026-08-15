@@ -9,11 +9,11 @@ import { field } from '@/configuration/core/field';
 
 describe('defineConfiguration', () => {
   it('creates a contract with normalized key and schema', () => {
-    const Configuration = defineConfiguration(' app.feature ', {
+    const Configuration = defineConfiguration(' example.feature ', {
       name: field.string(),
     });
 
-    expect(Configuration.key).toBe('app.feature');
+    expect(Configuration.key).toBe('example.feature');
     expect(isConfigurationContract(Configuration)).toBe(true);
   });
 
@@ -22,7 +22,7 @@ describe('defineConfiguration', () => {
   });
 
   it('creates configuration bindings', () => {
-    const Configuration = defineConfiguration('app.feature', {
+    const Configuration = defineConfiguration('example.feature', {
       name: field.string(),
     });
 

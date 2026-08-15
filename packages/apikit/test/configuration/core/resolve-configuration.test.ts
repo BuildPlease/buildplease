@@ -12,7 +12,7 @@ describe('resolveConfiguration', () => {
   const environment = testEnvironment();
 
   it('resolves nested schemas and fields', async () => {
-    const Configuration = defineConfiguration('app.server', {
+    const Configuration = defineConfiguration('example.server', {
       host: field.string(),
       port: field.number(),
       secure: field.boolean().default(false),
@@ -35,7 +35,7 @@ describe('resolveConfiguration', () => {
   });
 
   it('resolves environment sources', async () => {
-    const Configuration = defineConfiguration('app.edge', {
+    const Configuration = defineConfiguration('example.edge', {
       origin: field.string(),
     });
 
@@ -56,7 +56,7 @@ describe('resolveConfiguration', () => {
   });
 
   it('resolves computed sources from context', async () => {
-    const Configuration = defineConfiguration('app.identity', {
+    const Configuration = defineConfiguration('example.identity', {
       identifier: field.string(),
     });
 
@@ -89,7 +89,7 @@ describe('resolveConfiguration', () => {
   });
 
   it('does not reuse mutable default values', async () => {
-    const Configuration = defineConfiguration('app.defaults', {
+    const Configuration = defineConfiguration('example.defaults', {
       items: field.array(field.string()).default([]),
       nested: field.custom<{ readonly values: string[] }>().default({ values: [] }),
     });
@@ -103,12 +103,12 @@ describe('resolveConfiguration', () => {
   });
 
   it('throws for missing required values', async () => {
-    const Configuration = defineConfiguration('app.required', {
+    const Configuration = defineConfiguration('example.required', {
       token: field.string(),
     });
 
     await expect(
       resolveConfiguration(Configuration, from.static(undefined), { environment: environment }),
-    ).rejects.toThrow('Missing required configuration: app.required.token');
+    ).rejects.toThrow('Missing required configuration: example.required.token');
   });
 });

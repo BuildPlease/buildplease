@@ -1,15 +1,15 @@
-import { ApiKitAppDefaults } from '@internal/configuration/app';
+import { ApiKitDefaults } from '@internal/configuration';
 
 import { type InferConfiguration, defineConfiguration, field } from '@/configuration/core';
 
 export const HealthConfiguration = defineConfiguration('apikit.health', {
-  enabled: field.boolean().default(ApiKitAppDefaults.health.enabled),
-  url: field.string().default(ApiKitAppDefaults.health.url).map(validateHealthUrl),
+  enabled: field.boolean().default(ApiKitDefaults.health.enabled),
+  url: field.string().default(ApiKitDefaults.health.url).map(validateHealthUrl),
   pressure: {
-    maxEventLoopDelay: field.number().default(ApiKitAppDefaults.health.pressure.maxEventLoopDelay),
-    maxHeapUsedBytes: field.number().default(ApiKitAppDefaults.health.pressure.maxHeapUsedBytes),
-    maxRssBytes: field.number().default(ApiKitAppDefaults.health.pressure.maxRssBytes),
-    maxEventLoopUtilization: field.number().default(ApiKitAppDefaults.health.pressure.maxEventLoopUtilization),
+    maxEventLoopDelay: field.number().default(ApiKitDefaults.health.pressure.maxEventLoopDelay),
+    maxHeapUsedBytes: field.number().default(ApiKitDefaults.health.pressure.maxHeapUsedBytes),
+    maxRssBytes: field.number().default(ApiKitDefaults.health.pressure.maxRssBytes),
+    maxEventLoopUtilization: field.number().default(ApiKitDefaults.health.pressure.maxEventLoopUtilization),
   },
 });
 

@@ -1,9 +1,8 @@
-import { resolveConfiguration } from '@internal/configuration';
-import { ApiKitAppDefaults } from '@internal/configuration/app';
+import { ApiKitDefaults, resolveConfiguration } from '@internal/configuration';
 import { testEnvironment } from '@test/fixtures/configuration/environment';
 import { describe, expect, it } from 'vitest';
 
-import { CorsConfiguration } from '@/configuration/app';
+import { CorsConfiguration } from '@/configuration';
 
 describe('CorsConfiguration', () => {
   const environment = testEnvironment();
@@ -13,7 +12,7 @@ describe('CorsConfiguration', () => {
       enabled: false,
       allowAllOrigins: false,
       includeWwwSubdomain: true,
-      options: ApiKitAppDefaults.cors.options,
+      options: ApiKitDefaults.cors.options,
     });
   });
 
@@ -21,7 +20,7 @@ describe('CorsConfiguration', () => {
     const resolved = await resolveConfiguration(CorsConfiguration, { enabled: true }, { environment: environment });
 
     expect(resolved.enabled).toBe(true);
-    expect(resolved.options).toEqual(ApiKitAppDefaults.cors.options);
+    expect(resolved.options).toEqual(ApiKitDefaults.cors.options);
   });
 
   it('shallow-merges consumer CORS option overrides over framework defaults', async () => {
@@ -39,7 +38,7 @@ describe('CorsConfiguration', () => {
     );
 
     expect(resolved.options).toEqual({
-      ...ApiKitAppDefaults.cors.options,
+      ...ApiKitDefaults.cors.options,
       origin: origin,
     });
   });
@@ -57,7 +56,7 @@ describe('CorsConfiguration', () => {
     );
 
     expect(resolved.options).toEqual({
-      ...ApiKitAppDefaults.cors.options,
+      ...ApiKitDefaults.cors.options,
       credentials: false,
     });
   });

@@ -1,4 +1,4 @@
-import { ApiKitAppDefaults } from '@internal/configuration/app';
+import { ApiKitDefaults } from '@internal/configuration';
 import type { LoggerTransportOptions } from '@meawkit/core/node';
 
 import { type InferConfiguration, defineConfiguration, field } from '@/configuration/core';
@@ -46,7 +46,7 @@ export const LoggerConfiguration = defineConfiguration(
   field
     .custom<LoggerConfigurationValue>()
     .default({
-      enabled: ApiKitAppDefaults.logger.enabled,
+      enabled: ApiKitDefaults.logger.enabled,
     })
     .map(resolveLoggerConfiguration),
 );

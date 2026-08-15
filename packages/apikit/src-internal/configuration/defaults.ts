@@ -18,7 +18,7 @@ type I18nFallbackLanguages = Extract<NonNullable<InitOptions<object>['fallbackLn
 type I18nLoadMode = NonNullable<InitOptions<object>['load']>;
 type I18nPreload = NonNullable<InitOptions<object>['preload']>;
 
-export const ApiKitAppDefaults = {
+export const ApiKitDefaults = {
   build: {
     outDir: '.apikit',
   },

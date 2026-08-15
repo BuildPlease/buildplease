@@ -17,8 +17,8 @@ import type {
   ConfigurationContract,
   ConfigurationInputFromSchema,
   ConfigurationSchema,
-} from '../core/configuration';
-import type { EnvironmentRegistry } from '../core/environments';
+} from './core/configuration';
+import type { EnvironmentRegistry } from './core/environments';
 
 // MARK: - Public
 

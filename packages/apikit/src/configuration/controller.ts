@@ -13,9 +13,9 @@ import type {
   ServerConfig,
   StaticFilesConfig,
 } from './configs';
-import type { BuildMetadata } from '../core/build-metadata';
-import type { ConfigurationContract } from '../core/configuration';
-import type { EnvironmentConfig } from '../core/environments';
+import type { BuildMetadata } from './core/build-metadata';
+import type { ConfigurationContract } from './core/configuration';
+import type { EnvironmentConfig } from './core/environments';
 
 // MARK: - Public
 

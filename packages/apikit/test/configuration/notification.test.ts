@@ -1,13 +1,12 @@
-import { resolveConfiguration } from '@internal/configuration';
-import { ApiKitAppDefaults } from '@internal/configuration/app';
+import { ApiKitDefaults, resolveConfiguration } from '@internal/configuration';
 import { describe, expect, it } from 'vitest';
 
-import { NotificationConfiguration } from '@/configuration/app';
+import { NotificationConfiguration } from '@/configuration';
 
 describe('NotificationConfiguration', () => {
   it('keeps notifications disabled when omitted', async () => {
     await expect(resolveConfiguration(NotificationConfiguration, undefined)).resolves.toEqual({
-      enabled: ApiKitAppDefaults.notification.enabled,
+      enabled: ApiKitDefaults.notification.enabled,
     });
   });
 
