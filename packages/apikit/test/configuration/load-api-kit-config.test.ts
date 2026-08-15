@@ -1,6 +1,6 @@
 import { basename } from 'node:path';
 
-import { loadAppConfig } from '@internal/configuration';
+import { loadApiKitConfig } from '@internal/configuration';
 import {
   type TemporaryConfigurationProject,
   makeTemporaryConfigurationProject,
@@ -21,7 +21,7 @@ export default {
 };
 `;
 
-describe('loadAppConfig', () => {
+describe('loadApiKitConfig', () => {
   let project: TemporaryConfigurationProject | undefined;
 
   afterEach(async () => {
@@ -29,24 +29,30 @@ describe('loadAppConfig', () => {
     project = undefined;
   });
 
-  it('loads the default app config', async () => {
+  it('loads the default ApiKit config', async () => {
     project = await makeTemporaryConfigurationProject();
-    await project.writeConfig('apikit.app.config.ts', CONFIG_SOURCE);
+    await project.writeConfig('apikit.config.ts', CONFIG_SOURCE);
 
-    const result = await loadAppConfig({ dir: project.rootDir });
+    const result = await loadApiKitConfig({ dir: project.rootDir });
 
     expect(result.rootDir).toBe(project.rootDir);
-    expect(basename(result.configFilePath)).toBe('apikit.app.config.ts');
+    expect(basename(result.configFilePath)).toBe('apikit.config.ts');
     expect(result.config.environments).toEqual({
       development: { file: '.env.development' },
     });
+  });
+
+  it('fails when the default config is missing', async () => {
+    project = await makeTemporaryConfigurationProject();
+
+    await expect(loadApiKitConfig({ dir: project.rootDir })).rejects.toThrow('ApiKit config is missing');
   });
 
   it('loads an explicit config file name', async () => {
     project = await makeTemporaryConfigurationProject();
     await project.writeConfig('custom.config.ts', CONFIG_SOURCE);
 
-    const result = await loadAppConfig({ dir: project.rootDir, config: 'custom.config.ts' });
+    const result = await loadApiKitConfig({ dir: project.rootDir, config: 'custom.config.ts' });
 
     expect(result.config.server).toMatchObject({
       identifier: 'test',

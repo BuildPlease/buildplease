@@ -48,9 +48,23 @@ describe('loadApiKitContext', () => {
     expect(global.apikit.notificationConfig).toEqual({ enabled: false });
   });
 
+  it('loads an explicit config file', async () => {
+    project = await makeTemporaryConfigurationProject();
+    await writeProjectFiles(project, 'custom.config.ts');
+
+    await loadApiKitContext({
+      environment: 'development',
+      dir: project.rootDir,
+      config: 'custom.config.ts',
+    });
+
+    expect(global.apikit.environmentConfig.name).toBe('development');
+    expect(global.apikit.serverConfig.identifier).toBe('@test/example-api:development');
+  });
+
   it('fails when generated build metadata is missing', async () => {
     project = await makeTemporaryConfigurationProject();
-    await project.writeConfig('apikit.app.config.ts', makeConfigSource());
+    await project.writeConfig('apikit.config.ts', makeConfigSource());
     await writeFile(join(project.rootDir, '.env.development'), '', 'utf8');
     vi.spyOn(process, 'cwd').mockReturnValue(project.rootDir);
 
@@ -62,8 +76,11 @@ describe('loadApiKitContext', () => {
   });
 });
 
-async function writeProjectFiles(project: TemporaryConfigurationProject): Promise<void> {
-  await project.writeConfig('apikit.app.config.ts', makeConfigSource());
+async function writeProjectFiles(
+  project: TemporaryConfigurationProject,
+  configName = 'apikit.config.ts',
+): Promise<void> {
+  await project.writeConfig(configName, makeConfigSource());
   await writeFile(join(project.rootDir, '.env.development'), '', 'utf8');
 
   const buildDir = join(project.rootDir, '.apikit');

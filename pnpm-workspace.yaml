@@ -1,20 +1,20 @@
 # Save exact dependency versions
 saveExact: true
 
-# Hoist dependencies for tools that require flat node_modules
-shamefullyHoist: true
-
 # Auto-install resolvable peer dependencies
 autoInstallPeers: true
 
-# Disable minimum package release age
-minimumReleaseAge: 0
+# Fail on invalid or missing peer dependencies
+strictPeerDependencies: true
 
 # Do not auto-install before running scripts
 verifyDepsBeforeRun: false
 
-# Fail on invalid or missing peer dependencies
-strictPeerDependencies: true
+# Hoist dependencies for tools that require flat node_modules
+shamefullyHoist: false
+
+# Disable minimum package release age
+minimumReleaseAge: 0
 
 packages:
   - packages/*
@@ -58,11 +58,5 @@ catalog:
   '@nuxtjs/i18n': 10.6.0
   nuxt: 4.5.2
 
-  # Dev
-  '@types/node': 26.2.0
-  tsdown: 0.22.14
-  turbo: 2.10.10
-  typescript: 6.0.3
-  unrun: 0.3.1
-  vitest: 4.1.10
+  # Tooling
   vue-tsc: 3.3.9

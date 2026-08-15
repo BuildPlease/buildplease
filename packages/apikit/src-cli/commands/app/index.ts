@@ -1,4 +1,4 @@
-import { loadAppConfig } from '@internal/configuration';
+import { APIKIT_CONFIG_NAME, loadApiKitConfig } from '@internal/configuration';
 import { generateApp } from '@internal/generator';
 import { resolveAppGeneratorConfig } from '@internal/generator/configuration/app-generator-config';
 import { Console } from '@meawkit/core/node';
@@ -20,12 +20,12 @@ export function createBuildAppCommand(runtime: CliRuntime) {
         '  apikit build:app [--dir <directory>] [--config <config-name>]',
         '',
         'Config lookup:',
-        '  apikit.app.config.*',
+        `  ${APIKIT_CONFIG_NAME}.*`,
         '',
         'Examples:',
         '  apikit build:app',
         '  apikit build:app --dir ./apps/main-api',
-        '  apikit build:app -c custom.app.config',
+        '  apikit build:app -c custom.config',
       ].join('\n'),
     },
     args: commandArgs,
@@ -35,7 +35,7 @@ export function createBuildAppCommand(runtime: CliRuntime) {
 
 async function runApp(args: CommandOptions, runtime: CliRuntime): Promise<void> {
   try {
-    const loaded = await loadAppConfig({ dir: args.dir, config: args.config });
+    const loaded = await loadApiKitConfig({ dir: args.dir, config: args.config });
     const generatorConfig = await resolveAppGeneratorConfig(loaded.config);
 
     cli.title('ApiKit', 'app', [

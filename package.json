@@ -23,12 +23,12 @@
   },
   "devDependencies": {
     "@meawkit/devkit": "workspace:*",
-    "@types/node": "catalog:",
-    "tsdown": "catalog:",
-    "turbo": "catalog:",
-    "typescript": "catalog:",
-    "unrun": "catalog:",
-    "vitest": "catalog:"
+    "@types/node": "26.2.0",
+    "tsdown": "0.22.14",
+    "turbo": "2.10.10",
+    "typescript": "6.0.3",
+    "unrun": "0.3.1",
+    "vitest": "4.1.10"
   },
   "packageManager": "pnpm@11.20.0"
 }

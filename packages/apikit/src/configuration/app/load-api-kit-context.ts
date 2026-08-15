@@ -4,8 +4,8 @@ import path from 'node:path';
 import dotenvx from '@dotenvx/dotenvx';
 import {
   type ResolveConfigurationOptions,
+  loadApiKitConfig,
   loadAppBuild,
-  loadAppConfig,
   resolveConfiguration,
   resolveConfigurationBinding,
 } from '@internal/configuration';
@@ -36,10 +36,15 @@ const cli = new Console();
 
 export interface LoadApiKitContextOptions {
   readonly environment: string;
+  readonly dir?: string;
+  readonly config?: string;
 }
 
 export async function loadApiKitContext(options: LoadApiKitContextOptions): Promise<void> {
-  const loaded = await loadAppConfig();
+  const loaded = await loadApiKitConfig({
+    dir: options.dir,
+    config: options.config,
+  });
   const buildConfiguration = await resolveConfiguration(BuildConfiguration, loaded.config.build);
   const build = await loadAppBuild(loaded.rootDir, buildConfiguration.outDir);
   const environment = resolveEnvironment(loaded.config.environments, options.environment, {
