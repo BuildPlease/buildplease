@@ -1,13 +1,17 @@
 # TypeScript
 
-- Use strict types, narrow interfaces and discriminated unions.
+## Types
+
+- Use strict TypeScript, narrow contracts and discriminated unions.
+- Use `unknown` at untrusted boundaries and narrow before use.
 - Use `import type` for type-only imports.
 - Declare return types on public async functions.
 - Mark injected dependencies `private readonly`.
-- Keep public API types, domain models, transport models and persistence records separate.
-- Use explicit object properties when mapping across boundaries.
-- Prefer exhaustive `switch` statements for closed unions.
-- Use `unknown` at untrusted boundaries and narrow it before use.
+- Keep public API types, domain models, transport DTOs and persistence rows distinct.
+- Prefer exhaustive `switch` handling for closed unions.
+- Use explicit object properties when mapping or constructing objects.
+
+GOOD:
 
 ```ts
 return {
@@ -16,56 +20,113 @@ return {
 };
 ```
 
-Do not hide problems with:
+BAD:
 
 ```ts
-as any
-as unknown as SomeType
-// @ts-ignore
-// @ts-expect-error
-value!
+return { result, metadata };
 ```
 
-An isolated cast is allowed only at a verified boundary whose type system cannot express the runtime contract.
+- Use casts only at verified boundaries where runtime behavior is known but the type system cannot express the contract.
 
-## Canonical type ownership
+GOOD:
 
-- Import a contract directly from the package or module that owns it.
-- Forwarding re-exports whose only purpose is to mirror a symbol owned elsewhere are forbidden.
-- Identity type aliases that only rename an existing type without adding a new semantic contract are forbidden.
-- Barrel files may export symbols that are actually owned by that package or module.
+```ts
+if (!isConfiguration(value)) throw new Error('Invalid configuration.');
+return value;
+```
 
-Bad:
+BAD:
+
+```ts
+return value as any;
+return value as unknown as Configuration;
+// @ts-ignore
+value!;
+```
+
+## Canonical ownership
+
+- Import a contract from the package or module that owns it.
+- Re-export symbols that are genuinely owned by the current public surface.
+- Create a type alias when it adds a distinct semantic contract.
+
+GOOD:
+
+```ts
+import type { DeviceModel, JSONValue } from '@scope/contracts';
+```
+
+BAD:
 
 ```ts
 export type { DeviceModel } from '@scope/contracts';
 export type Cacheable = JSONValue;
 ```
 
-Good:
-
-```ts
-import type { DeviceModel, JSONValue } from '@scope/contracts';
-```
-
-## Dependency Injection
+## Dependency injection
 
 - Inject services through canonical named contracts.
-- Prefer a narrow named capability when a consumer needs only one part of a larger service.
-- Do not reshape injected services with inline `Pick` or `Omit`.
-- Utility types remain valid for real data projections.
+- Create a narrow named capability when a consumer needs a stable subset of a larger service.
+- Use utility types for real data projections, not ad-hoc service shaping.
+
+GOOD:
 
 ```ts
-// Good
 private readonly configuration: StorageConfigurationController;
+```
 
-// Avoid
+BAD:
+
+```ts
 private readonly configuration: Pick<ConfigurationController, 'storage'>;
+```
+
+## Variables and functions
+
+- Use `const` by default and `let` for intentional mutation.
+- Use function declarations for reusable named functions and test helpers.
+- Use arrow functions for callbacks, closures and lexical-context values.
+
+```ts
+function makeController(): Controller {
+  return new Controller();
+}
+
+const result = items.map((item) => item.value);
+const handler = vi.fn(async () => undefined);
+```
+
+## Construction and lifecycle
+
+- Constructors store dependencies and input state.
+- Use one private `init()` to close multi-step synchronous initialization.
+- Use `start()` / `stop()` / `quit()` for real asynchronous resource lifecycle.
+
+```ts
+class Router {
+  public constructor(private readonly configuration: Configuration) {
+    this.init();
+  }
+
+  private init(): void {
+    this.configureRoutes();
+    this.registerListeners();
+  }
+}
+```
+
+```ts
+class Worker {
+  public constructor(private readonly queue: Queue) {}
+
+  public async start(): Promise<void> {
+    await this.queue.connect();
+  }
+}
 ```
 
 ## Generated code
 
-- Do not manually restyle or refactor generated sources.
-- Generated code may contain generator-required casts or suppression comments.
-- Fix generated output through its source contract, generator configuration or template.
-- Exclude generated folders from handwritten-code quality assertions where appropriate.
+- Treat generated sources as generator output.
+- Change generated behavior through its source contract, generator configuration or template.
+- Keep generated folders outside handwritten-code style assertions when the generator owns their shape.

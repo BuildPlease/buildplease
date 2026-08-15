@@ -1,12 +1,26 @@
 # Bundling
 
-- Treat the package manifest as the source of truth for dependency ownership.
-- Derive external and bundled dependency policy from the manifest; do not duplicate package names in bundler configuration.
-- Use repository-provided dependency/bundling policy helpers when available instead of maintaining parallel external/bundle lists.
-- Hardcoded dependency names in bundler configuration require a verified technical exception that cannot be expressed through manifest-derived policy; keep the exception local and documented.
-- Derive the current package name from its manifest when build or test tooling needs it; do not hardcode the package name in its own tooling configuration.
-- Keep public package imports as package imports in built output when they represent runtime/package boundaries.
-- Source aliases are for source compilation, tests and tooling; do not use them to leak package internals to consumers.
-- Build, typecheck and test tasks must not require stale generated output to resolve the package's own source.
-- Do not use generated build output as source input unless the build pipeline explicitly owns that generated contract.
-- Prefer explicit bundler configuration over implicit resolution behavior or environment-dependent defaults.
+- Treat `package.json` as the source of truth for dependency ownership.
+- Derive external/bundled dependency policy from the manifest through repository helpers when available.
+- Derive the current package name from its manifest when tooling needs it.
+- Preserve public package boundaries as package imports in emitted code.
+- Use source aliases for source, tests and tooling; consumers use public package exports.
+- Build, typecheck and test resolve current source without relying on stale output from the same project.
+- Generated output becomes build input only when the pipeline explicitly owns that generated contract.
+- Keep bundler configuration deterministic and independent of incidental process state.
+- Copy physical runtime resources as assets; compile source registries as source code.
+
+GOOD:
+
+```text
+package.json -> bundling policy helper -> tsdown externals
+```
+
+BAD:
+
+```text
+package.json dependency list
++ manually duplicated hardcoded bundler dependency list
+```
+
+A hardcoded bundler exception is local, documented and tied to a verified technical constraint.

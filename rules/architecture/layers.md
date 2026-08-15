@@ -1,48 +1,64 @@
-# Layers
+# Layers and Ownership
 
-Organize code by ownership and dependency direction, not by convenience.
-
-## Applications
-
-A typical application separates transport, application behavior, domain capabilities and external adapters.
+Organize code by ownership and dependency direction.
 
 ```text
 Transport -> Application operation -> Domain capability -> External adapter
 ```
 
-- Transport adapts external input to application operations.
-- Application operations coordinate behavior and dependencies.
-- Domain code owns business rules and stable domain contracts.
-- External adapters implement persistence, network, filesystem or other infrastructure boundaries.
-- Cross-module collaboration goes through the owning module's public boundary.
-- A composition root may know concrete implementations; reusable logic should depend on stable contracts.
-- Tests may import the implementation they directly test; test imports do not define runtime ownership.
+- Transport adapts external input/output.
+- Application operations coordinate one behavior and its dependencies.
+- Domain code owns stable business rules and contracts.
+- Adapters own persistence, network, filesystem and framework integration.
+- Composition roots may know concrete implementations.
+- Cross-module collaboration uses the owning module's public boundary.
+- Dependencies point toward stable contracts; concrete integration stays at the edge.
 
-A modular application may use:
+## Applications
+
+Typical modular application:
 
 ```text
+src/app/                  composition and runtime startup
+src/library/              application-local reusable technical capabilities
 src/modules/<name>/api/   public module contracts
 src/modules/<name>/impl/  private module implementation
-src/library/              app-local reusable technical capabilities
-src/app/                  composition root and runtime startup
+src/l10n/                 owner-local localization source
 ```
+
+- `api/` contains contracts intentionally shared with other modules.
+- `impl/` contains module-owned implementation.
+- `library/` contains reusable code that still belongs to the application.
+- Application-specific workflows remain in the application.
 
 ## Packages
 
-A package may use:
+Typical package:
 
 ```text
 src/          public contracts and public implementations
-src-internal/ package-private implementation details and tooling
-src-node/     Node-only public surface when needed
-src-cli/      command entry points when needed
+src-internal/ package-private implementation
+src-node/     Node-only public surface when required
+src-cli/      CLI entry points when required
 test/         behavioral tests
-types/        ambient or package-level declarations when needed
+types/        ambient/package declarations when required
+resources/    physical runtime assets + registry
 ```
 
-- Keep the public surface limited to contracts and behavior consumers actually need.
-- Keep implementation-only helpers behind the package boundary.
-- Package internals may depend on package public contracts.
-- Consumers must not import package-private source paths.
+- Packages own reusable mechanisms and stable shared contracts.
+- Technology-specific packages are valid; consumer-specific workflows stay with the consumer.
+- Public exports are small, explicit and consumer-driven.
+- Implementation helpers stay package-private.
+- A caller provides values it owns; implementation-owned details stay inside the implementation.
 
-Keep dependencies pointing inward toward stable contracts.
+GOOD:
+
+```text
+application -> @scope/package public export -> package implementation
+```
+
+BAD:
+
+```text
+application -> @scope/package/src-internal/private-helper
+```

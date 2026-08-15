@@ -1,29 +1,23 @@
 # Rules
 
 Read this file before changing source code.
+Follow principles: KISS, SOLID, DRY and YAGNI
 
-## Priorities
+## Usage
 
-1. Correctness and security.
-2. Existing architecture and ownership.
-3. KISS and predictable control flow.
-4. SOLID where it removes real coupling.
-5. DRY after reuse is proven.
-6. YAGNI.
-
-- Preserve intentional public contracts and ownership boundaries.
-- Prefer boring, explicit code with visible side effects and failure paths.
-- Fail fast on broken internal contracts; map expected user or dependency failures explicitly.
-- Add abstractions only for real boundaries or proven reuse.
-- Do not move code into shared modules or packages for hypothetical reuse.
-- Do not redesign architecture to satisfy formatting, linting or a desire to remove every cast.
-- Keep rules short, stable and focused on engineering decisions rather than implementation history.
-- Update rules only when the intended engineering contract changes.
+- Read the rules relevant to the code being changed before editing it.
+- Preserve existing public contracts and ownership unless the task explicitly changes them.
+- Prefer small, explicit changes with visible state, side effects and failure paths.
+- Add abstractions for real boundaries, stable contracts or proven reuse.
+- Keep implementation history in Git; keep rules focused on the intended engineering contract.
+- Project repositories contain only project-specific extensions. Generic rules live here once.
 
 ## Structure
 
-- `architecture/` owns cross-cutting architecture, naming, identity, localization, configuration and dependency rules.
-- `packages/` owns reusable package boundaries and package testing rules.
-- `testing/` owns repository-wide testing strategy.
-- `infrastructure/` owns deployment and runtime infrastructure rules.
-- Projects may add focused domain or technology rule directories when those rules are not generic enough to belong above.
+- `architecture/` — code structure, dependencies, configuration, bundling, naming, identity, localization, resources and infrastructure.
+- `testing/` — behavior and integration testing strategy.
+- `security/` — generic security and cryptography contracts.
+
+## Examples
+
+Rules describe the preferred shape positively. When a distinction matters, `GOOD` and `BAD` examples define the boundary.

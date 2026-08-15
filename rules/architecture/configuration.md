@@ -1,24 +1,30 @@
 # Configuration
 
-- Keep application-wide limits, intervals, feature behavior and runtime settings in typed configuration.
+```text
+external input -> load -> validate -> resolve defaults -> typed runtime configuration
+```
+
+- Keep runtime settings, limits, intervals and feature behavior in typed configuration.
 - Keep environment-specific values explicit at the configuration boundary.
-- Validate external configuration input once during startup or configuration loading.
-- Resolve defaults before values enter runtime code.
-- Runtime consumers should not repeatedly handle optional values when the configuration contract already provides defaults.
-- Environment variables are deployment input, not a general settings store.
-- Keep loading, validation, resolution and runtime consumption as separate responsibilities.
-- Build-time configuration must not depend on artifacts produced by the same build step.
-- Resolve paths relative to the component that owns the configuration, not incidental process state.
-- Do not pass implementation-owned values through public APIs when the implementation can resolve them itself.
+- Validate external configuration once during loading/startup.
+- Resolve defaults before runtime consumers receive values.
+- Separate loading, validation, resolution and consumption.
+- Treat environment variables as deployment input; configuration owns their runtime shape.
+- Resolve paths relative to the component that owns the configuration.
+- Keep build-time configuration independent of output produced by the same build step.
+- Keep implementation-owned values inside the implementation when the caller does not own them.
+
+GOOD:
 
 ```ts
-FeatureConfiguration({
-  enabled: from.byEnvironment({
-    development: true,
-    test: true,
-    production: false,
-  }),
+const Configuration = defineConfiguration({
+  timeoutMs: field.number().default(5_000),
 });
 ```
 
-Prefer typed configuration capabilities over passing raw environment variables through runtime code.
+BAD:
+
+```ts
+const timeout = Number(process.env.TIMEOUT_MS ?? 5000);
+// repeated in multiple runtime consumers
+```

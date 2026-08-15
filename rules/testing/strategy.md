@@ -1,21 +1,30 @@
-# Testing Strategy
+# Testing
 
-Tests protect behavior that is expensive to rediscover in production.
+Tests protect behavior at the layer that owns it.
 
-Priority:
+## Priority
 
 1. Public contracts and reusable behavior.
 2. Security, transactions, resource lifecycle and concurrency-sensitive behavior.
 3. Configuration parsing, validation and resolution.
-4. Complex application or domain branching.
+4. Complex application/domain branching.
 5. Transport adaptation.
-6. Trivial mapping only when it is itself a public contract.
-
-Do not chase test count or line coverage for its own sake.
+6. Simple mapping when the mapping itself is a public contract.
 
 ## Test shape
 
-Use one test per behavior.
+- Write one test around one observable behavior.
+- Name tests after behavior.
+- Cover meaningful success, expected failure and boundary conditions.
+- Test behavior once at its owner; consumers test their own integration/composition.
+- Protect pure type behavior primarily with strict typecheck and focused type assertions when needed.
+- Use integration tests where generated/runtime/framework interaction is the contract.
+- Prefer deterministic fixtures and temporary resources.
+- Keep fixture builders local until reuse is real.
+- Keep test doubles smaller than the behavior under test.
+- Verify interactions when the interaction itself is the protected side effect.
+- Use production source aliases in tests.
+- Keep private implementation private and test observable behavior through its owning boundary.
 
 ```ts
 it('rolls back the transaction when the operation throws', async () => {
@@ -25,14 +34,19 @@ it('rolls back the transaction when the operation throws', async () => {
 });
 ```
 
-- Name tests after behavior, not implementation methods.
-- Test behavior at the layer that implements it; consumers test only their own behavior or integration.
-- Test success, expected failure and boundary conditions.
-- Verify interactions only when the interaction itself is the side effect being protected.
-- Prefer deterministic fixtures.
-- Keep fixture builders close to tests until reuse is real.
-- Keep test doubles smaller than the behavior under test.
-- Use the same source aliases as production code; do not climb through `../../../src`.
-- Do not recreate framework or third-party contracts by hand.
-- If a test mostly mocks a framework or dependency, move the test boundary or remove the test.
-- Never make production code public only to unit-test a private implementation detail.
+| Behavior                            | Preferred protection              |
+| ----------------------------------- | --------------------------------- |
+| Value object / converter            | Unit test                         |
+| Configuration parsing              | Unit test                         |
+| Lifecycle / deterministic algorithm | Unit test                         |
+| Runtime/framework integration       | Integration test                  |
+| Pure type mapping                   | Typecheck / type assertion        |
+
+BAD:
+
+```text
+consumer retests framework/package behavior already owned by the dependency
+re-export file test with no behavior
+test that reproduces an entire third-party framework as mocks
+public production API added only to reach a private helper from a test
+```
