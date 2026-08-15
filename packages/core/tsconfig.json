@@ -11,7 +11,8 @@
       "@/*": ["./src/*"],
       "@internal/*": ["./src-internal/*"],
       "@node/*": ["./src-node/*"],
-      "@resources": ["./resources.config.ts"],
+      "@l10n": ["./src/l10n/index.ts"],
+      "@resources": ["./resources/index.ts"],
 
       "@node-test/*": ["./src-node-test/*"],
       "@test/*": ["./test/*"]

@@ -1,6 +1,6 @@
+import { CoreL10n } from '@l10n';
 import { z } from 'zod';
 
-import { CoreL10n } from '@/l10n';
 import {
   type Geometry,
   type OpeningHourInterval,

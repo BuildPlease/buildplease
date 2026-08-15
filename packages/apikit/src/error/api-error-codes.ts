@@ -1,4 +1,4 @@
-import { ApiKitL10n } from '@/l10n';
+import { ApiKitL10n } from '@l10n';
 
 import { type ApiErrorDefinition, type ApiErrorTree, isApiErrorDefinition } from './api-error-definition';
 

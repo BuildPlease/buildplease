@@ -1,18 +1,19 @@
-import { Resources } from '@resources';
-
 import { defineL10n } from './define-l10n';
 import { defineL10nResource } from './define-l10n-resource';
+import cs from './locales/cs.json';
+import en from './locales/en.json';
+import sk from './locales/sk.json';
 
 export const CoreL10nResource = defineL10nResource({
   resources: {
     en: {
-      core: Resources.L10n.en,
+      core: en,
     },
     sk: {
-      core: Resources.L10n.sk,
+      core: sk,
     },
     cs: {
-      core: Resources.L10n.cs,
+      core: cs,
     },
   },
 });

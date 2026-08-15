@@ -1,4 +1,4 @@
-import { defineConfig } from 'tsdown';
+import { type CopyEntry, defineConfig } from 'tsdown';
 
 import { makeDependencyBundlingPolicy } from './src-node/bundling';
 import { resolvePath } from './src-node/file';
@@ -26,6 +26,7 @@ export default defineConfig([
 
     outDir: outDir,
     clean: true,
+    copy: copyResources(),
 
     hash: false,
     dts: true,
@@ -87,3 +88,13 @@ export default defineConfig([
     },
   },
 ]);
+
+function copyResources(): CopyEntry[] {
+  return [
+    {
+      from: ['resources/**/*', '!resources/index.ts'],
+      to: 'dist/resources',
+      flatten: false,
+    },
+  ];
+}

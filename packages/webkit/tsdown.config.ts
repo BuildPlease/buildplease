@@ -1,5 +1,5 @@
 import { loadPackageJSON, makeDependencyBundlingPolicy, resolvePath } from '@meawkit/core/node';
-import { defineConfig } from 'tsdown';
+import { type CopyEntry, defineConfig } from 'tsdown';
 
 const outDir = 'dist';
 const pkg = loadPackageJSON(resolvePath(import.meta.url, './package.json'));
@@ -23,6 +23,7 @@ export default defineConfig([
 
     outDir: outDir,
     clean: true,
+    copy: copyResources(),
 
     hash: false,
     dts: true,
@@ -61,3 +62,13 @@ export default defineConfig([
     },
   },
 ]);
+
+function copyResources(): CopyEntry[] {
+  return [
+    {
+      from: ['resources/**/*', '!resources/index.ts'],
+      to: 'dist/resources',
+      flatten: false,
+    },
+  ];
+}

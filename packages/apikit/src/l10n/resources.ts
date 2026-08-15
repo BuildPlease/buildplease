@@ -1,16 +1,19 @@
 import { CoreL10nResource, defineL10n } from '@meawkit/core';
-import { Resources } from '@resources';
+
+import cs from './locales/cs.json';
+import en from './locales/en.json';
+import sk from './locales/sk.json';
 
 export const ApiKitL10nResource = CoreL10nResource.extend({
   resources: {
     en: {
-      apikit: Resources.L10n.en,
+      apikit: en,
     },
     sk: {
-      apikit: Resources.L10n.sk,
+      apikit: sk,
     },
     cs: {
-      apikit: Resources.L10n.cs,
+      apikit: cs,
     },
   },
 });

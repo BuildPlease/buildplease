@@ -68,6 +68,7 @@ async function loadConfigExport(rootDir: string, configFilePath: string): Promis
   const jiti = createJiti(rootDir, {
     interopDefault: true,
     extensions: [...CONFIG_EXTENSIONS],
+    tsconfigPaths: true,
   });
 
   return jiti.import(configFilePath, {

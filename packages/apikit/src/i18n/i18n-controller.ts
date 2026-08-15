@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 
+import { ApiKitL10nResource } from '@l10n';
 import { ensureDirectory, resolvePath } from '@meawkit/core/node';
 import i18next, { type InitOptions } from 'i18next';
 import { inject, injectable } from 'inversify';
@@ -7,7 +8,6 @@ import merge from 'lodash.merge';
 
 import type { ApiKitController, I18nConfig, I18nFileEntry } from '@/configuration';
 import { ApiKitSymbols } from '@/di';
-import { ApiKitL10nResource } from '@/l10n';
 
 import { normalizeLocale, splitBaseRegion } from './utils';
 
@@ -172,6 +172,7 @@ export class I18nControllerImpl implements I18nController {
     const namespaces = this.makeNamespaces(input.namespaces, defaultNamespace, directories, files);
 
     return {
+      resources: input.resources ?? {},
       directories: directories,
       files: files,
 
@@ -249,6 +250,8 @@ type ResolvedI18nConfig = Required<Omit<I18nConfig, 'directories' | 'files'>> & 
 
 function makeResources(config: ResolvedI18nConfig): Record<string, any> {
   const resources = makeBuiltinResources(config);
+  mergeConfiguredResources(resources, config);
+
   const entries: ResourceEntry[] = [...collectDirectoryEntries(config), ...collectFileEntries(config)];
 
   for (const { locale, ns, path } of entries) {
@@ -259,6 +262,16 @@ function makeResources(config: ResolvedI18nConfig): Record<string, any> {
   }
 
   return resources;
+}
+
+function mergeConfiguredResources(resources: Record<string, any>, config: ResolvedI18nConfig): void {
+  for (const locale of Object.keys(config.resources).sort()) {
+    const resource = config.resources[locale];
+    if (!resource) continue;
+
+    const bucket = (resources[locale] ||= {});
+    bucket[config.defaultNamespace] = merge(bucket[config.defaultNamespace] || {}, resource);
+  }
 }
 
 function makeBuiltinResources(config: ResolvedI18nConfig): Record<string, any> {

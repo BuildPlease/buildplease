@@ -67,6 +67,7 @@ export const ApiKitDefaults = {
   },
 
   i18n: {
+    resources: {},
     directories: [],
     files: [],
 

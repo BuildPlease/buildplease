@@ -1,4 +1,5 @@
 import { ApiKitDefaults } from '@internal/configuration';
+import type { L10nResources } from '@meawkit/core';
 import type { InitOptions } from 'i18next';
 
 import { type InferConfiguration, defineConfiguration, field } from '@/configuration/core';
@@ -22,6 +23,8 @@ export type I18nLoadMode = NonNullable<I18nInitOptions['load']>;
 export type I18nPreload = NonNullable<I18nInitOptions['preload']>;
 
 export const I18nConfiguration = defineConfiguration('apikit.i18n', {
+  resources: field.custom<L10nResources>().default(ApiKitDefaults.i18n.resources),
+
   directories: field.array(field.custom<I18nDirectoryEntry>()).default(ApiKitDefaults.i18n.directories),
   files: field.array(field.custom<I18nFileEntry>()).default(ApiKitDefaults.i18n.files),
 
