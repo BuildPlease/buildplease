@@ -2,11 +2,11 @@
 
 Each dependency has one version owner policy:
 
-| Ownership | Version declaration |
-| --------- | ------------------- |
-| 1 manifest owner | exact version in that manifest |
-| 2+ manifest owners | pnpm default catalog |
-| workspace-owned package | workspace protocol |
+| Ownership               | Version declaration            |
+| ----------------------- | ------------------------------ |
+| 1 manifest owner        | exact version in that manifest |
+| 2+ manifest owners      | pnpm default catalog           |
+| workspace-owned package | workspace protocol             |
 
 - Declare each external dependency in the manifest that owns its usage.
 - Use exact external versions; catalog entries are exact too.

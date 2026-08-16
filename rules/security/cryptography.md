@@ -2,11 +2,11 @@
 
 Choose secret storage from entropy, recoverability and threat model.
 
-| Secret | Preferred persisted representation |
-| ------ | ---------------------------------- |
-| User password | password KDF such as Argon2id |
+| Secret                               | Preferred persisted representation                         |
+| ------------------------------------ | ---------------------------------------------------------- |
+| User password                        | password KDF such as Argon2id                              |
 | Short verification/PIN/recovery code | keyed construction such as HMAC with an application secret |
-| High-entropy random bearer token | SHA-256 digest when raw token recovery is unnecessary |
+| High-entropy random bearer token     | SHA-256 digest when raw token recovery is unnecessary      |
 
 - Generate secrets with a cryptographically secure RNG.
 - Use password-specific KDF parameters appropriate to the deployment environment.

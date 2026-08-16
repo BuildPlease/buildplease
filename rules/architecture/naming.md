@@ -9,34 +9,34 @@
 
 ## Roles
 
-| Suffix                    | Responsibility                                       |
-| ------------------------- | ---------------------------------------------------- |
-| `Model`                   | Reusable identity-less domain/application data       |
-| `Input` / `Options`       | Caller-provided operation parameters                 |
-| `Row`                     | Selected persistence record                          |
-| `InsertRow` / `UpdateRow` | Writable persistence record                          |
-| `DTO` / `Schema`          | Transport contract and validation                    |
-| `Converter`               | Conversion with runtime contract validation          |
-| `Controller`              | Technical/application capability                     |
-| `Repository`              | Persistence boundary                                 |
-| `UseCase`                 | One application operation                            |
-| `Handler`                 | Transport-to-application adapter                     |
-| `Validator`               | Reusable validation/business guard                   |
-| `Provider`                | Selects or supplies a capability                     |
-| `Factory`                 | Creates a value or implementation                    |
+| Suffix                    | Responsibility                                 |
+| ------------------------- | ---------------------------------------------- |
+| `Model`                   | Reusable identity-less domain/application data |
+| `Input` / `Options`       | Caller-provided operation parameters           |
+| `Row`                     | Selected persistence record                    |
+| `InsertRow` / `UpdateRow` | Writable persistence record                    |
+| `DTO` / `Schema`          | Transport contract and validation              |
+| `Converter`               | Conversion with runtime contract validation    |
+| `Controller`              | Technical/application capability               |
+| `Repository`              | Persistence boundary                           |
+| `UseCase`                 | One application operation                      |
+| `Handler`                 | Transport-to-application adapter               |
+| `Validator`               | Reusable validation/business guard             |
+| `Provider`                | Selects or supplies a capability               |
+| `Factory`                 | Creates a value or implementation              |
 
 ## Methods
 
-| Method                                  | Meaning                                  |
-| --------------------------------------- | ---------------------------------------- |
-| `init()`                                | Synchronous constructor closure          |
-| `configure()`                           | Apply configuration                      |
-| `start()` / `stop()` / `quit()`         | Real resource lifecycle                  |
-| `load*()`                               | Read an external file/module/source      |
-| `resolve*()`                            | Derive a validated runtime value         |
-| `find*()` / `list*()`                   | Optional or collection lookup            |
-| `get*()`                                | Required value/direct property access    |
-| `create*()` / `update*()` / `delete*()` | Mutation                                 |
+| Method                                  | Meaning                               |
+| --------------------------------------- | ------------------------------------- |
+| `init()`                                | Synchronous constructor closure       |
+| `configure()`                           | Apply configuration                   |
+| `start()` / `stop()` / `quit()`         | Real resource lifecycle               |
+| `load*()`                               | Read an external file/module/source   |
+| `resolve*()`                            | Derive a validated runtime value      |
+| `find*()` / `list*()`                   | Optional or collection lookup         |
+| `get*()`                                | Required value/direct property access |
+| `create*()` / `update*()` / `delete*()` | Mutation                              |
 
 GOOD:
 

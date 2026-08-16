@@ -34,13 +34,13 @@ it('rolls back the transaction when the operation throws', async () => {
 });
 ```
 
-| Behavior                            | Preferred protection              |
-| ----------------------------------- | --------------------------------- |
-| Value object / converter            | Unit test                         |
-| Configuration parsing              | Unit test                         |
-| Lifecycle / deterministic algorithm | Unit test                         |
-| Runtime/framework integration       | Integration test                  |
-| Pure type mapping                   | Typecheck / type assertion        |
+| Behavior                            | Preferred protection       |
+| ----------------------------------- | -------------------------- |
+| Value object / converter            | Unit test                  |
+| Configuration parsing               | Unit test                  |
+| Lifecycle / deterministic algorithm | Unit test                  |
+| Runtime/framework integration       | Integration test           |
+| Pure type mapping                   | Typecheck / type assertion |
 
 BAD:
 

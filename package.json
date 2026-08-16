@@ -13,11 +13,8 @@
     "clean:deep": "devkit run clean-deep",
     "dep:check": "devkit run dep-check",
     "dep:update": "devkit run dep-update",
-    "format": "devkit run format",
-    "format:fix": "devkit run format-fix",
+    "format": "devkit run format-fix && devkit run lint-fix",
     "preinstall": "npx only-allow pnpm",
-    "lint": "devkit run lint",
-    "lint:fix": "devkit run lint-fix",
     "test": "turbo run test",
     "typecheck": "turbo run typecheck"
   },
