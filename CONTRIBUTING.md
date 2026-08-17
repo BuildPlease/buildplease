@@ -65,42 +65,14 @@ Rules describe the preferred shape directly. `GOOD` and `BAD` examples are used 
 Use [Conventional Commits](https://www.conventionalcommits.org/).
 
 ```text
-<type>(<scope>): <description>
-```
-
-Use a package scope when the change belongs to a specific package:
-
-```text
 feat(apikit): add request context
-fix(nuxtkit): resolve runtime alias
+fix(webkit): handle missing session
 refactor(core): simplify validation
 docs: improve contributing guide
 chore: update tooling
 ```
 
-Use `feat` for new functionality and `fix` for bug fixes. Use `!` or a `BREAKING CHANGE:` footer for breaking changes.
-
-Pull request titles should follow the same convention.
-
-## Release Changes
-
-BuildPlease uses pnpm native release management. Public packages release as one fixed version group.
-
-For a change that should be included in a release, record a release intent and commit the generated `.changeset/` file with the change:
-
-```bash
-pnpm change
-```
-
-Choose the semantic version impact of the change:
-
-- `patch` — backward-compatible bug fix.
-- `minor` — backward-compatible functionality.
-- `major` — breaking change.
-
-Changes that do not affect a published package do not need a release intent.
-
-Maintainers prepare releases through the **Prepare Release** GitHub workflow. pnpm consumes the pending release intents, synchronizes the fixed package versions, and commits the release state to `master`. Publishing is then performed separately by the **Publish Packages** workflow.
+Use a package scope when the change belongs to a specific package. Use `!` or a `BREAKING CHANGE:` footer for breaking changes. Pull request titles should follow the same convention.
 
 ## Validation
 
@@ -110,6 +82,7 @@ Run the checks relevant to your change before opening a pull request:
 pnpm build
 pnpm typecheck
 pnpm test
+pnpm format
 ```
 
 Formatting and generated files should follow the repository tooling. Do not hand-edit generated lockfiles or build output.
