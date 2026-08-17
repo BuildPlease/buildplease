@@ -48,7 +48,7 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@buildplease/core": "workspace:^",
+    "@buildplease/core": "workspace:*",
     "@dotenvx/dotenvx": "2.21.0",
     "@fastify/basic-auth": "6.3.0",
     "@fastify/cookie": "11.1.2",
@@ -73,7 +73,7 @@
     "validator": "13.15.35"
   },
   "devDependencies": {
-    "@buildplease/identity": "workspace:^",
+    "@buildplease/identity": "workspace:*",
     "@types/ejs": "3.1.5",
     "@types/lodash.merge": "4.6.9",
     "@types/mime-types": "3.0.1",

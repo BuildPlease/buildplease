@@ -38,12 +38,12 @@
     "typecheck": "vue-tsc --noEmit"
   },
   "dependencies": {
-    "@buildplease/webkit": "workspace:^",
+    "@buildplease/webkit": "workspace:*",
     "@nuxt/kit": "4.5.2",
     "defu": "6.1.7"
   },
   "devDependencies": {
-    "@buildplease/identity": "workspace:^",
+    "@buildplease/identity": "workspace:*",
     "@nuxt/devtools": "3.4.1",
     "@nuxt/module-builder": "1.0.3",
     "@nuxt/schema": "4.5.2",

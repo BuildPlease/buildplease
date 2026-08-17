@@ -69,7 +69,7 @@ importers:
   packages/apikit:
     dependencies:
       '@buildplease/core':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../core
       '@dotenvx/dotenvx':
         specifier: 2.21.0
@@ -154,7 +154,7 @@ importers:
         version: 4.4.3
     devDependencies:
       '@buildplease/identity':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../identity
       '@types/ejs':
         specifier: 3.1.5
@@ -212,7 +212,7 @@ importers:
         version: 4.4.3
     devDependencies:
       '@buildplease/identity':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../identity
       '@types/ms':
         specifier: 2.1.0
@@ -221,7 +221,7 @@ importers:
   packages/devkit:
     dependencies:
       '@buildplease/core':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../core
       '@typescript-eslint/eslint-plugin':
         specifier: 8.67.0
@@ -289,7 +289,7 @@ importers:
   packages/nuxtkit:
     dependencies:
       '@buildplease/webkit':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../webkit
       '@nuxt/kit':
         specifier: 4.5.2
@@ -317,7 +317,7 @@ importers:
         version: 4.4.3
     devDependencies:
       '@buildplease/identity':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../identity
       '@nuxt/devtools':
         specifier: 3.4.1
@@ -345,10 +345,10 @@ importers:
         version: 4.4.3
     devDependencies:
       '@buildplease/nuxtkit':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:..
       '@buildplease/webkit':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../webkit
       '@iconify-json/lucide':
         specifier: 1.2.123
@@ -369,7 +369,7 @@ importers:
   packages/webkit:
     dependencies:
       '@buildplease/core':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../core
       axios:
         specifier: 1.19.0
@@ -385,7 +385,7 @@ importers:
         version: 4.4.3
     devDependencies:
       '@buildplease/identity':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../identity
 
 packages:

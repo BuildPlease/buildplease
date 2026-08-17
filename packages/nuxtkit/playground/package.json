@@ -13,8 +13,8 @@
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@buildplease/nuxtkit": "workspace:^",
-    "@buildplease/webkit": "workspace:^",
+    "@buildplease/nuxtkit": "workspace:*",
+    "@buildplease/webkit": "workspace:*",
     "@iconify-json/lucide": "1.2.123",
     "@nuxt/ui": "catalog:",
     "@nuxtjs/i18n": "catalog:",
