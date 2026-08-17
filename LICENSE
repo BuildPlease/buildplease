@@ -1,35 +1,21 @@
-Copyright (c) Simon Rastislav Kovačič. All Rights Reserved.
+MIT License
 
-PROPRIETARY AND CONFIDENTIAL
+Copyright (c) 2026 BuildPlease
 
-This software, including all source code, documentation, and associated 
-files (collectively, the "Software"), is the exclusive property of 
-Simon Rastislav Kovačič ("Owner"). All rights are reserved.
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-RESTRICTIONS
-No part of this Software may be, without the prior explicit written 
-permission of the Owner:
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-  1. Copied, reproduced, or duplicated in any form or by any means.
-  2. Modified, adapted, translated, or create derivative works from.
-  3. Distributed, published, sublicensed, sold, or transferred.
-  4. Used for any purpose, whether personal, educational, commercial,
-     or otherwise.
-  5. Reverse engineered, decompiled, or disassembled.
-  6. Used to train, fine-tune, or develop artificial intelligence 
-     or machine learning models.
-
-CONFIDENTIALITY
-The Software contains trade secrets and confidential information belonging 
-solely to the Owner. Any unauthorized access, use, or disclosure is 
-strictly prohibited and may result in civil and criminal liability.
-
-NO LICENSE
-No license, express or implied, is granted to any party under any 
-intellectual property rights. Possession of this Software does not 
-confer any rights to use it.
-
-LEGAL ACTION
-Any unauthorized use of this Software will be prosecuted to the fullest 
-extent permitted by applicable law, including but not limited to Slovak 
-law, EU regulations, and international intellectual property treaties.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.

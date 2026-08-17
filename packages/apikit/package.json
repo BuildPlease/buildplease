@@ -7,7 +7,7 @@
     "url": "git+https://github.com/BuildPlease/buildplease.git",
     "directory": "packages/apikit"
   },
-  "license": "UNLICENSED",
+  "license": "MIT",
   "author": "Simon Rastislav Kovačič",
   "type": "module",
   "exports": {

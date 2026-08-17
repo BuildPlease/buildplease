@@ -6,7 +6,7 @@
     "url": "git+https://github.com/BuildPlease/buildplease.git",
     "directory": "packages/nuxtkit"
   },
-  "license": "UNLICENSED",
+  "license": "MIT",
   "author": "Simon Rastislav Kovačič",
   "type": "module",
   "imports": {
