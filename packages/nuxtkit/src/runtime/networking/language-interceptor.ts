@@ -1,4 +1,4 @@
-import type { RemoteRequestConfig, RemoteRequestInterceptor } from '@meawkit/webkit';
+import type { RemoteRequestConfig, RemoteRequestInterceptor } from '@buildplease/webkit';
 
 import { useNuxtKit } from '#internal-runtime';
 import { useCurrentLocale } from '#nuxtkit/composables';

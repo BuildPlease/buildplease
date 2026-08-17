@@ -1,4 +1,4 @@
-import { FrameworkIdentity } from '@meawkit/identity';
+import { FrameworkIdentity } from '@buildplease/identity';
 
 export const MODULE_NAME = 'NuxtKit' as const;
 export const MODULE_PACKAGE_NAME = `${FrameworkIdentity.scope}/nuxtkit` as const;

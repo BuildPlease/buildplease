@@ -28,7 +28,7 @@ If a `src-<name>` root exists, expose it consistently as `@src-<name>/*`.
 
 Exact shortcuts such as `#l10n` and `#resources` are project-owned conveniences, not source-root aliases.
 
-Prefer framework-native aliases where a framework already owns resolution. Keep framework, runtime and module aliases such as `#app`, `#imports`, `#ui`, `#nuxtkit`, `#internal-runtime` and `#internal-shared` unchanged and never shadow them. A framework-native project-root alias such as Nuxt's `@@/*` may be used where that framework owns it; MeawKit does not define a generic `@@` alias.
+Prefer framework-native aliases where a framework already owns resolution. Keep framework, runtime and module aliases such as `#app`, `#imports`, `#ui`, `#nuxtkit`, `#internal-runtime` and `#internal-shared` unchanged and never shadow them. A framework-native project-root alias such as Nuxt's `@@/*` may be used where that framework owns it; BuildPlease does not define a generic `@@` alias.
 
 Use real package names across package boundaries. Inside the owning package, use its source aliases or a clear relative import.
 

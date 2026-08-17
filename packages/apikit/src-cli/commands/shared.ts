@@ -1,6 +1,6 @@
 import path from 'node:path';
 
-import { Console } from '@meawkit/core/node';
+import { Console } from '@buildplease/core/node';
 
 const cli = new Console();
 

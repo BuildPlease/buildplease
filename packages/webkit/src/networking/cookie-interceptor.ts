@@ -1,5 +1,5 @@
-import type { Identity } from '@meawkit/core';
-import { FrameworkIdentity } from '@meawkit/identity';
+import type { Identity } from '@buildplease/core';
+import { FrameworkIdentity } from '@buildplease/identity';
 
 import type { RemoteRequestConfig, RemoteRequestInterceptor } from '@/networking';
 

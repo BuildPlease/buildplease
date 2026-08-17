@@ -1,4 +1,4 @@
-import { filterObject, isEmptyObject } from '@meawkit/core';
+import { filterObject, isEmptyObject } from '@buildplease/core';
 
 import { HttpHeaders } from '@/http';
 import type { RequestMetadata } from '@/request';

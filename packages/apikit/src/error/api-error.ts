@@ -1,4 +1,4 @@
-import { type JSONSerializable, filterObject } from '@meawkit/core';
+import { type JSONSerializable, filterObject } from '@buildplease/core';
 
 export type ApiErrorDetails = unknown;
 

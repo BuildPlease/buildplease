@@ -1,5 +1,5 @@
-import { type ValidationSchemaI18nParams, CoreSymbols } from '@meawkit/core';
-import type { Logger } from '@meawkit/core/node';
+import { type ValidationSchemaI18nParams, CoreSymbols } from '@buildplease/core';
+import type { Logger } from '@buildplease/core/node';
 import { inject, injectable } from 'inversify';
 import { type ZodType, z, ZodError } from 'zod';
 

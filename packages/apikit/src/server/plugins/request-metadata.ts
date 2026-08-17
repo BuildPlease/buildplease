@@ -1,4 +1,4 @@
-import { isNullOrEmpty } from '@meawkit/core';
+import { isNullOrEmpty } from '@buildplease/core';
 import type { FastifyPluginAsync } from 'fastify';
 import fp from 'fastify-plugin';
 

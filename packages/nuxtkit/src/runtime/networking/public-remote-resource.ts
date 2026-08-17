@@ -1,4 +1,4 @@
-import { type RemoteEndpoint, type RemoteRequestConfig } from '@meawkit/webkit';
+import { type RemoteEndpoint, type RemoteRequestConfig } from '@buildplease/webkit';
 import { decorate, injectable } from 'inversify';
 
 import { useOperationQueue } from '#nuxtkit/composables';

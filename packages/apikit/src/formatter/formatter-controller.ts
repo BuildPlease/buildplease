@@ -1,4 +1,4 @@
-import { isObject, isPlainObject } from '@meawkit/core';
+import { isObject, isPlainObject } from '@buildplease/core';
 import { injectable } from 'inversify';
 
 /**

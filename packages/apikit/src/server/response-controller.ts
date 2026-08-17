@@ -1,5 +1,5 @@
-import { CoreSymbols } from '@meawkit/core';
-import type { Logger } from '@meawkit/core/node';
+import { CoreSymbols } from '@buildplease/core';
+import type { Logger } from '@buildplease/core/node';
 import type { FastifyReply, FastifyRequest } from 'fastify';
 import { inject, injectable } from 'inversify';
 

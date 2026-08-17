@@ -2,8 +2,8 @@ import { existsSync } from 'node:fs';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 
-import { CoreSymbols } from '@meawkit/core';
-import type { Logger } from '@meawkit/core/node';
+import { CoreSymbols } from '@buildplease/core';
+import type { Logger } from '@buildplease/core/node';
 import ejs from 'ejs';
 import { inject, injectable } from 'inversify';
 import nodemailer from 'nodemailer';

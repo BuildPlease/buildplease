@@ -1,4 +1,4 @@
-import { type RemoteEndpoint, type RemoteRequestConfig, HttpError } from '@meawkit/webkit';
+import { type RemoteEndpoint, type RemoteRequestConfig, HttpError } from '@buildplease/webkit';
 import { decorate, injectable } from 'inversify';
 
 import { type NuxtApp, useNuxtApp } from '#app';

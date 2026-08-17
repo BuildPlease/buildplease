@@ -1,4 +1,4 @@
-import type { Assembly, AssemblyContainer } from '@meawkit/core';
+import type { Assembly, AssemblyContainer } from '@buildplease/core';
 
 import { type ApiKitController, ApiKitControllerImpl } from '@/configuration';
 import { ApiKitSymbols } from '@/di';

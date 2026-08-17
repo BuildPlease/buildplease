@@ -1,10 +1,10 @@
 import 'reflect-metadata';
-import { type Assembly, coreAssembly } from '@meawkit/core';
+import { type Assembly, coreAssembly } from '@buildplease/core';
 import { makeAssemblies } from '@src-internal/di';
 
 // MARK: - Exports
 
-export * from '@meawkit/core';
+export * from '@buildplease/core';
 export * from './di';
 export * from './l10n';
 export * from './model';

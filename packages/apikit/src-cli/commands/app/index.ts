@@ -1,4 +1,4 @@
-import { Console } from '@meawkit/core/node';
+import { Console } from '@buildplease/core/node';
 import { APIKIT_CONFIG_NAME, loadApiKitConfig } from '@src-internal/configuration';
 import { generateApp } from '@src-internal/generator';
 import { resolveAppGeneratorConfig } from '@src-internal/generator/configuration/app-generator-config';

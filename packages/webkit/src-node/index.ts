@@ -1,1 +1,1 @@
-export * from '@meawkit/core/node';
+export * from '@buildplease/core/node';

@@ -1,4 +1,4 @@
-import type { OptionalPartial } from '@meawkit/webkit';
+import type { OptionalPartial } from '@buildplease/webkit';
 import { z } from 'zod';
 
 const stringSchema = z.object({

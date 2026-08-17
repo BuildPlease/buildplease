@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 
-import { ensureDirectory, resolvePath } from '@meawkit/core/node';
+import { ensureDirectory, resolvePath } from '@buildplease/core/node';
 import i18next, { type InitOptions } from 'i18next';
 import { inject, injectable } from 'inversify';
 import merge from 'lodash.merge';

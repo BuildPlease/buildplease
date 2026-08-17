@@ -1,9 +1,9 @@
-import { defineDevKitConfig } from '@meawkit/devkit';
+import { defineDevKitConfig } from '@buildplease/devkit';
 
 export default defineDevKitConfig({
-  ignore: ['**/.apikit/**'],
+  ignore: ['**/.apikit/**', '**/.archicat/**'],
 
   clean: {
-    directories: ['.apikit'],
+    directories: ['.apikit', '.archicat'],
   },
 });

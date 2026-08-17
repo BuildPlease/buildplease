@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 
-import { ensureDirectory, resolvePath } from '@meawkit/core/node';
+import { ensureDirectory, resolvePath } from '@buildplease/core/node';
 import { createJiti } from 'jiti';
 
 import type { DevKitConfig } from '../../src/configuration';

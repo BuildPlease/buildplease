@@ -1,14 +1,14 @@
 import 'reflect-metadata';
-import type { Assembly } from '@meawkit/core';
-import { type LoggerOptions, coreNodeAssembly } from '@meawkit/core/node';
+import type { Assembly } from '@buildplease/core';
+import { type LoggerOptions, coreNodeAssembly } from '@buildplease/core/node';
 import { makeAssemblies } from '@src-internal/di';
 
 import '../types';
 
 // MARK: - Exports
 
-export * from '@meawkit/core';
-export * from '@meawkit/core/node';
+export * from '@buildplease/core';
+export * from '@buildplease/core/node';
 export * from './configuration';
 export * from './database';
 export * from './di';

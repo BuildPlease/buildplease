@@ -12,7 +12,7 @@ export default defineNuxtConfig({
 
   devtools: { enabled: true },
   compatibilityDate: '2025-09-01',
-  modules: ['@meawkit/nuxtkit'],
+  modules: ['@buildplease/nuxtkit'],
   css: ['~/assets/styles/main.css'],
 
   icon: {
@@ -33,7 +33,7 @@ export default defineNuxtConfig({
     },
   },
 
-  meawkitNuxtKit: {
+  buildpleaseNuxtKit: {
     debug: true,
     components: {
       prefix: 'NuxtKit',

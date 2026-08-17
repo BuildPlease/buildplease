@@ -1,8 +1,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
+import { Console } from '@buildplease/core/node';
 import dotenvx from '@dotenvx/dotenvx';
-import { Console } from '@meawkit/core/node';
 import {
   type ResolveConfigurationOptions,
   loadApiKitConfig,

@@ -1,11 +1,15 @@
 {
-  "name": "@meawkit/webkit",
+  "name": "@buildplease/webkit",
   "version": "1.0.0",
   "description": "",
   "keywords": [],
+  "homepage": "https://github.com/BuildPlease/BuildPlease/tree/master/packages/webkit#readme",
+  "bugs": {
+    "url": "https://github.com/BuildPlease/BuildPlease/issues"
+  },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/MeawKit/MeawKit.git",
+    "url": "git+https://github.com/BuildPlease/BuildPlease.git",
     "directory": "packages/webkit"
   },
   "license": "UNLICENSED",
@@ -43,15 +47,19 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@meawkit/core": "workspace:^",
+    "@buildplease/core": "workspace:^",
     "axios": "1.19.0"
   },
   "devDependencies": {
-    "@meawkit/identity": "workspace:^"
+    "@buildplease/identity": "workspace:^"
   },
   "peerDependencies": {
     "inversify": "catalog:",
     "reflect-metadata": "catalog:",
     "zod": "catalog:"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   }
 }

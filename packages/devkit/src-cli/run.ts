@@ -1,4 +1,4 @@
-import { Console } from '@meawkit/core/node';
+import { Console } from '@buildplease/core/node';
 import { runCommand } from 'citty';
 
 import { main, showHelpForUnknownCommand } from './main';

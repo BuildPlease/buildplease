@@ -6,7 +6,7 @@ import {
   UnauthorizedResource,
 } from '@@/feature/dashboard/unauthorized-operation';
 import { DashboardViewModel } from '@@/feature/dashboard/view-model';
-import type { Assembly, AssemblyContainer } from '@meawkit/webkit';
+import type { Assembly, AssemblyContainer } from '@buildplease/webkit';
 
 export class DashboardAssembly implements Assembly {
   public assemble(container: AssemblyContainer): void {

@@ -20,9 +20,6 @@ packages:
   - packages/*
   - packages/*/playground
 
-registries:
-  '@meawkit': https://npm.pkg.github.com/
-
 overrides:
   # Temporary compatibility fixes
   '@napi-rs/wasm-runtime@': 1.1.6
@@ -50,6 +47,7 @@ catalog:
   zod: 4.4.3
 
   # Shared
+  consola: 3.4.2
   citty: 0.2.2
   jiti: 2.7.0
 

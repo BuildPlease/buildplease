@@ -1,7 +1,7 @@
 import { readdir, rm, stat } from 'node:fs/promises';
 import path from 'node:path';
 
-import { Console } from '@meawkit/core/node';
+import { Console } from '@buildplease/core/node';
 
 import { loadDevKitConfig, resolveDevKitConfig } from '../../src-internal/configuration';
 

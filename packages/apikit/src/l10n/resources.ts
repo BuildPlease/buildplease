@@ -1,4 +1,4 @@
-import { CoreL10nResource, defineL10n } from '@meawkit/core';
+import { CoreL10nResource, defineL10n } from '@buildplease/core';
 
 import cs from './locales/cs.json';
 import en from './locales/en.json';

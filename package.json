@@ -1,5 +1,5 @@
 {
-  "name": "meawkit",
+  "name": "buildplease",
   "version": "1.0.0",
   "private": true,
   "description": "",
@@ -19,7 +19,7 @@
     "typecheck": "turbo run typecheck"
   },
   "devDependencies": {
-    "@meawkit/devkit": "workspace:*",
+    "@buildplease/devkit": "workspace:*",
     "@types/node": "26.2.0",
     "tsdown": "0.22.14",
     "turbo": "2.10.10",

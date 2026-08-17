@@ -8,7 +8,7 @@
  * ```ts
  * 'zod'
  * /^zod(?:\/.*)?$/
- * /^@meawkit\/core(?:\/.*)?$/
+ * /^@buildplease\/core(?:\/.*)?$/
  * ```
  */
 export type DependencyBundlingMatcher = string | RegExp;

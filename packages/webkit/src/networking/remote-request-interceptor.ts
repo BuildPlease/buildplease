@@ -1,4 +1,4 @@
-import type { Equatable, Hashable, Identity } from '@meawkit/core';
+import type { Equatable, Hashable, Identity } from '@buildplease/core';
 
 import type { RemoteRequestConfig } from '@/networking';
 

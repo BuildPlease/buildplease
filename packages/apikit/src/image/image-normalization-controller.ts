@@ -1,7 +1,7 @@
 import { type Readable, PassThrough } from 'stream';
 import { pipeline as pipelineAsync } from 'stream/promises';
 
-import { type UnitFormatterController, ByteUnit, CoreSymbols } from '@meawkit/core';
+import { type UnitFormatterController, ByteUnit, CoreSymbols } from '@buildplease/core';
 import { inject, injectable } from 'inversify';
 import type { Metadata } from 'sharp';
 import sharp from 'sharp';

@@ -1,7 +1,7 @@
 import { Symbols } from '@@/di/symbols';
 import type { TestOperation, TestOperationInput, TestOperationOutput } from '@@/feature/dashboard/test-operation';
 import type { UnauthorizedOperation } from '@@/feature/dashboard/unauthorized-operation';
-import { CanceledError } from '@meawkit/webkit';
+import { CanceledError } from '@buildplease/webkit';
 import { inject, injectable } from 'inversify';
 
 export interface QueueTestItem {

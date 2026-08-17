@@ -1,4 +1,4 @@
-import type { DeepRequired } from '@meawkit/webkit';
+import type { DeepRequired } from '@buildplease/webkit';
 import { type Resolver, createResolver, useLogger } from '@nuxt/kit';
 
 import { MODULE_NAME } from '#internal-shared';

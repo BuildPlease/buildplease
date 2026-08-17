@@ -1,6 +1,6 @@
 import path from 'node:path';
 
-import { createFile } from '@meawkit/core/node';
+import { createFile } from '@buildplease/core/node';
 
 import type { EnvironmentRegistry } from '@/configuration';
 

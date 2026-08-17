@@ -1,4 +1,4 @@
-import type { DeepRequired } from '@meawkit/webkit';
+import type { DeepRequired } from '@buildplease/webkit';
 
 /**
  * Public runtime config exposed by the NuxtKit module.

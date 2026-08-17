@@ -1,4 +1,4 @@
-import type { L10nResources } from '@meawkit/core';
+import type { L10nResources } from '@buildplease/core';
 import { ApiKitDefaults } from '@src-internal/configuration';
 import type { InitOptions } from 'i18next';
 

@@ -1,4 +1,4 @@
-import type { ScopeController } from '@meawkit/webkit';
+import type { ScopeController } from '@buildplease/webkit';
 
 import { useNuxtApp } from '#app';
 

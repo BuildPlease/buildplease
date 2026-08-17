@@ -1,5 +1,5 @@
-import { CoreSymbols, ignoreErrorAsync } from '@meawkit/core';
-import { type Logger, LogFlag } from '@meawkit/core/node';
+import { CoreSymbols, ignoreErrorAsync } from '@buildplease/core';
+import { type Logger, LogFlag } from '@buildplease/core/node';
 import type { FastifyReply, FastifyRequest } from 'fastify';
 import { inject, injectable } from 'inversify';
 

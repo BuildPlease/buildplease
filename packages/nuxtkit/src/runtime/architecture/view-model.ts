@@ -1,4 +1,4 @@
-import type { Awaitable } from '@meawkit/webkit';
+import type { Awaitable } from '@buildplease/webkit';
 import { type Reactive, reactive } from 'vue';
 import type { RouteLocationNormalizedLoaded, Router } from 'vue-router';
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import path from 'node:path';
 
-import { loadPackageJSON, resolvePath } from '@meawkit/core/node';
+import { loadPackageJSON, resolvePath } from '@buildplease/core/node';
 
 import { runMain } from '../dist/cli/index.mjs';
 

@@ -1,4 +1,4 @@
-import { type RemoteEndpoint, BaseRemoteResource } from '@meawkit/webkit';
+import { type RemoteEndpoint, BaseRemoteResource } from '@buildplease/webkit';
 import { decorate, injectable } from 'inversify';
 
 import { LanguageInterceptor, SSRRequestCookiesInterceptor } from '#nuxtkit/networking';

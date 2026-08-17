@@ -12,7 +12,7 @@ import { ApiErrorFactory } from '@/error';
  *
  * @example
  * // Using FormatErrors from defineErrors:
- * import { defineErrors } from '@meawkit/apikit';
+ * import { defineErrors } from '@buildplease/apikit';
  *
  * export const FormatErrors = defineErrors({
  *   UNSUPPORTED_FORMAT: {

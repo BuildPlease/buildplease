@@ -1,4 +1,4 @@
-import type { Assembly, AssemblyContainer } from '@meawkit/core';
+import type { Assembly, AssemblyContainer } from '@buildplease/core';
 import { InternalApiKitSymbols } from '@src-internal/di/symbols';
 import { TelegramNotificationChannelController } from '@src-internal/notification/channels/telegram-notification-channel-controller';
 import type { NotificationChannelController } from '@src-internal/notification/notification-channel-controller';

@@ -2,7 +2,7 @@ import { mkdir, mkdtemp, rm, stat } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 
-import { Console } from '@meawkit/core/node';
+import { Console } from '@buildplease/core/node';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { clean } from '../../src/commands/clean';

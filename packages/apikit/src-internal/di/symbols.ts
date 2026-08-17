@@ -1,4 +1,4 @@
-import { FrameworkIdentity } from '@meawkit/identity';
+import { FrameworkIdentity } from '@buildplease/identity';
 
 const prefix = `${FrameworkIdentity.name}.ApiKit.Internal.DI`;
 

@@ -1,4 +1,4 @@
-import { loadPackageJSON, makeDependencyBundlingPolicy, resolvePath } from '@meawkit/core/node';
+import { loadPackageJSON, makeDependencyBundlingPolicy, resolvePath } from '@buildplease/core/node';
 import { type CopyEntry, defineConfig } from 'tsdown';
 
 const outDir = 'dist';

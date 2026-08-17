@@ -1,4 +1,4 @@
-import { createDirectory, removePath, resolvePath } from '@meawkit/core/node';
+import { createDirectory, removePath, resolvePath } from '@buildplease/core/node';
 import CodeBlockWriter from 'code-block-writer';
 
 import type { GeneratorConfig } from './configuration';

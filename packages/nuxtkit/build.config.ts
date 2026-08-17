@@ -3,7 +3,7 @@ import { defineBuildConfig } from 'unbuild';
 export default defineBuildConfig({
   externals: ['#imports'],
   rollup: {
-    inlineDependencies: ['@meawkit/identity'],
+    inlineDependencies: ['@buildplease/identity'],
   },
   hooks: {
     'build:prepare'(ctx) {

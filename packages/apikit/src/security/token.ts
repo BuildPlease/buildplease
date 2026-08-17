@@ -1,4 +1,4 @@
-import { ignoreError } from '@meawkit/core';
+import { ignoreError } from '@buildplease/core';
 
 export class Token<T extends Record<string, unknown> = any> {
   private readonly _value: string;

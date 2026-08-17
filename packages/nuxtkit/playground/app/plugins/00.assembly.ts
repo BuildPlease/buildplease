@@ -1,6 +1,6 @@
 import { DashboardAssembly } from '@@/feature/dashboard/assembly';
 import { LoginAssembly } from '@@/feature/login/assembly';
-import { webkitAssembly } from '@meawkit/webkit';
+import { webkitAssembly } from '@buildplease/webkit';
 
 export default defineNuxtPlugin({
   name: 'assembly-plugin',

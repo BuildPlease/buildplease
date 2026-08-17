@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { ScopeController } from '@meawkit/webkit';
+import { ScopeController } from '@buildplease/webkit';
 
 import { defineNuxtPlugin } from '#imports';
 

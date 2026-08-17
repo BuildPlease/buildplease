@@ -1,4 +1,4 @@
-import { type HttpError, CanceledError, Mutex } from '@meawkit/webkit';
+import { type HttpError, CanceledError, Mutex } from '@buildplease/webkit';
 import { decorate, injectable } from 'inversify';
 
 export type RunOptions = {

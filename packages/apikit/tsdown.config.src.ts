@@ -1,4 +1,4 @@
-import { loadPackageJSON, makeDependencyBundlingPolicy, resolvePath } from '@meawkit/core/node';
+import { loadPackageJSON, makeDependencyBundlingPolicy, resolvePath } from '@buildplease/core/node';
 import { type CopyEntry, type UserConfig, defineConfig } from 'tsdown';
 
 const pkg = loadPackageJSON(resolvePath(import.meta.url, './package.json'));

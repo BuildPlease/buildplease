@@ -1,6 +1,6 @@
 import path from 'node:path';
 
-import { type PackageJSONModel, createFile, loadPackageJSON } from '@meawkit/core/node';
+import { type PackageJSONModel, createFile, loadPackageJSON } from '@buildplease/core/node';
 import { v7 as uuidV7 } from 'uuid';
 
 import type { BuildMetadata } from '@/configuration';
@@ -12,7 +12,7 @@ export async function generateBuildMetadata(options: GeneratorOptions): Promise<
   const buildMetadata = makeBuildMetadata(pkg);
   const writer = new options.writer();
 
-  writer.writeLine(`import type { BuildMetadata as BuildMetadataContract } from '@meawkit/apikit';`);
+  writer.writeLine(`import type { BuildMetadata as BuildMetadataContract } from '@buildplease/apikit';`);
   writer.blankLine();
   writer.writeLine('export const BuildMetadata = {');
   writer.indent(() => {

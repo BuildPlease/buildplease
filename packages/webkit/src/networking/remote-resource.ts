@@ -9,7 +9,7 @@ import {
   NetworkError,
   TimeoutError,
   UnknownError,
-} from '@meawkit/core';
+} from '@buildplease/core';
 import axios from 'axios';
 import { injectable, unmanaged } from 'inversify';
 

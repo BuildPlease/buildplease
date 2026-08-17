@@ -4,7 +4,7 @@ export default defineNuxtPlugin((nuxt) => {
   const localePath = useLocalePath();
   const notifyError = useErrorNotifier();
 
-  nuxt.hook('meawkit:unauthorized', async (context) => {
+  nuxt.hook('buildplease:unauthorized', async (context) => {
     const { error, redirect } = context;
     const localizedPath = localePath(Symbols.Routes.Login.path);
 
