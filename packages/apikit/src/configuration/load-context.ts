@@ -2,14 +2,14 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 import dotenvx from '@dotenvx/dotenvx';
+import { Console } from '@meawkit/core/node';
 import {
   type ResolveConfigurationOptions,
   loadApiKitConfig,
   loadAppBuild,
   resolveConfiguration,
   resolveConfigurationBinding,
-} from '@internal/configuration';
-import { Console } from '@meawkit/core/node';
+} from '@src-internal/configuration';
 
 import type { ApiKitConfig } from './config';
 import {

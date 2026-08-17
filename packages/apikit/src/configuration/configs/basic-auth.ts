@@ -1,5 +1,5 @@
 import type { FastifyBasicAuthOptions } from '@fastify/basic-auth';
-import { ApiKitDefaults } from '@internal/configuration';
+import { ApiKitDefaults } from '@src-internal/configuration';
 
 import { type InferConfiguration, defineConfiguration, field } from '@/configuration/core';
 

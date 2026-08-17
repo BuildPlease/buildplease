@@ -14,7 +14,7 @@ export default defineConfig({
   resolve: {
     alias: [
       { find: /^@\/(.*)$/, replacement: `${resolve(rootDir, 'src')}/$1` },
-      { find: /^@test\/(.*)$/, replacement: `${resolve(rootDir, 'test')}/$1` },
+      { find: /^#test\/(.*)$/, replacement: `${resolve(rootDir, 'test')}/$1` },
     ],
   },
 });

@@ -1,8 +1,8 @@
-import { InternalApiKitSymbols } from '@internal/di/symbols';
-import { TelegramNotificationChannelController } from '@internal/notification/channels/telegram-notification-channel-controller';
-import type { NotificationChannelController } from '@internal/notification/notification-channel-controller';
-import { NotificationControllerImpl } from '@internal/notification/notification-controller';
 import type { Assembly, AssemblyContainer } from '@meawkit/core';
+import { InternalApiKitSymbols } from '@src-internal/di/symbols';
+import { TelegramNotificationChannelController } from '@src-internal/notification/channels/telegram-notification-channel-controller';
+import type { NotificationChannelController } from '@src-internal/notification/notification-channel-controller';
+import { NotificationControllerImpl } from '@src-internal/notification/notification-controller';
 
 import { ApiKitSymbols } from '@/di';
 import type { NotificationController } from '@/notification';

@@ -1,4 +1,4 @@
-import { Symbols } from '@di/symbols';
+import { Symbols } from '@@/di/symbols';
 
 export default defineNuxtPlugin((nuxt) => {
   const localePath = useLocalePath();

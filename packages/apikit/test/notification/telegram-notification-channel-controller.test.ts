@@ -1,4 +1,4 @@
-import { TelegramNotificationChannelController } from '@internal/notification/channels/telegram-notification-channel-controller';
+import { TelegramNotificationChannelController } from '@src-internal/notification/channels/telegram-notification-channel-controller';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { NotificationChannel } from '@/notification';

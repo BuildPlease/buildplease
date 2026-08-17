@@ -1,4 +1,4 @@
-import { ApiKitDefaults } from '@internal/configuration';
+import { ApiKitDefaults } from '@src-internal/configuration';
 import type { RouteOptions } from 'fastify';
 
 import { type InferConfiguration, defineConfiguration, field } from '@/configuration/core';

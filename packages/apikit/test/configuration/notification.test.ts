@@ -1,4 +1,4 @@
-import { ApiKitDefaults, resolveConfiguration } from '@internal/configuration';
+import { ApiKitDefaults, resolveConfiguration } from '@src-internal/configuration';
 import { describe, expect, it } from 'vitest';
 
 import { NotificationConfiguration } from '@/configuration';

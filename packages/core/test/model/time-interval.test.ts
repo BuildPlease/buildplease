@@ -1,6 +1,6 @@
-import { makeInterval } from '@test/fixtures/model/time-interval';
 import { describe, expect, it } from 'vitest';
 
+import { makeInterval } from '#test/fixtures/model/time-interval';
 import { TimeInterval } from '@/model/time-interval';
 
 describe('TimeInterval', () => {

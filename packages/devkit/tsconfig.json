@@ -9,9 +9,9 @@
     /* Project paths */
     "paths": {
       "@/*": ["./src/*"],
-      "@cli/*": ["./src-cli/*"],
-      "@internal/*": ["./src-internal/*"],
-      "@test/*": ["./test/*"]
+      "@src-cli/*": ["./src-cli/*"],
+      "@src-internal/*": ["./src-internal/*"],
+      "#test/*": ["./test/*"]
     }
   },
   "include": ["src", "src-cli", "src-internal", "test", "tsdown.config.cli.ts", "tsdown.config.src.ts"],

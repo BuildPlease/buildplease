@@ -3,7 +3,7 @@ import type {
   FastifyMultipartBaseOptions,
   FastifyMultipartOptions,
 } from '@fastify/multipart';
-import { ApiKitDefaults } from '@internal/configuration';
+import { ApiKitDefaults } from '@src-internal/configuration';
 
 import { type InferConfiguration, defineConfiguration, field } from '@/configuration/core';
 

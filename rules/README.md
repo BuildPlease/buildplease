@@ -14,7 +14,7 @@ Follow principles: KISS, SOLID, DRY and YAGNI
 
 ## Structure
 
-- `architecture/` — code structure, dependencies, configuration, bundling, naming, identity, localization, resources and infrastructure.
+- `architecture/` — code structure, dependencies, configuration, bundling, imports and source paths, naming, identity, localization, resources and infrastructure.
 - `testing/` — behavior and integration testing strategy.
 - `security/` — generic security and cryptography contracts.
 

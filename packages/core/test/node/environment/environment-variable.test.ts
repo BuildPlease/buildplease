@@ -1,4 +1,4 @@
-import { optionalEnvironmentVariable, requiredEnvironmentVariable } from '@node/environment';
+import { optionalEnvironmentVariable, requiredEnvironmentVariable } from '@src-node/environment';
 import { afterEach, describe, expect, it } from 'vitest';
 
 const OPTIONAL_VARIABLE = 'TEST_OPTIONAL_ENVIRONMENT_VARIABLE';

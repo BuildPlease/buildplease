@@ -1,6 +1,6 @@
-import { Symbols } from '@di/symbols';
-import type { TestOperation, TestOperationInput, TestOperationOutput } from '@feature/dashboard/test-operation';
-import type { UnauthorizedOperation } from '@feature/dashboard/unauthorized-operation';
+import { Symbols } from '@@/di/symbols';
+import type { TestOperation, TestOperationInput, TestOperationOutput } from '@@/feature/dashboard/test-operation';
+import type { UnauthorizedOperation } from '@@/feature/dashboard/unauthorized-operation';
 import { CanceledError } from '@meawkit/webkit';
 import { inject, injectable } from 'inversify';
 

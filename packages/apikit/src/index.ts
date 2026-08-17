@@ -1,7 +1,7 @@
 import 'reflect-metadata';
-import { makeAssemblies } from '@internal/di';
 import type { Assembly } from '@meawkit/core';
 import { type LoggerOptions, coreNodeAssembly } from '@meawkit/core/node';
+import { makeAssemblies } from '@src-internal/di';
 
 import '../types';
 

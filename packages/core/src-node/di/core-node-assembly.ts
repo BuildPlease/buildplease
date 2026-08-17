@@ -1,5 +1,5 @@
-import { makeAssemblies } from '@internal/di';
-import type { LoggerOptions } from '@node/logger';
+import { makeAssemblies } from '@src-internal/di';
+import type { LoggerOptions } from '@src-node/logger';
 
 import type { Assembly } from '@/di';
 

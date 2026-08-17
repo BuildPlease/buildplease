@@ -1,7 +1,7 @@
 import { type Stats, promises as fs } from 'node:fs';
 import path from 'node:path';
 
-import { resolvePath } from '@node/file';
+import { resolvePath } from '@src-node/file';
 
 /**
  * Remove or clean a file or directory.

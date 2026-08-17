@@ -1,7 +1,7 @@
-import { resolveConfiguration } from '@internal/configuration';
-import { testEnvironment, testEnvironments } from '@test/fixtures/configuration/environment';
+import { resolveConfiguration } from '@src-internal/configuration';
 import { describe, expect, it } from 'vitest';
 
+import { testEnvironment, testEnvironments } from '#test/fixtures/configuration/environment';
 import type { BuildMetadata } from '@/configuration/core/build-metadata';
 import { defineConfiguration } from '@/configuration/core/configuration';
 import { field } from '@/configuration/core/field';

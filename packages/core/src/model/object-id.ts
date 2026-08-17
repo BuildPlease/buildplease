@@ -1,4 +1,4 @@
-import type { JSONSerializable } from '@meawkit/core';
+import type { JSONSerializable } from '@/utils';
 
 function invalid(details: unknown): Error {
   return new Error(`Invalid ObjectId value: ${String(details)}`);

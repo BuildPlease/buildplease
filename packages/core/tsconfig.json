@@ -9,13 +9,13 @@
     /* Project paths */
     "paths": {
       "@/*": ["./src/*"],
-      "@internal/*": ["./src-internal/*"],
-      "@node/*": ["./src-node/*"],
-      "@l10n": ["./src/l10n/index.ts"],
-      "@resources": ["./resources/index.ts"],
+      "@src-internal/*": ["./src-internal/*"],
+      "@src-node/*": ["./src-node/*"],
+      "#l10n": ["./src/l10n/index.ts"],
+      "#resources": ["./resources/index.ts"],
 
-      "@node-test/*": ["./src-node-test/*"],
-      "@test/*": ["./test/*"]
+      "@src-node-test/*": ["./src-node-test/*"],
+      "#test/*": ["./test/*"]
     }
   },
   "include": ["src", "src-node", "src-node-test", "src-internal", "test", "tsdown.config.ts"],

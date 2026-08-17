@@ -1,4 +1,4 @@
-import { resolveConfiguration } from '@internal/configuration';
+import { resolveConfiguration } from '@src-internal/configuration';
 
 import { type ApiKitConfig, BuildConfiguration } from '@/configuration';
 

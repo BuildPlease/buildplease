@@ -9,13 +9,13 @@
     /* Project paths */
     "paths": {
       "@/*": ["./src/*"],
-      "@cli/*": ["./src-cli/*"],
-      "@internal/*": ["./src-internal/*"],
-      "@l10n": ["./src/l10n/index.ts"],
-      "@resources": ["./resources/index.ts"],
+      "@src-cli/*": ["./src-cli/*"],
+      "@src-internal/*": ["./src-internal/*"],
+      "#l10n": ["./src/l10n/index.ts"],
+      "#resources": ["./resources/index.ts"],
 
-      "@node-test/*": ["./src-node-test/*"],
-      "@test/*": ["./test/*"]
+      "@src-node-test/*": ["./src-node-test/*"],
+      "#test/*": ["./test/*"]
     }
   },
   "include": [

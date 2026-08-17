@@ -1,6 +1,6 @@
-import { Symbols } from '@di/symbols';
-import { type LoginController, LoginControllerImpl } from '@feature/login/controller';
-import { LoginViewModel } from '@feature/login/view-model';
+import { Symbols } from '@@/di/symbols';
+import { type LoginController, LoginControllerImpl } from '@@/feature/login/controller';
+import { LoginViewModel } from '@@/feature/login/view-model';
 import type { Assembly, AssemblyContainer } from '@meawkit/webkit';
 
 export class LoginAssembly implements Assembly {

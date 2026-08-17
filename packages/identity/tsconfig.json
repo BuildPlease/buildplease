@@ -9,7 +9,7 @@
     /* Project paths */
     "paths": {
       "@/*": ["./src/*"],
-      "@test/*": ["./test/*"]
+      "#test/*": ["./test/*"]
     }
   },
   "include": ["src", "test", "tsdown.config.ts"],

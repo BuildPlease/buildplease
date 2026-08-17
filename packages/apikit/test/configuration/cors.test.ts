@@ -1,7 +1,7 @@
-import { ApiKitDefaults, resolveConfiguration } from '@internal/configuration';
-import { testEnvironment } from '@test/fixtures/configuration/environment';
+import { ApiKitDefaults, resolveConfiguration } from '@src-internal/configuration';
 import { describe, expect, it } from 'vitest';
 
+import { testEnvironment } from '#test/fixtures/configuration/environment';
 import { CorsConfiguration } from '@/configuration';
 
 describe('CorsConfiguration', () => {

@@ -1,5 +1,5 @@
-import { makeBuildMetadata } from '@internal/generator/steps/generate-build-metadata';
 import { PackageJSONSchema } from '@meawkit/core/node';
+import { makeBuildMetadata } from '@src-internal/generator/steps/generate-build-metadata';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 const { buildId } = vi.hoisted(() => ({

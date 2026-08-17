@@ -24,12 +24,6 @@ export default defineNuxtConfig({
     },
   },
 
-  alias: {
-    '@di': r('./di'),
-    '@schema': r('./schema'),
-    '@feature': r('./feature'),
-  },
-
   typescript: {
     tsConfig: {
       compilerOptions: {

@@ -1,6 +1,6 @@
-import type { NotificationChannelController } from '@internal/notification/notification-channel-controller';
-import { NotificationControllerImpl } from '@internal/notification/notification-controller';
 import { LoggerImpl } from '@meawkit/core/node';
+import type { NotificationChannelController } from '@src-internal/notification/notification-channel-controller';
+import { NotificationControllerImpl } from '@src-internal/notification/notification-controller';
 import { describe, expect, it, vi } from 'vitest';
 
 import { type NotificationChannelRequest, NotificationChannel } from '@/notification';

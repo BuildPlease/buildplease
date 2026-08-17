@@ -1,5 +1,5 @@
-import { ApiKitDefaults } from '@internal/configuration';
 import type { L10nResources } from '@meawkit/core';
+import { ApiKitDefaults } from '@src-internal/configuration';
 import type { InitOptions } from 'i18next';
 
 import { type InferConfiguration, defineConfiguration, field } from '@/configuration/core';

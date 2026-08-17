@@ -1,7 +1,7 @@
-import { APIKIT_CONFIG_NAME, loadApiKitConfig } from '@internal/configuration';
-import { generateApp } from '@internal/generator';
-import { resolveAppGeneratorConfig } from '@internal/generator/configuration/app-generator-config';
 import { Console } from '@meawkit/core/node';
+import { APIKIT_CONFIG_NAME, loadApiKitConfig } from '@src-internal/configuration';
+import { generateApp } from '@src-internal/generator';
+import { resolveAppGeneratorConfig } from '@src-internal/generator/configuration/app-generator-config';
 import { defineCommand } from 'citty';
 
 import type { CliRuntime } from '../../runtime';

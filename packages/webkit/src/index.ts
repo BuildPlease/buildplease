@@ -1,6 +1,6 @@
 import 'reflect-metadata';
-import { makeAssemblies } from '@internal/di';
 import { type Assembly, coreAssembly } from '@meawkit/core';
+import { makeAssemblies } from '@src-internal/di';
 
 // MARK: - Exports
 

@@ -1,4 +1,4 @@
-import { type Logger, type LoggerOptions, LoggerImpl } from '@node/logger';
+import { type Logger, type LoggerOptions, LoggerImpl } from '@src-node/logger';
 
 import { type Assembly, type AssemblyContainer, CoreSymbols } from '@/di';
 

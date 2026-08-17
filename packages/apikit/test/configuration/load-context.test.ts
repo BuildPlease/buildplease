@@ -1,12 +1,12 @@
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
+import { afterEach, describe, expect, it, vi } from 'vitest';
+
 import {
   type TemporaryConfigurationProject,
   makeTemporaryConfigurationProject,
-} from '@test/fixtures/configuration/temporary-config-project';
-import { afterEach, describe, expect, it, vi } from 'vitest';
-
+} from '#test/fixtures/configuration/temporary-config-project';
 import { loadApiKitContext } from '@/configuration/load-context';
 
 const BUILD_METADATA = {

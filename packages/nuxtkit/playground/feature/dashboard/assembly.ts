@@ -1,11 +1,11 @@
-import { Symbols } from '@di/symbols';
-import { type TestOperation, TestEndpoint, TestResource } from '@feature/dashboard/test-operation';
+import { Symbols } from '@@/di/symbols';
+import { type TestOperation, TestEndpoint, TestResource } from '@@/feature/dashboard/test-operation';
 import {
   type UnauthorizedOperation,
   UnauthorizedEndpoint,
   UnauthorizedResource,
-} from '@feature/dashboard/unauthorized-operation';
-import { DashboardViewModel } from '@feature/dashboard/view-model';
+} from '@@/feature/dashboard/unauthorized-operation';
+import { DashboardViewModel } from '@@/feature/dashboard/view-model';
 import type { Assembly, AssemblyContainer } from '@meawkit/webkit';
 
 export class DashboardAssembly implements Assembly {

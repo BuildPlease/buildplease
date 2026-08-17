@@ -1,6 +1,6 @@
-import { InternalApiKitSymbols } from '@internal/di/symbols';
 import { CoreSymbols } from '@meawkit/core';
 import type { Logger } from '@meawkit/core/node';
+import { InternalApiKitSymbols } from '@src-internal/di/symbols';
 import { inject, injectable, multiInject, optional } from 'inversify';
 
 import type {

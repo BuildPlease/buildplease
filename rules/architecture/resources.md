@@ -10,7 +10,7 @@ src/l10n/**         compiled localization source
 
 - Keep physical runtime assets under the owner's root `resources/` directory.
 - Keep the registry at `resources/index.ts`, including when currently empty.
-- Expose the registry through one exact `@resources` alias when a project alias is useful.
+- Expose the registry through one exact `#resources` alias when a project alias is useful.
 - Keep each registry limited to assets owned by that unit.
 - Resolve asset paths relative to the registry with `import.meta.url`/owner-relative path helpers.
 - Keep raw `resources/` in package files when the package reserves or publishes runtime assets.

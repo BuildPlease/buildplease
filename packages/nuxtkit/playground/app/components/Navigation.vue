@@ -35,7 +35,7 @@
 </template>
 
 <script setup lang="ts">
-import { Symbols } from '@di/symbols';
+import { Symbols } from '@@/di/symbols';
 
 import type { NavigationMenuItem } from '#ui/types';
 

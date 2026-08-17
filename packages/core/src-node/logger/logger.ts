@@ -1,6 +1,6 @@
 import path from 'node:path';
 
-import { ensureDirectory, resolvePath } from '@node/file';
+import { ensureDirectory, resolvePath } from '@src-node/file';
 import pino, {
   type Bindings,
   type Level,
