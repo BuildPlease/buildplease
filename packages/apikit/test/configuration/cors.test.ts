@@ -24,7 +24,7 @@ describe('CorsConfiguration', () => {
   });
 
   it('shallow-merges consumer CORS option overrides over framework defaults', async () => {
-    const origin = 'https://business.myssless.com';
+    const origin = 'https://subdomain.example.com';
 
     const resolved = await resolveConfiguration(
       CorsConfiguration,

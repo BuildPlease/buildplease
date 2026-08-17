@@ -1,23 +1,28 @@
-# Rules
+# Engineering Rules
 
-Read this file before changing source code.
-Follow principles: KISS, SOLID, DRY and YAGNI
+These rules define the engineering contract for BuildPlease source code and repository tooling.
 
-## Usage
+Keep them practical. They describe the preferred shape of the codebase, not implementation history.
 
-- Read the rules relevant to the code being changed before editing it.
-- Preserve existing public contracts and ownership unless the task explicitly changes them.
-- Prefer small, explicit changes with visible state, side effects and failure paths.
-- Add abstractions for real boundaries, stable contracts or proven reuse.
-- Keep implementation history in Git; keep rules focused on the intended engineering contract.
-- Project repositories contain only project-specific extensions. Generic rules live here once.
+## Principles
+
+Follow **KISS**, **SOLID**, **DRY**, and **YAGNI**.
+
+- Keep ownership, runtime boundaries, state, side effects, and failure paths explicit.
+- Prefer small changes over broad cleanup.
+- Add abstractions for real boundaries, stable contracts, or proven reuse.
+- Preserve public contracts unless a change intentionally modifies them.
+- Keep generated output and implementation history out of the rules.
 
 ## Structure
 
-- `architecture/` — code structure, dependencies, configuration, bundling, imports and source paths, naming, identity, localization, resources and infrastructure.
-- `testing/` — behavior and integration testing strategy.
-- `security/` — generic security and cryptography contracts.
+| Area                              | Covers                                                                                                                                |
+| --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| [`architecture/`](./architecture) | Structure, dependencies, configuration, bundling, imports, TypeScript, naming, identity, localization, resources, and infrastructure. |
+| [`testing/`](./testing)           | Testing strategy, ownership, and integration boundaries.                                                                              |
+| [`security/`](./security)         | Security and cryptography contracts.                                                                                                  |
 
-## Examples
+## Usage
 
-Rules describe the preferred shape positively. When a distinction matters, `GOOD` and `BAD` examples define the boundary.
+Read only the rules relevant to the change, then keep the implementation consistent with them.
+When a real architecture exception appears, resolve the ownership or contract explicitly instead of adding a hidden workaround or a parallel convention.

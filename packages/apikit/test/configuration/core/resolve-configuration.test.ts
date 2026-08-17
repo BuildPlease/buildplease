@@ -45,7 +45,7 @@ describe('resolveConfiguration', () => {
         {
           origin: from.byEnvironment({
             development: 'http://localhost:3000',
-            production: 'https://myssless.com',
+            production: 'https://example.com',
           }),
         },
         { environment: environment },

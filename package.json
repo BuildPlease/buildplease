@@ -2,7 +2,7 @@
   "name": "buildplease",
   "version": "1.0.0",
   "private": true,
-  "description": "",
+  "description": "A TypeScript framework ecosystem for modular applications.",
   "keywords": [],
   "license": "UNLICENSED",
   "author": "Simon Rastislav Kovačič",

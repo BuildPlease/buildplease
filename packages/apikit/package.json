@@ -1,15 +1,10 @@
 {
   "name": "@buildplease/apikit",
   "version": "1.0.0",
-  "description": "",
   "keywords": [],
-  "homepage": "https://github.com/BuildPlease/BuildPlease/tree/master/packages/apikit#readme",
-  "bugs": {
-    "url": "https://github.com/BuildPlease/BuildPlease/issues"
-  },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/BuildPlease/BuildPlease.git",
+    "url": "git+https://github.com/BuildPlease/buildplease.git",
     "directory": "packages/apikit"
   },
   "license": "UNLICENSED",

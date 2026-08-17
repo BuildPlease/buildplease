@@ -1,14 +1,9 @@
 {
   "name": "@buildplease/nuxtkit",
   "version": "1.0.0",
-  "description": "A Nuxt Kit for MVVM design pattern and Clean Code architecture, with foundation for web app",
-  "homepage": "https://github.com/BuildPlease/BuildPlease/tree/master/packages/nuxtkit#readme",
-  "bugs": {
-    "url": "https://github.com/BuildPlease/BuildPlease/issues"
-  },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/BuildPlease/BuildPlease.git",
+    "url": "git+https://github.com/BuildPlease/buildplease.git",
     "directory": "packages/nuxtkit"
   },
   "license": "UNLICENSED",

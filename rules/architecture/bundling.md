@@ -7,7 +7,7 @@
 - Use source aliases for source, tests and tooling; consumers use public package exports.
 - Build, typecheck and test resolve current source without relying on stale output from the same project.
 - Generated output becomes build input only when the pipeline explicitly owns that generated contract.
-- Keep bundler configuration deterministic and independent of incidental process state.
+- Keep bundler configuration deterministic and independent of ambient process state.
 - Copy physical runtime resources as assets; compile source registries as source code.
 
 GOOD:

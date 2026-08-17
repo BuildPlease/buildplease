@@ -27,16 +27,16 @@
 
 ## Methods
 
-| Method                                  | Meaning                               |
-| --------------------------------------- | ------------------------------------- |
-| `init()`                                | Synchronous constructor closure       |
-| `configure()`                           | Apply configuration                   |
-| `start()` / `stop()` / `quit()`         | Real resource lifecycle               |
-| `load*()`                               | Read an external file/module/source   |
-| `resolve*()`                            | Derive a validated runtime value      |
-| `find*()` / `list*()`                   | Optional or collection lookup         |
-| `get*()`                                | Required value/direct property access |
-| `create*()` / `update*()` / `delete*()` | Mutation                              |
+| Method                                  | Meaning                                 |
+| --------------------------------------- | --------------------------------------- |
+| `init()`                                | Synchronous setup called by constructor |
+| `configure()`                           | Apply configuration                     |
+| `start()` / `stop()` / `quit()`         | Real resource lifecycle                 |
+| `load*()`                               | Read an external file/module/source     |
+| `resolve*()`                            | Derive a validated runtime value        |
+| `find*()` / `list*()`                   | Optional or collection lookup           |
+| `get*()`                                | Required value/direct property access   |
+| `create*()` / `update*()` / `delete*()` | Mutation                                |
 
 GOOD:
 

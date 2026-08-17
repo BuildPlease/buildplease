@@ -6,7 +6,8 @@ owned locale files -> L10nResource composition -> L10n typed keys -> I18n runtim
 
 - `L10n` names localization content: authored locale data, typed resources and typed key trees.
 - `I18n` names the runtime mechanism: services, configuration, adapters, i18next and Vue I18n integration.
-- Keep owner-local localization source under `src/l10n/`; authored locale files live under `src/l10n/locales/`. Nested runtime/module owners may colocate it under their own source root, for example `src/runtime/l10n/`.
+- Keep owner-local localization source under `src/l10n/`; authored locale files live under `src/l10n/locales/`.
+- Nested runtime/module owners may colocate localization under their own source root, for example `src/runtime/l10n/`.
 - Import locale files statically into L10n composition; they are build inputs.
 - Expose the owner-local entry point through one exact `#l10n` alias when a project alias is useful.
 - Shared/reusable layers own content reused by consumers.
