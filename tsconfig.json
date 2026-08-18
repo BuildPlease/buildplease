@@ -34,5 +34,6 @@
     "emitDeclarationOnly": true,
     "skipLibCheck": true,
     "sourceMap": false
-  }
+  },
+  "exclude": ["packages"]
 }

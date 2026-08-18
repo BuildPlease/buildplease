@@ -1,5 +1,5 @@
 {
-  "extends": "./tsconfig.base.json",
+  "extends": "./tsconfig.json",
   "compilerOptions": {
     /* Browser runtime libs */
     "lib": ["ES2024", "DOM", "DOM.Iterable"],

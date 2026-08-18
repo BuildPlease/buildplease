@@ -20,21 +20,6 @@ packages:
   - packages/*
   - packages/*/playground
 
-# Native pnpm release management
-versioning:
-  fixed:
-    -
-      - '@buildplease/core'
-      - '@buildplease/apikit'
-      - '@buildplease/webkit'
-      - '@buildplease/nuxtkit'
-      - '@buildplease/devkit'
-      - '@buildplease/archicat'
-  ignore:
-    - buildplease
-    - '@buildplease/identity'
-    - '@buildplease/nuxtkit-playground'
-
 overrides:
   # Temporary compatibility fixes
   '@napi-rs/wasm-runtime@': 1.1.6
