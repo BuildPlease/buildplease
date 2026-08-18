@@ -18,14 +18,14 @@
 
 ## 📦 Packages
 
-| Kit                                 | Runtime           | Purpose                                 |
-| ----------------------------------- | ----------------- | --------------------------------------- |
-| [`Core`](@buildplease/core)         | Neutral + Node.js | Common foundation for the other kits.   |
-| [`ApiKit`](@buildplease/apikit)     | Node.js           | Backend and APIs.                       |
-| [`WebKit`](@buildplease/webkit)     | Browser           | Browser applications.                   |
-| [`NuxtKit`](@buildplease/nuxtkit)   | Nuxt              | Nuxt applications built on WebKit.      |
-| [`DevKit`](@buildplease/devkit)     | Node.js / CLI     | Development and repository tooling.     |
-| [`ArchiCat`](@buildplease/archicat) | Node.js / CLI     | Architecture generation and validation. |
+| Kit                               | Runtime           | Purpose                                 |
+| --------------------------------- | ----------------- | --------------------------------------- |
+| [`Core`](./packages/core)         | Neutral + Node.js | Common foundation for the other kits.   |
+| [`ApiKit`](./packages/apikit)     | Node.js           | Backend and APIs.                       |
+| [`WebKit`](./packages/webkit)     | Browser           | Browser applications.                   |
+| [`NuxtKit`](./packages/nuxtkit)   | Nuxt              | Nuxt applications built on WebKit.      |
+| [`DevKit`](./packages/devkit)     | Node.js / CLI     | Development and repository tooling.     |
+| [`ArchiCat`](./packages/archicat) | Node.js / CLI     | Architecture generation and validation. |
 
 ## 🤝 Contributing
 

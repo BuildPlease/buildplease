@@ -1,7 +1,7 @@
+import { resolveDevKitConfig } from '@src-internal/configuration';
 import { describe, expect, it } from 'vitest';
 
-import { defineDevKitConfig } from '../../src/configuration';
-import { resolveDevKitConfig } from '../../src-internal/configuration';
+import { defineDevKitConfig } from '@/configuration';
 
 describe('resolveDevKitConfig', () => {
   it('resolves generic built-in ignore entries', () => {

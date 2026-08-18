@@ -4,7 +4,7 @@ import path from 'node:path';
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { depCheck, format, formatFix } from '../../src/commands/tool-commands';
+import { depCheck, format, formatFix } from '@/commands/tool-commands';
 
 const mocks = vi.hoisted(() => ({
   runNodeBin: vi.fn<(_packageName: string, _binName: string, _args: readonly string[]) => Promise<void>>(
@@ -12,7 +12,7 @@ const mocks = vi.hoisted(() => ({
   ),
 }));
 
-vi.mock('../../src/commands/run-bin', () => ({
+vi.mock('@/commands/run-bin', () => ({
   runNodeBin: mocks.runNodeBin,
 }));
 
