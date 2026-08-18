@@ -13,7 +13,7 @@ permissions:
 
 jobs:
   release:
-    name: Dry Run
+    name: Release
     runs-on: macos-26
 
     env:
@@ -42,34 +42,6 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Preview release plan
-        run: |
-          pnpm change status
-          pnpm version -r --dry-run
-
-      - name: Version packages
-        run: |
-          pnpm version -r
-
-          if [ -z "$(git status --porcelain)" ]; then
-            echo "No pending release changes."
-            exit 1
-          fi
-
-      - name: Resolve release
-        id: release
-        run: |
-          VERSION="$(node -p "require('./packages/core/package.json').version")"
-          TAG="v${VERSION}"
-
-          if git ls-remote --exit-code --tags origin "refs/tags/${TAG}" > /dev/null 2>&1; then
-            echo "Tag ${TAG} already exists."
-            exit 1
-          fi
-
-          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
-          echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
-
       - name: Build
         run: pnpm run build
 
@@ -79,38 +51,19 @@ jobs:
       - name: Test
         run: pnpm run test
 
-      - name: Commit release locally
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+      - name: Publish packages
+        id: publish
+        continue-on-error: true
+        run: node scripts/release.ts
 
-          git add -A
-          git commit -m "chore(release): ${{ steps.release.outputs.tag }}"
-
-      - name: Create tag locally
-        run: git tag "${{ steps.release.outputs.tag }}"
-
-      - name: Dry-run publish
-        run: pnpm publish -r --dry-run --no-git-checks
-
-      - name: Dry-run push
-        run: |
-          git push --dry-run --atomic origin \
-            HEAD:"$DEFAULT_BRANCH" \
-            "${{ steps.release.outputs.tag }}"
-
-      - name: Preview GitHub release notes
+      - name: Post release
+        if: always() && (steps.publish.outcome == 'success' || steps.publish.outcome == 'failure')
         env:
           GH_TOKEN: ${{ github.token }}
-        run: |
-          gh api \
-            --method POST \
-            "repos/${GITHUB_REPOSITORY}/releases/generate-notes" \
-            -f tag_name="${{ steps.release.outputs.tag }}" \
-            -f target_commitish="$GITHUB_SHA" \
-            --jq '"\(.name)\n\n\(.body)"'
+        run: node scripts/post-release.ts
 
-      - name: Summary
+      - name: Propagate publish failure
+        if: always() && steps.publish.outcome == 'failure'
         run: |
-          echo "Dry run completed for ${{ steps.release.outputs.tag }}."
-          echo "Nothing was pushed, published, or released."
+          echo "::error title=Package publishing failed::One or more packages failed to publish. Successfully published packages were finalized with Git tags and GitHub Releases. See the Publish packages log for the original error."
+          exit 1
