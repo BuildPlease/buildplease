@@ -1,40 +1,16 @@
+import fs from 'node:fs';
 import path from 'node:path';
 
 import { writeTextFile } from '@src-internal/generator/file-writer';
-import type {
-  ResolvedArchicatDefinition,
-  ResolvedArchicatLibrary,
-  ResolvedArchicatModule,
-  ResolvedArchicatSurface,
-} from '@src-internal/model';
+import type { ResolvedArchicatDefinition, ResolvedArchicatSurface } from '@src-internal/model';
 import { normalizePath, toPosixRelativeImport } from '@src-internal/path';
 import { hasDefaultExport, listTypeScriptFiles } from '@src-internal/scanner';
 
-// MARK: - Mirror generation
-
 export function generateMirrors(definitions: readonly ResolvedArchicatDefinition[]): void {
   for (const definition of definitions) {
-    switch (definition.kind) {
-      case 'module':
-        generateModuleMirror(definition);
-        break;
-      case 'library':
-        generateLibraryMirror(definition);
-        break;
-    }
+    generateApiMirror(definition.api);
+    generateImplMirror(definition);
   }
-}
-
-// MARK: - Mirror file formatting
-
-function generateModuleMirror(module: ResolvedArchicatModule): void {
-  generateApiMirror(module.api);
-  generateImplMirror(module, 'module');
-}
-
-function generateLibraryMirror(library: ResolvedArchicatLibrary): void {
-  generateApiMirror(library.api);
-  generateImplMirror(library, 'library');
 }
 
 function generateApiMirror(surface: ResolvedArchicatSurface): void {
@@ -43,45 +19,31 @@ function generateApiMirror(surface: ResolvedArchicatSurface): void {
     return;
   }
 
-  const apiFiles = listTypeScriptFiles(surface.rootPath);
-  const mirroredRelativePaths = new Set<string>();
+  const mirroredPaths = new Set<string>();
 
-  for (const sourceFilePath of apiFiles) {
+  for (const sourceFilePath of listTypeScriptFiles(surface.rootPath)) {
     const relativePath = normalizePath(path.relative(surface.rootPath, sourceFilePath));
-    mirroredRelativePaths.add(relativePath);
+    mirroredPaths.add(relativePath);
     writeMirrorFile(path.join(surface.mirrorRootPath, relativePath), sourceFilePath);
   }
 
-  if (!mirroredRelativePaths.has('index.ts')) {
+  if (!mirroredPaths.has('index.ts')) {
     writeEmptyMirror(path.join(surface.mirrorRootPath, 'index.ts'));
   }
 }
 
-function generateImplMirror(
-  definition: ResolvedArchicatModule | ResolvedArchicatLibrary,
-  kind: 'module' | 'library',
-): void {
-  const implIndexPath = definition.impl.rootPath ? findIndexFile(definition.impl.rootPath) : undefined;
+function generateImplMirror(definition: ResolvedArchicatDefinition): void {
+  const indexPath = definition.impl.rootPath ? findIndexFile(definition.impl.rootPath) : undefined;
 
-  if (!implIndexPath) {
-    writeNoOpImplementationMirror(definition, kind);
+  if (indexPath) {
+    writeMirrorFile(path.join(definition.impl.mirrorRootPath, 'index.ts'), indexPath);
     return;
   }
 
-  writeMirrorFile(path.join(definition.impl.mirrorRootPath, 'index.ts'), implIndexPath);
-}
-
-function writeNoOpImplementationMirror(
-  definition: ResolvedArchicatModule | ResolvedArchicatLibrary,
-  kind: 'module' | 'library',
-): void {
-  const constName = kind === 'module' ? 'ArchicatModuleImplementation' : 'ArchicatLibraryImplementation';
+  const constName = definition.kind === 'module' ? 'ArchicatModuleImplementation' : 'ArchicatLibraryImplementation';
   const content = `${makeMirrorHeader()}
 export const ${constName} = {
   name: '${definition.name}',
-  assemblies: [],
-  schemas: [],
-  routes: [],
 } as const;
 
 export default ${constName};
@@ -91,31 +53,27 @@ export default ${constName};
 }
 
 function writeEmptyMirror(filePath: string): void {
-  writeTextFile(
-    filePath,
-    `${makeMirrorHeader()}export {};
-`,
-  );
+  writeTextFile(filePath, `${makeMirrorHeader()}export {};\n`);
 }
 
 function writeMirrorFile(targetFilePath: string, sourceFilePath: string): void {
   const sourceImport = toPosixRelativeImport(targetFilePath, sourceFilePath);
   const defaultExport = hasDefaultExport(sourceFilePath) ? `export { default } from '${sourceImport}';\n` : '';
-  const content = `${makeMirrorHeader()}
-export * from '${sourceImport}';
-${defaultExport}`;
 
-  writeTextFile(targetFilePath, content);
+  writeTextFile(
+    targetFilePath,
+    `${makeMirrorHeader()}
+export * from '${sourceImport}';
+${defaultExport}`,
+  );
 }
 
 function findIndexFile(rootPath: string): string | undefined {
-  const candidates = ['index.ts', 'index.mts', 'index.cts', 'index.tsx'];
+  for (const fileName of ['index.ts', 'index.mts', 'index.cts', 'index.tsx']) {
+    const filePath = path.join(rootPath, fileName);
 
-  for (const candidate of candidates) {
-    const candidatePath = path.join(rootPath, candidate);
-
-    if (listTypeScriptFiles(candidatePath).length > 0) {
-      return candidatePath;
+    if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
+      return filePath;
     }
   }
 

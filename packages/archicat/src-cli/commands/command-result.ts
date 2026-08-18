@@ -31,17 +31,3 @@ export interface ArchicatCliCommandResult {
   readonly exitCode: number;
   readonly lines: readonly ArchicatCliCommandLine[];
 }
-
-export function successResult(messages: readonly string[]): ArchicatCliCommandResult {
-  return {
-    exitCode: 0,
-    lines: messages.map((message) => ({ kind: 'success', message: message })),
-  };
-}
-
-export function failureResult(messages: readonly string[]): ArchicatCliCommandResult {
-  return {
-    exitCode: 1,
-    lines: messages.map((message) => ({ kind: 'error', message: message })),
-  };
-}

@@ -31,7 +31,7 @@ export async function loadArchicatDefinition(
   }
 }
 
-export async function loadArchicatModule(filePath: string): Promise<LoadedArchicatModule> {
+async function loadArchicatModule(filePath: string): Promise<LoadedArchicatModule> {
   const contract = await importDefault<ArchicatModuleContract>(filePath, path.dirname(filePath));
   assertArchicatDefinition(contract, filePath, 'module');
 
@@ -43,7 +43,7 @@ export async function loadArchicatModule(filePath: string): Promise<LoadedArchic
   };
 }
 
-export async function loadArchicatLibrary(filePath: string): Promise<LoadedArchicatLibrary> {
+async function loadArchicatLibrary(filePath: string): Promise<LoadedArchicatLibrary> {
   const contract = await importDefault<ArchicatLibraryContract>(filePath, path.dirname(filePath));
   assertArchicatDefinition(contract, filePath, 'library');
 
@@ -55,7 +55,7 @@ export async function loadArchicatLibrary(filePath: string): Promise<LoadedArchi
   };
 }
 
-export async function loadArchicatApp(filePath: string): Promise<LoadedArchicatApp> {
+async function loadArchicatApp(filePath: string): Promise<LoadedArchicatApp> {
   const contract = await importDefault<ArchicatAppContract>(filePath, path.dirname(filePath));
   assertArchicatDefinition(contract, filePath, 'app');
 
@@ -93,7 +93,7 @@ function assertArchicatDefinition(
   const definition = input as Partial<ArchicatModuleContract | ArchicatLibraryContract | ArchicatAppContract>;
 
   if (definition.kind !== expectedKind) {
-    throw new Error(`Archicat ${expectedKind} file must export define${capitalize(expectedKind)}(...): ${filePath}`);
+    throw new Error(`Archicat ${expectedKind} file must export a ${expectedKind} definition: ${filePath}`);
   }
 
   if (typeof definition.name !== 'string' || definition.name.trim() === '') {
@@ -135,8 +135,4 @@ function assertOptionalNonEmptyString(value: unknown, key: string, filePath: str
   if (value !== undefined && (typeof value !== 'string' || value.trim() === '')) {
     throw new Error(`Archicat ${key} must be a non-empty string when defined: ${filePath}`);
   }
-}
-
-function capitalize(value: string): string {
-  return `${value.charAt(0).toUpperCase()}${value.slice(1)}`;
 }

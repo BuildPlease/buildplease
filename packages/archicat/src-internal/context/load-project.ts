@@ -3,9 +3,9 @@ import { discoverDefinitionFiles, loadArchicatDefinition } from '@src-internal/d
 import type { LoadedArchicatDefinition, ResolvedArchicatProject } from '@src-internal/model';
 import { resolveArchicatProject } from '@src-internal/resolver';
 
-// MARK: - Build context loading
+// MARK: - Project loading
 
-export async function loadArchicatBuildContext(cwd: string, configFileName?: string): Promise<ResolvedArchicatProject> {
+export async function loadArchicatProject(cwd: string, configFileName?: string): Promise<ResolvedArchicatProject> {
   const loadedConfig = await loadArchicatConfig(cwd, configFileName);
   const moduleFiles = discoverDefinitionFiles(
     loadedConfig.rootDir,

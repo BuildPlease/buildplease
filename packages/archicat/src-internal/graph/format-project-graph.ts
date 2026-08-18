@@ -1,49 +1,10 @@
-import type { ArchicatGraphDependency, ResolvedArchicatProject } from '@src-internal/model';
-
-// MARK: - Graph formatting
+import type { ArchicatGraphDependency, ResolvedArchicatDefinition, ResolvedArchicatProject } from '@src-internal/model';
 
 export function formatProjectGraph(project: ResolvedArchicatProject): string[] {
-  const lines: string[] = [`Modules: ${project.modules.length}`, ''];
+  const lines: string[] = [];
 
-  for (const module of project.modules) {
-    lines.push(module.name);
-    lines.push(`  api: ${module.apiTarget}`);
-    pushDependencies(
-      lines,
-      project.graph.dependencies.filter((dependency) => dependency.from === module.apiTarget),
-      '  api dependsOn',
-    );
-    lines.push(`  impl: ${module.implTarget}`);
-    pushDependencies(
-      lines,
-      project.graph.dependencies.filter((dependency) => dependency.from === module.implTarget),
-      '  impl dependsOn',
-    );
-    lines.push('');
-  }
-
-  lines.push(`Libraries: ${project.libraries.length}`);
-
-  if (project.libraries.length > 0) {
-    lines.push('');
-  }
-
-  for (const library of project.libraries) {
-    lines.push(library.name);
-    lines.push(`  api: ${library.apiTarget}`);
-    pushDependencies(
-      lines,
-      project.graph.dependencies.filter((dependency) => dependency.from === library.apiTarget),
-      '  api dependsOn',
-    );
-    lines.push(`  impl: ${library.implTarget}`);
-    pushDependencies(
-      lines,
-      project.graph.dependencies.filter((dependency) => dependency.from === library.implTarget),
-      '  impl dependsOn',
-    );
-    lines.push('');
-  }
+  pushSection(lines, 'Modules', project.modules.length, project.modules, project.graph.dependencies);
+  pushSection(lines, 'Libraries', project.libraries.length, project.libraries, project.graph.dependencies);
 
   lines.push(`Apps: ${project.apps.length}`);
 
@@ -65,7 +26,36 @@ export function formatProjectGraph(project: ResolvedArchicatProject): string[] {
   return trimTrailingEmptyLines(lines);
 }
 
-// MARK: - Graph line formatting
+function pushSection(
+  lines: string[],
+  title: string,
+  count: number,
+  definitions: readonly ResolvedArchicatDefinition[],
+  dependencies: readonly ArchicatGraphDependency[],
+): void {
+  lines.push(`${title}: ${count}`);
+
+  if (definitions.length > 0) {
+    lines.push('');
+  }
+
+  for (const definition of definitions) {
+    lines.push(definition.name);
+    lines.push(`  api: ${definition.apiTarget}`);
+    pushDependencies(
+      lines,
+      dependencies.filter((dependency) => dependency.from === definition.apiTarget),
+      '  api dependsOn',
+    );
+    lines.push(`  impl: ${definition.implTarget}`);
+    pushDependencies(
+      lines,
+      dependencies.filter((dependency) => dependency.from === definition.implTarget),
+      '  impl dependsOn',
+    );
+    lines.push('');
+  }
+}
 
 function pushDependencies(lines: string[], dependencies: readonly ArchicatGraphDependency[], label: string): void {
   if (dependencies.length === 0) {
@@ -82,11 +72,9 @@ function pushDependencies(lines: string[], dependencies: readonly ArchicatGraphD
 }
 
 function trimTrailingEmptyLines(lines: string[]): string[] {
-  const result = [...lines];
-
-  while (result.at(-1) === '') {
-    result.pop();
+  while (lines.at(-1) === '') {
+    lines.pop();
   }
 
-  return result;
+  return lines;
 }

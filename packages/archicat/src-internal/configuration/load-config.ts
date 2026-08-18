@@ -36,7 +36,6 @@ export async function loadArchicatConfig(
     outDir: outDir,
     reportsDir: reportsDir,
     ...(tsconfigPath ? { tsconfigPath: tsconfigPath } : {}),
-    config: config,
     resolvedConfig: resolvedConfig,
   };
 }

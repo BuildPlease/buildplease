@@ -1,4 +1,4 @@
-import type { ArchicatAppContract, ArchicatConfig, ArchicatLibraryContract, ArchicatModuleContract } from '@/configs';
+import type { ArchicatAppContract, ArchicatLibraryContract, ArchicatModuleContract } from '@/configs';
 
 // MARK: - Configuration model
 
@@ -39,7 +39,6 @@ export interface LoadedArchicatConfig {
   outDir: string;
   reportsDir: string;
   tsconfigPath?: string;
-  config: ArchicatConfig;
   resolvedConfig: ResolvedArchicatConfig;
 }
 
@@ -77,8 +76,6 @@ export type ArchicatDependencyOrigin = 'declared' | 'derived';
 
 export interface ArchicatGraphTarget {
   key: string;
-  kind: ArchicatTargetKind;
-  name: string;
   surface: ArchicatSurface;
 }
 
@@ -103,8 +100,8 @@ export interface ResolvedArchicatModule {
   implTarget: string;
   alias: string;
   aliasGlob: string;
-  implAlias?: string;
-  implAliasGlob?: string;
+  implAlias: string;
+  implAliasGlob: string;
   contractFilePath: string;
   definitionDir: string;
   api: ResolvedArchicatSurface;
@@ -118,8 +115,8 @@ export interface ResolvedArchicatLibrary {
   implTarget: string;
   alias: string;
   aliasGlob: string;
-  implAlias?: string;
-  implAliasGlob?: string;
+  implAlias: string;
+  implAliasGlob: string;
   contractFilePath: string;
   definitionDir: string;
   api: ResolvedArchicatSurface;
@@ -131,7 +128,6 @@ export interface ResolvedArchicatApp {
   name: string;
   target: string;
   contractFilePath: string;
-  definitionDir: string;
   rootPath: string;
   dependencies: string[];
 }
@@ -198,10 +194,5 @@ export interface ArchicatGraphReport {
 export interface ArchicatViolation {
   filePath: string;
   importPath: string;
-  message: string;
-}
-
-export interface ArchicatDoctorIssue {
-  severity: 'warning' | 'error';
   message: string;
 }

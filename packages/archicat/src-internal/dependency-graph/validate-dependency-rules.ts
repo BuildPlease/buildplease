@@ -1,7 +1,5 @@
-import type { DependencyOwner, ParsedDependencyTarget } from './dependency-target';
+import type { DependencyOwner } from './dependency-target';
 import { parseDependencyTarget } from './parse-dependency-target';
-
-// MARK: - Dependency rule validation
 
 export function validateDeclaredDependency(
   owner: DependencyOwner,
@@ -22,30 +20,20 @@ export function validateDeclaredDependency(
     throw new Error(`${formatOwner(owner)} cannot depend on itself: ${dependency}`);
   }
 
-  if (!isAllowedDependency(owner, target)) {
+  if (owner.surface === 'api' && target.surface === 'impl') {
     throw new Error(
       `${formatOwner(owner)} cannot depend on implementation target "${dependency}" from an API surface.`,
     );
   }
 }
 
-export function isAllowedDependency(owner: DependencyOwner, target: ParsedDependencyTarget): boolean {
-  if (owner.surface === 'api' && target.surface === 'impl') {
-    return false;
-  }
-
-  return true;
-}
-
-export function formatOwner(owner: DependencyOwner): string {
+function formatOwner(owner: DependencyOwner): string {
   if (owner.kind === 'app') {
     return `App "${owner.name}"`;
   }
 
   return `${capitalize(owner.kind)} "${owner.name}" ${owner.surface}`;
 }
-
-// MARK: - Private
 
 function capitalize(value: string): string {
   return `${value.charAt(0).toUpperCase()}${value.slice(1)}`;

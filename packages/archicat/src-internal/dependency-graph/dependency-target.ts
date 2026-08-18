@@ -1,19 +1,14 @@
 import type { ArchicatSurface, ArchicatTargetKind } from '@src-internal/model';
 
-// MARK: - Dependency target model
-
 export interface ParsedDependencyTarget {
   kind: ArchicatTargetKind;
   name: string;
   surface: ArchicatSurface;
 }
 
-export type DependencyOwnerKind = 'module' | 'library' | 'app';
-export type DependencyOwnerSurface = 'api' | 'impl' | 'app';
-
 export interface DependencyOwner {
-  kind: DependencyOwnerKind;
+  kind: 'module' | 'library' | 'app';
   name: string;
-  surface: DependencyOwnerSurface;
+  surface: 'api' | 'impl' | 'app';
   target: string;
 }

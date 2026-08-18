@@ -150,7 +150,6 @@ function resolveApp(loadedApp: LoadedArchicatApp): ResolvedArchicatApp {
     name: contract.name,
     target: `app.${contract.name}`,
     contractFilePath: contractFilePath,
-    definitionDir: definitionDir,
     rootPath: contract.root ? resolveDeclaredRoot(definitionDir, contract.root, 'app', contract.name) : definitionDir,
     dependencies: [...contract.dependencies],
   };
@@ -197,8 +196,8 @@ function buildGraph(
   dependencies: ArchicatGraphDependency[];
 } {
   const targets = definitions.flatMap((definition): ArchicatGraphTarget[] => [
-    { key: definition.apiTarget, kind: definition.kind, name: definition.name, surface: 'api' },
-    { key: definition.implTarget, kind: definition.kind, name: definition.name, surface: 'impl' },
+    { key: definition.apiTarget, surface: 'api' },
+    { key: definition.implTarget, surface: 'impl' },
   ]);
 
   const declaredDependencies = [

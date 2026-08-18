@@ -1,1 +1,1 @@
-export { loadArchicatBuildContext } from './load-build-context';
+export { loadArchicatProject } from './load-project';

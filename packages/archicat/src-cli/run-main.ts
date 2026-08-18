@@ -1,13 +1,7 @@
 import { Console } from '@buildplease/core/node';
 
 import type { ArchicatCliCommandLine, ArchicatCliCommandOptions, ArchicatCliCommandResult } from './commands/index';
-import {
-  runCheckCommand,
-  runDoctorCommand,
-  runGenerateCommand,
-  runGraphCommand,
-  runValidateCommand,
-} from './commands/index';
+import { runGraphCommand, runProjectCommand } from './commands/index';
 
 const cli = new Console();
 
@@ -41,15 +35,14 @@ async function runCommand(
 ): Promise<ArchicatCliCommandResult | undefined> {
   switch (command) {
     case 'generate':
-      return await runGenerateCommand(options, cwd);
+      return await runProjectCommand('generate', options, cwd);
     case 'validate':
-      return await runValidateCommand(options, cwd);
     case 'check':
-      return await runCheckCommand(options, cwd);
+      return await runProjectCommand('validate', options, cwd);
     case 'graph':
       return await runGraphCommand(options, cwd);
     case 'doctor':
-      return await runDoctorCommand(options, cwd);
+      return await runProjectCommand('doctor', options, cwd);
     case 'help':
     case '--help':
     case '-h':

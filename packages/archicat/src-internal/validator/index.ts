@@ -1,1 +1,1 @@
-export { formatViolation, validate, validateProject } from './validator';
+export { formatViolation, validateProject } from './validator';

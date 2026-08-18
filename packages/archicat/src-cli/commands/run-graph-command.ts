@@ -1,4 +1,4 @@
-import { loadArchicatBuildContext } from '@src-internal/context';
+import { loadArchicatProject } from '@src-internal/context';
 import { formatProjectGraph } from '@src-internal/graph';
 
 import type { ArchicatCliCommandOptions, ArchicatCliCommandResult } from './command-result';
@@ -9,7 +9,7 @@ export async function runGraphCommand(
   options: ArchicatCliCommandOptions,
   cwd: string,
 ): Promise<ArchicatCliCommandResult> {
-  const project = await loadArchicatBuildContext(cwd, options.config);
+  const project = await loadArchicatProject(cwd, options.config);
 
   return {
     exitCode: 0,

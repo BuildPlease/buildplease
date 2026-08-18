@@ -93,7 +93,7 @@ function makeArchicatAliasPaths(project: ResolvedArchicatProject): Record<string
       paths[definition.aliasGlob] = [makeRelativeTsconfigPath(project.outDir, path.join(definition.api.rootPath, '*'))];
     }
 
-    if (definition.impl.rootPath && definition.implAliasGlob) {
+    if (definition.impl.rootPath) {
       paths[definition.implAliasGlob] = [
         makeRelativeTsconfigPath(project.outDir, path.join(definition.impl.rootPath, '*')),
       ];

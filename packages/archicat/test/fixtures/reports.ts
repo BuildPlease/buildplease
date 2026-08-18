@@ -2,32 +2,22 @@ import path from 'node:path';
 
 import { readJson } from '#test/fixtures/files';
 
-// MARK: - Report fixtures
-
-export interface BuildReportDependency {
-  from: string;
-  to: string;
-  origin: 'declared' | 'derived';
-}
-
 export interface BuildReport {
-  schemaVersion: number;
-  aliases: {
-    module: string;
-    library: string;
-  };
-  targets: string[];
-  dependencies: BuildReportDependency[];
+  readonly schemaVersion: number;
+  readonly targets: readonly string[];
+  readonly dependencies: readonly {
+    readonly from: string;
+    readonly to: string;
+    readonly origin: 'declared' | 'derived';
+  }[];
 }
 
 export function readBuildReport(root: string): BuildReport {
-  return readJson(path.join(root, '.archicat/reports/build.report.json')) as BuildReport;
+  return readJson<BuildReport>(path.join(root, '.archicat/reports/build.report.json'));
 }
 
-export function findDependency(report: BuildReport, from: string, to: string): BuildReportDependency | undefined {
-  return report.dependencies.find((dependency) => dependency.from === from && dependency.to === to);
-}
-
-export function hasDependencyOrigin(report: BuildReport, origin: BuildReportDependency['origin']): boolean {
-  return report.dependencies.some((dependency) => dependency.origin === origin);
+export function hasDependency(report: BuildReport, from: string, to: string, origin: 'declared' | 'derived'): boolean {
+  return report.dependencies.some(
+    (dependency) => dependency.from === from && dependency.to === to && dependency.origin === origin,
+  );
 }

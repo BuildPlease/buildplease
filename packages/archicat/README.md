@@ -34,16 +34,16 @@ ArchiCat validates:
 A module or library has two targets:
 
 ```txt
-module.account.api
-module.account.impl
-library.backend.api
-library.backend.impl
+module.dummy.api
+module.dummy.impl
+library.sample.api
+library.sample.impl
 ```
 
 An app is a composition root:
 
 ```txt
-app.main-api
+app.test
 ```
 
 ## Dependency rules
@@ -62,16 +62,16 @@ Implementation targets are not public by default. They are importable only when 
 import { defineModule } from '@buildplease/archicat';
 
 export default defineModule({
-  name: 'media',
+  name: 'dummy',
 
   api: {
     root: './api',
-    dependencies: ['module.account.api'],
+    dependencies: ['module.mock.api'],
   },
 
   impl: {
     root: './impl',
-    dependencies: ['module.account.api', 'library.backend.api'],
+    dependencies: ['module.mock.api', 'library.sample.api'],
   },
 });
 ```
@@ -82,7 +82,7 @@ export default defineModule({
 import { defineLibrary } from '@buildplease/archicat';
 
 export default defineLibrary({
-  name: 'backend',
+  name: 'sample',
 
   api: './api',
   impl: './impl',
@@ -95,10 +95,10 @@ export default defineLibrary({
 import { defineApp } from '@buildplease/archicat';
 
 export default defineApp({
-  name: 'main-api',
+  name: 'test',
   root: './src/app',
 
-  dependencies: ['module.media.impl', 'library.backend.impl'],
+  dependencies: ['module.dummy.impl', 'library.sample.impl'],
 });
 ```
 
@@ -107,25 +107,25 @@ export default defineApp({
 Public API:
 
 ```ts
-import { AccountReader } from '#modules/account/api';
+import { dummyApi } from '#modules/dummy/api/index.js';
 ```
 
 Declared implementation dependency:
 
 ```ts
-import { mediaAssembly } from '#modules/media/impl';
+import { dummyImpl } from '#modules/dummy/impl/index.js';
 ```
 
 Blocked without dependency:
 
 ```ts
-import { mediaAssembly } from '#modules/media/impl';
+import { dummyImpl } from '#modules/dummy/impl/index.js';
 ```
 
 Blocked source-path boundary bypass:
 
 ```ts
-import { MediaRepository } from '../../media/impl/repository.js';
+import { dummyImpl } from '../../dummy/impl/index.js';
 ```
 
 Local same-target imports stay normal:
