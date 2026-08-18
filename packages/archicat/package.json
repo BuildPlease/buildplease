@@ -1,0 +1,57 @@
+{
+  "name": "@buildplease/archicat",
+  "version": "1.0.0",
+  "description": "Modular mirroring (M²) for clean TypeScript architecture.",
+  "keywords": [
+    "architecture",
+    "clean-architecture",
+    "mirroring",
+    "modular",
+    "module-system"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BuildPlease/buildplease.git",
+    "directory": "packages/archicat"
+  },
+  "license": "MIT",
+  "author": "Simon Rastislav Kovačič",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/src/index.d.mts",
+        "default": "./dist/src/index.mjs"
+      },
+      "require": {
+        "types": "./dist/src/index.d.cts",
+        "default": "./dist/src/index.cjs"
+      }
+    }
+  },
+  "bin": {
+    "archicat": "./bin/archicat.mjs"
+  },
+  "files": [
+    "bin",
+    "dist"
+  ],
+  "scripts": {
+    "build": "pnpm run build:cli && pnpm run build:src",
+    "build:cli": "tsdown --config tsdown.config.cli.ts --config-loader unrun",
+    "build:src": "tsdown --config tsdown.config.src.ts --config-loader unrun",
+    "test": "vitest run",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@buildplease/core": "workspace:*",
+    "jiti": "catalog:"
+  },
+  "peerDependencies": {
+    "typescript": "6.0.3"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  }
+}

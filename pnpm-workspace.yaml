@@ -29,6 +29,7 @@ versioning:
       - '@buildplease/webkit'
       - '@buildplease/nuxtkit'
       - '@buildplease/devkit'
+      - '@buildplease/archicat'
   ignore:
     - buildplease
     - '@buildplease/identity'
