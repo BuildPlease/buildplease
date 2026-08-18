@@ -18,14 +18,6 @@ import type {
   LoggerTransportOptions,
 } from './logger-options';
 
-const FILTER_OPTIONS = {
-  filterNull: true,
-  filterUndefined: true,
-  filterEmptyString: true,
-  filterEmptyArray: true,
-  filterEmptyObject: true,
-} as const;
-
 export interface Logger {
   readonly instance: PinoLogger;
 
@@ -84,17 +76,12 @@ export class LoggerImpl implements Logger {
   private formatLogOptions(options?: LogOptions): Record<string, unknown> {
     if (!options) return {};
 
-    const formatted = filterObject(
-      {
-        flag: options.flag,
-        details: this.formatUnknown(options.details),
-        error: this.formatUnknown(options.error),
-        metadata: this.formatUnknown(options.metadata),
-      },
-      FILTER_OPTIONS,
-    );
-
-    return formatted as Record<string, unknown>;
+    return this.normalizeObject({
+      flag: options.flag,
+      details: this.formatUnknown(options.details),
+      error: this.formatUnknown(options.error),
+      metadata: this.formatUnknown(options.metadata),
+    });
   }
 
   private formatUnknown(value: unknown): unknown {
@@ -108,18 +95,19 @@ export class LoggerImpl implements Logger {
         base.stack = value.stack;
       }
 
-      for (const key of Object.keys(value)) {
-        if (!(key in base)) {
-          base[key] = (value as unknown as Record<string, unknown>)[key];
-        }
+      for (const [key, property] of Object.entries(value)) {
+        if (!(key in base)) base[key] = property;
       }
 
-      const filtered = filterObject(base, FILTER_OPTIONS);
-      return isEmptyObject(filtered) ? undefined : filtered;
+      const normalized = this.normalizeObject(base);
+      return isEmptyObject(normalized) ? undefined : normalized;
     }
 
     if (Buffer.isBuffer(value)) return '[Buffer]';
-    if (value && typeof (value as { readonly pipe?: unknown }).pipe === 'function') return '[Stream]';
+
+    if (value && typeof (value as { readonly pipe?: unknown }).pipe === 'function') {
+      return '[Stream]';
+    }
 
     if (isObject(value)) {
       try {
@@ -133,8 +121,8 @@ export class LoggerImpl implements Logger {
         }
 
         if (isObject(serialized)) {
-          const filtered = filterObject(serialized, FILTER_OPTIONS);
-          return isEmptyObject(filtered) ? undefined : filtered;
+          const normalized = this.normalizeObject(serialized);
+          return isEmptyObject(normalized) ? undefined : normalized;
         }
 
         return serialized;
@@ -146,6 +134,16 @@ export class LoggerImpl implements Logger {
     if (isPrimitive(value)) return value;
 
     return String(value);
+  }
+
+  private normalizeObject(value: object): Record<string, unknown> {
+    return filterObject(Object.fromEntries(Object.entries(value)), {
+      filterNull: true,
+      filterUndefined: true,
+      filterEmptyString: true,
+      filterEmptyArray: true,
+      filterEmptyObject: true,
+    });
   }
 
   private makeInstance(): PinoLogger {
