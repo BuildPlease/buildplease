@@ -120,6 +120,7 @@ blob-report/
 .stylelintcache
 
 .cache/
+.data/
 .parcel-cache/
 .vite/
 
@@ -181,4 +182,5 @@ out/
 # ------------------------------------------------------------------------------
 
 **/generated/
+**/.archicat/
 **/.apikit/
