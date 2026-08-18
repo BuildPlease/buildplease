@@ -1,0 +1,113 @@
+name: Release
+
+on:
+  workflow_dispatch: {}
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  id-token: write
+
+jobs:
+  release:
+    name: Dry Run
+    runs-on: macos-26
+
+    env:
+      DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+      NODE_OPTIONS: --max-old-space-size=4096
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Verify branch
+        run: |
+          if [ "$GITHUB_REF_NAME" != "$DEFAULT_BRANCH" ]; then
+            echo "Release must run from $DEFAULT_BRANCH."
+            exit 1
+          fi
+
+      - name: Setup pnpm and Node.js
+        uses: pnpm/setup@v1
+        with:
+          runtime: node@24
+          install: false
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Preview release plan
+        run: |
+          pnpm change status
+          pnpm version -r --dry-run
+
+      - name: Version packages
+        run: |
+          pnpm version -r
+
+          if git diff --quiet; then
+            echo "No pending release changes."
+            exit 1
+          fi
+
+      - name: Resolve release
+        id: release
+        run: |
+          VERSION="$(node -p "require('./packages/core/package.json').version")"
+          TAG="v${VERSION}"
+
+          if git ls-remote --exit-code --tags origin "refs/tags/${TAG}" > /dev/null 2>&1; then
+            echo "Tag ${TAG} already exists."
+            exit 1
+          fi
+
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+          echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
+
+      - name: Build
+        run: pnpm run build
+
+      - name: Typecheck
+        run: pnpm run typecheck
+
+      - name: Test
+        run: pnpm run test
+
+      - name: Commit release locally
+        run: |
+          git add -A
+          git commit -m "chore(release): ${{ steps.release.outputs.tag }}"
+
+      - name: Create tag locally
+        run: git tag "${{ steps.release.outputs.tag }}"
+
+      - name: Dry-run publish
+        run: pnpm publish -r --dry-run --no-git-checks
+
+      - name: Dry-run push
+        run: |
+          git push --dry-run --atomic origin \
+            HEAD:"$DEFAULT_BRANCH" \
+            "${{ steps.release.outputs.tag }}"
+
+      - name: Preview GitHub release notes
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api \
+            --method POST \
+            "repos/${GITHUB_REPOSITORY}/releases/generate-notes" \
+            -f tag_name="${{ steps.release.outputs.tag }}" \
+            -f target_commitish="$GITHUB_SHA" \
+            --jq '"\(.name)\n\n\(.body)"'
+
+      - name: Summary
+        run: |
+          echo "Dry run completed for ${{ steps.release.outputs.tag }}."
+          echo "Nothing was pushed, published, or released."
