@@ -12,7 +12,6 @@ describe('resolveDevKitConfig', () => {
     expect(config.ignore).toContain('**/.generated/**');
     expect(config.ignore).toContain('**/dist/**');
 
-    expect(config.ignore).not.toContain('**/.archicat/**');
     expect(config.ignore).not.toContain('**/.apikit/**');
   });
 
@@ -40,7 +39,6 @@ describe('resolveDevKitConfig', () => {
     expect(config.clean.directories).toContain('.nuxt');
     expect(config.clean.directories).toContain('coverage');
 
-    expect(config.clean.directories).not.toContain('.archicat');
     expect(config.clean.directories).not.toContain('.apikit');
   });
 

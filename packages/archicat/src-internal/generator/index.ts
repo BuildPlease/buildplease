@@ -1,1 +1,0 @@
-export { generateArtifacts } from './generator';

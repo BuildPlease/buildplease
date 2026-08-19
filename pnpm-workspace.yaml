@@ -41,12 +41,10 @@ allowBuilds:
   vue-demi: true
 
 catalog:
-  # Architecture
+  # Shared
   inversify: 8.2.3
   reflect-metadata: 0.2.2
   zod: 4.4.3
-
-  # Shared
   consola: 3.4.2
   citty: 0.2.2
   jiti: 2.7.0
@@ -55,6 +53,4 @@ catalog:
   '@nuxt/ui': 4.10.0
   '@nuxtjs/i18n': 10.6.0
   nuxt: 4.5.2
-
-  # Tooling
   vue-tsc: 3.3.9

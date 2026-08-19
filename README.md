@@ -25,7 +25,6 @@
 | [`WebKit`](./packages/webkit)     | Browser           | Browser applications.                   |
 | [`NuxtKit`](./packages/nuxtkit)   | Nuxt              | Nuxt applications built on WebKit.      |
 | [`DevKit`](./packages/devkit)     | Node.js / CLI     | Development and repository tooling.     |
-| [`ArchiCat`](./packages/archicat) | Node.js / CLI     | Architecture generation and validation. |
 
 ## 🤝 Contributing
 
