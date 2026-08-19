@@ -8,20 +8,22 @@ release.yml
 │
 ├── Step 1 ──: install / build / typecheck / test
 │
-├── Step 2 ──: pnpm -r --no-bail publish --report-summary
-│      ├── already published versions -> pnpm skips
-│      ├── new versions -> pnpm publishes
+├── Step 2 ──: scripts/release.ts
+│      ├── loads public workspace packages
+│      ├── publishes each package independently with pnpm
+│      ├── skips versions already published
+│      ├── continues when an individual publish fails
 │      └── writes pnpm-publish-summary.json
 │
 ├── Step 3 ──: scripts/post-release.ts
-│      ├── reads only publishedPackages from the pnpm summary
+│      ├── reads publishedPackages from the publish summary
 │      ├── validates the complete release plan
 │      ├── generates per-package Conventional Commit notes
 │      ├── pushes package tags atomically
 │      └── creates GitHub Releases
 │
 └── Step 4 ──: propagate publish failure
-       └── fails the workflow if the pnpm publish step failed
+       └── fails the workflow if any package publish failed
 ```
 
 ## Package release
@@ -38,12 +40,12 @@ One package version is one release identity:
 
 ## Partial publish failure
 
-Recursive publish uses `--no-bail`, so pnpm attempts every publish even if one package fails.
-Post-release reads only `publishedPackages` from `pnpm-publish-summary.json`.
-Every package that was successfully published is finalized with its Git tag and GitHub Release.
-Packages absent from the summary are ignored.
+Packages are published independently.
+If one package fails, the remaining package publishes are still attempted.
+Successfully published packages are recorded in `pnpm-publish-summary.json` and finalized with their Git tags and GitHub Releases.
 
-After finalization, the workflow is explicitly failed when the pnpm publish outcome was `failure`.
+Packages absent from `publishedPackages` are ignored by post-release.
+After finalization, the workflow is explicitly failed when any package publish failed.
 
 ## Release notes
 

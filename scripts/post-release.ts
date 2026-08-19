@@ -1,5 +1,3 @@
-/// <reference types="node" />
-
 import { execFile as execFileCallback, spawn } from 'node:child_process';
 import { appendFile, readFile } from 'node:fs/promises';
 import path from 'node:path';
@@ -7,7 +5,9 @@ import process from 'node:process';
 import { promisify } from 'node:util';
 
 const execFile = promisify(execFileCallback);
+
 const root = process.cwd();
+const summaryPath = path.resolve(root, 'pnpm-publish-summary.json');
 
 const commitParser = 'conventional-commits-parser@7.1.2';
 const commitSeparator = '\x1e';
@@ -21,15 +21,19 @@ const sections = {
   refactor: 'Refactoring',
 } as const;
 
-type PublishedPackage = {
+type PackageIdentity = {
   name: string;
   version: string;
 };
 
-type Release = PublishedPackage & {
-  path: string;
+type Release = PackageIdentity & {
   tag: string;
   notes: string;
+};
+
+type PackageManifest = {
+  name?: unknown;
+  version?: unknown;
 };
 
 type ParsedCommit = {
@@ -43,14 +47,14 @@ type ParsedCommit = {
 };
 
 try {
-  const published = await loadPublishedPackages();
-  const releases = await prepareReleases(published);
+  const publishedPackages = await loadPublishedPackages();
+  const releases = await prepareReleases(publishedPackages);
 
   await pushGitTags(releases);
   await createGitHubReleases(releases);
   await writeSummary(releases);
 } catch (error) {
-  const message = error instanceof Error ? error.message : String(error);
+  const message = getErrorMessage(error);
 
   console.error(`::error title=Post release failed::${message.replaceAll('\n', ' ')}`);
   console.error(`Post-release failed: ${message}`);
@@ -58,50 +62,41 @@ try {
   process.exitCode = 1;
 }
 
-async function loadPublishedPackages(): Promise<PublishedPackage[]> {
-  const summary = await readJson('pnpm-publish-summary.json');
+async function loadPublishedPackages(): Promise<PackageIdentity[]> {
+  const summary = await readJson<{ publishedPackages?: unknown }>(summaryPath);
 
-  if (!summary || !Array.isArray(summary.publishedPackages)) {
-    throw new Error('pnpm-publish-summary.json is missing or invalid.');
+  if (!Array.isArray(summary.publishedPackages)) {
+    throw new Error('pnpm-publish-summary.json is missing publishedPackages.');
   }
 
-  return summary.publishedPackages.map((pkg: unknown) => {
+  return summary.publishedPackages.map((pkg) => {
     if (!pkg || typeof pkg !== 'object') {
-      throw new Error('Invalid package in pnpm publish summary.');
+      throw new Error('pnpm-publish-summary.json contains an invalid published package.');
     }
 
-    const { name, version } = pkg as Partial<PublishedPackage>;
+    const { name, version } = pkg as Partial<PackageIdentity>;
 
-    if (!name || !version) {
-      throw new Error('Published package is missing name or version.');
+    if (typeof name !== 'string' || typeof version !== 'string') {
+      throw new Error('pnpm-publish-summary.json contains an invalid published package.');
     }
 
     return { name: name, version: version };
   });
 }
 
-async function prepareReleases(published: PublishedPackage[]): Promise<Release[]> {
-  if (published.length === 0) return [];
-
-  if (process.env.GITHUB_REPOSITORY) {
-    await run('gh', ['repo', 'view', process.env.GITHUB_REPOSITORY, '--json', 'nameWithOwner']);
-  }
-
-  return Promise.all(published.map(prepareRelease));
+async function prepareReleases(publishedPackages: PackageIdentity[]): Promise<Release[]> {
+  return Promise.all(publishedPackages.map(prepareRelease));
 }
 
-async function prepareRelease(pkg: PublishedPackage): Promise<Release> {
+async function prepareRelease(pkg: PackageIdentity): Promise<Release> {
   const shortName = pkg.name.split('/').at(-1);
-
-  if (!shortName) {
-    throw new Error(`Invalid package name: ${pkg.name}`);
-  }
+  if (!shortName) throw new Error(`Invalid package name: ${pkg.name}`);
 
   const packagePath = `packages/${shortName}`;
-  const manifest = await readJson(path.join(packagePath, 'package.json'));
+  const manifest = await readJson<PackageManifest>(path.resolve(root, packagePath, 'package.json'));
 
-  if (manifest?.name !== pkg.name || manifest?.version !== pkg.version) {
-    throw new Error(`Publish summary does not match ${packagePath}/package.json for ${pkg.name}@${pkg.version}.`);
+  if (manifest.name !== pkg.name || manifest.version !== pkg.version) {
+    throw new Error(`Release summary does not match ${packagePath}/package.json for ${pkg.name}@${pkg.version}.`);
   }
 
   const tag = `${shortName}@${pkg.version}`;
@@ -111,7 +106,7 @@ async function prepareRelease(pkg: PublishedPackage): Promise<Release> {
   }
 
   if (await exists('gh', ['release', 'view', tag, '--json', 'tagName'])) {
-    throw new Error(`GitHub release already exists: ${tag}`);
+    throw new Error(`GitHub Release already exists: ${tag}`);
   }
 
   const previousTag = await findPreviousTag(shortName);
@@ -119,7 +114,6 @@ async function prepareRelease(pkg: PublishedPackage): Promise<Release> {
 
   return {
     ...pkg,
-    path: packagePath,
     tag: tag,
     notes: notes,
   };
@@ -130,12 +124,12 @@ async function pushGitTags(releases: Release[]): Promise<void> {
 
   const commit = await run('git', ['rev-parse', 'HEAD']);
 
-  for (const { tag } of releases) {
-    await run('git', ['check-ref-format', `refs/tags/${tag}`]);
-    await run('git', ['tag', tag, commit]);
+  for (const release of releases) {
+    await run('git', ['check-ref-format', `refs/tags/${release.tag}`]);
+    await run('git', ['tag', release.tag, commit]);
   }
 
-  await run('git', ['push', '--atomic', 'origin', ...releases.map(({ tag }) => `refs/tags/${tag}`)]);
+  await run('git', ['push', '--atomic', 'origin', ...releases.map((release) => `refs/tags/${release.tag}`)]);
 }
 
 async function createGitHubReleases(releases: Release[]): Promise<void> {
@@ -155,9 +149,9 @@ async function createGitHubReleases(releases: Release[]): Promise<void> {
 
 async function findPreviousTag(shortName: string): Promise<string | undefined> {
   const packageTags = await run('git', ['tag', '--merged', 'HEAD', '--list', `${shortName}@*`, '--sort=-v:refname']);
-  const previous = packageTags.split('\n').find(Boolean);
 
-  if (previous) return previous;
+  const previousPackageTag = packageTags.split('\n').find(Boolean);
+  if (previousPackageTag) return previousPackageTag;
 
   const legacyTags = await run('git', ['tag', '--merged', 'HEAD', '--list', 'v[0-9]*', '--sort=-v:refname']);
 
@@ -170,6 +164,7 @@ async function generateReleaseNotes(
   currentTag: string,
 ): Promise<string> {
   const range = previousTag ? `${previousTag}..HEAD` : 'HEAD';
+
   const log = await run('git', ['log', '--no-merges', '--format=%H%x1f%B%x1e', range, '--', packagePath]);
 
   const commits = log
@@ -177,11 +172,11 @@ async function generateReleaseNotes(
     .map((value) => value.trim())
     .filter(Boolean)
     .map((value) => {
-      const [hash = '', ...message] = value.split('\x1f');
+      const [hash = '', ...messageParts] = value.split('\x1f');
 
       return {
         hash: hash,
-        message: message.join('\x1f').trim(),
+        message: messageParts.join('\x1f').trim(),
       };
     });
 
@@ -189,40 +184,46 @@ async function generateReleaseNotes(
     return 'No Conventional Commit changes were detected for this package.';
   }
 
-  const parsed = await parseCommits(commits.map(({ message }) => message));
-  const entries: Record<string, string[]> = {};
+  const parsedCommits = await parseCommits(commits.map((commit) => commit.message));
+  const entries: Partial<Record<keyof typeof sections, string[]>> = {};
 
-  parsed.forEach((commit, index) => {
+  parsedCommits.forEach((commit, index) => {
     const source = commits[index];
-
     if (!source) return;
 
     const type = commit.type?.toLowerCase();
     const breaking = (commit.notes?.length ?? 0) > 0 || /^\w+(?:\([^)]*\))?!:/.test(commit.header ?? '');
     const section = breaking ? 'breaking' : type;
+    if (!section || !(section in sections)) return;
 
-    const subject = breaking
-      ? commit.notes
-          ?.map(({ text }) => text?.replace(/\s+/g, ' ').trim())
-          .filter(Boolean)
-          .join(' ') || commit.subject
-      : commit.subject;
+    const breakingSubject = commit.notes
+      ?.map((note) => note.text?.replace(/\s+/g, ' ').trim())
+      .filter((value): value is string => Boolean(value))
+      .join(' ');
 
-    if (!section || !(section in sections) || !subject) return;
+    const subject = breaking ? breakingSubject || commit.subject : commit.subject;
+    if (!subject) return;
 
     const scope = commit.scope ? `**${commit.scope}**: ` : '';
-    const hash = source.hash.slice(0, 7);
+    const shortHash = source.hash.slice(0, 7);
 
-    const link = process.env.GITHUB_REPOSITORY
-      ? `[\`${hash}\`](https://github.com/${process.env.GITHUB_REPOSITORY}/commit/${source.hash})`
-      : `\`${hash}\``;
+    const commitReference = process.env.GITHUB_REPOSITORY
+      ? `[\`${shortHash}\`](https://github.com/${process.env.GITHUB_REPOSITORY}/commit/${source.hash})`
+      : `\`${shortHash}\``;
 
-    (entries[section] ??= []).push(`- ${scope}${subject} (${link})`);
+    const key = section as keyof typeof sections;
+
+    (entries[key] ??= []).push(`- ${scope}${subject} (${commitReference})`);
   });
 
-  const notes = Object.entries(sections).flatMap(([type, title]) =>
-    entries[type]?.length ? [`## ${title}`, '', ...entries[type], ''] : [],
-  );
+  const notes: string[] = [];
+
+  for (const [type, title] of Object.entries(sections) as Array<[keyof typeof sections, string]>) {
+    const sectionEntries = entries[type];
+    if (!sectionEntries?.length) continue;
+
+    notes.push(`## ${title}`, '', ...sectionEntries, '');
+  }
 
   if (notes.length === 0) {
     notes.push('No Conventional Commit changes were detected for this package.', '');
@@ -263,7 +264,7 @@ async function parseCommits(messages: string[]): Promise<ParsedCommit[]> {
 }
 
 async function writeSummary(releases: Release[]): Promise<void> {
-  const lines = releases.length ? releases.map(({ tag }) => `✓ ${tag}`) : ['No packages were published.'];
+  const lines = releases.length > 0 ? releases.map((release) => `✓ ${release.tag}`) : ['No packages were published.'];
 
   console.log(`\n${lines.join('\n')}\n`);
 
@@ -296,9 +297,9 @@ async function run(command: string, args: string[]): Promise<string> {
       maxBuffer: 16 * 1024 * 1024,
     });
 
-    return String(stdout).trim();
+    return stdout.trim();
   } catch (error) {
-    throw new Error(`${command} ${args.join(' ')} failed: ${error instanceof Error ? error.message : String(error)}`);
+    throw new Error(`${command} ${args.join(' ')} failed: ${getErrorMessage(error)}`);
   }
 }
 
@@ -306,6 +307,7 @@ async function runWithInput(command: string, args: string[], input: string): Pro
   return new Promise((resolve, reject) => {
     const child = spawn(command, args, {
       cwd: root,
+      env: process.env,
       stdio: ['pipe', 'pipe', 'pipe'],
     });
 
@@ -325,23 +327,24 @@ async function runWithInput(command: string, args: string[], input: string): Pro
 
     child.on('error', reject);
 
-    child.on('close', (code) => {
+    child.on('close', (code, signal) => {
       if (code === 0) {
         resolve(stdout.trim());
         return;
       }
 
-      reject(
-        new Error(
-          `${command} ${args.join(' ')} failed${stderr.trim() ? `: ${stderr.trim()}` : ` with exit code ${code}`}`,
-        ),
-      );
+      const reason = stderr.trim() || (signal ? `terminated by signal ${signal}` : `exited with code ${code}`);
+      reject(new Error(`${command} ${args.join(' ')} failed: ${reason}`));
     });
 
     child.stdin.end(input);
   });
 }
 
-async function readJson(file: string) {
-  return JSON.parse(await readFile(path.resolve(root, file), 'utf8'));
+async function readJson<T>(file: string): Promise<T> {
+  return JSON.parse(await readFile(file, 'utf8')) as T;
+}
+
+function getErrorMessage(error: unknown): string {
+  return error instanceof Error ? error.message : String(error);
 }
