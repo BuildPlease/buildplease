@@ -5,7 +5,7 @@ import { defineNuxtPlugin } from '#imports';
 
 export default defineNuxtPlugin({
   name: 'nuxtkit:plugin:di',
-  setup(_nuxt) {
+  setup() {
     const scopeController = new ScopeController();
 
     return {

@@ -302,11 +302,12 @@
 </template>
 
 <script setup lang="ts">
-import { type ComplexData, type ComplexDto, complexSchema } from '@@/schema/complex';
 import { type CalendarDate, DateFormatter, getLocalTimeZone, parseDate } from '@internationalized/date';
 import type { FormErrorEvent, FormSubmitEvent } from '@nuxt/ui';
 import type { DateRange } from 'reka-ui';
 import { computed, reactive, ref } from 'vue';
+
+import { type ComplexData, type ComplexDto, complexSchema } from '~/schema/complex';
 
 const schema = complexSchema;
 const { locale, t } = useI18n();

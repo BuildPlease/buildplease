@@ -1,8 +1,7 @@
 {
   "nuxtkit": {
     "error": {
-      "generic": "Something went wrong",
-      "unauthorized": "Access denied."
+      "generic": "Something went wrong"
     },
     "zod": {
       "units": {

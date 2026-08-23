@@ -1,8 +1,8 @@
 # @buildplease/core
 
-Core contains the shared application primitives used across BuildPlease: dependency injection, errors, validation, localization, formatting, operations, security helpers, utilities, and Node.js infrastructure.
+Core is the shared foundation for BuildPlease applications. It provides framework-independent application primitives used by the other BuildPlease kits.
 
-## Install
+## Installation
 
 ```bash
 pnpm add @buildplease/core
@@ -16,15 +16,17 @@ import { coreAssembly } from '@buildplease/core';
 const assemblies = coreAssembly();
 ```
 
-Node.js-specific utilities are available from `@buildplease/core/node`.
+Node.js-specific APIs are available from `@buildplease/core/node`.
 
-## What’s included
+## Features
 
-- dependency injection and assemblies
-- validation and error primitives
-- L10n and localization
-- formatters, converters, models, and operations
-- mutex and security utilities
-- Node.js logging, environment, file, and package helpers
+- dependency injection and application assemblies
+- operations, models, converters, and formatters
+- errors, validation, and normalization primitives
+- L10n resources and localization helpers
+- security, synchronization, and general utilities
+- Node.js infrastructure helpers
 
-Part of [BuildPlease](https://github.com/BuildPlease/buildplease).
+## License
+
+MIT

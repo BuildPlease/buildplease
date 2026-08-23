@@ -1,37 +1,24 @@
-import type { RemoteRequestConfig, RemoteRequestInterceptor } from '@buildplease/webkit';
-import { parseCookies } from 'h3';
+import type { HttpRequestInterceptor, HttpRequestOptions, Identity } from '@buildplease/webkit';
 
-import { useNuxtApp } from '#app';
-import { useNuxtKit } from '#internal-runtime';
-import { isSSR } from '#nuxtkit/infrastructure';
+import type { NuxtApp } from '#app';
+import { useRequestHeader } from '#imports';
+import { MODULE_SYMBOL_NAME } from '#internal-shared';
 
-export class SSRRequestCookiesInterceptor implements RemoteRequestInterceptor {
-  public order = -20;
+export class SSRRequestCookiesInterceptor implements HttpRequestInterceptor {
+  public readonly identity: Identity = Symbol.for(`${MODULE_SYMBOL_NAME}.networking.interceptor.ssr-cookies`);
 
-  public hash() {
-    const { makeSymbol } = useNuxtKit();
-    return makeSymbol('networking.ssr.cookies');
-  }
+  public constructor(private readonly app: NuxtApp) {}
 
-  public equals(other: unknown) {
-    return other instanceof SSRRequestCookiesInterceptor;
-  }
+  public async intercept(options: HttpRequestOptions): Promise<HttpRequestOptions> {
+    const cookie = await this.app.runWithContext(() => useRequestHeader('cookie'));
+    if (!cookie) return options;
 
-  public intercept(config: RemoteRequestConfig): RemoteRequestConfig {
-    if (!isSSR) return config;
-
-    const app = useNuxtApp();
-    const event = app.ssrContext?.event;
-    if (!event) return config;
-
-    // MARK: - Get cookies from the SSR context
-    const cookies = parseCookies(event);
-
-    // MARK: - Format cookies to a single Cookie header
-    const cookieHeader = Object.entries(cookies)
-      .map(([k, v]) => `${k}=${v}`)
-      .join('; ');
-
-    return { ...config, headers: { ...config.headers, Cookie: cookieHeader } };
+    return {
+      ...options,
+      headers: {
+        ...options.headers,
+        Cookie: cookie,
+      },
+    };
   }
 }

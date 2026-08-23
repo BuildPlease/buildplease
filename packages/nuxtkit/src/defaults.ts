@@ -16,8 +16,5 @@ export const DEFAULT_OPTIONS = {
   errors: {
     genericErrorKey: 'nuxtkit.error.generic',
     genericMessageFallback: 'Something went wrong',
-    unauthorizedKey: 'nuxtkit.error.unauthorized',
-    unauthorizedMessageFallback: 'Access denied.',
   },
-  unauthorizedStatusCodes: [401],
 } as const satisfies NuxtKitOptions;

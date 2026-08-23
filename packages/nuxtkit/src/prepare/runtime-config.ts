@@ -14,7 +14,6 @@ export async function prepareRuntimeConfig(context: NuxtKitContext, nuxt: Nuxt):
     zodI18n: options.zodI18n,
     components: options.components,
     errors: options.errors,
-    unauthorizedStatusCodes: options.unauthorizedStatusCodes,
   } satisfies NuxtKitPublicRuntimeConfig;
 
   const publicConfig = nuxt.options.runtimeConfig.public;

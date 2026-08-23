@@ -30,32 +30,6 @@ async function prepareNetworkingImports(resolver: Resolver): Promise<void> {
       from: resolver.resolve('./runtime/networking/language-interceptor'),
     },
     {
-      name: 'NuxtKitRemoteResource',
-      from: resolver.resolve('./runtime/networking/nuxtkit-remote-resource'),
-    },
-    {
-      name: 'OperationQueueController',
-      from: resolver.resolve('./runtime/networking/operation-queue-controller'),
-      type: true,
-    },
-    {
-      name: 'OperationQueueControllerImpl',
-      from: resolver.resolve('./runtime/networking/operation-queue-controller'),
-    },
-    {
-      name: 'RunOptions',
-      from: resolver.resolve('./runtime/networking/operation-queue-controller'),
-      type: true,
-    },
-    {
-      name: 'PublicRemoteResource',
-      from: resolver.resolve('./runtime/networking/public-remote-resource'),
-    },
-    {
-      name: 'SecuredRemoteResource',
-      from: resolver.resolve('./runtime/networking/secured-remote-resource'),
-    },
-    {
       name: 'SSRRequestCookiesInterceptor',
       from: resolver.resolve('./runtime/networking/ssr-request-cookies-interceptor'),
     },

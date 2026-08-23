@@ -1,0 +1,148 @@
+{
+  "common": {
+    "email": "Email",
+    "password": "Heslo",
+    "login": "Přihlásit se",
+    "copyright": "© {year} Všechna práva vyhrazena."
+  },
+  "placeholder": {
+    "email": "Váš email",
+    "password": "Vaše heslo"
+  },
+  "navigation": {
+    "dashboard": "Přehled",
+    "complexValidation": "Komplexní validace"
+  },
+  "operation": {
+    "label": {
+      "response": "Odpověď",
+      "lifecycle": "Průběh",
+      "result": "Výsledek"
+    },
+    "input": {
+      "delayMs": "Trvání operace (ms)",
+      "startDelayMs": "Zpoždění startu (ms)"
+    },
+    "action": {
+      "testUnauthorized": "Otestovat neautorizovanou operaci (přesměrování)",
+      "testErrorNotifier": "Otestovat chybové hlášení",
+      "runHttpRequests": "Spustit HTTP requesty"
+    },
+    "status": {
+      "idle": "Nečinné",
+      "running": "Probíhá",
+      "success": "Úspěšné",
+      "error": "Chyba",
+      "canceled": "Zrušeno",
+      "waiting": "Čeká",
+      "unauthorized": "Neautorizováno"
+    },
+    "preset": {
+      "allSuccess": "Vše úspěšné",
+      "errorMiddle": "500: uprostřed",
+      "unauthorizedFirst": "Neautorizováno: první",
+      "unauthorizedMiddle": "Neautorizováno: uprostřed",
+      "unauthorizedLast": "Neautorizováno: poslední",
+      "unauthorizedDelayed": "Neautorizováno: opožděné requesty"
+    }
+  },
+  "page": {
+    "home": {
+      "title": "Vítejte",
+      "description": "Toto je úvodní stránka NuxtKit Playground. Objevujte MVVM + čistou architekturu s komponentami Nuxt UI."
+    },
+    "login": {
+      "title": "Přihlášení",
+      "button": "Přihlásit se"
+    },
+    "dashboard": {
+      "welcomeBack": "Vítejte zpět!",
+      "loginSuccess": "Úspěšně jste se přihlásili.",
+      "goHome": "Zpět na domov",
+      "sections": {
+        "basicOperations": {
+          "title": "Základní operace"
+        },
+        "httpRequests": {
+          "title": "HTTP Requesty",
+          "description": "Spusť pět zabezpečených HTTP requestů a sleduj jejich průběh, odpovědi a zrušení po neautorizované odpovědi."
+        }
+      }
+    },
+    "complexValidation": {
+      "title": "Komplexní validace",
+      "description": "Řetězce, čísla, data, enumy, pole, objekty, uniony, refine",
+      "actions": {
+        "fillInvalid": "Vyplnit neplatné",
+        "fillValid": "Vyplnit platné",
+        "reset": "Obnovit",
+        "validate": "Validovat"
+      },
+      "sections": {
+        "stringFields": "Textová pole",
+        "dateFields": "Datumová pole"
+      },
+      "fields": {
+        "stringMin1": {
+          "label": "Text min. 1 (min. 1 znak)",
+          "placeholder": "Alespoň 1 znak"
+        },
+        "stringMin2": {
+          "label": "Text min. 2 (min. 2 znaky)",
+          "placeholder": "Alespoň 2 znaky"
+        },
+        "stringMin5": {
+          "label": "Text min. 5 (min. 5 znaků)",
+          "placeholder": "Alespoň 5 znaků"
+        },
+        "stringMax1": {
+          "label": "Text max. 1 (max. 1 znak)",
+          "placeholder": "Nejvýše 1 znak"
+        },
+        "stringMax2": {
+          "label": "Text max. 2 (max. 2 znaky)",
+          "placeholder": "Nejvýše 2 znaky"
+        },
+        "stringMax5": {
+          "label": "Text max. 5 (max. 5 znaků)",
+          "placeholder": "Nejvýše 5 znaků"
+        },
+        "regexLowercased": {
+          "label": "Formát malých písmen",
+          "placeholder": "Pouze malá písmena"
+        },
+        "regexUppercased": {
+          "label": "Formát velkých písmen",
+          "placeholder": "Pouze velká písmena"
+        },
+        "email": {
+          "label": "Formát e-mailu",
+          "placeholder": "Platný e-mail"
+        },
+        "date": {
+          "label": "Datum",
+          "placeholder": "Vyberte datum"
+        },
+        "dateMin": {
+          "label": "Minimální datum (po 2000-01-01)",
+          "placeholder": "Vyberte datum"
+        },
+        "dateMax": {
+          "label": "Maximální datum (před 2030-01-01)",
+          "placeholder": "Vyberte datum"
+        },
+        "dateRange": {
+          "label": "Rozsah dat"
+        },
+        "dateISO": {
+          "label": "ISO datum",
+          "placeholder": "Platné ISO datum (RRRR-MM-DD)"
+        }
+      },
+      "result": {
+        "valid": "Platné!",
+        "errors": "Chyby ({count})"
+      }
+    }
+  }
+}

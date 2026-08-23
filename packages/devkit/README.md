@@ -1,8 +1,8 @@
 # @buildplease/devkit
 
-DevKit is the shared repository tooling used by BuildPlease projects. It wraps formatting, linting, dependency maintenance, and cleanup behind one consistent CLI.
+DevKit is the BuildPlease development toolkit. It provides shared repository tooling and a consistent CLI for BuildPlease projects.
 
-## Install
+## Installation
 
 ```bash
 pnpm add -D @buildplease/devkit
@@ -17,20 +17,14 @@ pnpm exec devkit run dep-check
 pnpm exec devkit run clean
 ```
 
-Fixing variants and deeper cleanup are available through the same CLI:
+## Features
 
-```bash
-pnpm exec devkit run format-fix
-pnpm exec devkit run lint-fix
-pnpm exec devkit run clean-deep
-```
+- formatting and linting
+- dependency checks and updates
+- repository cleanup
+- shared development configuration
+- consistent project CLI commands
 
-## What’s included
+## License
 
-- Prettier formatting
-- ESLint configuration and execution
-- dependency checking and updates
-- repository cleanup commands
-- shared DevKit configuration
-
-Part of [BuildPlease](https://github.com/BuildPlease/buildplease).
+MIT

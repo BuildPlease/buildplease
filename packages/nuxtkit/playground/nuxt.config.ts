@@ -1,12 +1,10 @@
-import { fileURLToPath } from 'node:url';
-
-import { DEFAULT_LOCALE_CODE, LOCALES } from './i18n/index';
-
-const r = (p: string) => fileURLToPath(new URL(p, import.meta.url));
+import { DEFAULT_LOCALE_CODE, LOCALES } from './app/i18n';
 
 export default defineNuxtConfig({
+  ssr: false,
+
   devServer: {
-    port: 5000,
+    port: 3333,
     host: 'localhost',
   },
 
@@ -19,18 +17,6 @@ export default defineNuxtConfig({
     clientBundle: {
       scan: true,
     },
-    serverBundle: {
-      collections: ['lucide'],
-    },
-  },
-
-  typescript: {
-    tsConfig: {
-      compilerOptions: {
-        experimentalDecorators: true,
-        emitDecoratorMetadata: true,
-      },
-    },
   },
 
   buildpleaseNuxtKit: {
@@ -38,16 +24,15 @@ export default defineNuxtConfig({
     components: {
       prefix: 'NuxtKit',
     },
-    unauthorizedStatusCodes: [401],
   },
 
   i18n: {
-    vueI18n: r('./i18n.config.ts'),
+    restructureDir: 'app',
     types: 'composition',
     defaultLocale: DEFAULT_LOCALE_CODE,
     defaultDirection: 'ltr',
     strategy: 'prefix_except_default',
-    langDir: '../l10n',
+    langDir: 'l10n',
     detectBrowserLanguage: {
       useCookie: true,
       cookieKey: 'nuxtkit_playground_i18n_redirected',
