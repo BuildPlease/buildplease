@@ -1,30 +1,23 @@
-import type { RemoteRequestConfig, RemoteRequestInterceptor } from '@buildplease/webkit';
+import type { HttpRequestInterceptor, HttpRequestOptions, Identity } from '@buildplease/webkit';
 
-import { useNuxtKit } from '#internal-runtime';
+import type { NuxtApp } from '#app';
+import { MODULE_SYMBOL_NAME } from '#internal-shared';
 import { useCurrentLocale } from '#nuxtkit/composables';
 
-export class LanguageInterceptor implements RemoteRequestInterceptor {
-  order = 0;
+export class LanguageInterceptor implements HttpRequestInterceptor {
+  public readonly identity: Identity = Symbol.for(`${MODULE_SYMBOL_NAME}.networking.interceptor.language`);
 
-  hash() {
-    const { makeSymbol } = useNuxtKit();
-    return makeSymbol('networking.interceptor.language');
-  }
+  public constructor(private readonly app: NuxtApp) {}
 
-  equals(other: unknown) {
-    return other instanceof LanguageInterceptor;
-  }
-
-  intercept(config: RemoteRequestConfig): RemoteRequestConfig {
-    const { logger } = useNuxtKit();
-    const currentLocale = useCurrentLocale({ withRegion: false });
-    const value = currentLocale.value;
-
-    logger.debug(`[NuxtKit:Language] Accept-Language: ${value}`);
+  public async intercept(options: HttpRequestOptions): Promise<HttpRequestOptions> {
+    const language = await this.app.runWithContext(() => useCurrentLocale({ withRegion: false }).value);
 
     return {
-      ...config,
-      headers: { ...config.headers, 'Accept-Language': value },
+      ...options,
+      headers: {
+        ...options.headers,
+        'Accept-Language': language,
+      },
     };
   }
 }

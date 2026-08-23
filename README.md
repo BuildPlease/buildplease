@@ -18,13 +18,13 @@
 
 ## 📦 Packages
 
-| Kit                               | Runtime           | Purpose                                 |
-| --------------------------------- | ----------------- | --------------------------------------- |
-| [`Core`](./packages/core)         | Neutral + Node.js | Common foundation for the other kits.   |
-| [`ApiKit`](./packages/apikit)     | Node.js           | Backend and APIs.                       |
-| [`WebKit`](./packages/webkit)     | Browser           | Browser applications.                   |
-| [`NuxtKit`](./packages/nuxtkit)   | Nuxt              | Nuxt applications built on WebKit.      |
-| [`DevKit`](./packages/devkit)     | Node.js / CLI     | Development and repository tooling.     |
+| Kit                             | Runtime           | Purpose                               |
+| ------------------------------- | ----------------- | ------------------------------------- |
+| [`Core`](./packages/core)       | Neutral + Node.js | Common foundation for the other kits. |
+| [`ApiKit`](./packages/apikit)   | Node.js           | Backend and APIs.                     |
+| [`WebKit`](./packages/webkit)   | Browser           | Browser applications.                 |
+| [`NuxtKit`](./packages/nuxtkit) | Nuxt              | Nuxt applications built on WebKit.    |
+| [`DevKit`](./packages/devkit)   | Node.js / CLI     | Development and repository tooling.   |
 
 ## 🤝 Contributing
 

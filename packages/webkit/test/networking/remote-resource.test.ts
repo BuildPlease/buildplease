@@ -1,34 +1,93 @@
+import { ConversionError } from '@buildplease/core';
 import { describe, expect, it } from 'vitest';
 
-import { type RemoteEndpoint, type RemoteRequestConfig, BaseRemoteResource, HttpError } from '@/networking';
+import {
+  type HttpRequest,
+  type HttpRequestOptions,
+  type RemoteEndpoint,
+  HttpClient,
+  RemoteResource,
+} from '@/networking';
 
-class HttpErrorEndpoint implements RemoteEndpoint<void, void, void, void> {
-  constructor(private readonly error: HttpError) {}
+interface Input {
+  readonly id: string;
+}
 
-  public async makeRequest(_input: void, _options?: RemoteRequestConfig): Promise<void> {
-    throw this.error;
+interface InputDto {
+  readonly id: string;
+}
+
+interface OutputDto {
+  readonly value: string;
+}
+
+interface Output {
+  readonly value: string;
+}
+
+type Client = (id: string) => Promise<OutputDto>;
+
+class TestEndpoint implements RemoteEndpoint<Input, InputDto, Output, OutputDto, Client> {
+  public inputError?: unknown;
+  public outputError?: unknown;
+
+  public async convertInput(input: Input): Promise<InputDto> {
+    if (this.inputError !== undefined) throw this.inputError;
+    return { id: input.id };
   }
 
-  public async convertInput(input: void): Promise<void> {
-    return input;
+  public makeRequest(input: InputDto): HttpRequest<Client, OutputDto> {
+    return {
+      execute: (client) => client(input.id),
+    };
   }
 
-  public async convertOutput(response: void): Promise<void> {
-    return response;
+  public async convertOutput(response: OutputDto): Promise<Output> {
+    if (this.outputError !== undefined) throw this.outputError;
+    return { value: response.value };
   }
 }
 
-class TestRemoteResource extends BaseRemoteResource<void, void, RemoteEndpoint<void, void, void, void>> {}
+class TestHttpClient extends HttpClient<Client> {
+  protected createClient(_options: HttpRequestOptions): Client {
+    return async (id) => ({ value: id });
+  }
+}
 
-describe('BaseRemoteResource', () => {
-  it('preserves an already-normalized HttpError', async () => {
-    const error = new HttpError({
-      statusCode: 401,
-      code: 'unauthorized',
-      message: 'Unauthorized',
-    });
-    const resource = new TestRemoteResource(new HttpErrorEndpoint(error));
+class TestRemoteResource extends RemoteResource<Input, Output, Client> {
+  public constructor(endpoint: TestEndpoint, httpClient: HttpClient<Client>) {
+    super(endpoint, httpClient);
+  }
+}
 
-    await expect(resource.execute(undefined)).rejects.toBe(error);
+describe('RemoteResource', () => {
+  it('executes endpoint conversion and HTTP request orchestration', async () => {
+    const resource = new TestRemoteResource(new TestEndpoint(), new TestHttpClient());
+
+    await expect(resource.execute({ id: 'account' })).resolves.toEqual({ value: 'account' });
+  });
+
+  it('converts input conversion failures to ConversionError', async () => {
+    const failure = new Error('bad input');
+    const endpoint = new TestEndpoint();
+    endpoint.inputError = failure;
+    const resource = new TestRemoteResource(endpoint, new TestHttpClient());
+
+    const promise = resource.execute({ id: 'account' });
+
+    await expect(promise).rejects.toBeInstanceOf(ConversionError);
+    await expect(promise).rejects.toMatchObject({ cause: failure });
+  });
+
+  it('converts output conversion failures to ConversionError', async () => {
+    const failure = new Error('bad output');
+    const endpoint = new TestEndpoint();
+    endpoint.outputError = failure;
+    const resource = new TestRemoteResource(endpoint, new TestHttpClient());
+
+    const promise = resource.execute({ id: 'account' });
+
+    await expect(promise).rejects.toBeInstanceOf(ConversionError);
+    await expect(promise).rejects.toMatchObject({ cause: failure });
   });
 });

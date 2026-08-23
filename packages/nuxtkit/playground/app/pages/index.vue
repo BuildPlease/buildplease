@@ -23,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-import { Symbols } from '@@/di/symbols';
+import { Symbols } from '~/di/symbols';
 
 const { t } = useI18n();
 const localePath = useLocalePath();

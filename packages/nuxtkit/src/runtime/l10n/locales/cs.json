@@ -1,8 +1,7 @@
 {
   "nuxtkit": {
     "error": {
-      "generic": "Něco se pokazilo",
-      "unauthorized": "Přístup odepřen."
+      "generic": "Něco se pokazilo"
     },
     "zod": {
       "units": {

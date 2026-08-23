@@ -67,11 +67,10 @@
 </template>
 
 <script setup lang="ts">
-import { Symbols } from '@@/di/symbols';
-import type { LoginViewModel } from '@@/feature/login/view-model';
-import { type LoginDto, loginSchema } from '@@/schema';
-
 import type { FormSubmitEvent } from '#ui/types';
+import { Symbols } from '~/di/symbols';
+import type { LoginViewModel } from '~/feature/login/view-model';
+import { type LoginDto, loginSchema } from '~/schema';
 
 const { t } = useI18n();
 const viewModel = useInstance<LoginViewModel>(Symbols.DI.Feature.Login.ViewModel);

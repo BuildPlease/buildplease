@@ -9,7 +9,6 @@ const enMessages = {
   nuxtkit: {
     error: {
       generic: 'Something went wrong',
-      unauthorized: 'Access denied.',
     },
   },
 };

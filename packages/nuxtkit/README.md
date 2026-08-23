@@ -1,16 +1,25 @@
 # @buildplease/nuxtkit
 
-NuxtKit integrates BuildPlease with Nuxt. It provides the Nuxt module, runtime composables, application architecture helpers, networking integration, L10n/i18n support, and shared runtime configuration.
+NuxtKit brings BuildPlease application architecture and runtime utilities to Nuxt applications.
 
-## Install
+## Features
+
+- BuildPlease dependency injection and application scopes for Nuxt
+- runtime composables and application architecture helpers
+- Nuxt UI integration
+- i18n and L10n integration
+- localized Zod validation
+- shared runtime components and utilities
+
+## Installation
+
+Install NuxtKit:
 
 ```bash
 pnpm add @buildplease/nuxtkit
 ```
 
-## Usage
-
-Add the module to `nuxt.config.ts`:
+Add it to `nuxt.config.ts`:
 
 ```ts
 export default defineNuxtConfig({
@@ -18,15 +27,20 @@ export default defineNuxtConfig({
 });
 ```
 
-NuxtKit integrates with Nuxt UI and Nuxt i18n and exposes its runtime through Nuxt auto-imports and module configuration.
+## Configuration
 
-## What’s included
+NuxtKit can be configured through `buildpleaseNuxtKit` in `nuxt.config.ts`:
 
-- Nuxt module and runtime integration
-- dependency injection and scoped application architecture
-- runtime composables and infrastructure
-- remote-resource networking helpers
-- L10n/i18n and Zod localization
-- shared runtime components and configuration
+```ts
+export default defineNuxtConfig({
+  modules: ['@buildplease/nuxtkit'],
 
-Part of [BuildPlease](https://github.com/BuildPlease/buildplease).
+  buildpleaseNuxtKit: {
+    debug: false,
+  },
+});
+```
+
+## License
+
+MIT

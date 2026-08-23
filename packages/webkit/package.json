@@ -42,8 +42,7 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@buildplease/core": "workspace:*",
-    "axios": "1.19.0"
+    "@buildplease/core": "workspace:*"
   },
   "devDependencies": {
     "@buildplease/identity": "workspace:*"

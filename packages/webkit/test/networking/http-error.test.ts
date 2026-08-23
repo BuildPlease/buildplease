@@ -4,6 +4,7 @@ import { HttpError } from '@/networking/http-error';
 
 describe('HttpError', () => {
   it('preserves HTTP error metadata', () => {
+    const cause = new Error('transport');
     const error = new HttpError({
       statusCode: 404,
       code: 'not_found',
@@ -11,6 +12,7 @@ describe('HttpError', () => {
       details: {
         id: ['missing'],
       },
+      cause: cause,
     });
 
     expect(error).toBeInstanceOf(HttpError);
@@ -18,9 +20,8 @@ describe('HttpError', () => {
     expect(error.statusCode).toBe(404);
     expect(error.code).toBe('not_found');
     expect(error.message).toBe('Not found.');
-    expect(error.details).toEqual({
-      id: ['missing'],
-    });
+    expect(error.details).toEqual({ id: ['missing'] });
+    expect(error.cause).toBe(cause);
   });
 
   it('uses native Error prototype identity', () => {
