@@ -8,15 +8,15 @@
   "author": "Simon Rastislav Kovačič",
   "type": "module",
   "scripts": {
-    "build": "turbo run build",
+    "build": "turbo run build --log-order=grouped",
     "clean": "devkit run clean",
     "clean:deep": "devkit run clean-deep",
     "dep:check": "devkit run dep-check",
     "dep:update": "devkit run dep-update",
     "format": "devkit run format-fix && devkit run lint-fix",
     "preinstall": "npx only-allow pnpm",
-    "test": "turbo run test",
-    "typecheck": "turbo run typecheck"
+    "test": "turbo run test --log-order=grouped",
+    "typecheck": "turbo run typecheck --log-order=grouped"
   },
   "devDependencies": {
     "@buildplease/devkit": "workspace:*",
