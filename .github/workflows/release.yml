@@ -1,0 +1,68 @@
+name: Release
+
+on:
+  workflow_dispatch: {}
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  id-token: write
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    env:
+      DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+      NODE_OPTIONS: --max-old-space-size=4096
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Verify branch
+        run: |
+          if [ "$GITHUB_REF_NAME" != "$DEFAULT_BRANCH" ]; then
+            echo "Release must run from $DEFAULT_BRANCH."
+            exit 1
+          fi
+
+      - name: Setup pnpm and Node.js
+        uses: pnpm/setup@v2
+        with:
+          runtime: node@24
+          install: false
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm run build
+
+      - name: Typecheck
+        run: pnpm run typecheck
+
+      - name: Test
+        run: pnpm run test
+
+      - name: Publish packages
+        id: publish
+        continue-on-error: true
+        run: node scripts/release.ts
+
+      - name: Post release
+        if: always() && (steps.publish.outcome == 'success' || steps.publish.outcome == 'failure')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: node scripts/post-release.ts
+
+      - name: Propagate publish failure
+        if: always() && steps.publish.outcome == 'failure'
+        run: |
+          echo "::error title=Package publishing failed::One or more packages failed to publish. Successfully published packages were finalized with Git tags and GitHub Releases. See the Publish packages log for the original error."
+          exit 1
