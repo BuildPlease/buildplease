@@ -15,7 +15,7 @@
   "devDependencies": {
     "@buildplease/nuxtkit": "workspace:*",
     "@buildplease/webkit": "workspace:*",
-    "@iconify-json/lucide": "1.2.123",
+    "@iconify-json/lucide": "1.2.125",
     "@nuxt/ui": "catalog:",
     "@nuxtjs/i18n": "catalog:",
     "nuxt": "catalog:",
