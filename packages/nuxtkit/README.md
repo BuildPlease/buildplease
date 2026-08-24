@@ -29,13 +29,13 @@ export default defineNuxtConfig({
 
 ## Configuration
 
-NuxtKit can be configured through `buildpleaseNuxtKit` in `nuxt.config.ts`:
+NuxtKit can be configured through `nuxtkit` in `nuxt.config.ts`:
 
 ```ts
 export default defineNuxtConfig({
   modules: ['@buildplease/nuxtkit'],
 
-  buildpleaseNuxtKit: {
+  nuxtkit: {
     debug: false,
   },
 });

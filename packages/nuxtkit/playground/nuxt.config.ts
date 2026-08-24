@@ -19,7 +19,7 @@ export default defineNuxtConfig({
     },
   },
 
-  buildpleaseNuxtKit: {
+  nuxtkit: {
     debug: true,
     components: {
       prefix: 'NuxtKit',

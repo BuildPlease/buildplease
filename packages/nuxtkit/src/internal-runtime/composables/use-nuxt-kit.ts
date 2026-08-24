@@ -1,10 +1,10 @@
 import { isObject } from '@buildplease/webkit';
 
 import { isCSR, isSSR, useRuntimeConfig } from '#imports';
-import { MODULE_NAME, MODULE_SYMBOL_NAME } from '#internal-shared';
+import { MODULE_CONFIG_KEY_NAME, MODULE_NAME, MODULE_SYMBOL_NAME } from '#internal-shared';
 
 export function useNuxtKit() {
-  const runtimeConfig = useRuntimeConfig().public.buildpleaseNuxtKit;
+  const runtimeConfig = useRuntimeConfig().public[MODULE_CONFIG_KEY_NAME];
   const isDebugEnabled = Boolean(runtimeConfig.debug);
   const logger = new Logger(isDebugEnabled);
 

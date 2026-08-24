@@ -1,4 +1,4 @@
-import { CanceledError, HttpError } from '@buildplease/webkit';
+import { CanceledError, HttpError, isNonEmptyString } from '@buildplease/webkit';
 
 import { useNuxtApp } from '#app';
 import { useNuxtKit } from '#internal-runtime';
@@ -30,7 +30,7 @@ export interface ErrorHandlerOptions {
  * Steps:
  * 1. If the error is a `CanceledError`, return null.
  * 2. If `options.handle` is provided, return its result.
- * 3. If the error is a `HttpError`, return its message.
+ * 3. If the error is a `HttpError` with a message, return its message.
  * 4. Otherwise, resolve the configured generic L10n key and literal fallback.
  *
  * @param error - The error object to handle.
@@ -63,7 +63,7 @@ export function useErrorHandler(error: unknown, options: ErrorHandlerOptions = D
   }
 
   // Step 2: HttpError
-  if (error instanceof HttpError) {
+  if (error instanceof HttpError && isNonEmptyString(error.message)) {
     return error.message;
   }
 

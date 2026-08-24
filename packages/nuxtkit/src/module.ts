@@ -1,6 +1,6 @@
 import { defineNuxtModule } from '@nuxt/kit';
 
-import { MODULE_CONFIG_KEY_NAME, MODULE_NAME } from '#internal-shared';
+import { MODULE_CONFIG_KEY_NAME, MODULE_PACKAGE_NAME } from '#internal-shared';
 
 import { prepareContext } from './context';
 import { DEFAULT_OPTIONS } from './defaults';
@@ -9,7 +9,7 @@ import type { NuxtKitOptions, NuxtKitPublicRuntimeConfig } from './types';
 
 export default defineNuxtModule<ModuleOptions>({
   meta: {
-    name: MODULE_NAME,
+    name: MODULE_PACKAGE_NAME,
     configKey: MODULE_CONFIG_KEY_NAME,
     compatibility: {
       nuxt: '>=4.1.0',
