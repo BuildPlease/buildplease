@@ -1,23 +1,29 @@
 export interface HttpErrorOptions {
-  /** HTTP status code returned by the remote system. */
+  /** HTTP status code. */
   readonly statusCode: number;
 
-  /** Machine-readable error code for programmatic handling. */
-  readonly code: string;
-
-  /** Human-readable error description. */
-  readonly message: string;
+  /**
+   * Error code.
+   * @default undefined
+   * @example "not_found"
+   */
+  readonly code?: string;
 
   /**
-   * Structured error details.
-   *
+   * Error message.
+   * @default undefined
+   * @example "Not found"
+   */
+  readonly message?: string;
+
+  /**
+   * Error details.
    * @default undefined
    */
-  readonly details?: Readonly<Record<string, string[]>>;
+  readonly details?: unknown;
 
   /**
-   * Original transport error.
-   *
+   * Original error.
    * @default undefined
    */
   readonly cause?: unknown;
@@ -25,7 +31,7 @@ export interface HttpErrorOptions {
 
 export class HttpError extends Error {
   public readonly statusCode: HttpErrorOptions['statusCode'];
-  public readonly code: HttpErrorOptions['code'];
+  public readonly code?: HttpErrorOptions['code'];
   public readonly details?: HttpErrorOptions['details'];
 
   public constructor(options: HttpErrorOptions) {
