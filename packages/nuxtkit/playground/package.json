@@ -10,6 +10,7 @@
     "typecheck": "vue-tsc --noEmit"
   },
   "dependencies": {
+    "@internationalized/date": "3.12.3",
     "zod": "catalog:"
   },
   "devDependencies": {

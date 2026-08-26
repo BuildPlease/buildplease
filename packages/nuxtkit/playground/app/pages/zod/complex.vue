@@ -159,27 +159,11 @@
             name="dates.date"
             :label="t('page.complexValidation.fields.date.label')"
           >
-            <UPopover>
-              <UButton
-                color="neutral"
-                variant="subtle"
-                icon="i-lucide-calendar"
-              >
-                {{
-                  dateModel
-                    ? dateFormatter.format(dateModel.toDate(getLocalTimeZone()))
-                    : t('page.complexValidation.fields.date.placeholder')
-                }}
-              </UButton>
-
-              <template #content>
-                <UCalendar
-                  v-model="dateModel"
-                  :locale="locale"
-                  class="p-2"
-                />
-              </template>
-            </UPopover>
+            <UInputDate
+              v-model="dateModel"
+              :locale="locale"
+              class="w-full"
+            />
           </UFormField>
 
           <!-- Date with Min -->
@@ -187,27 +171,11 @@
             name="dates.dateMin"
             :label="t('page.complexValidation.fields.dateMin.label')"
           >
-            <UPopover>
-              <UButton
-                color="neutral"
-                variant="subtle"
-                icon="i-lucide-calendar"
-              >
-                {{
-                  dateMinModel
-                    ? dateFormatter.format(dateMinModel.toDate(getLocalTimeZone()))
-                    : t('page.complexValidation.fields.dateMin.placeholder')
-                }}
-              </UButton>
-
-              <template #content>
-                <UCalendar
-                  v-model="dateMinModel"
-                  :locale="locale"
-                  class="p-2"
-                />
-              </template>
-            </UPopover>
+            <UInputDate
+              v-model="dateMinModel"
+              :locale="locale"
+              class="w-full"
+            />
           </UFormField>
 
           <!-- Date with Max -->
@@ -215,27 +183,11 @@
             name="dates.dateMax"
             :label="t('page.complexValidation.fields.dateMax.label')"
           >
-            <UPopover>
-              <UButton
-                color="neutral"
-                variant="subtle"
-                icon="i-lucide-calendar"
-              >
-                {{
-                  dateMaxModel
-                    ? dateFormatter.format(dateMaxModel.toDate(getLocalTimeZone()))
-                    : t('page.complexValidation.fields.dateMax.placeholder')
-                }}
-              </UButton>
-
-              <template #content>
-                <UCalendar
-                  v-model="dateMaxModel"
-                  :locale="locale"
-                  class="p-2"
-                />
-              </template>
-            </UPopover>
+            <UInputDate
+              v-model="dateMaxModel"
+              :locale="locale"
+              class="w-full"
+            />
           </UFormField>
 
           <!-- Date Range -->
@@ -244,12 +196,11 @@
             :label="t('page.complexValidation.fields.dateRange.label')"
             :error-pattern="/^dates.dateRange\.(start|end)$/"
           >
-            <UCalendar
+            <UInputDate
               v-model="dateRangeModel"
               range
               :locale="locale"
-              class="p-2"
-              selectionMode="range"
+              class="w-full"
             />
           </UFormField>
 
@@ -302,9 +253,8 @@
 </template>
 
 <script setup lang="ts">
-import { type CalendarDate, DateFormatter, getLocalTimeZone, parseDate } from '@internationalized/date';
+import { type DateValue, getLocalTimeZone, parseDate } from '@internationalized/date';
 import type { FormErrorEvent, FormSubmitEvent } from '@nuxt/ui';
-import type { DateRange } from 'reka-ui';
 import { computed, reactive, ref } from 'vue';
 
 import { type ComplexData, type ComplexDto, complexSchema } from '~/schema/complex';
@@ -314,56 +264,54 @@ const { locale, t } = useI18n();
 const result = ref<{ ok: boolean; errors: any[] } | null>(null);
 const resultPretty = computed(() => (result.value ? JSON.stringify(result.value, null, 2) : ''));
 
-const dateFormatter = computed(() => new DateFormatter(locale.value, { dateStyle: 'medium' }));
 const timezone = getLocalTimeZone();
 
-const dateModel = computed<CalendarDate | undefined>({
-  get: () => {
-    if (state.dates.date && !isNaN(state.dates.date.getTime())) {
-      return parseDate(state.dates.date.toISOString().slice(0, 10));
-    }
+type DateRangeValue = {
+  start: DateValue | undefined;
+  end: DateValue | undefined;
+};
+
+function toDateValue(value: Date | undefined): DateValue | undefined {
+  if (!value || Number.isNaN(value.getTime())) {
     return undefined;
-  },
-  set: (d) => {
-    state.dates.date = d?.toDate(timezone) ?? undefined;
+  }
+
+  return parseDate(value.toISOString().slice(0, 10));
+}
+
+function toDate(value: DateValue | undefined): Date | undefined {
+  return value?.toDate(timezone);
+}
+
+const dateModel = computed<DateValue | undefined>({
+  get: () => toDateValue(state.dates.date),
+  set: (value) => {
+    state.dates.date = toDate(value);
   },
 });
 
-const dateMinModel = computed<CalendarDate | undefined>({
-  get: () => {
-    if (state.dates.dateMin && !isNaN(state.dates.dateMin.getTime())) {
-      return parseDate(state.dates.dateMin.toISOString().slice(0, 10));
-    }
-    return undefined;
-  },
-  set: (d) => {
-    state.dates.dateMin = d?.toDate(timezone) ?? undefined;
+const dateMinModel = computed<DateValue | undefined>({
+  get: () => toDateValue(state.dates.dateMin),
+  set: (value) => {
+    state.dates.dateMin = toDate(value);
   },
 });
 
-const dateMaxModel = computed<CalendarDate | undefined>({
-  get: () => {
-    if (state.dates.dateMax && !isNaN(state.dates.dateMax.getTime())) {
-      return parseDate(state.dates.dateMax.toISOString().slice(0, 10));
-    }
-    return undefined;
-  },
-  set: (d) => {
-    state.dates.dateMax = d?.toDate(timezone) ?? undefined;
+const dateMaxModel = computed<DateValue | undefined>({
+  get: () => toDateValue(state.dates.dateMax),
+  set: (value) => {
+    state.dates.dateMax = toDate(value);
   },
 });
 
-const dateRangeModel = computed<DateRange>({
-  get() {
-    const { start, end } = state.dates.dateRange;
-    return {
-      start: start ? parseDate(start.toISOString().slice(0, 10)) : undefined,
-      end: end ? parseDate(end.toISOString().slice(0, 10)) : undefined,
-    };
-  },
-  set(value) {
-    state.dates.dateRange.start = value.start ? new Date(value.start.toString()) : undefined;
-    state.dates.dateRange.end = value.end ? new Date(value.end.toString()) : undefined;
+const dateRangeModel = computed<DateRangeValue>({
+  get: () => ({
+    start: toDateValue(state.dates.dateRange.start),
+    end: toDateValue(state.dates.dateRange.end),
+  }),
+  set: (value) => {
+    state.dates.dateRange.start = toDate(value.start);
+    state.dates.dateRange.end = toDate(value.end);
   },
 });
 
