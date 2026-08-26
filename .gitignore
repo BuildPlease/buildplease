@@ -136,7 +136,9 @@ blob-report/
 
 .next/
 .nuxt/
+.nitro/
 .output/
+.runtime/
 
 .turbo/
 .vercel/
@@ -176,13 +178,14 @@ packages/*/LICENSE
 dist
 
 dist/
-build/
 out/
+build/
+.build/
 
 
 # ------------------------------------------------------------------------------
 # Generated output
 # ------------------------------------------------------------------------------
 
-**/generated/
-**/.apikit/
+generated/
+.apikit/
