@@ -19,11 +19,14 @@ export abstract class RemoteResource<Input, Output, Client> implements AsyncOper
   ) {}
 
   public async execute(input: Input, options?: HttpRequestOptions): Promise<Output> {
-    const inputDto = await this.convertOrThrow(() => this.endpoint.convertInput(input));
-    const request = this.endpoint.makeRequest(inputDto);
+    const requestInput = await this.convertOrThrow(() => this.endpoint.convertInput(input));
+
+    const request = this.endpoint.makeRequest(requestInput);
     const response = await this.httpClient.execute(request, options);
 
-    return await this.convertOrThrow(() => this.endpoint.convertOutput(response));
+    const requestOutput = await this.convertOrThrow(() => this.endpoint.convertOutput(response));
+
+    return requestOutput;
   }
 
   private async convertOrThrow<T>(convert: () => Promise<T>): Promise<T> {
