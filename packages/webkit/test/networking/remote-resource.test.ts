@@ -5,6 +5,7 @@ import {
   type HttpRequest,
   type HttpRequestOptions,
   type RemoteEndpoint,
+  defineHttpRequest,
   HttpClient,
   RemoteResource,
 } from '@/networking';
@@ -27,7 +28,7 @@ interface Output {
 
 type Client = (id: string) => Promise<OutputDto>;
 
-class TestEndpoint implements RemoteEndpoint<Input, InputDto, Output, OutputDto, Client> {
+class TestEndpoint implements RemoteEndpoint<Input, InputDto, Output, OutputDto> {
   public inputError?: unknown;
   public outputError?: unknown;
 
@@ -36,10 +37,8 @@ class TestEndpoint implements RemoteEndpoint<Input, InputDto, Output, OutputDto,
     return { id: input.id };
   }
 
-  public makeRequest(input: InputDto): HttpRequest<Client, OutputDto> {
-    return {
-      execute: (client) => client(input.id),
-    };
+  public makeRequest(input: InputDto): HttpRequest<OutputDto> {
+    return defineHttpRequest<Client, OutputDto>((client) => client(input.id));
   }
 
   public async convertOutput(response: OutputDto): Promise<Output> {
@@ -48,14 +47,14 @@ class TestEndpoint implements RemoteEndpoint<Input, InputDto, Output, OutputDto,
   }
 }
 
-class TestHttpClient extends HttpClient<Client> {
+class TestHttpClient extends HttpClient {
   protected createClient(_options: HttpRequestOptions): Client {
     return async (id) => ({ value: id });
   }
 }
 
-class TestRemoteResource extends RemoteResource<Input, Output, Client> {
-  public constructor(endpoint: TestEndpoint, httpClient: HttpClient<Client>) {
+class TestRemoteResource extends RemoteResource<Input, Output> {
+  public constructor(endpoint: TestEndpoint, httpClient: HttpClient) {
     super(endpoint, httpClient);
   }
 }

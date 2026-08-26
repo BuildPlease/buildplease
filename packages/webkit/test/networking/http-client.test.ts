@@ -6,6 +6,7 @@ import {
   type HttpRequest,
   type HttpRequestOptions,
   AsyncQueueImpl,
+  defineHttpRequest,
   HttpClient,
   HttpError,
   HttpRequestInterceptorPipeline,
@@ -13,7 +14,7 @@ import {
 
 type Client = (value: string) => Promise<string>;
 
-class TestHttpClient extends HttpClient<Client> {
+class TestHttpClient extends HttpClient {
   public options?: HttpRequestOptions;
   public failure?: unknown;
   public mappedError?: Error;
@@ -37,9 +38,7 @@ class TestHttpClient extends HttpClient<Client> {
   }
 }
 
-const request: HttpRequest<Client, string> = {
-  execute: (client) => client('result'),
-};
+const request = defineHttpRequest<Client, string>((client) => client('result'));
 
 describe('HttpClient', () => {
   it('applies request options in global, interceptor, request and caller precedence order', async () => {
@@ -65,7 +64,7 @@ describe('HttpClient', () => {
         },
       ]),
     });
-    const configuredRequest: HttpRequest<Client, string> = {
+    const configuredRequest: HttpRequest<string> = {
       ...request,
       options: {
         headers: {

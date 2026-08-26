@@ -42,14 +42,13 @@ export class HttpRequestTestEndpoint implements RemoteEndpoint<
   HttpRequestTestInput,
   HttpRequestTestInput,
   HttpRequestTestOutput,
-  HttpRequestTestOutput,
-  void
+  HttpRequestTestOutput
 > {
   public async convertInput(input: HttpRequestTestInput): Promise<HttpRequestTestInput> {
     return input;
   }
 
-  public makeRequest(input: HttpRequestTestInput): HttpRequest<void, HttpRequestTestOutput> {
+  public makeRequest(input: HttpRequestTestInput): HttpRequest<HttpRequestTestOutput> {
     return {
       execute: async () => {
         input.onRequestStart?.();
@@ -85,24 +84,20 @@ export class HttpRequestTestEndpoint implements RemoteEndpoint<
 }
 
 @injectable()
-export class HttpRequestTestResource extends SecuredRemoteResource<HttpRequestTestInput, HttpRequestTestOutput, void> {
+export class HttpRequestTestResource extends SecuredRemoteResource<HttpRequestTestInput, HttpRequestTestOutput> {
   public constructor(
     @inject(HttpRequestTestEndpoint) endpoint: HttpRequestTestEndpoint,
-    @inject(Symbols.DI.Networking.HttpRequestTestClient) httpClient: HttpClient<void>,
+    @inject(Symbols.DI.Networking.HttpRequestTestClient) httpClient: HttpClient,
   ) {
     super(endpoint, httpClient);
   }
 }
 
 @injectable()
-export class DelayedHttpRequestTestResource extends SecuredRemoteResource<
-  HttpRequestTestInput,
-  HttpRequestTestOutput,
-  void
-> {
+export class DelayedHttpRequestTestResource extends SecuredRemoteResource<HttpRequestTestInput, HttpRequestTestOutput> {
   public constructor(
     @inject(HttpRequestTestEndpoint) endpoint: HttpRequestTestEndpoint,
-    @inject(Symbols.DI.Networking.DelayedHttpRequestTestClient) httpClient: HttpClient<void>,
+    @inject(Symbols.DI.Networking.DelayedHttpRequestTestClient) httpClient: HttpClient,
   ) {
     super(endpoint, httpClient);
   }

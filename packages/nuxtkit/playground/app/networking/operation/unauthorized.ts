@@ -18,12 +18,12 @@ export enum UnauthorizedErrorCode {
 export type UnauthorizedOperation = AsyncOperation<void, void>;
 
 @injectable()
-export class UnauthorizedEndpoint implements RemoteEndpoint<void, void, void, void, void> {
+export class UnauthorizedEndpoint implements RemoteEndpoint<void, void, void, void> {
   public async convertInput(input: void): Promise<void> {
     return input;
   }
 
-  public makeRequest(_input: void): HttpRequest<void, void> {
+  public makeRequest(_input: void): HttpRequest<void> {
     return {
       execute: async () => {
         await delay(2000);
@@ -43,10 +43,10 @@ export class UnauthorizedEndpoint implements RemoteEndpoint<void, void, void, vo
 }
 
 @injectable()
-export class UnauthorizedResource extends SecuredRemoteResource<void, void, void> {
+export class UnauthorizedResource extends SecuredRemoteResource<void, void> {
   public constructor(
     @inject(UnauthorizedEndpoint) endpoint: UnauthorizedEndpoint,
-    @inject(Symbols.DI.Networking.HttpClient) httpClient: HttpClient<void>,
+    @inject(Symbols.DI.Networking.HttpClient) httpClient: HttpClient,
   ) {
     super(endpoint, httpClient);
   }

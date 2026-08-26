@@ -26,7 +26,7 @@ function deferred<T = void>(): { promise: Promise<T>; resolve: (value: T) => voi
 
 type Client = () => Promise<string>;
 
-class TestHttpClient extends HttpClient<Client> {
+class TestHttpClient extends HttpClient {
   public constructor(options: HttpClientOptions = {}) {
     super(options);
   }
@@ -36,12 +36,12 @@ class TestHttpClient extends HttpClient<Client> {
   }
 }
 
-class TestEndpoint implements RemoteEndpoint<() => Promise<string>, () => Promise<string>, string, string, Client> {
+class TestEndpoint implements RemoteEndpoint<() => Promise<string>, () => Promise<string>, string, string> {
   public async convertInput(input: () => Promise<string>): Promise<() => Promise<string>> {
     return input;
   }
 
-  public makeRequest(operation: () => Promise<string>): HttpRequest<Client, string> {
+  public makeRequest(operation: () => Promise<string>): HttpRequest<string> {
     return {
       execute: async () => await operation(),
     };
@@ -52,8 +52,8 @@ class TestEndpoint implements RemoteEndpoint<() => Promise<string>, () => Promis
   }
 }
 
-class TestPublicResource extends PublicRemoteResource<() => Promise<string>, string, Client> {}
-class TestSecuredResource extends SecuredRemoteResource<() => Promise<string>, string, Client> {}
+class TestPublicResource extends PublicRemoteResource<() => Promise<string>, string> {}
+class TestSecuredResource extends SecuredRemoteResource<() => Promise<string>, string> {}
 
 function httpError(statusCode: number, code = 'error'): HttpError {
   return new HttpError({ statusCode: statusCode, code: code, message: 'HTTP error' });

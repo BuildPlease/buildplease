@@ -42,7 +42,7 @@ export interface HttpClientOptions {
   readonly unauthorized?: UnauthorizedOptions;
 }
 
-export abstract class HttpClient<Client> {
+export abstract class HttpClient {
   private readonly requestOptions: HttpRequestOptions;
   private readonly interceptorPipeline: HttpRequestInterceptorPipeline;
   public readonly asyncQueue: AsyncQueue;
@@ -55,7 +55,7 @@ export abstract class HttpClient<Client> {
     this.unauthorized = options.unauthorized;
   }
 
-  public execute<Output>(request: HttpRequest<Client, Output>, options?: HttpRequestOptions): Promise<Output> {
+  public execute<Output>(request: HttpRequest<Output>, options?: HttpRequestOptions): Promise<Output> {
     return this.asyncQueue.execute(async () => {
       const requestOptions = await this.makeRequestOptions(request, options);
 
@@ -68,8 +68,8 @@ export abstract class HttpClient<Client> {
     });
   }
 
-  /** Creates the concrete client for the resolved request options. */
-  protected abstract createClient(options: HttpRequestOptions): Client;
+  /** Creates the concrete transport client for the resolved request options. */
+  protected abstract createClient(options: HttpRequestOptions): unknown;
 
   /** Maps a transport-specific failure to a BuildPlease error. */
   protected handleError(error: unknown): Error {
@@ -90,7 +90,7 @@ export abstract class HttpClient<Client> {
   }
 
   private async makeRequestOptions(
-    request: HttpRequest<Client, unknown>,
+    request: HttpRequest<unknown>,
     options?: HttpRequestOptions,
   ): Promise<HttpRequestOptions> {
     let result = this.mergeRequestOptions(DEFAULT_REQUEST_OPTIONS, this.requestOptions);

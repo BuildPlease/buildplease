@@ -6,16 +6,12 @@ import type { HttpRequestOptions } from './http-request-options';
 import type { RemoteEndpoint } from './remote-endpoint';
 
 @injectable()
-export abstract class RemoteResource<Input, Output, Client> implements AsyncOperation<
-  Input,
-  Output,
-  HttpRequestOptions
-> {
+export abstract class RemoteResource<Input, Output> implements AsyncOperation<Input, Output, HttpRequestOptions> {
   protected constructor(
     @unmanaged()
-    protected readonly endpoint: RemoteEndpoint<Input, unknown, Output, unknown, Client>,
+    protected readonly endpoint: RemoteEndpoint<Input, unknown, Output, unknown>,
     @unmanaged()
-    protected readonly httpClient: HttpClient<Client>,
+    protected readonly httpClient: HttpClient,
   ) {}
 
   public async execute(input: Input, options?: HttpRequestOptions): Promise<Output> {

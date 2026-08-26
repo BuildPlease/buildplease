@@ -5,11 +5,8 @@ import type { RemoteEndpoint } from './remote-endpoint';
 import { RemoteResource } from './remote-resource';
 
 @injectable()
-export class PublicRemoteResource<Input, Output, Client> extends RemoteResource<Input, Output, Client> {
-  public constructor(
-    endpoint: RemoteEndpoint<Input, unknown, Output, unknown, Client>,
-    httpClient: HttpClient<Client>,
-  ) {
+export class PublicRemoteResource<Input, Output> extends RemoteResource<Input, Output> {
+  public constructor(endpoint: RemoteEndpoint<Input, unknown, Output, unknown>, httpClient: HttpClient) {
     super(endpoint, httpClient);
   }
 }
