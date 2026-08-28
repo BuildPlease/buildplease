@@ -1,7 +1,6 @@
+import { type InferConfiguration, defineConfiguration, field } from '@buildplease/core/node';
 import type { FastifyBasicAuthOptions } from '@fastify/basic-auth';
 import { ApiKitDefaults } from '@src-internal/configuration';
-
-import { type InferConfiguration, defineConfiguration, field } from '@/configuration/core';
 
 export type BasicAuthAuthenticate = FastifyBasicAuthOptions['authenticate'];
 

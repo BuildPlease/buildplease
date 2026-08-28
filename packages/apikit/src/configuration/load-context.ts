@@ -1,15 +1,12 @@
-import fs from 'node:fs';
-import path from 'node:path';
-
-import { Console } from '@buildplease/core/node';
-import dotenvx from '@dotenvx/dotenvx';
 import {
+  type ConfigurationBinding,
   type ResolveConfigurationOptions,
-  loadApiKitConfig,
-  loadAppBuild,
+  Console,
+  loadConfig,
   resolveConfiguration,
   resolveConfigurationBinding,
-} from '@src-internal/configuration';
+} from '@buildplease/core/node';
+import { loadAppBuild } from '@src-internal/configuration';
 
 import type { ApiKitConfig } from './config';
 import {
@@ -26,9 +23,6 @@ import {
   ServerConfiguration,
   StaticFilesConfiguration,
 } from './configs';
-import type { ConfigurationBinding } from './core/configuration';
-import type { EnvironmentConfig } from './core/environments';
-import { resolveEnvironment } from './core/environments';
 
 const cli = new Console();
 
@@ -40,22 +34,22 @@ export interface LoadApiKitContextOptions {
 }
 
 export async function loadApiKitContext(options: LoadApiKitContextOptions): Promise<void> {
-  const loaded = await loadApiKitConfig({
+  const loaded = await loadConfig<ApiKitConfig>({
     config: options.config,
+    environment: options.environment,
   });
-  const buildConfiguration = await resolveConfiguration(BuildConfiguration, loaded.config.build);
+  const input = loaded.config.input;
+  const environment = loaded.environment;
+  const buildConfiguration = await resolveConfiguration(BuildConfiguration, input.build, {
+    environment: environment,
+  });
   const build = await loadAppBuild(loaded.rootDir, buildConfiguration.outDir);
-  const environment = resolveEnvironment(loaded.config.environments, options.environment, {
-    fileDir: loaded.rootDir,
-  });
-
-  initializeEnvironment(environment);
 
   const resolveOptions = {
     buildMetadata: build,
     environment: environment,
   };
-  const configuration = await resolveApiKitConfigurations(loaded.config, resolveOptions);
+  const configuration = await resolveApiKitConfigurations(input, resolveOptions);
 
   global.apikit = {
     build: build,
@@ -68,7 +62,7 @@ export async function loadApiKitContext(options: LoadApiKitContextOptions): Prom
 
 // MARK: - Private
 
-async function resolveApiKitConfigurations(config: ApiKitConfig, options: ResolveConfigurationOptions) {
+async function resolveApiKitConfigurations(config: ApiKitConfig['input'], options: ResolveConfigurationOptions) {
   return {
     serverConfig: await resolveConfiguration(ServerConfiguration, config.server, options),
     loggerConfig: await resolveConfiguration(LoggerConfiguration, config.logger, options),
@@ -104,15 +98,4 @@ async function resolveExtensions(
   }
 
   return configurations;
-}
-
-function initializeEnvironment(environment: EnvironmentConfig): void {
-  const environmentFilePath = path.resolve(environment.fileDir, environment.file);
-
-  if (!fs.existsSync(environmentFilePath)) {
-    throw new Error(`Environment file "${environmentFilePath}" does not exist.`);
-  }
-
-  dotenvx.config({ path: environmentFilePath });
-  process.env.NODE_ENV = environment.name;
 }

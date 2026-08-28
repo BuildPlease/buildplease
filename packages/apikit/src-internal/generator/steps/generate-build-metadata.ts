@@ -1,9 +1,7 @@
 import path from 'node:path';
 
-import { type PackageJSONModel, createFile, loadPackageJSON } from '@buildplease/core/node';
+import { type BuildMetadata, type PackageJSONModel, createFile, loadPackageJSON } from '@buildplease/core/node';
 import { v7 as uuidV7 } from 'uuid';
-
-import type { BuildMetadata } from '@/configuration';
 
 import type { GeneratorOptions } from '../generator-options';
 

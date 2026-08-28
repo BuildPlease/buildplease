@@ -1,17 +1,16 @@
-import type { BuildMetadata } from './build-metadata';
-import type { EnvironmentConfig } from './environments';
+import type { BuildMetadata } from '../build-metadata';
+import type { EnvironmentConfig, EnvironmentRegistry } from './environment';
 
 // MARK: - Symbols
 
-const CONFIGURATION_SOURCE = Symbol('apikit.configuration.source');
+const CONFIGURATION_SOURCE = Symbol.for('buildplease.environment-configuration.source');
 
 // MARK: - Public
 
-export type ConfigurationSourceKind = 'env' | 'by-environment' | 'compute' | 'static';
+export type ConfigurationSourceKind = 'env' | 'by-environment' | 'compute' | 'static' | 'default';
 
 export interface ConfigurationResolveContext<EnvironmentName extends string = string> {
   readonly environment: EnvironmentConfig<EnvironmentName>;
-
   readonly buildMetadata: BuildMetadata;
 }
 
@@ -20,16 +19,16 @@ export interface ConfigurationSource<Output = unknown> {
   readonly options: unknown;
   readonly transforms: readonly ConfigurationSourceTransform[];
 
-  map<NextOutput>(
-    transform: (value: Output, context: ConfigurationResolveContext) => NextOutput | Promise<NextOutput>,
-  ): ConfigurationSource<NextOutput>;
+  default<Default>(value: Default): ConfigurationSource<Exclude<Output, null | undefined> | Default>;
+
+  map<NextOutput>(transform: (value: Output) => NextOutput | Promise<NextOutput>): ConfigurationSource<NextOutput>;
 }
 
-export function defineSource<const Environments extends Record<string, unknown>>(_environments: Environments) {
+export function defineSource<const Environments extends EnvironmentRegistry>(_environments: Environments) {
   type EnvironmentName = keyof Environments & string;
 
   return {
-    env(name: string): ConfigurationSource<string> {
+    env(name: string): ConfigurationSource<string | undefined> {
       return makeSource('env', { name: name });
     },
 
@@ -63,10 +62,7 @@ export function isConfigurationSource(input: unknown): input is ConfigurationSou
 
 // MARK: - Private
 
-type ConfigurationSourceTransform = (
-  value: unknown,
-  context: ConfigurationResolveContext,
-) => unknown | Promise<unknown>;
+type ConfigurationSourceTransform = (value: unknown) => unknown | Promise<unknown>;
 
 type InferSourceOutput<T> =
   T extends ConfigurationSource<infer Output>
@@ -91,9 +87,14 @@ function makeSource<Output>(
     options: options,
     transforms: transforms,
 
-    map<NextOutput>(
-      transform: (value: Output, context: ConfigurationResolveContext) => NextOutput | Promise<NextOutput>,
-    ) {
+    default<Default>(value: Default) {
+      return makeSource<Exclude<Output, null | undefined> | Default>('default', {
+        source: result,
+        value: value,
+      });
+    },
+
+    map<NextOutput>(transform: (value: Output) => NextOutput | Promise<NextOutput>) {
       return makeSource<NextOutput>(kind, options, [...transforms, transform as ConfigurationSourceTransform]);
     },
   };

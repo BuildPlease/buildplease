@@ -1,7 +1,6 @@
+import { type InferConfiguration, defineConfiguration, field } from '@buildplease/core/node';
 import type { FastifyStaticOptions } from '@fastify/static';
 import { ApiKitDefaults } from '@src-internal/configuration';
-
-import { type InferConfiguration, defineConfiguration, field } from '@/configuration/core';
 
 export type StaticFilesDotfilesMode = NonNullable<FastifyStaticOptions['dotfiles']>;
 

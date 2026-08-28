@@ -1,8 +1,6 @@
 import path from 'node:path';
 
-import { createFile } from '@buildplease/core/node';
-
-import type { EnvironmentRegistry } from '@/configuration';
+import { type EnvironmentRegistry, createFile } from '@buildplease/core/node';
 
 import type { GeneratorOptions } from '../generator-options';
 

@@ -1,16 +1,16 @@
-import { ApiKitDefaults, resolveConfiguration } from '@src-internal/configuration';
+import { resolveConfiguration } from '@buildplease/core/node';
 import { describe, expect, it } from 'vitest';
 
 import { NotificationConfiguration } from '@/configuration';
 
 describe('NotificationConfiguration', () => {
-  it('keeps notifications disabled when omitted', async () => {
+  it('resolves the disabled default', async () => {
     await expect(resolveConfiguration(NotificationConfiguration, undefined)).resolves.toEqual({
-      enabled: ApiKitDefaults.notification.enabled,
+      enabled: false,
     });
   });
 
-  it('resolves Telegram channel configuration', async () => {
+  it('resolves a Telegram channel', async () => {
     await expect(
       resolveConfiguration(NotificationConfiguration, {
         enabled: true,
@@ -32,7 +32,7 @@ describe('NotificationConfiguration', () => {
     });
   });
 
-  it('rejects channels when notifications are disabled', async () => {
+  it('rejects channels while notifications are disabled', async () => {
     await expect(
       resolveConfiguration(NotificationConfiguration, {
         enabled: false,
@@ -46,16 +46,14 @@ describe('NotificationConfiguration', () => {
     ).rejects.toThrow('apikit.notification.channels cannot be configured when notification is disabled.');
   });
 
-  it('requires at least one configured channel when enabled', async () => {
+  it('requires a supported channel when notifications are enabled', async () => {
     await expect(
       resolveConfiguration(NotificationConfiguration, {
         enabled: true,
         channels: {},
       }),
     ).rejects.toThrow('apikit.notification.channels must contain at least one configured channel.');
-  });
 
-  it('rejects unsupported channels', async () => {
     await expect(
       resolveConfiguration(NotificationConfiguration, {
         enabled: true,

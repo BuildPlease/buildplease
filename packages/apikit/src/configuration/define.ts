@@ -1,15 +1,15 @@
-import type { ApiKitConfig, DefineApiKitInput } from './config';
-import type { EnvironmentRegistry } from './core/environments';
+import { type EnvironmentRegistry, defineConfig as defineCoreConfig } from '@buildplease/core/node';
 
-// MARK: - Public
+import type { ApiKitConfig, DefineApiKitConfigInput } from './config';
 
-export function defineApiKit<const Environments extends EnvironmentRegistry>(
+// MARK: - Internal
+
+export function defineApiKitConfiguration<const Environments extends EnvironmentRegistry>(
   environments: Environments,
-  input: DefineApiKitInput,
+  input: DefineApiKitConfigInput,
 ): ApiKitConfig<Environments> {
-  return {
+  return defineCoreConfig(environments, {
     ...input,
-    environments: environments,
     configurations: input.configurations ?? [],
-  };
+  });
 }

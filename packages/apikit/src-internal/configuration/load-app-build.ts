@@ -1,9 +1,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
+import type { BuildMetadata } from '@buildplease/core/node';
 import { createJiti } from 'jiti';
-
-import type { BuildMetadata } from '@/configuration/core/build-metadata';
 
 const APP_BUILD_ENTRY = 'build-metadata.ts';
 

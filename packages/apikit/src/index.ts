@@ -10,6 +10,7 @@ import '../types';
 export * from '@buildplease/core';
 export * from '@buildplease/core/node';
 export * from './configuration';
+export { defineConfig } from './configuration';
 export * from './database';
 export * from './di';
 export * from './email';

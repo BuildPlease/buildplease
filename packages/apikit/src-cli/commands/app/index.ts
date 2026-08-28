@@ -1,8 +1,9 @@
-import { Console } from '@buildplease/core/node';
-import { APIKIT_CONFIG_NAME, loadApiKitConfig } from '@src-internal/configuration';
+import { Console, ENVIRONMENT_CONFIG_FILE, loadConfig } from '@buildplease/core/node';
 import { generateApp } from '@src-internal/generator';
 import { resolveAppGeneratorConfig } from '@src-internal/generator/configuration/app-generator-config';
 import { defineCommand } from 'citty';
+
+import type { ApiKitConfig } from '@/configuration';
 
 import type { CliRuntime } from '../../runtime';
 import { type CommandOptions, commandArgs, fail, formatPath, runInDirectory } from '../shared';
@@ -20,7 +21,7 @@ export function createBuildAppCommand(runtime: CliRuntime) {
         '  apikit build:app [--dir <directory>] [--config <config-name>]',
         '',
         'Config lookup:',
-        `  ${APIKIT_CONFIG_NAME}.*`,
+        `  ${ENVIRONMENT_CONFIG_FILE}`,
         '',
         'Examples:',
         '  apikit build:app',
@@ -35,7 +36,7 @@ export function createBuildAppCommand(runtime: CliRuntime) {
 
 async function runApp(args: CommandOptions, runtime: CliRuntime): Promise<void> {
   try {
-    const loaded = await loadApiKitConfig({ dir: args.dir, config: args.config });
+    const loaded = await loadConfig<ApiKitConfig>({ dir: args.dir, config: args.config });
     const generatorConfig = await resolveAppGeneratorConfig(loaded.config);
 
     cli.title('ApiKit', 'app', [

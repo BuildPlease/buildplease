@@ -1,14 +1,12 @@
-import { ApiKitDefaults, resolveConfiguration } from '@src-internal/configuration';
+import { resolveConfiguration } from '@buildplease/core/node';
+import { ApiKitDefaults } from '@src-internal/configuration';
 import { describe, expect, it } from 'vitest';
 
-import { testEnvironment } from '#test/fixtures/configuration/environment';
 import { CorsConfiguration } from '@/configuration';
 
 describe('CorsConfiguration', () => {
-  const environment = testEnvironment();
-
-  it('keeps CORS disabled while resolving default options when omitted', async () => {
-    await expect(resolveConfiguration(CorsConfiguration, {}, { environment: environment })).resolves.toEqual({
+  it('resolves ApiKit defaults', async () => {
+    await expect(resolveConfiguration(CorsConfiguration, {})).resolves.toEqual({
       enabled: false,
       allowAllOrigins: false,
       includeWwwSubdomain: true,
@@ -16,48 +14,24 @@ describe('CorsConfiguration', () => {
     });
   });
 
-  it('uses framework CORS options when enabled without consumer overrides', async () => {
-    const resolved = await resolveConfiguration(CorsConfiguration, { enabled: true }, { environment: environment });
-
-    expect(resolved.enabled).toBe(true);
-    expect(resolved.options).toEqual(ApiKitDefaults.cors.options);
-  });
-
-  it('shallow-merges consumer CORS option overrides over framework defaults', async () => {
-    const origin = 'https://subdomain.example.com';
-
-    const resolved = await resolveConfiguration(
-      CorsConfiguration,
-      {
+  it('merges consumer options over ApiKit defaults', async () => {
+    await expect(
+      resolveConfiguration(CorsConfiguration, {
         enabled: true,
         options: {
-          origin: origin,
-        },
-      },
-      { environment: environment },
-    );
-
-    expect(resolved.options).toEqual({
-      ...ApiKitDefaults.cors.options,
-      origin: origin,
-    });
-  });
-
-  it('allows consumer CORS options to override framework defaults explicitly', async () => {
-    const resolved = await resolveConfiguration(
-      CorsConfiguration,
-      {
-        enabled: true,
-        options: {
+          origin: 'https://example.com',
           credentials: false,
         },
+      }),
+    ).resolves.toEqual({
+      enabled: true,
+      allowAllOrigins: false,
+      includeWwwSubdomain: true,
+      options: {
+        ...ApiKitDefaults.cors.options,
+        origin: 'https://example.com',
+        credentials: false,
       },
-      { environment: environment },
-    );
-
-    expect(resolved.options).toEqual({
-      ...ApiKitDefaults.cors.options,
-      credentials: false,
     });
   });
 });

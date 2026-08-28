@@ -1,8 +1,7 @@
 import type { L10nResources } from '@buildplease/core';
+import { type InferConfiguration, defineConfiguration, field } from '@buildplease/core/node';
 import { ApiKitDefaults } from '@src-internal/configuration';
 import type { InitOptions } from 'i18next';
-
-import { type InferConfiguration, defineConfiguration, field } from '@/configuration/core';
 
 export interface I18nDirectoryEntry {
   readonly path: string;

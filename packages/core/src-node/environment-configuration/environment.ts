@@ -1,3 +1,5 @@
+import { resolvePath } from '@src-node/file';
+
 // MARK: - Public
 
 export interface EnvironmentDefinition {
@@ -20,7 +22,7 @@ export type EnvironmentConfigFromRegistry<Environments extends EnvironmentRegist
 >;
 
 export interface ResolveEnvironmentOptions {
-  readonly fileDir?: string;
+  readonly baseDir?: string;
 }
 
 export function defineEnvironments<const Environments extends EnvironmentRegistry>(
@@ -37,8 +39,6 @@ export function defineEnvironments<const Environments extends EnvironmentRegistr
   return environments;
 }
 
-// MARK: - Internal
-
 export function resolveEnvironment<Environments extends EnvironmentRegistry>(
   environments: Environments,
   name: string,
@@ -48,10 +48,13 @@ export function resolveEnvironment<Environments extends EnvironmentRegistry>(
 
   if (!environment) throw new Error(`Environment "${name}" is not defined.`);
 
+  const baseDir = options.baseDir?.trim() || process.cwd();
+  const fileDir = resolvePath(baseDir, environment.fileDir?.trim() || '.');
+
   return {
     name: name as EnvironmentName<Environments>,
     file: environment.file.trim(),
-    fileDir: environment.fileDir?.trim() || options.fileDir?.trim() || process.cwd(),
+    fileDir: fileDir,
   };
 }
 

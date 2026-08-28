@@ -1,6 +1,5 @@
+import { type InferConfiguration, defineConfiguration, field } from '@buildplease/core/node';
 import { ApiKitDefaults } from '@src-internal/configuration';
-
-import { type InferConfiguration, defineConfiguration, field } from '@/configuration/core';
 
 export const EmailConfiguration = defineConfiguration('apikit.email', {
   enabled: field.boolean().default(ApiKitDefaults.email.enabled),

@@ -49,7 +49,6 @@
   },
   "dependencies": {
     "@buildplease/core": "workspace:*",
-    "@dotenvx/dotenvx": "2.21.0",
     "@fastify/basic-auth": "6.3.0",
     "@fastify/cookie": "11.1.2",
     "@fastify/cors": "11.3.0",

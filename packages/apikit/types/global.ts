@@ -1,9 +1,9 @@
+import type { BuildMetadata, EnvironmentConfig } from '@buildplease/core/node';
+
 import type {
   BasicAuthConfig,
-  BuildMetadata,
   CorsConfig,
   EmailConfig,
-  EnvironmentConfig,
   HealthConfig,
   I18nConfig,
   LoggerConfig,

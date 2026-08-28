@@ -1,4 +1,4 @@
-import { type EnvironmentName, defineEnvironments, resolveEnvironment } from '@/configuration/core/environments';
+import { type EnvironmentName, defineEnvironments, resolveEnvironment } from '@buildplease/core/node';
 
 export const testEnvironments = defineEnvironments({
   development: { file: '.env.development' },

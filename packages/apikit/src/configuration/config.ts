@@ -1,3 +1,12 @@
+import type {
+  ConfigDefinition,
+  ConfigurationBinding,
+  ConfigurationContract,
+  ConfigurationInputFromSchema,
+  ConfigurationSchema,
+  EnvironmentRegistry,
+} from '@buildplease/core/node';
+
 import {
   type BasicAuthConfiguration,
   type BuildConfiguration,
@@ -12,17 +21,10 @@ import {
   type ServerConfiguration,
   type StaticFilesConfiguration,
 } from './configs';
-import type {
-  ConfigurationBinding,
-  ConfigurationContract,
-  ConfigurationInputFromSchema,
-  ConfigurationSchema,
-} from './core/configuration';
-import type { EnvironmentRegistry } from './core/environments';
 
 // MARK: - Public
 
-export interface DefineApiKitInput {
+export interface DefineApiKitConfigInput {
   readonly build?: InputOf<typeof BuildConfiguration>;
 
   readonly server: InputOf<typeof ServerConfiguration>;
@@ -40,12 +42,14 @@ export interface DefineApiKitInput {
   readonly configurations?: readonly ExtensionConfigurationBinding[];
 }
 
-export interface ApiKitConfig<
-  Environments extends EnvironmentRegistry = EnvironmentRegistry,
-> extends DefineApiKitInput {
-  readonly environments: Environments;
+export interface ApiKitConfigInput extends Omit<DefineApiKitConfigInput, 'configurations'> {
   readonly configurations: readonly ExtensionConfigurationBinding[];
 }
+
+export type ApiKitConfig<Environments extends EnvironmentRegistry = EnvironmentRegistry> = ConfigDefinition<
+  Environments,
+  ApiKitConfigInput
+>;
 
 // MARK: - Private
 

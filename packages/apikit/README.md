@@ -8,10 +8,29 @@ ApiKit is the BuildPlease application kit for backend services and APIs. It buil
 pnpm add @buildplease/apikit
 ```
 
-## Usage
+## Configuration
+
+ApiKit uses the shared BuildPlease `environment.config.ts` convention. Its `defineConfig()` adds the required ApiKit contract while still allowing app-owned typed configurations.
 
 ```ts
-import { defineApiKit, ServerController } from '@buildplease/apikit';
+import { defineConfig, defineEnvironments, defineSource } from '@buildplease/apikit';
+
+const environments = defineEnvironments({
+  test: { file: '.env.test' },
+  production: { file: '.env.production' },
+});
+
+const from = defineSource(environments);
+
+export default defineConfig(environments, {
+  server: {
+    identifier: from.compute(({ buildMetadata, environment }) => {
+      return `${buildMetadata.name.original}:${environment.name}`;
+    }),
+    host: from.env('SERVER_HOST').default('127.0.0.1'),
+    port: from.env('SERVER_PORT').default('30000'),
+  },
+});
 ```
 
 ApiKit also exposes the BuildPlease primitives commonly used by backend applications.
