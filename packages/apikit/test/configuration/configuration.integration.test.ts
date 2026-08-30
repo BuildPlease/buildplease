@@ -1,7 +1,6 @@
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
-import { ScopeController } from '@buildplease/core';
 import { BUILDPLEASE_ENVIRONMENT_VARIABLE } from '@buildplease/core/node';
 import { loadApiKitContext } from '@src-internal/configuration/load-context';
 import { afterEach, describe, expect, it, vi } from 'vitest';
@@ -10,7 +9,6 @@ import {
   type TemporaryConfigurationProject,
   makeTemporaryConfigurationProject,
 } from '#test/fixtures/configuration/temporary-config-project';
-import { apikitAssembly } from '@/index';
 
 const BUILD_METADATA = {
   name: {
@@ -52,14 +50,6 @@ describe('ApiKit configuration integration', () => {
 
     Reflect.deleteProperty(globalThis, 'apikit');
     delete process.env[BUILDPLEASE_ENVIRONMENT_VARIABLE];
-  });
-
-  it('registers ApiKit assemblies without runtime context', async () => {
-    const scope = new ScopeController();
-
-    await scope.registerAssemblies(apikitAssembly());
-
-    expect(Reflect.has(globalThis, 'apikit')).toBe(false);
   });
 
   it('creates the ApiKit runtime context from the selected BuildPlease environment', async () => {

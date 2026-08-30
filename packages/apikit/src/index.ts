@@ -1,8 +1,5 @@
 import 'reflect-metadata';
 
-import { type Assembly, coreAssembly } from '@buildplease/core';
-import { makeAssemblies } from '@src-internal/di';
-
 import '../types';
 
 // MARK: - Exports
@@ -26,10 +23,7 @@ export * from './normalization';
 export * from './notification';
 export * from './openapi';
 export * from './request';
+export * from './runtime';
 export * from './security';
 export * from './server';
 export * from './validation';
-
-export function apikitAssembly(): Assembly[] {
-  return [...coreAssembly(), ...makeAssemblies()];
-}
