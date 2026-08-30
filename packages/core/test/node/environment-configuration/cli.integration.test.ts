@@ -3,7 +3,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
 import { runMain } from '@src-cli/run';
-import { BUILDPLEASE_ENVIRONMENT_VARIABLE } from '@src-node/environment-configuration';
+import { BUILDPLEASE_ENVIRONMENT_VARIABLE } from '@src-internal/environment-configuration/selection';
 import { afterEach, describe, expect, it } from 'vitest';
 
 describe('BuildPlease environment launcher', () => {

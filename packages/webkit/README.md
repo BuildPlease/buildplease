@@ -1,6 +1,6 @@
 # @buildplease/webkit
 
-WebKit is the BuildPlease application kit for browser applications. It builds on Core and provides shared web application architecture and runtime primitives without depending on a specific frontend framework.
+WebKit provides shared runtime, dependency injection, networking, and application primitives for web applications.
 
 ## Installation
 
@@ -25,6 +25,46 @@ const from = defineSource(environments);
 export default defineConfig(environments, {
   origin: {
     api: from.env('ORIGIN_API'),
+  },
+});
+```
+
+## Browser runtime
+
+```ts
+import { runWebKit } from '@buildplease/webkit';
+
+await runWebKit({
+  hooks: {
+    assemblies: () => [
+      ...makeAssemblies(),
+    ],
+
+    prepare: ({ scope }) => {
+      // optional app preparation
+    },
+  },
+});
+```
+
+## Node / SSR runtime
+
+```ts
+import { runWebKit } from '@buildplease/webkit/node';
+
+await runWebKit({
+  hooks: {
+    assemblies: () => [
+      ...makeAssemblies(),
+    ],
+
+    prepare: ({ scope }) => {
+      // optional SSR preparation
+    },
+
+    close: ({ scope }) => {
+      // optional cleanup
+    },
   },
 });
 ```

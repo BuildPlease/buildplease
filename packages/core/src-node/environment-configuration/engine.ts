@@ -19,7 +19,7 @@ import {
 } from './configuration';
 import { type EnvironmentConfig, type EnvironmentConfigFromRegistry, resolveEnvironment } from './environment';
 import { readEnvironmentVariable } from './environment-variable';
-import { readSelectedEnvironmentName } from './selection';
+import { readSelectedEnvironmentName } from '@src-internal/environment-configuration/selection';
 import { type ConfigurationResolveContext, type ConfigurationSource, isConfigurationSource } from './source';
 import { ensureDirectory, resolvePath } from '../file/file-sync';
 

@@ -30,16 +30,6 @@
         "types": "./dist/src-node/index.d.cts",
         "default": "./dist/src-node/index.cjs"
       }
-    },
-    "./node/test": {
-      "import": {
-        "types": "./dist/src-node-test/index.d.mts",
-        "default": "./dist/src-node-test/index.mjs"
-      },
-      "require": {
-        "types": "./dist/src-node-test/index.d.cts",
-        "default": "./dist/src-node-test/index.cjs"
-      }
     }
   },
   "bin": {

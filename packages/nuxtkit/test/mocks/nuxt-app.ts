@@ -3,3 +3,7 @@ export function useNuxtApp() {
     $i18n: {},
   };
 }
+
+export function defineNuxtPlugin<T>(plugin: T): T {
+  return plugin;
+}

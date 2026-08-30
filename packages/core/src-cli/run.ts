@@ -1,7 +1,7 @@
 import { spawnSync } from 'node:child_process';
 import { constants } from 'node:os';
 
-import { BUILDPLEASE_ENVIRONMENT_VARIABLE } from '@src-node/environment-configuration/selection';
+import { BUILDPLEASE_ENVIRONMENT_VARIABLE } from '@src-internal/environment-configuration/selection';
 
 const USAGE = 'Usage: buildplease --env <environment> -- <command> [arguments...]';
 

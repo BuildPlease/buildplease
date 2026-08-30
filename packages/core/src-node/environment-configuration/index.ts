@@ -47,4 +47,3 @@ export {
   defineSource,
   isConfigurationSource,
 } from './source';
-export * from './selection';

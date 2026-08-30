@@ -15,10 +15,9 @@
       "#l10n": ["./src/l10n/index.ts"],
       "#resources": ["./resources/index.ts"],
 
-      "@src-node-test/*": ["./src-node-test/*"],
       "#test/*": ["./test/*"]
     }
   },
-  "include": ["src", "src-cli", "src-node", "src-node-test", "src-internal", "test", "tsdown.config.ts"],
+  "include": ["src", "src-cli", "src-node", "src-internal", "test", "tsdown.config.ts"],
   "exclude": ["node_modules", "dist"]
 }

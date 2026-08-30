@@ -3,11 +3,8 @@ import { tmpdir } from 'node:os';
 import { basename, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import {
-  BUILDPLEASE_ENVIRONMENT_VARIABLE,
-  loadEnvironmentConfig,
-  loadSelectedEnvironmentConfig,
-} from '@src-node/environment-configuration';
+import { BUILDPLEASE_ENVIRONMENT_VARIABLE } from '@src-internal/environment-configuration/selection';
+import { loadEnvironmentConfig, loadSelectedEnvironmentConfig } from '@src-node/environment-configuration';
 import { afterEach, describe, expect, it } from 'vitest';
 
 const TEST_VARIABLE = 'BUILDPLEASE_LOADER_TEST';

@@ -19,6 +19,7 @@ export default defineConfig({
       { find: /^#internal-shared$/, replacement: resolve(rootDir, 'src/internal-shared/index.ts') },
       { find: /^#internal-shared\/(.*)$/, replacement: `${resolve(rootDir, 'src/internal-shared')}/$1` },
       { find: /^#app$/, replacement: resolve(rootDir, 'test/mocks/nuxt-app.ts') },
+      { find: /^#imports$/, replacement: resolve(rootDir, 'test/mocks/nuxt-app.ts') },
       { find: /^#nuxtkit\/(.*)$/, replacement: `${resolve(rootDir, 'src/runtime')}/$1` },
     ],
   },
