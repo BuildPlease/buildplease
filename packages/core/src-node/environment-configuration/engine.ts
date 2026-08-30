@@ -1,3 +1,9 @@
+import fs from 'node:fs';
+import { dirname } from 'node:path';
+
+import dotenvx from '@dotenvx/dotenvx';
+import { createJiti } from 'jiti';
+
 import type { BuildMetadata } from '../build-metadata';
 import {
   type ConfigDefinition,
@@ -7,14 +13,68 @@ import {
   type ConfigurationInputFromSchema,
   type ConfigurationSchema,
   type InferConfig,
+  isConfigDefinition,
   isConfigurationBinding,
   isConfigurationField,
 } from './configuration';
-import type { EnvironmentConfig } from './environment';
+import { type EnvironmentConfig, type EnvironmentConfigFromRegistry, resolveEnvironment } from './environment';
 import { readEnvironmentVariable } from './environment-variable';
+import { readSelectedEnvironmentName } from './selection';
 import { type ConfigurationResolveContext, type ConfigurationSource, isConfigurationSource } from './source';
+import { ensureDirectory, resolvePath } from '../file/file-sync';
+
+const ENVIRONMENT_CONFIG_FILE = 'environment.config.ts';
 
 // MARK: - Public
+
+export interface LoadEnvironmentConfigOptions {
+  readonly dir?: string;
+}
+
+export interface LoadedConfig<Config extends ConfigDefinition = ConfigDefinition> {
+  readonly config: Config;
+  readonly configFilePath: string;
+  readonly rootDir: string;
+}
+
+export interface LoadedEnvironmentConfig<
+  Config extends ConfigDefinition = ConfigDefinition,
+> extends LoadedConfig<Config> {
+  readonly environment: EnvironmentConfigFromRegistry<Config['environments']>;
+}
+
+/** Load the conventional environment.config.ts definition without selecting an environment. */
+export async function loadEnvironmentConfig<Config extends ConfigDefinition = ConfigDefinition>(
+  options: LoadEnvironmentConfigOptions = {},
+): Promise<LoadedConfig<Config>> {
+  return loadEnvironmentConfigInternal<Config>(options);
+}
+
+/**
+ * Load environment.config.ts and resolve the environment selected for the
+ * current BuildPlease process tree.
+ */
+export async function loadSelectedEnvironmentConfig<Config extends ConfigDefinition = ConfigDefinition>(
+  options: LoadEnvironmentConfigOptions = {},
+): Promise<LoadedEnvironmentConfig<Config>> {
+  const environmentName = readSelectedEnvironmentName();
+  const loaded = await loadEnvironmentConfigInternal<Config>(options);
+
+  try {
+    const environment = resolveEnvironment(loaded.config.environments, environmentName, {
+      baseDir: dirname(loaded.configFilePath),
+    });
+
+    initializeEnvironment(environment);
+
+    return {
+      ...loaded,
+      environment: environment,
+    };
+  } catch (error) {
+    throw makeLoadError(error);
+  }
+}
 
 export interface ResolveConfigurationOptions {
   readonly buildMetadata?: BuildMetadata;
@@ -48,6 +108,72 @@ export async function resolveConfigurationBinding<Output>(
 }
 
 // MARK: - Private
+
+async function loadEnvironmentConfigInternal<Config extends ConfigDefinition>(
+  options: LoadEnvironmentConfigOptions,
+): Promise<LoadedConfig<Config>> {
+  const rootDir = resolveRootDir(options.dir);
+
+  try {
+    const configFilePath = resolvePath(rootDir, ENVIRONMENT_CONFIG_FILE);
+
+    if (!fs.existsSync(configFilePath)) {
+      throw new Error(`Config file "${configFilePath}" does not exist.`);
+    }
+
+    const config = await loadConfigExport(rootDir, configFilePath);
+
+    if (!isConfigDefinition(config)) {
+      throw new Error(`Environment config must be defined with defineConfig() (${configFilePath}).`);
+    }
+
+    return {
+      config: config as Config,
+      configFilePath: configFilePath,
+      rootDir: rootDir,
+    };
+  } catch (error) {
+    throw makeLoadError(error);
+  }
+}
+
+function resolveRootDir(dir?: string): string {
+  const rootDir = dir ? resolvePath(process.cwd(), dir) : process.cwd();
+
+  ensureDirectory(rootDir);
+
+  return rootDir;
+}
+
+async function loadConfigExport(rootDir: string, configFilePath: string): Promise<unknown> {
+  const jiti = createJiti(rootDir, {
+    interopDefault: true,
+    extensions: ['.ts'],
+    tsconfigPaths: true,
+  });
+
+  return jiti.import(configFilePath, { default: true });
+}
+
+function initializeEnvironment(environment: { readonly file?: string; readonly fileDir: string }): void {
+  if (!environment.file) return;
+
+  const environmentFilePath = resolvePath(environment.fileDir, environment.file);
+
+  if (!fs.existsSync(environmentFilePath)) return;
+
+  dotenvx.config({
+    path: environmentFilePath,
+    overload: false,
+    quiet: true,
+  });
+}
+
+function makeLoadError(error: unknown): Error {
+  return new Error(`Failed to load environment config: ${error instanceof Error ? error.message : String(error)}`, {
+    cause: error,
+  });
+}
 
 type InternalResolveContext = Omit<ConfigurationResolveContext, 'buildMetadata' | 'environment'> & {
   readonly buildMetadata?: BuildMetadata;

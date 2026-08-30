@@ -1,14 +1,12 @@
 import {
   type ConfigurationBinding,
   type ResolveConfigurationOptions,
-  Console,
-  loadConfig,
+  loadSelectedEnvironmentConfig,
   resolveConfiguration,
   resolveConfigurationBinding,
 } from '@buildplease/core/node';
-import { loadAppBuild } from '@src-internal/configuration';
 
-import type { ApiKitConfig } from './config';
+import type { ApiKitConfig } from '@/configuration/config';
 import {
   BasicAuthConfiguration,
   BuildConfiguration,
@@ -22,22 +20,14 @@ import {
   NotificationConfiguration,
   ServerConfiguration,
   StaticFilesConfiguration,
-} from './configs';
+} from '@/configuration/configs';
 
-const cli = new Console();
+import { loadAppBuild } from './load-app-build';
 
-// MARK: - Public
+// MARK: - Internal
 
-export interface LoadApiKitContextOptions {
-  readonly environment: string;
-  readonly config?: string;
-}
-
-export async function loadApiKitContext(options: LoadApiKitContextOptions): Promise<void> {
-  const loaded = await loadConfig<ApiKitConfig>({
-    config: options.config,
-    environment: options.environment,
-  });
+export async function loadApiKitContext(): Promise<void> {
+  const loaded = await loadSelectedEnvironmentConfig<ApiKitConfig>();
   const input = loaded.config.input;
   const environment = loaded.environment;
   const buildConfiguration = await resolveConfiguration(BuildConfiguration, input.build, {
@@ -56,8 +46,6 @@ export async function loadApiKitContext(options: LoadApiKitContextOptions): Prom
     environmentConfig: environment,
     ...configuration,
   };
-
-  cli.success(`[ApiKit] Context created for ${environment.name} environment`);
 }
 
 // MARK: - Private

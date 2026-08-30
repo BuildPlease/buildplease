@@ -1,6 +1,6 @@
 import 'reflect-metadata';
-import type { Assembly } from '@buildplease/core';
-import { type LoggerOptions, coreNodeAssembly } from '@buildplease/core/node';
+
+import { type Assembly, coreAssembly } from '@buildplease/core';
 import { makeAssemblies } from '@src-internal/di';
 
 import '../types';
@@ -31,17 +31,5 @@ export * from './server';
 export * from './validation';
 
 export function apikitAssembly(): Assembly[] {
-  const logger = global.apikit.loggerConfig;
-  const loggerOptions: LoggerOptions = logger.enabled
-    ? {
-        enabled: true,
-        debug: global.apikit.serverConfig.debug,
-        transports: logger.transports,
-      }
-    : {
-        enabled: false,
-        debug: global.apikit.serverConfig.debug,
-      };
-
-  return [...coreNodeAssembly({ logger: loggerOptions }), ...makeAssemblies()];
+  return [...coreAssembly(), ...makeAssemblies()];
 }

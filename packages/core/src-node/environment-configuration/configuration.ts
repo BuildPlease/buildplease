@@ -1,4 +1,4 @@
-import type { EnvironmentRegistry } from './environment';
+import { type EnvironmentRegistry, defineEnvironments } from './environment';
 import type { ConfigurationSource } from './source';
 
 // MARK: - Symbols
@@ -194,7 +194,7 @@ export function defineConfig<const Environments extends EnvironmentRegistry, con
   input: Input,
 ): ConfigDefinition<Environments, Input> {
   const config: ConfigDefinition<Environments, Input> = {
-    environments: environments,
+    environments: defineEnvironments(environments),
     input: input,
   };
 

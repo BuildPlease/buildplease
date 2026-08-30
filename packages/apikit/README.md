@@ -10,7 +10,7 @@ pnpm add @buildplease/apikit
 
 ## Configuration
 
-ApiKit uses the shared BuildPlease `environment.config.ts` convention. Its `defineConfig()` adds the required ApiKit contract while still allowing app-owned typed configurations.
+Define `environment.config.ts` with `defineConfig()`:
 
 ```ts
 import { defineConfig, defineEnvironments, defineSource } from '@buildplease/apikit';
@@ -32,8 +32,6 @@ export default defineConfig(environments, {
   },
 });
 ```
-
-ApiKit also exposes the BuildPlease primitives commonly used by backend applications.
 
 ## Features
 

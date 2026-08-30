@@ -3,29 +3,47 @@ import { InternalApiKitSymbols } from '@src-internal/di/symbols';
 import { TelegramNotificationChannelController } from '@src-internal/notification/channels/telegram-notification-channel-controller';
 import type { NotificationChannelController } from '@src-internal/notification/notification-channel-controller';
 import { NotificationControllerImpl } from '@src-internal/notification/notification-controller';
+import { NOTIFICATION_LOG_PREFIX } from '@src-internal/notification/notification-log';
+import { inject, injectable } from 'inversify';
 
+import { type ApiKitController } from '@/configuration';
 import { ApiKitSymbols } from '@/di';
-import type { NotificationController } from '@/notification';
+import { type NotificationChannelRequest, type NotificationController, NotificationChannel } from '@/notification';
+
+@injectable()
+class ApiKitTelegramNotificationChannelController implements NotificationChannelController {
+  public readonly channel = NotificationChannel.Telegram;
+  private readonly controller?: TelegramNotificationChannelController;
+
+  public constructor(
+    @inject(ApiKitSymbols.DI.Configuration.Controller)
+    configuration: ApiKitController,
+  ) {
+    const notification = configuration.notification;
+    const telegram = notification.enabled ? notification.channels.telegram : undefined;
+
+    if (telegram) this.controller = new TelegramNotificationChannelController(telegram);
+  }
+
+  public async send(request: NotificationChannelRequest): Promise<void> {
+    if (!this.controller) {
+      throw new Error(`${NOTIFICATION_LOG_PREFIX} Channel "${this.channel}" is unavailable.`);
+    }
+
+    await this.controller.send(request);
+  }
+}
 
 export class NotificationAssembly implements Assembly {
   public assemble(container: AssemblyContainer): void {
-    this.assembleChannelControllers(container);
+    container
+      .bind<NotificationChannelController>(InternalApiKitSymbols.DI.Notification.ChannelController)
+      .to(ApiKitTelegramNotificationChannelController)
+      .inSingletonScope();
 
     container
       .bind<NotificationController>(ApiKitSymbols.DI.Notification.Controller)
       .to(NotificationControllerImpl)
       .inSingletonScope();
-  }
-
-  private assembleChannelControllers(container: AssemblyContainer): void {
-    const configuration = global.apikit.notificationConfig;
-    if (!configuration.enabled) return;
-
-    const telegram = configuration.channels.telegram;
-    if (!telegram) return;
-
-    container
-      .bind<NotificationChannelController>(InternalApiKitSymbols.DI.Notification.ChannelController)
-      .toConstantValue(new TelegramNotificationChannelController(telegram));
   }
 }

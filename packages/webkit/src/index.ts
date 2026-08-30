@@ -1,6 +1,5 @@
 import 'reflect-metadata';
 import { type Assembly, coreAssembly } from '@buildplease/core';
-import { makeAssemblies } from '@src-internal/di';
 
 // MARK: - Exports
 
@@ -11,8 +10,5 @@ export * from './model';
 export * from './networking';
 
 export function webkitAssembly(): Assembly[] {
-  const coreAssemblies = coreAssembly();
-  const assemblies = makeAssemblies();
-
-  return [...coreAssemblies, ...assemblies];
+  return coreAssembly();
 }

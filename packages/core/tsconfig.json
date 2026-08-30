@@ -9,6 +9,7 @@
     /* Project paths */
     "paths": {
       "@/*": ["./src/*"],
+      "@src-cli/*": ["./src-cli/*"],
       "@src-internal/*": ["./src-internal/*"],
       "@src-node/*": ["./src-node/*"],
       "#l10n": ["./src/l10n/index.ts"],
@@ -18,6 +19,6 @@
       "#test/*": ["./test/*"]
     }
   },
-  "include": ["src", "src-node", "src-node-test", "src-internal", "test", "tsdown.config.ts"],
+  "include": ["src", "src-cli", "src-node", "src-node-test", "src-internal", "test", "tsdown.config.ts"],
   "exclude": ["node_modules", "dist"]
 }

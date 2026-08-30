@@ -42,7 +42,11 @@
       }
     }
   },
+  "bin": {
+    "buildplease": "./bin/buildplease.mjs"
+  },
   "files": [
+    "bin",
     "dist",
     "resources"
   ],

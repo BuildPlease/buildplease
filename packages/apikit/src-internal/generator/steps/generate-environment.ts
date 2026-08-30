@@ -25,12 +25,8 @@ export async function generateEnvironment(
       writer.writeLine(`${name}: {`);
       writer.indent(() => {
         writer.writeLine(`name: Environment.${name},`);
-        writer.write('file: ').quote(environment.file).write(',').newLine();
-        writer
-          .write('fileDir: ')
-          .quote(environment.fileDir ?? '')
-          .write(',')
-          .newLine();
+        if (environment.file) writer.write('file: ').quote(environment.file).write(',').newLine();
+        if (environment.fileDir) writer.write('fileDir: ').quote(environment.fileDir).write(',').newLine();
       });
       writer.writeLine('},');
     }

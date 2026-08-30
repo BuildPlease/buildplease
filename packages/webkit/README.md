@@ -8,9 +8,9 @@ WebKit is the BuildPlease application kit for browser applications. It builds on
 pnpm add @buildplease/webkit
 ```
 
-## Node configuration
+## Configuration
 
-WebKit reuses the Core Environment Configuration engine. Its `defineConfig()` policy requires only an object root and keeps the complete app-owned shape fully typed and free-form.
+Define `environment.config.ts` with `@buildplease/webkit/node`:
 
 ```ts
 import { defineConfig, defineEnvironments, defineSource } from '@buildplease/webkit/node';

@@ -32,6 +32,33 @@ describe('Environment Configuration definitions', () => {
     expect(config.input).toBe(input);
   });
 
+  it('supports environments without dotenv files', () => {
+    const filelessEnvironments = defineEnvironments({
+      test: {},
+      production: {},
+    });
+
+    expect(resolveEnvironment(filelessEnvironments, 'test', { baseDir: '/workspace' })).toEqual({
+      name: 'test',
+      file: undefined,
+      fileDir: resolvePath('/workspace', '.'),
+    });
+  });
+
+  it('validates malformed environment registries when defining config', () => {
+    expect(() => defineConfig({} as never, {})).toThrow('At least one environment must be defined.');
+    expect(() => defineConfig({ test: null } as never, {})).toThrow(
+      'Environment definition must be an object for "test".',
+    );
+    expect(() => defineConfig({ test: { fileDir: ' ' } } as never, {})).toThrow(
+      'Environment file directory must not be empty for "test".',
+    );
+  });
+
+  it('does not resolve inherited registry properties as environments', () => {
+    expect(() => resolveEnvironment(environments, 'toString')).toThrow('Environment "toString" is not defined.');
+  });
+
   it('resolves environment directories relative to their configuration base', () => {
     const nestedEnvironments = defineEnvironments({
       test: { file: '.env.test', fileDir: './environment' },

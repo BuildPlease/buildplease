@@ -8,6 +8,7 @@ import { FormatterAssembly } from './assemblies/formatter';
 import { GeneratorAssembly } from './assemblies/generator';
 import { I18nAssembly } from './assemblies/i18n';
 import { ImageAssembly } from './assemblies/image';
+import { LoggerAssembly } from './assemblies/logger';
 import { NormalizationAssembly } from './assemblies/normalization';
 import { NotificationAssembly } from './assemblies/notification';
 import { OpenAPIAssembly } from './assemblies/openapi';
@@ -25,6 +26,7 @@ export function makeAssemblies(): Assembly[] {
     new GeneratorAssembly(),
     new I18nAssembly(),
     new ImageAssembly(),
+    new LoggerAssembly(),
     new NormalizationAssembly(),
     new NotificationAssembly(),
     new OpenAPIAssembly(),

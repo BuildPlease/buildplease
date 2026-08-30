@@ -30,18 +30,16 @@ export {
   resolveEnvironment,
 } from './environment';
 export {
+  type LoadedConfig,
+  type LoadedEnvironmentConfig,
+  type LoadEnvironmentConfigOptions,
   type ResolveConfigurationOptions,
+  loadEnvironmentConfig,
+  loadSelectedEnvironmentConfig,
   resolveConfig,
   resolveConfiguration,
   resolveConfigurationBinding,
 } from './engine';
-export {
-  type LoadConfigOptions,
-  type LoadedConfig,
-  type LoadedEnvironmentConfig,
-  ENVIRONMENT_CONFIG_FILE,
-  loadConfig,
-} from './loader';
 export {
   type ConfigurationResolveContext,
   type ConfigurationSource,
@@ -49,3 +47,4 @@ export {
   defineSource,
   isConfigurationSource,
 } from './source';
+export * from './selection';

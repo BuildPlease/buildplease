@@ -1,6 +1,6 @@
 # @buildplease/core
 
-Core is the shared foundation for BuildPlease applications. It provides framework-independent application primitives used by the other BuildPlease kits.
+Core provides shared application primitives for BuildPlease kits.
 
 ## Installation
 
@@ -20,7 +20,7 @@ Node.js-specific APIs are available from `@buildplease/core/node`.
 
 ### Environment configuration
 
-Node applications use one BuildPlease convention: `environment.config.ts`.
+Define application environment configuration in `environment.config.ts`:
 
 ```ts
 import { defineConfig, defineEnvironments, defineSource } from '@buildplease/core/node';
@@ -37,7 +37,14 @@ export default defineConfig(environments, {
 });
 ```
 
-Core owns config discovery, TypeScript loading, environment-file loading, source resolution, defaults, computed values, and reusable typed configuration contracts. Root configuration resolution always receives one explicit context containing both the selected environment and build metadata. Kits expose their own `defineConfig()` policy while using the same Core engine and loader.
+Environment files are optional dotenv hookups. If a configured file is missing, BuildPlease continues with the existing process environment. Existing `process.env` values keep priority over dotenv values.
+
+Select the BuildPlease environment when running a command:
+
+```bash
+buildplease --env test -- <command>
+buildplease --env production -- <command>
+```
 
 ## Features
 
