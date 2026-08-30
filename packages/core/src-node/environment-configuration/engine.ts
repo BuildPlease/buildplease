@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import { dirname } from 'node:path';
 
 import dotenvx from '@dotenvx/dotenvx';
+import { readSelectedEnvironmentName } from '@src-internal/environment-configuration/selection';
 import { createJiti } from 'jiti';
 
 import type { BuildMetadata } from '../build-metadata';
@@ -19,7 +20,6 @@ import {
 } from './configuration';
 import { type EnvironmentConfig, type EnvironmentConfigFromRegistry, resolveEnvironment } from './environment';
 import { readEnvironmentVariable } from './environment-variable';
-import { readSelectedEnvironmentName } from '@src-internal/environment-configuration/selection';
 import { type ConfigurationResolveContext, type ConfigurationSource, isConfigurationSource } from './source';
 import { ensureDirectory, resolvePath } from '../file/file-sync';
 

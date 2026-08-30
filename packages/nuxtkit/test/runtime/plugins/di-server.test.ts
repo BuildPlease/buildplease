@@ -1,12 +1,12 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
+import plugin from '@/src/runtime/plugins/di.server';
+
 const { runWebKit } = vi.hoisted(() => ({
   runWebKit: vi.fn(),
 }));
 
 vi.mock('@buildplease/webkit/node', () => ({ runWebKit: runWebKit }));
-
-import plugin from '@/src/runtime/plugins/di.server';
 
 describe('server WebKit Nuxt plugin', () => {
   afterEach(() => {

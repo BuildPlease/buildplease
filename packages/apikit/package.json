@@ -21,14 +21,14 @@
         "default": "./dist/src/index.cjs"
       }
     },
-    "./node/test": {
+    "./test": {
       "import": {
-        "types": "./dist/src-node-test/index.d.mts",
-        "default": "./dist/src-node-test/index.mjs"
+        "types": "./dist/src-test/index.d.mts",
+        "default": "./dist/src-test/index.mjs"
       },
       "require": {
-        "types": "./dist/src-node-test/index.d.cts",
-        "default": "./dist/src-node-test/index.cjs"
+        "types": "./dist/src-test/index.d.cts",
+        "default": "./dist/src-test/index.cjs"
       }
     }
   },

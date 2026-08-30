@@ -20,7 +20,4 @@ export async function prepareRuntime(context: NuxtKitContext, nuxt: Nuxt): Promi
   const alias = Object.fromEntries(entries.map(({ alias, path }) => [alias, r(path)]));
   Object.assign(nuxt.options.alias, alias);
   nuxt.options.build.transpile.push(...Object.values(alias));
-
-  nuxt.options.imports.transform ??= {};
-  nuxt.options.imports.transform.include ??= [];
 }

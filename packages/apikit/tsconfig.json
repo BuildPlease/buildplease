@@ -14,7 +14,7 @@
       "#l10n": ["./src/l10n/index.ts"],
       "#resources": ["./resources/index.ts"],
 
-      "@src-node-test/*": ["./src-node-test/*"],
+      "@src-test/*": ["./src-test/*"],
       "#test/*": ["./test/*"]
     }
   },
@@ -22,7 +22,7 @@
     "src",
     "src-cli",
     "src-internal",
-    "src-node-test",
+    "src-test",
     "types",
     "test",
     "tsdown.config.cli.ts",

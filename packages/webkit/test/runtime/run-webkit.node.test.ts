@@ -1,7 +1,7 @@
 import { type Assembly, type AssemblyContainer, CoreSymbols } from '@buildplease/core';
+import { runWebKit } from '@src-node/runtime';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { runWebKit } from '@src-node/runtime';
 
 const { loadSelectedEnvironmentConfig } = vi.hoisted(() => ({
   loadSelectedEnvironmentConfig: vi.fn(),
@@ -55,13 +55,7 @@ describe('Node runWebKit', () => {
     expect(loadSelectedEnvironmentConfig).toHaveBeenCalledOnce();
     expect(first).not.toBe(second);
     expect(first.scope).not.toBe(second.scope);
-    expect(events).toEqual([
-      'environment',
-      'assemblies.first',
-      'prepare.first',
-      'assemblies.second',
-      'prepare.second',
-    ]);
+    expect(events).toEqual(['environment', 'assemblies.first', 'prepare.first', 'assemblies.second', 'prepare.second']);
 
     await first.close();
     await second.close();

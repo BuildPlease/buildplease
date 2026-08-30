@@ -35,11 +35,11 @@ export default defineConfig([
     clean: true,
     copy: copyResources(),
   },
-  // MARK: - Node test entry
+  // MARK: - Test support entry
   {
     ...baseConfig,
-    entry: './src-node-test/index.ts',
-    outDir: 'dist/src-node-test',
+    entry: './src-test/index.ts',
+    outDir: 'dist/src-test',
     clean: false,
   },
 ]);

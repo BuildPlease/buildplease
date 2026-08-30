@@ -1,7 +1,7 @@
 import { loadSelectedEnvironmentConfig } from '@buildplease/core/node';
 
-import { run } from '../../src-internal/runtime';
 import type { RunWebKitOptions, WebKitRuntime } from '../../src/runtime/types';
+import { run } from '../../src-internal/runtime';
 
 let environmentInitialization: Promise<void> | undefined;
 

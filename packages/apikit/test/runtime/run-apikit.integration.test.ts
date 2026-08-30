@@ -2,7 +2,7 @@ import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
 import { type Assembly, type AssemblyContainer, CoreSymbols } from '@buildplease/core';
-import { BUILDPLEASE_ENVIRONMENT_VARIABLE } from '@buildplease/core/node';
+import { withSelectedEnvironment } from '@buildplease/core/test';
 import type { FastifyInstance } from 'fastify';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
@@ -55,15 +55,12 @@ describe('runApiKit', () => {
     project = undefined;
 
     Reflect.deleteProperty(globalThis, 'apikit');
-    delete process.env[BUILDPLEASE_ENVIRONMENT_VARIABLE];
   });
 
   it('owns context loading and the framework/consumer lifecycle order', async () => {
     project = await makeTemporaryConfigurationProject();
     await writeProjectFiles(project);
     vi.spyOn(process, 'cwd').mockReturnValue(project.rootDir);
-    process.env[BUILDPLEASE_ENVIRONMENT_VARIABLE] = 'development';
-
     const events: string[] = [];
     let closeHook: (() => Promise<void>) | undefined;
     const pluginServer = {} as FastifyInstance;
@@ -106,28 +103,30 @@ describe('runApiKit', () => {
       },
     };
 
-    await runApiKit({
-      hooks: {
-        assemblies: () => {
-          expect(global.apikit.environmentConfig.name).toBe('development');
-          events.push('assemblies.hook');
-          return [consumerAssembly];
+    await withSelectedEnvironment('development', async () => {
+      await runApiKit({
+        hooks: {
+          assemblies: () => {
+            expect(global.apikit.environmentConfig.name).toBe('development');
+            events.push('assemblies.hook');
+            return [consumerAssembly];
+          },
+          plugins: ({ scope, server: hookServer, options }) => {
+            expect(scope.getInstance<I18nController>(ApiKitSymbols.DI.I18n.Controller)).toBe(i18n);
+            expect(hookServer).toBe(pluginServer);
+            expect(options).toBe(pluginOptions);
+            events.push('plugins.consumer');
+          },
+          prepare: ({ scope }) => {
+            expect(scope.getInstance<I18nController>(ApiKitSymbols.DI.I18n.Controller)).toBe(i18n);
+            events.push('consumer.prepare');
+          },
+          close: ({ scope }) => {
+            expect(scope.getInstance<ServerController>(ApiKitSymbols.DI.Server.Controller)).toBe(server);
+            events.push('consumer.close');
+          },
         },
-        plugins: ({ scope, server: hookServer, options }) => {
-          expect(scope.getInstance<I18nController>(ApiKitSymbols.DI.I18n.Controller)).toBe(i18n);
-          expect(hookServer).toBe(pluginServer);
-          expect(options).toBe(pluginOptions);
-          events.push('plugins.consumer');
-        },
-        prepare: ({ scope }) => {
-          expect(scope.getInstance<I18nController>(ApiKitSymbols.DI.I18n.Controller)).toBe(i18n);
-          events.push('consumer.prepare');
-        },
-        close: ({ scope }) => {
-          expect(scope.getInstance<ServerController>(ApiKitSymbols.DI.Server.Controller)).toBe(server);
-          events.push('consumer.close');
-        },
-      },
+      });
     });
 
     expect(global.apikit.build).toEqual(BUILD_METADATA);

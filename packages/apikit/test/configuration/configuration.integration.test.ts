@@ -1,7 +1,7 @@
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
-import { BUILDPLEASE_ENVIRONMENT_VARIABLE } from '@buildplease/core/node';
+import { withSelectedEnvironment } from '@buildplease/core/test';
 import { loadApiKitContext } from '@src-internal/configuration/load-context';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
@@ -49,20 +49,19 @@ describe('ApiKit configuration integration', () => {
     project = undefined;
 
     Reflect.deleteProperty(globalThis, 'apikit');
-    delete process.env[BUILDPLEASE_ENVIRONMENT_VARIABLE];
   });
 
   it('creates the ApiKit runtime context from the selected BuildPlease environment', async () => {
     project = await makeTemporaryConfigurationProject();
     await writeProjectFiles(project);
     vi.spyOn(process, 'cwd').mockReturnValue(project.rootDir);
-    process.env[BUILDPLEASE_ENVIRONMENT_VARIABLE] = 'development';
+    await withSelectedEnvironment('development', async () => {
+      await loadApiKitContext();
 
-    await loadApiKitContext();
-
-    expect(global.apikit.build).toEqual(BUILD_METADATA);
-    expect(global.apikit.environmentConfig.name).toBe('development');
-    expect(global.apikit.serverConfig.identifier).toBe('@test/example-api:development');
+      expect(global.apikit.build).toEqual(BUILD_METADATA);
+      expect(global.apikit.environmentConfig.name).toBe('development');
+      expect(global.apikit.serverConfig.identifier).toBe('@test/example-api:development');
+    });
   });
 });
 

@@ -1,5 +1,5 @@
-import { makeRequestMetadataFixture } from '@src-node-test/request/request-metadata';
-import { withTestRequestScope } from '@src-node-test/request/request-scope';
+import { makeRequestMetadataFixture } from '@src-test/request/request-metadata';
+import { withTestRequestScope } from '@src-test/request/request-scope';
 import { describe, expect, it, vi } from 'vitest';
 
 import { RequestScope } from '@/request/request-scope';

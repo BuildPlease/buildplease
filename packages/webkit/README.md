@@ -36,9 +36,7 @@ import { runWebKit } from '@buildplease/webkit';
 
 await runWebKit({
   hooks: {
-    assemblies: () => [
-      ...makeAssemblies(),
-    ],
+    assemblies: () => [...makeAssemblies()],
 
     prepare: ({ scope }) => {
       // optional app preparation
@@ -54,9 +52,7 @@ import { runWebKit } from '@buildplease/webkit/node';
 
 await runWebKit({
   hooks: {
-    assemblies: () => [
-      ...makeAssemblies(),
-    ],
+    assemblies: () => [...makeAssemblies()],
 
     prepare: ({ scope }) => {
       // optional SSR preparation

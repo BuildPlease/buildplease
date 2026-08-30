@@ -87,6 +87,30 @@ export default defineConfig([
       onlyBundle: nodePolicy.bundle,
     },
   },
+
+  // MARK: - Test support entry
+  {
+    entry: { 'src-test/index': './src-test/index.ts' },
+    tsconfig: 'tsconfig.json',
+    platform: 'node',
+    target: 'esnext',
+    format: ['esm', 'cjs'],
+
+    outDir: outDir,
+    clean: false,
+
+    hash: false,
+    dts: true,
+    minify: true,
+    shims: false,
+    sourcemap: false,
+    treeshake: true,
+
+    deps: {
+      neverBundle: nodePolicy.external,
+      onlyBundle: nodePolicy.bundle,
+    },
+  },
 ]);
 
 function copyResources(): CopyEntry[] {

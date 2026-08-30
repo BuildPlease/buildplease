@@ -17,7 +17,7 @@ src/*            -> @/*
 src-cli/*        -> @src-cli/*
 src-internal/*   -> @src-internal/*
 src-node/*       -> @src-node/*
-src-node-test/*  -> @src-node-test/*
+src-test/*       -> @src-test/*
 
 src/l10n/index.ts  -> #l10n
 resources/index.ts -> #resources
