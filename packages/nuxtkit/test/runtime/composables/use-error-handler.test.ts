@@ -1,4 +1,5 @@
-import { CanceledError, HttpError } from '@buildplease/webkit';
+import { CanceledError } from '@buildplease/core';
+import { HttpError } from '@buildplease/webkit';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { useErrorHandler } from '@/src/runtime/composables/use-error-handler';

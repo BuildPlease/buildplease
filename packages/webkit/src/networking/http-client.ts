@@ -68,10 +68,8 @@ export abstract class HttpClient {
     });
   }
 
-  /** Creates the concrete transport client for the resolved request options. */
   protected abstract createClient(options: HttpRequestOptions): unknown;
 
-  /** Maps a transport-specific failure to a BuildPlease error. */
   protected handleError(error: unknown): Error {
     if (
       error instanceof HttpError ||

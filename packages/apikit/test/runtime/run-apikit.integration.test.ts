@@ -16,7 +16,7 @@ import * as ApiKit from '@/index';
 import { type RunApiKitOptions, runApiKit } from '@/runtime';
 import type { ServerController, ServerPluginExternalHook } from '@/server';
 
-const BUILD_METADATA = {
+const BUILD = {
   name: {
     original: '@test/example-api',
     base: 'example-api',
@@ -29,7 +29,7 @@ const BUILD_METADATA = {
 const CONFIG_SOURCE = `
 const config = {
   environments: {
-    development: { file: '.env.development' },
+    development: { file: '.env.development', alias: 'beta' },
   },
   input: {
     server: {
@@ -93,7 +93,7 @@ describe('runApiKit', () => {
     } satisfies ServerController;
     const consumerAssembly: Assembly = {
       assemble: (container: AssemblyContainer) => {
-        expect(global.apikit.environmentConfig.name).toBe('development');
+        expect(global.apikit.environment.name).toBe('development');
         expect(container.isBound(CoreSymbols.DI.Formatter.UnitController)).toBe(true);
         expect(container.isBound(ApiKitSymbols.DI.I18n.Controller)).toBe(true);
         expect(container.isBound(ApiKitSymbols.DI.Server.Controller)).toBe(true);
@@ -107,7 +107,7 @@ describe('runApiKit', () => {
       await runApiKit({
         hooks: {
           assemblies: () => {
-            expect(global.apikit.environmentConfig.name).toBe('development');
+            expect(global.apikit.environment.name).toBe('development');
             events.push('assemblies.hook');
             return [consumerAssembly];
           },
@@ -129,7 +129,7 @@ describe('runApiKit', () => {
       });
     });
 
-    expect(global.apikit.build).toEqual(BUILD_METADATA);
+    expect(global.apikit.build).toEqual(BUILD);
     expect(events).toEqual([
       'assemblies.hook',
       'assemblies',
@@ -163,11 +163,13 @@ async function writeProjectFiles(project: TemporaryConfigurationProject): Promis
   await project.writeConfig('environment.config.ts', CONFIG_SOURCE);
   await writeFile(join(project.rootDir, '.env.development'), '', 'utf8');
 
-  const buildDir = join(project.rootDir, '.apikit');
+  const buildDir = join(project.rootDir, '.buildplease');
   await mkdir(buildDir, { recursive: true });
+  await writeFile(join(buildDir, 'build.ts'), `export const Build = ${JSON.stringify(BUILD, null, 2)};\n`, 'utf8');
   await writeFile(
-    join(buildDir, 'build-metadata.ts'),
-    `export const BuildMetadata = ${JSON.stringify(BUILD_METADATA, null, 2)};\n`,
+    join(buildDir, 'environment.ts'),
+    "export enum Environment { development = 'development' }\n" +
+      "export const Environments = { development: { name: Environment.development, alias: 'beta' } } as const;\n",
     'utf8',
   );
 }

@@ -1,4 +1,4 @@
-import type { Awaitable } from '@buildplease/webkit';
+import type { Awaitable } from '@buildplease/core';
 import type { RouteLocationNormalizedLoaded } from 'vue-router';
 
 /**

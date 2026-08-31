@@ -11,8 +11,8 @@ describe('resolveDevKitConfig', () => {
     expect(config.ignore).toContain('**/.output/**');
     expect(config.ignore).toContain('**/.generated/**');
     expect(config.ignore).toContain('**/dist/**');
-
-    expect(config.ignore).not.toContain('**/.apikit/**');
+    expect(config.ignore).not.toContain('**/build/**');
+    expect(config.ignore).not.toContain('**/.buildplease/**');
   });
 
   it('extends ignore entries from consumer config', () => {
@@ -38,8 +38,7 @@ describe('resolveDevKitConfig', () => {
     expect(config.clean.directories).toContain('.turbo');
     expect(config.clean.directories).toContain('.nuxt');
     expect(config.clean.directories).toContain('coverage');
-
-    expect(config.clean.directories).not.toContain('.apikit');
+    expect(config.clean.directories).not.toContain('.buildplease');
   });
 
   it('extends clean targets and directories from consumer config by default', () => {

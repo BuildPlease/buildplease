@@ -1,9 +1,7 @@
-import type { DeepRequired } from '@buildplease/webkit';
+import type { DeepRequired } from '@buildplease/core';
 
-/** Public runtime config exposed by the NuxtKit module. */
 export type NuxtKitPublicRuntimeConfig = DeepRequired<NuxtKitOptions>;
 
-/** NuxtKit configuration. */
 export interface NuxtKitOptions {
   /** Whether to print debug logs at runtime. */
   debug: boolean;

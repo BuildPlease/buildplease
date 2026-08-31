@@ -32,18 +32,12 @@
       }
     }
   },
-  "bin": {
-    "apikit": "./bin/apikit.mjs"
-  },
   "files": [
-    "bin",
     "dist",
     "resources"
   ],
   "scripts": {
-    "build": "pnpm run build:cli && pnpm run build:src",
-    "build:cli": "tsdown --config tsdown.config.cli.ts --config-loader unrun",
-    "build:src": "tsdown --config tsdown.config.src.ts --config-loader unrun",
+    "build": "tsdown --config tsdown.config.src.ts --config-loader unrun",
     "test": "vitest run",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
@@ -57,18 +51,16 @@
     "@fastify/under-pressure": "9.1.0",
     "@fastify/view": "12.0.0",
     "argon2": "0.45.1",
-    "citty": "catalog:",
     "ejs": "6.0.1",
     "fastify-ip": "2.0.0",
     "fastify-metrics": "13.2.1",
     "fastify-plugin": "6.0.0",
     "i18next": "26.4.0",
-    "jiti": "catalog:",
     "libphonenumber-js": "1.13.11",
     "lodash.merge": "4.6.2",
     "mime-types": "3.0.2",
     "nodemailer": "9.0.5",
-    "uuid": "14.0.2",
+    "uuid": "catalog:",
     "validator": "13.15.35"
   },
   "devDependencies": {
@@ -77,8 +69,7 @@
     "@types/lodash.merge": "4.6.9",
     "@types/mime-types": "3.0.1",
     "@types/nodemailer": "8.0.1",
-    "@types/validator": "13.15.10",
-    "code-block-writer": "13.0.3"
+    "@types/validator": "13.15.10"
   },
   "peerDependencies": {
     "fastify": "5.12.1",

@@ -1,6 +1,6 @@
 # @buildplease/devkit
 
-DevKit is the BuildPlease development toolkit. It provides shared repository tooling and a consistent CLI for BuildPlease projects.
+DevKit provides shared development tooling for TypeScript repositories.
 
 ## Installation
 
@@ -8,7 +8,21 @@ DevKit is the BuildPlease development toolkit. It provides shared repository too
 pnpm add -D @buildplease/devkit
 ```
 
-## Usage
+## Configuration
+
+Define `devkit.config.ts` when repository defaults need to be extended:
+
+```ts
+import { defineDevKitConfig } from '@buildplease/devkit';
+
+export default defineDevKitConfig({
+  format: {
+    include: ['apps', 'packages'],
+  },
+});
+```
+
+## Commands
 
 ```bash
 pnpm exec devkit run format
@@ -16,14 +30,6 @@ pnpm exec devkit run lint
 pnpm exec devkit run dep-check
 pnpm exec devkit run clean
 ```
-
-## Features
-
-- formatting and linting
-- dependency checks and updates
-- repository cleanup
-- shared development configuration
-- consistent project CLI commands
 
 ## License
 

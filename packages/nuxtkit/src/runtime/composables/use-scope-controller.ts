@@ -1,9 +1,13 @@
-import type { ScopeController } from '@buildplease/webkit';
+import type { ScopeController } from '@buildplease/core';
 
 import { useNuxtApp } from '#app';
 
+interface ScopeControllerHost {
+  readonly $scopeController?: ScopeController;
+}
+
 /**
- * Provides access to the scope controller for dependency injection.
+ * Provides access to the scope controller supplied by the application.
  *
  * @returns {ScopeController} The scope controller instance.
  *
@@ -12,9 +16,12 @@ import { useNuxtApp } from '#app';
  * const myService = scopeController.getInstance<MyService>(Symbols.MyService);
  */
 export function useScopeController(): ScopeController {
-  const { $scopeController } = useNuxtApp();
+  const app = useNuxtApp() as ReturnType<typeof useNuxtApp> & ScopeControllerHost;
+  const scopeController = app.$scopeController;
 
-  if (!$scopeController) throw new Error('Failed to resolve Scope & Container.');
+  if (!scopeController) {
+    throw new Error('Scope controller is not available. Provide it from an application plugin.');
+  }
 
-  return $scopeController;
+  return scopeController;
 }

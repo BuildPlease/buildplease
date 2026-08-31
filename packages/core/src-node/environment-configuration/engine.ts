@@ -5,7 +5,9 @@ import dotenvx from '@dotenvx/dotenvx';
 import { readSelectedEnvironmentName } from '@src-internal/environment-configuration/selection';
 import { createJiti } from 'jiti';
 
-import type { BuildMetadata } from '../build-metadata';
+import type { Build } from '@/build';
+import type { Environment } from '@/environment';
+
 import {
   type ConfigDefinition,
   type ConfigurationBinding,
@@ -18,8 +20,14 @@ import {
   isConfigurationBinding,
   isConfigurationField,
 } from './configuration';
-import { type EnvironmentConfig, type EnvironmentConfigFromRegistry, resolveEnvironment } from './environment';
+import {
+  type EnvironmentFromRegistry,
+  type EnvironmentRegistry,
+  resolveEnvironment,
+  resolveEnvironmentSource,
+} from './environment';
 import { readEnvironmentVariable } from './environment-variable';
+import { loadPreparedEnvironments } from './prepared-environment';
 import { type ConfigurationResolveContext, type ConfigurationSource, isConfigurationSource } from './source';
 import { ensureDirectory, resolvePath } from '../file/file-sync';
 
@@ -40,36 +48,37 @@ export interface LoadedConfig<Config extends ConfigDefinition = ConfigDefinition
 export interface LoadedEnvironmentConfig<
   Config extends ConfigDefinition = ConfigDefinition,
 > extends LoadedConfig<Config> {
-  readonly environment: EnvironmentConfigFromRegistry<Config['environments']>;
+  readonly environment: EnvironmentFromRegistry<Config['environments']>;
 }
 
-/** Load the conventional environment.config.ts definition without selecting an environment. */
 export async function loadEnvironmentConfig<Config extends ConfigDefinition = ConfigDefinition>(
   options: LoadEnvironmentConfigOptions = {},
 ): Promise<LoadedConfig<Config>> {
   return loadEnvironmentConfigInternal<Config>(options);
 }
 
-/**
- * Load environment.config.ts and resolve the environment selected for the
- * current BuildPlease process tree.
- */
 export async function loadSelectedEnvironmentConfig<Config extends ConfigDefinition = ConfigDefinition>(
   options: LoadEnvironmentConfigOptions = {},
 ): Promise<LoadedEnvironmentConfig<Config>> {
   const environmentName = readSelectedEnvironmentName();
-  const loaded = await loadEnvironmentConfigInternal<Config>(options);
+  const rootDir = resolveRootDir(options.dir);
+  const preparedEnvironments = await loadPreparedEnvironments(rootDir);
+  const loaded = await loadEnvironmentConfigInternal<Config>({ dir: rootDir });
+  validatePreparedEnvironments(loaded.config.environments, preparedEnvironments);
+  const preparedEnvironment = preparedEnvironments[environmentName];
+
+  if (!preparedEnvironment) throw new Error(`Environment "${environmentName}" is not configured.`);
 
   try {
-    const environment = resolveEnvironment(loaded.config.environments, environmentName, {
+    const environmentSource = resolveEnvironmentSource(loaded.config.environments, environmentName, {
       baseDir: dirname(loaded.configFilePath),
     });
 
-    initializeEnvironment(environment);
+    initializeEnvironment(environmentSource);
 
     return {
       ...loaded,
-      environment: environment,
+      environment: preparedEnvironment as EnvironmentFromRegistry<Config['environments']>,
     };
   } catch (error) {
     throw makeLoadError(error);
@@ -77,8 +86,8 @@ export async function loadSelectedEnvironmentConfig<Config extends ConfigDefinit
 }
 
 export interface ResolveConfigurationOptions {
-  readonly buildMetadata?: BuildMetadata;
-  readonly environment?: EnvironmentConfig;
+  readonly build?: Build;
+  readonly environment?: Environment;
 }
 
 export async function resolveConfig<Config extends ConfigDefinition<any>>(
@@ -170,19 +179,19 @@ function initializeEnvironment(environment: { readonly file?: string; readonly f
 }
 
 function makeLoadError(error: unknown): Error {
-  return new Error(`Failed to load environment config: ${error instanceof Error ? error.message : String(error)}`, {
+  return new Error(`Failed to load environment.config.ts: ${error instanceof Error ? error.message : String(error)}`, {
     cause: error,
   });
 }
 
-type InternalResolveContext = Omit<ConfigurationResolveContext, 'buildMetadata' | 'environment'> & {
-  readonly buildMetadata?: BuildMetadata;
-  readonly environment?: EnvironmentConfig;
+type InternalResolveContext = Omit<ConfigurationResolveContext, 'build' | 'environment'> & {
+  readonly build?: Build;
+  readonly environment?: Environment;
 };
 
 function makeContext(options: ResolveConfigurationOptions): InternalResolveContext {
   return {
-    buildMetadata: options.buildMetadata,
+    build: options.build,
     environment: options.environment,
   };
 }
@@ -313,10 +322,37 @@ async function resolveSource(
   return value;
 }
 
-function requireEnvironment(context: InternalResolveContext | undefined, path: string): EnvironmentConfig {
+function requireEnvironment(context: InternalResolveContext | undefined, path: string): Environment {
   if (!context?.environment) throw new Error(`${path} requires runtime environment.`);
 
   return context.environment;
+}
+
+function validatePreparedEnvironments(
+  source: EnvironmentRegistry,
+  prepared: Readonly<Record<string, Environment>>,
+): void {
+  const sourceEntries = Object.entries(source);
+  const preparedNames = Object.keys(prepared);
+
+  if (sourceEntries.length !== preparedNames.length) throw makeStaleEnvironmentError();
+
+  for (const [name] of sourceEntries) {
+    const sourceEnvironment = resolveEnvironment(source, name);
+    const preparedEnvironment = prepared[name];
+
+    if (
+      !preparedEnvironment ||
+      preparedEnvironment.name !== sourceEnvironment.name ||
+      preparedEnvironment.alias !== sourceEnvironment.alias
+    ) {
+      throw makeStaleEnvironmentError();
+    }
+  }
+}
+
+function makeStaleEnvironmentError(): Error {
+  return new Error('Prepared environments do not match configured environments.');
 }
 
 function requireResolveContext(
@@ -324,7 +360,7 @@ function requireResolveContext(
   path: string,
 ): ConfigurationResolveContext {
   if (!context?.environment) throw new Error(`${path} requires runtime environment.`);
-  if (!context.buildMetadata) throw new Error(`${path} requires build metadata.`);
+  if (!context.build) throw new Error(`${path} requires build.`);
 
   return context as ConfigurationResolveContext;
 }

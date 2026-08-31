@@ -1,12 +1,18 @@
+import { validateEnvironmentName } from '@src-internal/environment-configuration/validate-environment-name';
 import { resolvePath } from '@src-node/file';
+
+import type { Environment } from '@/environment';
 
 // MARK: - Public
 
 export interface EnvironmentDefinition {
+  /** Optional public/static alias for this environment. */
+  readonly alias?: string;
+
   /**
    * Optional dotenv file associated with this environment.
    *
-   * When the environment is selected, BuildPlease loads this file if it exists.
+   * When the environment is selected, the runtime loads this file if it exists.
    * Missing files are ignored, values already present in `process.env` keep
    * priority. Configuration resolution and defaults decide how missing values are handled.
    */
@@ -16,8 +22,7 @@ export interface EnvironmentDefinition {
   readonly fileDir?: string;
 }
 
-export interface EnvironmentConfig<Name extends string = string> {
-  readonly name: Name;
+interface EnvironmentSource<Name extends string = string> extends Environment<Name> {
   readonly file?: string;
   readonly fileDir: string;
 }
@@ -26,7 +31,7 @@ export type EnvironmentRegistry = Record<string, EnvironmentDefinition>;
 
 export type EnvironmentName<Environments extends EnvironmentRegistry> = keyof Environments & string;
 
-export type EnvironmentConfigFromRegistry<Environments extends EnvironmentRegistry> = EnvironmentConfig<
+export type EnvironmentFromRegistry<Environments extends EnvironmentRegistry> = Environment<
   EnvironmentName<Environments>
 >;
 
@@ -44,6 +49,7 @@ export function defineEnvironments<const Environments extends EnvironmentRegistr
   if (!entries.length) throw new Error('At least one environment must be defined.');
 
   for (const [name, environment] of entries) {
+    validateEnvironmentName(name);
     validateEnvironmentDefinition(name, environment);
   }
 
@@ -53,33 +59,58 @@ export function defineEnvironments<const Environments extends EnvironmentRegistr
 export function resolveEnvironment<Environments extends EnvironmentRegistry>(
   environments: Environments,
   name: string,
+): EnvironmentFromRegistry<Environments> {
+  validateEnvironmentName(name);
+  const environment = requireEnvironmentDefinition(environments, name);
+
+  return {
+    name: name as EnvironmentName<Environments>,
+    alias: environment.alias?.trim() || undefined,
+  };
+}
+
+export function resolveEnvironmentSource<Environments extends EnvironmentRegistry>(
+  environments: Environments,
+  name: string,
   options: ResolveEnvironmentOptions = {},
-): EnvironmentConfigFromRegistry<Environments> {
-  if (!Object.prototype.hasOwnProperty.call(environments, name)) {
-    throw new Error(`Environment "${name}" is not defined.`);
-  }
-
-  const environment = environments[name];
-
-  if (!environment) throw new Error(`Environment "${name}" is not defined.`);
-
+): EnvironmentSource<EnvironmentName<Environments>> {
+  validateEnvironmentName(name);
+  const environment = requireEnvironmentDefinition(environments, name);
   const baseDir = options.baseDir?.trim() || process.cwd();
   const fileDir = resolvePath(baseDir, environment.fileDir?.trim() || '.');
 
   return {
     name: name as EnvironmentName<Environments>,
+    alias: environment.alias?.trim() || undefined,
     file: environment.file?.trim() || undefined,
     fileDir: fileDir,
   };
 }
 
+function requireEnvironmentDefinition<Environments extends EnvironmentRegistry>(
+  environments: Environments,
+  name: string,
+): EnvironmentDefinition {
+  if (!Object.prototype.hasOwnProperty.call(environments, name)) {
+    throw new Error(`Environment "${name}" is not configured.`);
+  }
+
+  const environment = environments[name];
+
+  if (!environment) throw new Error(`Environment "${name}" is not configured.`);
+
+  return environment;
+}
+
 // MARK: - Private
 
 function validateEnvironmentDefinition(name: string, environment: EnvironmentDefinition): void {
-  if (!name.trim()) throw new Error('Environment name must not be empty.');
-
   if (!isPlainObject(environment)) {
     throw new Error(`Environment definition must be an object for "${name}".`);
+  }
+
+  if (environment.alias !== undefined && (typeof environment.alias !== 'string' || !environment.alias.trim())) {
+    throw new Error(`Environment alias must not be empty for "${name}".`);
   }
 
   if (environment.file !== undefined && (typeof environment.file !== 'string' || !environment.file.trim())) {

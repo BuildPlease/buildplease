@@ -9,7 +9,6 @@ import type {
 
 import {
   type BasicAuthConfiguration,
-  type BuildConfiguration,
   type CorsConfiguration,
   type EmailConfiguration,
   type HealthConfiguration,
@@ -25,8 +24,6 @@ import {
 // MARK: - Public
 
 export interface DefineApiKitConfigInput {
-  readonly build?: InputOf<typeof BuildConfiguration>;
-
   readonly server: InputOf<typeof ServerConfiguration>;
   readonly logger?: InputOf<typeof LoggerConfiguration>;
   readonly metrics?: InputOf<typeof MetricsConfiguration>;

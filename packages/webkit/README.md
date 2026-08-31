@@ -1,16 +1,16 @@
 # @buildplease/webkit
 
-WebKit provides shared runtime, dependency injection, networking, and application primitives for web applications.
+WebKit is the BuildPlease runtime and infrastructure kit for web applications.
 
 ## Installation
 
 ```bash
-pnpm add @buildplease/webkit
+pnpm add @buildplease/core @buildplease/webkit
 ```
 
 ## Configuration
 
-Define `environment.config.ts` with `@buildplease/webkit/node`:
+Define `environment.config.ts`:
 
 ```ts
 import { defineConfig, defineEnvironments, defineSource } from '@buildplease/webkit/node';
@@ -24,7 +24,7 @@ const from = defineSource(environments);
 
 export default defineConfig(environments, {
   origin: {
-    api: from.env('ORIGIN_API'),
+    api: from.env('API_ORIGIN'),
   },
 });
 ```
@@ -33,46 +33,34 @@ export default defineConfig(environments, {
 
 ```ts
 import { runWebKit } from '@buildplease/webkit';
+import { appAssembly } from './app';
 
-await runWebKit({
+const runtime = await runWebKit({
   hooks: {
-    assemblies: () => [...makeAssemblies()],
-
-    prepare: ({ scope }) => {
-      // optional app preparation
-    },
+    assemblies: () => [...appAssembly()],
   },
 });
 ```
 
-## Node / SSR runtime
+## Node runtime
 
 ```ts
 import { runWebKit } from '@buildplease/webkit/node';
+import { appAssembly } from './app';
 
-await runWebKit({
+const runtime = await runWebKit({
   hooks: {
-    assemblies: () => [...makeAssemblies()],
-
-    prepare: ({ scope }) => {
-      // optional SSR preparation
-    },
-
-    close: ({ scope }) => {
-      // optional cleanup
-    },
+    assemblies: () => [...appAssembly()],
   },
 });
 ```
 
 ## Features
 
-- browser application architecture and dependency injection
+- dependency injection and application assemblies
 - asynchronous operations and remote resources
-- transport-independent HTTP primitives
-- request interception and error handling
-- shared web models and utilities
-- L10n integration
+- HTTP requests, interception, and error handling
+- shared web models and localization resources
 
 ## License
 

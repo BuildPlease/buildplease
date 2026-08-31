@@ -1,5 +1,7 @@
-import type { BuildMetadata } from '../build-metadata';
-import type { EnvironmentConfig, EnvironmentRegistry } from './environment';
+import type { Build } from '@/build';
+import type { Environment } from '@/environment';
+
+import type { EnvironmentRegistry } from './environment';
 
 // MARK: - Symbols
 
@@ -10,8 +12,8 @@ const CONFIGURATION_SOURCE = Symbol.for('buildplease.environment-configuration.s
 export type ConfigurationSourceKind = 'env' | 'by-environment' | 'compute' | 'static' | 'default';
 
 export interface ConfigurationResolveContext<EnvironmentName extends string = string> {
-  readonly environment: EnvironmentConfig<EnvironmentName>;
-  readonly buildMetadata: BuildMetadata;
+  readonly environment: Environment<EnvironmentName>;
+  readonly build: Build;
 }
 
 export interface ConfigurationSource<Output = unknown> {

@@ -1,4 +1,4 @@
-import type { Assembly, AssemblyContainer } from '@buildplease/webkit';
+import type { Assembly, AssemblyContainer } from '@buildplease/core';
 
 import { Symbols } from '~/di/symbols';
 import { type LoginController, LoginControllerImpl } from '~/feature/login/controller';

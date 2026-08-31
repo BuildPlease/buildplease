@@ -1,4 +1,5 @@
-import type { BuildMetadata, ConfigurationContract, EnvironmentConfig } from '@buildplease/core/node';
+import type { Build, Environment } from '@buildplease/core';
+import type { ConfigurationContract } from '@buildplease/core/node';
 import { injectable } from 'inversify';
 
 import type {
@@ -18,9 +19,9 @@ import type {
 // MARK: - Public
 
 export interface ApiKitController {
-  get build(): BuildMetadata;
+  get build(): Build;
   get isDebug(): boolean;
-  get environment(): EnvironmentConfig;
+  get environment(): Environment;
 
   get logger(): LoggerConfig;
   get server(): ServerConfig;
@@ -40,7 +41,7 @@ export interface ApiKitController {
 
 @injectable()
 export class ApiKitControllerImpl implements ApiKitController {
-  public get build(): BuildMetadata {
+  public get build(): Build {
     return global.apikit.build;
   }
 
@@ -48,8 +49,8 @@ export class ApiKitControllerImpl implements ApiKitController {
     return global.apikit.serverConfig.debug;
   }
 
-  public get environment(): EnvironmentConfig {
-    return global.apikit.environmentConfig;
+  public get environment(): Environment {
+    return global.apikit.environment;
   }
 
   public get logger(): LoggerConfig {

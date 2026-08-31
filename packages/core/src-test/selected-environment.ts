@@ -1,8 +1,10 @@
 import { BUILDPLEASE_ENVIRONMENT_VARIABLE } from '@src-internal/environment-configuration/selection';
+import { validateEnvironmentName } from '@src-internal/environment-configuration/validate-environment-name';
 
 export function withSelectedEnvironment<T>(environment: string, run: () => Promise<T>): Promise<T>;
 export function withSelectedEnvironment<T>(environment: string, run: () => T): T;
 export function withSelectedEnvironment<T>(environment: string, run: () => T | Promise<T>): T | Promise<T> {
+  validateEnvironmentName(environment);
   const previous = process.env[BUILDPLEASE_ENVIRONMENT_VARIABLE];
   process.env[BUILDPLEASE_ENVIRONMENT_VARIABLE] = environment;
 

@@ -20,12 +20,10 @@ export {
   isConfigurationField,
 } from './configuration';
 export {
-  type EnvironmentConfig,
-  type EnvironmentConfigFromRegistry,
   type EnvironmentDefinition,
+  type EnvironmentFromRegistry,
   type EnvironmentName,
   type EnvironmentRegistry,
-  type ResolveEnvironmentOptions,
   defineEnvironments,
   resolveEnvironment,
 } from './environment';

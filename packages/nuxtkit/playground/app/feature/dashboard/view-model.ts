@@ -1,4 +1,4 @@
-import { CanceledError, delay } from '@buildplease/webkit';
+import { CanceledError, delay } from '@buildplease/core';
 import { inject, injectable } from 'inversify';
 
 import { Symbols } from '~/di/symbols';

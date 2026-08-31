@@ -14,12 +14,15 @@
     "zod": "catalog:"
   },
   "devDependencies": {
+    "@buildplease/core": "workspace:*",
     "@buildplease/nuxtkit": "workspace:*",
     "@buildplease/webkit": "workspace:*",
     "@iconify-json/lucide": "1.2.125",
     "@nuxt/ui": "catalog:",
     "@nuxtjs/i18n": "catalog:",
+    "inversify": "catalog:",
     "nuxt": "catalog:",
+    "reflect-metadata": "catalog:",
     "vue-tsc": "catalog:"
   }
 }

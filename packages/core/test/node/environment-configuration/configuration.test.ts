@@ -6,11 +6,10 @@ import {
   field,
   resolveEnvironment,
 } from '@src-node/environment-configuration';
-import { resolvePath } from '@src-node/file';
 import { describe, expect, it } from 'vitest';
 
 const environments = defineEnvironments({
-  test: { file: ' .env.test ' },
+  test: { file: ' .env.test ', alias: ' beta ' },
   production: { file: '.env.production' },
 });
 
@@ -22,12 +21,11 @@ describe('Environment Configuration definitions', () => {
     };
     const config = defineConfig(environments, input);
 
-    expect(resolveEnvironment(environments, 'test', { baseDir: '/workspace' })).toEqual({
+    expect(resolveEnvironment(environments, 'test')).toEqual({
       name: 'test',
-      file: '.env.test',
-      fileDir: resolvePath('/workspace', '.'),
+      alias: 'beta',
     });
-    expect(() => resolveEnvironment(environments, 'bug')).toThrow('Environment "bug" is not defined.');
+    expect(() => resolveEnvironment(environments, 'bug')).toThrow('Environment "bug" is not configured.');
     expect(config.environments).toBe(environments);
     expect(config.input).toBe(input);
   });
@@ -38,11 +36,35 @@ describe('Environment Configuration definitions', () => {
       production: {},
     });
 
-    expect(resolveEnvironment(filelessEnvironments, 'test', { baseDir: '/workspace' })).toEqual({
+    expect(resolveEnvironment(filelessEnvironments, 'test')).toEqual({
       name: 'test',
-      file: undefined,
-      fileDir: resolvePath('/workspace', '.'),
+      alias: undefined,
     });
+  });
+
+  it.each(['test', 'production', 'staging', 'pre-production', 'local_dev'])(
+    'accepts the canonical environment name %s',
+    (name) => {
+      const registry = { [name]: {} };
+
+      expect(defineEnvironments(registry)).toBe(registry);
+      expect(resolveEnvironment(registry, name)).toEqual({ name: name, alias: undefined });
+    },
+  );
+
+  it.each(['', ' ', ' test', 'test ', ' test ', 'my test', 'production environment'])(
+    'rejects the non-canonical environment name %j',
+    (name) => {
+      expect(() => defineEnvironments({ [name]: {} })).toThrow(
+        'Environment name must be a non-empty string without whitespace.',
+      );
+    },
+  );
+
+  it('allows spaces in environment aliases', () => {
+    const registry = defineEnvironments({ test: { alias: 'Beta Release' } });
+
+    expect(resolveEnvironment(registry, 'test')).toEqual({ name: 'test', alias: 'Beta Release' });
   });
 
   it('validates malformed environment registries when defining config', () => {
@@ -53,21 +75,23 @@ describe('Environment Configuration definitions', () => {
     expect(() => defineConfig({ test: { fileDir: ' ' } } as never, {})).toThrow(
       'Environment file directory must not be empty for "test".',
     );
+    expect(() => defineConfig({ test: { alias: ' ' } } as never, {})).toThrow(
+      'Environment alias must not be empty for "test".',
+    );
   });
 
   it('does not resolve inherited registry properties as environments', () => {
-    expect(() => resolveEnvironment(environments, 'toString')).toThrow('Environment "toString" is not defined.');
+    expect(() => resolveEnvironment(environments, 'toString')).toThrow('Environment "toString" is not configured.');
   });
 
-  it('resolves environment directories relative to their configuration base', () => {
+  it('keeps Node source metadata out of the public environment identity', () => {
     const nestedEnvironments = defineEnvironments({
       test: { file: '.env.test', fileDir: './environment' },
     });
 
-    expect(resolveEnvironment(nestedEnvironments, 'test', { baseDir: '/workspace/config' })).toEqual({
+    expect(resolveEnvironment(nestedEnvironments, 'test')).toEqual({
       name: 'test',
-      file: '.env.test',
-      fileDir: resolvePath('/workspace/config', './environment'),
+      alias: undefined,
     });
   });
 

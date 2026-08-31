@@ -3,7 +3,7 @@ import {
   readSelectedEnvironmentName,
 } from '@src-internal/environment-configuration/selection';
 import { withSelectedEnvironment } from '@src-test/selected-environment';
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 describe('withSelectedEnvironment', () => {
   afterEach(() => {
@@ -19,7 +19,7 @@ describe('withSelectedEnvironment', () => {
   it('restores a missing previous value', () => {
     withSelectedEnvironment('test', () => undefined);
 
-    expect(() => readSelectedEnvironmentName()).toThrow('BuildPlease environment is not selected.');
+    expect(() => readSelectedEnvironmentName()).toThrow('Environment is not selected.');
   });
 
   it('restores an existing previous value', () => {
@@ -39,7 +39,7 @@ describe('withSelectedEnvironment', () => {
       }),
     ).toThrow('callback failed');
 
-    expect(() => readSelectedEnvironmentName()).toThrow('BuildPlease environment is not selected.');
+    expect(() => readSelectedEnvironmentName()).toThrow('Environment is not selected.');
   });
 
   it('keeps the environment selected for an asynchronous callback', async () => {
@@ -48,6 +48,15 @@ describe('withSelectedEnvironment', () => {
       expect(readSelectedEnvironmentName()).toBe('test');
     });
 
-    expect(() => readSelectedEnvironmentName()).toThrow('BuildPlease environment is not selected.');
+    expect(() => readSelectedEnvironmentName()).toThrow('Environment is not selected.');
+  });
+
+  it('rejects invalid environment names before running the callback', () => {
+    const run = vi.fn();
+
+    expect(() => withSelectedEnvironment(' test ', run)).toThrow(
+      'Environment name must be a non-empty string without whitespace.',
+    );
+    expect(run).not.toHaveBeenCalled();
   });
 });

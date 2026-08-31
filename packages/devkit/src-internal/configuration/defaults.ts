@@ -101,7 +101,6 @@ export const DevKitDefaults = {
 
     // Build output
     '**/dist/**',
-    '**/build/**',
     '**/out/**',
 
     // Generated output

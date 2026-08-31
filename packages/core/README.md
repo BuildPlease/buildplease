@@ -1,6 +1,6 @@
 # @buildplease/core
 
-Core provides shared application primitives for BuildPlease kits.
+Core provides the shared application foundation, configuration primitives, and CLI.
 
 ## Installation
 
@@ -8,52 +8,66 @@ Core provides shared application primitives for BuildPlease kits.
 pnpm add @buildplease/core
 ```
 
-## Usage
+## Configuration
 
-```ts
-import { coreAssembly } from '@buildplease/core';
-
-const assemblies = coreAssembly();
-```
-
-Node.js-specific APIs are available from `@buildplease/core/node`.
-
-### Environment configuration
-
-Define application environment configuration in `environment.config.ts`:
+Define `environment.config.ts`:
 
 ```ts
 import { defineConfig, defineEnvironments, defineSource } from '@buildplease/core/node';
 
 const environments = defineEnvironments({
-  test: { file: '.env.test' },
-  production: { file: '.env.production' },
+  test: { file: '.env.test', alias: 'Beta' },
+  production: { file: '.env.production', alias: 'Live' },
 });
 
 const from = defineSource(environments);
 
 export default defineConfig(environments, {
-  origin: from.env('API_ORIGIN').default('http://localhost:30000'),
+  origin: from.env('APP_ORIGIN').default('http://localhost:3000'),
 });
 ```
 
-Environment files are optional dotenv hookups. If a configured file is missing, BuildPlease continues with the existing process environment. Existing `process.env` values keep priority over dotenv values.
+Environment names are non-empty technical identifiers without whitespace. Aliases are optional user-facing labels.
 
-Select the BuildPlease environment when running a command:
+## CLI
+
+Prepare the application metadata:
 
 ```bash
-buildplease --env test -- <command>
-buildplease --env production -- <command>
+buildplease build
 ```
 
-## Features
+This generates:
 
-- dependency injection and application assemblies
-- operations, models, converters, and formatters
-- errors, validation, and normalization primitives
-- L10n resources and localization helpers
-- security, synchronization, and general utilities
-- Node.js environment configuration and infrastructure helpers
+```text
+.buildplease/
+├── build.ts
+├── environment.ts
+└── index.ts
+```
+
+Run a command with a selected environment:
+
+```bash
+buildplease run --env production -- node dist/main.js
+```
+
+`run` transports the selected environment to the child process. It does not modify `NODE_ENV`.
+
+## Runtime
+
+Load the prepared build and selected configuration from Node.js:
+
+```ts
+import { loadBuild, loadSelectedEnvironmentConfig, resolveConfig } from '@buildplease/core/node';
+
+const build = await loadBuild();
+const loaded = await loadSelectedEnvironmentConfig();
+const config = await resolveConfig(loaded.config, {
+  build,
+  environment: loaded.environment,
+});
+```
 
 ## License
 

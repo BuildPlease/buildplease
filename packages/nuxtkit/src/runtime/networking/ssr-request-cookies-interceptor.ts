@@ -1,4 +1,5 @@
-import type { HttpRequestInterceptor, HttpRequestOptions, Identity } from '@buildplease/webkit';
+import type { Identity } from '@buildplease/core';
+import type { HttpRequestInterceptor, HttpRequestOptions } from '@buildplease/webkit';
 
 import type { NuxtApp } from '#app';
 import { useRequestHeader } from '#imports';

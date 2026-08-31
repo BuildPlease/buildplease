@@ -1,4 +1,4 @@
-import type { Assembly, AssemblyContainer } from '@buildplease/webkit';
+import type { Assembly, AssemblyContainer } from '@buildplease/core';
 
 import type { NuxtApp } from '#app';
 import { Symbols } from '~/di/symbols';

@@ -1,16 +1,16 @@
 # @buildplease/apikit
 
-ApiKit is the BuildPlease application kit for backend services and APIs. It builds on Core and provides the runtime and infrastructure needed for Fastify applications.
+ApiKit is the BuildPlease runtime and infrastructure kit for backend applications.
 
 ## Installation
 
 ```bash
-pnpm add @buildplease/apikit
+pnpm add @buildplease/core @buildplease/apikit
 ```
 
 ## Configuration
 
-Define `environment.config.ts` with `defineConfig()`:
+Define `environment.config.ts`:
 
 ```ts
 import { defineConfig, defineEnvironments, defineSource } from '@buildplease/apikit';
@@ -24,8 +24,8 @@ const from = defineSource(environments);
 
 export default defineConfig(environments, {
   server: {
-    identifier: from.compute(({ buildMetadata, environment }) => {
-      return `${buildMetadata.name.original}:${environment.name}`;
+    identifier: from.compute(({ build, environment }) => {
+      return `${build.name.original}:${environment.name}`;
     }),
     host: from.env('SERVER_HOST').default('127.0.0.1'),
     port: from.env('SERVER_PORT').default('30000'),
@@ -33,15 +33,34 @@ export default defineConfig(environments, {
 });
 ```
 
-## Features
+## Build
 
-- typed application configuration and environments
-- Fastify server and HTTP infrastructure
-- dependency injection and application assemblies
-- validation, errors, formatting, and normalization
-- i18n and L10n integration
-- OpenAPI, notifications, email, files, and database helpers
-- backend CLI tooling
+Prepare the application metadata:
+
+```bash
+buildplease build
+```
+
+## Runtime
+
+Run the application with a selected environment:
+
+```bash
+buildplease run --env production -- node dist/main.js
+```
+
+Start from the application entrypoint:
+
+```ts
+import { runApiKit } from '@buildplease/apikit';
+import { appAssembly } from './app';
+
+await runApiKit({
+  hooks: {
+    assemblies: () => [...appAssembly()],
+  },
+});
+```
 
 ## License
 

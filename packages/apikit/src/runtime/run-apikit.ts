@@ -1,5 +1,5 @@
 import { type Assembly, type Awaitable, ScopeController } from '@buildplease/core';
-import { loadApiKitContext } from '@src-internal/configuration/load-context';
+import { initializeApiKitConfiguration } from '@src-internal/configuration/initialize-configuration';
 import { makeAssemblies } from '@src-internal/di';
 import type { FastifyInstance } from 'fastify';
 
@@ -28,7 +28,7 @@ export interface RunApiKitOptions {
 }
 
 export async function runApiKit(options: RunApiKitOptions = {}): Promise<void> {
-  await loadApiKitContext();
+  await initializeApiKitConfiguration();
 
   const scope = new ScopeController();
   const consumerAssemblies = options.hooks?.assemblies?.() ?? [];

@@ -1,6 +1,6 @@
 <div align="center">
   <h1>BuildPlease</h1>
-  <p><strong>TypeScript kits for Node.js, the browser, Nuxt, and development tooling.</strong></p>
+  <p><strong>A TypeScript application framework for backend, web, Nuxt, and development tooling.</strong></p>
   <p>
     <img alt="pnpm" src="https://img.shields.io/badge/pnpm-F69220?logo=pnpm&logoColor=white">
     <img alt="Turborepo" src="https://img.shields.io/badge/Turborepo-000000?logo=turborepo&logoColor=white">
@@ -14,22 +14,25 @@
   </p>
 </div>
 
----
+Backend and frontend artifacts are fundamentally different by nature.
+BuildPlease does not try to hide that difference — it gives both the same foundation, and lets them diverge only where they truly must.
 
-## 📦 Packages
+## Packages
 
-| Kit                             | Runtime           | Purpose                               |
-| ------------------------------- | ----------------- | ------------------------------------- |
-| [`Core`](./packages/core)       | Neutral + Node.js | Common foundation for the other kits. |
-| [`ApiKit`](./packages/apikit)   | Node.js           | Backend and APIs.                     |
-| [`WebKit`](./packages/webkit)   | Browser           | Browser applications.                 |
-| [`NuxtKit`](./packages/nuxtkit) | Nuxt              | Nuxt applications built on WebKit.    |
-| [`DevKit`](./packages/devkit)   | Node.js / CLI     | Development and repository tooling.   |
+| Package                         | Purpose                                            |
+| ------------------------------- | -------------------------------------------------- |
+| [`Core`](./packages/core)       | Application foundation, configuration, and CLI     |
+| [`ApiKit`](./packages/apikit)   | Backend/API runtime and infrastructure             |
+| [`WebKit`](./packages/webkit)   | Framework-agnostic web runtime and networking      |
+| [`NuxtKit`](./packages/nuxtkit) | Nuxt module, localization, validation, and helpers |
+| [`DevKit`](./packages/devkit)   | Shared development tooling                         |
 
-## 🤝 Contributing
+See each package README for its public API and setup.
+
+## Contributing
 
 See [CONTRIBUTING.md](./CONTRIBUTING.md).
 
-## 🔒 License
+## License
 
 [MIT](./LICENSE)

@@ -1,63 +1,126 @@
-import { spawnSync } from 'node:child_process';
+import { spawn } from 'node:child_process';
 import { constants } from 'node:os';
 
 import { BUILDPLEASE_ENVIRONMENT_VARIABLE } from '@src-internal/environment-configuration/selection';
+import { validateEnvironmentName } from '@src-internal/environment-configuration/validate-environment-name';
+import { generateBuildPlease } from '@src-internal/generator';
 
-const USAGE = 'Usage: buildplease --env <environment> -- <command> [arguments...]';
+const HELP = [
+  'Usage:',
+  '  buildplease build',
+  '  buildplease run --env <environment> -- <command...>',
+  '',
+  'Commands:',
+  '  build   Generate the prepared application output.',
+  '  run     Run a command with the selected environment.',
+].join('\n');
 
-export function runMain(argv: readonly string[]): number {
-  const separatorIndex = argv.indexOf('--');
+interface RunOptions {
+  readonly environment: string;
+  readonly command: readonly string[];
+}
 
-  if (separatorIndex < 0) {
-    if (argv.length === 1 && (argv[0] === '--help' || argv[0] === '-h')) {
-      process.stdout.write(`${USAGE}\n`);
-      return 0;
-    }
+export async function runMain(argv: readonly string[]): Promise<number> {
+  const command = argv[0];
 
-    throw new Error(`${USAGE}\nMissing "--" command separator.`);
-  }
-
-  const launcherArguments = argv.slice(0, separatorIndex);
-
-  if (launcherArguments.includes('--help') || launcherArguments.includes('-h')) {
-    process.stdout.write(`${USAGE}\n`);
+  if (!command || command === '--help' || command === '-h') {
+    process.stdout.write(`${HELP}\n`);
     return 0;
   }
 
-  const commandArguments = argv.slice(separatorIndex + 1);
-  const environment = parseEnvironment(launcherArguments);
-  const command = commandArguments[0];
+  switch (command) {
+    case 'build':
+      return runBuild(argv.slice(1));
+    case 'run':
+      return runCommand(parseRunOptions(argv.slice(1)));
+    default:
+      throw new Error(`${HELP}\nUnknown command "${command}".`);
+  }
+}
 
-  if (!command) throw new Error(`${USAGE}\nMissing command.`);
+async function runBuild(argv: readonly string[]): Promise<number> {
+  if (argv.length) throw new Error('build: does not accept arguments.');
 
-  const result = spawnSync(command, commandArguments.slice(1), {
+  const outputPath = await generateBuildPlease(process.cwd());
+  process.stdout.write(`Generated ${outputPath}\n`);
+
+  return 0;
+}
+
+function parseRunOptions(argv: readonly string[]): RunOptions {
+  const separatorIndex = argv.indexOf('--');
+
+  if (separatorIndex < 0) throw new Error('run: missing "--" command separator.');
+
+  const optionArguments = argv.slice(0, separatorIndex);
+  const command = argv.slice(separatorIndex + 1);
+
+  if (!command.length) throw new Error('run: missing command after "--".');
+
+  let environment: string | undefined;
+
+  for (let index = 0; index < optionArguments.length; index += 1) {
+    const option = optionArguments[index];
+
+    if (option !== '--env') throw new Error(`run: unknown option "${option}".`);
+    if (environment !== undefined) throw new Error('run: --env may only be provided once.');
+
+    environment = requireEnvironment(optionArguments[++index]);
+  }
+
+  if (environment === undefined) throw new Error('run: --env <environment> is required.');
+
+  return {
+    environment: environment,
+    command: command,
+  };
+}
+
+function requireEnvironment(value: string | undefined): string {
+  if (value === undefined) throw new Error('run: --env requires an environment name.');
+
+  return validateEnvironmentName(value);
+}
+
+function runCommand(options: RunOptions): Promise<number> {
+  const command = options.command[0];
+  if (!command) throw new Error('run: missing command after "--".');
+
+  const child = spawn(command, options.command.slice(1), {
     env: {
       ...process.env,
-      [BUILDPLEASE_ENVIRONMENT_VARIABLE]: environment,
+      [BUILDPLEASE_ENVIRONMENT_VARIABLE]: options.environment,
     },
     shell: process.platform === 'win32',
     stdio: 'inherit',
   });
 
-  if (result.error) throw result.error;
+  const signals: NodeJS.Signals[] = ['SIGINT', 'SIGTERM', 'SIGHUP'];
+  const handlers = new Map<NodeJS.Signals, () => void>();
 
-  if (result.signal) {
-    const signalNumber = constants.signals[result.signal] ?? 0;
+  for (const signal of signals) {
+    const handler = (): void => {
+      child.kill(signal);
+    };
 
-    return 128 + signalNumber;
+    handlers.set(signal, handler);
+    process.on(signal, handler);
   }
 
-  return result.status ?? 1;
-}
+  const removeSignalHandlers = (): void => {
+    for (const [signal, handler] of handlers) process.off(signal, handler);
+  };
 
-function parseEnvironment(argv: readonly string[]): string {
-  if (argv.length !== 2 || argv[0] !== '--env') {
-    throw new Error(`${USAGE}\nExpected exactly one BuildPlease option: --env <environment>.`);
-  }
+  return new Promise<number>((resolve, reject) => {
+    child.once('error', (error) => {
+      removeSignalHandlers();
+      reject(error);
+    });
+    child.once('close', (status, signal) => {
+      removeSignalHandlers();
 
-  const environment = argv[1]?.trim();
-
-  if (!environment) throw new Error(`${USAGE}\nEnvironment must not be empty.`);
-
-  return environment;
+      if (signal) resolve(128 + (constants.signals[signal] ?? 0));
+      else resolve(status ?? 1);
+    });
+  });
 }

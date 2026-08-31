@@ -1,4 +1,4 @@
-import type { ValidationSchemaI18nParams } from '@buildplease/webkit';
+import type { ValidationSchemaI18nParams } from '@buildplease/core';
 import type { Composer } from 'vue-i18n';
 import { type $ZodErrorMap, type $ZodStringFormats, util } from 'zod/v4/core';
 

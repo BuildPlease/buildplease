@@ -1,4 +1,5 @@
-import { CanceledError, HttpError, isNonEmptyString } from '@buildplease/webkit';
+import { CanceledError, isNonEmptyString } from '@buildplease/core';
+import { HttpError } from '@buildplease/webkit';
 
 import { useNuxtApp } from '#app';
 import { useNuxtKit } from '#internal-runtime';

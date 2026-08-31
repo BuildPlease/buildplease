@@ -14,7 +14,6 @@ export default defineConfig({
   resolve: {
     alias: [
       { find: /^@\/(.*)$/, replacement: `${resolve(rootDir, 'src')}/$1` },
-      { find: /^@src-cli\/(.*)$/, replacement: `${resolve(rootDir, 'src-cli')}/$1` },
       { find: /^@src-internal\/(.*)$/, replacement: `${resolve(rootDir, 'src-internal')}/$1` },
       { find: /^#l10n$/, replacement: resolve(rootDir, 'src/l10n/index.ts') },
       { find: /^#resources$/, replacement: resolve(rootDir, 'resources/index.ts') },

@@ -1,8 +1,8 @@
-import { mkdir, writeFile } from 'node:fs/promises';
+import { mkdir, rm, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
 import { withSelectedEnvironment } from '@buildplease/core/test';
-import { loadApiKitContext } from '@src-internal/configuration/load-context';
+import { initializeApiKitConfiguration } from '@src-internal/configuration/initialize-configuration';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import {
@@ -10,7 +10,7 @@ import {
   makeTemporaryConfigurationProject,
 } from '#test/fixtures/configuration/temporary-config-project';
 
-const BUILD_METADATA = {
+const BUILD = {
   name: {
     original: '@test/example-api',
     base: 'example-api',
@@ -21,13 +21,22 @@ const BUILD_METADATA = {
 } as const;
 
 const CONFIG_SOURCE = `
+const identifier = {
+  kind: 'compute',
+  options: {
+    compute: ({ build, environment }) => build.name.original + ':' + environment.name,
+  },
+  transforms: [],
+};
+Object.defineProperty(identifier, Symbol.for('buildplease.environment-configuration.source'), { value: true });
+
 const config = {
   environments: {
-    development: { file: '.env.development' },
+    development: { file: '.env.development', alias: 'beta' },
   },
   input: {
     server: {
-      identifier: '@test/example-api:development',
+      identifier,
       host: '127.0.0.1',
       port: 30100,
     },
@@ -51,17 +60,48 @@ describe('ApiKit configuration integration', () => {
     Reflect.deleteProperty(globalThis, 'apikit');
   });
 
-  it('creates the ApiKit runtime context from the selected BuildPlease environment', async () => {
+  it('initializes ApiKit configuration from the selected BuildPlease environment', async () => {
     project = await makeTemporaryConfigurationProject();
     await writeProjectFiles(project);
     vi.spyOn(process, 'cwd').mockReturnValue(project.rootDir);
     await withSelectedEnvironment('development', async () => {
-      await loadApiKitContext();
+      await initializeApiKitConfiguration();
 
-      expect(global.apikit.build).toEqual(BUILD_METADATA);
-      expect(global.apikit.environmentConfig.name).toBe('development');
+      expect(global.apikit.build).toEqual(BUILD);
+      expect(global.apikit.environment.name).toBe('development');
+      expect(global.apikit.environment.alias).toBe('beta');
       expect(global.apikit.serverConfig.identifier).toBe('@test/example-api:development');
     });
+  });
+
+  it('requires the prepared Core environment contract', async () => {
+    project = await makeTemporaryConfigurationProject();
+    await writeProjectFiles(project);
+    await rm(join(project.rootDir, '.buildplease', 'environment.ts'));
+    vi.spyOn(process, 'cwd').mockReturnValue(project.rootDir);
+
+    await withSelectedEnvironment('development', async () => {
+      await expect(initializeApiKitConfiguration()).rejects.toThrow('Prepared environment');
+    });
+  });
+
+  it('requires the prepared Core build contract', async () => {
+    project = await makeTemporaryConfigurationProject();
+    await writeProjectFiles(project);
+    await writeFile(join(project.rootDir, '.env.development'), 'APIKIT_LOAD_ORDER=environment-loaded\n', 'utf8');
+    await rm(join(project.rootDir, '.buildplease', 'build.ts'));
+    vi.spyOn(process, 'cwd').mockReturnValue(project.rootDir);
+    delete process.env.APIKIT_LOAD_ORDER;
+
+    try {
+      await withSelectedEnvironment('development', async () => {
+        await expect(initializeApiKitConfiguration()).rejects.toThrow('Prepared build');
+      });
+
+      expect(process.env.APIKIT_LOAD_ORDER).toBeUndefined();
+    } finally {
+      delete process.env.APIKIT_LOAD_ORDER;
+    }
   });
 });
 
@@ -69,11 +109,13 @@ async function writeProjectFiles(project: TemporaryConfigurationProject): Promis
   await project.writeConfig('environment.config.ts', CONFIG_SOURCE);
   await writeFile(join(project.rootDir, '.env.development'), '', 'utf8');
 
-  const buildDir = join(project.rootDir, '.apikit');
+  const buildDir = join(project.rootDir, '.buildplease');
   await mkdir(buildDir, { recursive: true });
+  await writeFile(join(buildDir, 'build.ts'), `export const Build = ${JSON.stringify(BUILD, null, 2)};\n`, 'utf8');
   await writeFile(
-    join(buildDir, 'build-metadata.ts'),
-    `export const BuildMetadata = ${JSON.stringify(BUILD_METADATA, null, 2)};\n`,
+    join(buildDir, 'environment.ts'),
+    "export enum Environment { development = 'development' }\n" +
+      "export const Environments = { development: { name: Environment.development, alias: 'beta' } } as const;\n",
     'utf8',
   );
 }

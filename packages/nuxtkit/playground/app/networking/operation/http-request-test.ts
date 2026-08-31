@@ -1,9 +1,8 @@
+import { type AsyncOperation, delay } from '@buildplease/core';
 import {
-  type AsyncOperation,
   type HttpClient,
   type HttpRequest,
   type RemoteEndpoint,
-  delay,
   HttpError,
   SecuredRemoteResource,
 } from '@buildplease/webkit';

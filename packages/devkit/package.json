@@ -41,7 +41,7 @@
     "@buildplease/core": "workspace:*",
     "@typescript-eslint/eslint-plugin": "8.67.0",
     "@typescript-eslint/parser": "8.67.0",
-    "citty": "catalog:",
+    "citty": "0.2.2",
     "eslint": "9.39.5",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-check-file": "3.3.2",

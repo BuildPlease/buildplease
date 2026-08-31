@@ -19,10 +19,6 @@ type I18nLoadMode = NonNullable<InitOptions<object>['load']>;
 type I18nPreload = NonNullable<InitOptions<object>['preload']>;
 
 export const ApiKitDefaults = {
-  build: {
-    outDir: '.apikit',
-  },
-
   logger: {
     enabled: false,
   },

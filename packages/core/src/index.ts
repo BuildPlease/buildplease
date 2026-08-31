@@ -5,10 +5,12 @@ import type { Assembly } from '@/di';
 
 // MARK: - Exports
 
+export * from './build';
 export * from './converter';
 export * from './device';
 export * from './di';
 export * from './error';
+export * from './environment';
 export * from './formatter';
 export * from './l10n';
 export * from './foundation';

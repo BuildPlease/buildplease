@@ -4,7 +4,7 @@ import { MODULE_CONFIG_KEY_NAME, MODULE_PACKAGE_NAME } from '#internal-shared';
 
 import { prepareContext } from './context';
 import { DEFAULT_OPTIONS } from './defaults';
-import { prepareAutoImports, prepareHooks, prepareI18n, prepareRuntime, prepareRuntimeConfig } from './prepare';
+import { prepareAutoImports, prepareI18n, prepareRuntime, prepareRuntimeConfig } from './prepare';
 import type { NuxtKitOptions, NuxtKitPublicRuntimeConfig } from './types';
 
 export default defineNuxtModule<ModuleOptions>({
@@ -30,7 +30,6 @@ export default defineNuxtModule<ModuleOptions>({
   async setup(options, nuxt) {
     const context = prepareContext(options);
 
-    await prepareHooks(context, nuxt);
     await prepareRuntimeConfig(context, nuxt);
     await prepareI18n(context, nuxt);
     await prepareRuntime(context, nuxt);

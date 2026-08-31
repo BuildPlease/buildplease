@@ -1,4 +1,3 @@
-import type { BuildMetadata } from '@src-node/build-metadata';
 import {
   defineConfig,
   defineConfiguration,
@@ -11,7 +10,9 @@ import {
 } from '@src-node/environment-configuration';
 import { afterEach, describe, expect, it } from 'vitest';
 
-const buildMetadata: BuildMetadata = {
+import type { Build } from '@/build';
+
+const build: Build = {
   name: { original: '@test/example', base: 'example' },
   version: '1.0.0',
   id: '019c0000-0000-7000-8000-000000000000',
@@ -25,7 +26,7 @@ const environments = defineEnvironments({
 const from = defineSource(environments);
 const environment = resolveEnvironment(environments, 'test');
 const context = {
-  buildMetadata: buildMetadata,
+  build: build,
   environment: environment,
 };
 
@@ -40,7 +41,7 @@ describe('Environment Configuration engine', () => {
       origin: from.env('CONFIG_ENGINE_ORIGIN').default('http://localhost:30000'),
       port: from.env('CONFIG_ENGINE_PORT').default('30000').map(Number),
       mode: from.byEnvironment({ test: 'local', production: 'remote' }),
-      identifier: from.compute(({ buildMetadata: build, environment: current }) => {
+      identifier: from.compute(({ build: build, environment: current }) => {
         return `${build.name.original}:${current.name}`;
       }),
     });
@@ -100,20 +101,18 @@ describe('Environment Configuration engine', () => {
     });
     const invalidEnvironment = {
       name: 'staging',
-      file: '.env.staging',
-      fileDir: '/workspace',
     };
 
     await expect(
       resolveConfig(config, {
-        buildMetadata: buildMetadata,
+        build: build,
         environment: invalidEnvironment,
       } as never),
     ).rejects.toThrow('config.mode has no value for environment "staging".');
 
     await expect(resolveConfig(config, undefined as never)).rejects.toThrow('config requires runtime environment.');
     await expect(resolveConfig(config, { environment: environment } as never)).rejects.toThrow(
-      'config requires build metadata.',
+      'config requires build.',
     );
   });
 

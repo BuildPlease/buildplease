@@ -1,4 +1,5 @@
-import { type HttpError, type UnauthorizedHandler, delay } from '@buildplease/webkit';
+import { delay } from '@buildplease/core';
+import type { HttpError, UnauthorizedHandler } from '@buildplease/webkit';
 
 export class HttpRequestTestUnauthorizedHandler implements UnauthorizedHandler {
   public handle(_error: HttpError): Promise<void> {

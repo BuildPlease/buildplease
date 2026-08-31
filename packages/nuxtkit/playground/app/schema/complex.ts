@@ -1,4 +1,4 @@
-import type { OptionalPartial } from '@buildplease/webkit';
+import type { OptionalPartial } from '@buildplease/core';
 import { z } from 'zod';
 
 const stringSchema = z.object({

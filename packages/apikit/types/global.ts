@@ -1,4 +1,4 @@
-import type { BuildMetadata, EnvironmentConfig } from '@buildplease/core/node';
+import type { Build, Environment } from '@buildplease/core';
 
 import type {
   BasicAuthConfig,
@@ -16,8 +16,8 @@ import type {
 
 declare global {
   var apikit: {
-    build: BuildMetadata;
-    environmentConfig: EnvironmentConfig;
+    build: Build;
+    environment: Environment;
     loggerConfig: LoggerConfig;
     serverConfig: ServerConfig;
     metricsConfig: MetricsConfig;

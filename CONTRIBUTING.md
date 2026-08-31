@@ -2,39 +2,10 @@
 
 BuildPlease is developed as a monorepo. Contributions should stay small, explicit, and consistent with the existing architecture.
 
-## Setup
-
-1. Fork [`BuildPlease/buildplease`](https://github.com/BuildPlease/buildplease) and clone it locally.
-2. Use the Node.js version defined by the repository.
-3. Enable Corepack:
-
-   ```bash
-   corepack enable
-   ```
-
-4. Install dependencies:
-
-   ```bash
-   pnpm install --frozen-lockfile
-   ```
-
-5. Create a branch for your change.
-
-## Monorepo Guide
-
-- `packages/core` — shared runtime-neutral foundation used across BuildPlease packages.
-- `packages/apikit` — Node.js application and API framework.
-- `packages/webkit` — browser application framework.
-- `packages/nuxtkit` — Nuxt integration for WebKit applications.
-- `packages/devkit` — shared development and build tooling.
-
-Packages should depend only on the layers they actually use. Keep runtime-specific behavior in the package that owns that runtime.
-
 ## Rules
 
 Read the relevant rules before changing source code.
-
-Follow KISS, SOLID, DRY, and YAGNI. Keep rules practical; they exist to make behavior predictable.
+Follow KISS, SOLID, DRY, and YAGNI. Keep rules practical, they exist to make behavior predictable.
 
 ### Usage
 

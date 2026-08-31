@@ -1,13 +1,11 @@
-import { useNuxtApp } from '#app';
+import { useScopeController } from './use-scope-controller';
 
 /**
- * Generic composable for resolving ViewModel dependencies.
+ * Resolve a dependency from the scope supplied by the application.
  *
  * @param serviceIdentifier - Symbol used to resolve the dependency.
- * @returns An instance of the requested ViewModel.
+ * @returns An instance of the requested dependency.
  */
 export function useInstance<T>(serviceIdentifier: symbol): T {
-  const { $getInstance } = useNuxtApp();
-
-  return $getInstance(serviceIdentifier);
+  return useScopeController().getInstance<T>(serviceIdentifier);
 }

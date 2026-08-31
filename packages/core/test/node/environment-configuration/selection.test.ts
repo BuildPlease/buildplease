@@ -9,13 +9,21 @@ describe('BuildPlease environment selection', () => {
     delete process.env[BUILDPLEASE_ENVIRONMENT_VARIABLE];
   });
 
-  it('reads and normalizes the selected environment name', () => {
-    process.env[BUILDPLEASE_ENVIRONMENT_VARIABLE] = ' test ';
+  it('reads the selected environment name unchanged', () => {
+    process.env[BUILDPLEASE_ENVIRONMENT_VARIABLE] = '-test';
 
-    expect(readSelectedEnvironmentName()).toBe('test');
+    expect(readSelectedEnvironmentName()).toBe('-test');
   });
 
   it('requires explicit environment selection', () => {
-    expect(() => readSelectedEnvironmentName()).toThrow('BuildPlease environment is not selected.');
+    expect(() => readSelectedEnvironmentName()).toThrow('Environment is not selected.');
+  });
+
+  it('rejects a multi-word selected environment name', () => {
+    process.env[BUILDPLEASE_ENVIRONMENT_VARIABLE] = 'my test';
+
+    expect(() => readSelectedEnvironmentName()).toThrow(
+      'Environment name must be a non-empty string without whitespace.',
+    );
   });
 });

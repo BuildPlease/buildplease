@@ -1,13 +1,11 @@
-import { readEnvironmentVariable } from '../../src-node/environment-configuration/environment-variable';
+import { validateEnvironmentName } from './validate-environment-name';
 
-/** Process-environment transport used by the BuildPlease launcher. */
 export const BUILDPLEASE_ENVIRONMENT_VARIABLE = 'BUILDPLEASE_ENVIRONMENT';
 
-/** Read the environment selected for the current BuildPlease execution. */
 export function readSelectedEnvironmentName(): string {
-  const environment = readEnvironmentVariable(BUILDPLEASE_ENVIRONMENT_VARIABLE);
+  const environment = process.env[BUILDPLEASE_ENVIRONMENT_VARIABLE];
 
-  if (!environment) throw new Error('BuildPlease environment is not selected.');
+  if (environment === undefined) throw new Error('Environment is not selected.');
 
-  return environment;
+  return validateEnvironmentName(environment);
 }

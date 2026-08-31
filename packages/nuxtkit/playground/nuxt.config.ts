@@ -3,6 +3,24 @@ import { DEFAULT_LOCALE_CODE, LOCALES } from './app/i18n';
 export default defineNuxtConfig({
   ssr: false,
 
+  typescript: {
+    tsConfig: {
+      compilerOptions: {
+        experimentalDecorators: true,
+        emitDecoratorMetadata: true,
+      },
+    },
+  },
+
+  vite: {
+    oxc: {
+      decorator: {
+        legacy: true,
+        emitDecoratorMetadata: true,
+      },
+    },
+  },
+
   devServer: {
     port: 3333,
     host: 'localhost',
