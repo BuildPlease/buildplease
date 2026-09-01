@@ -17,10 +17,11 @@ export default defineConfig({
       { find: /^@src-internal\/(.*)$/, replacement: `${resolve(rootDir, 'src-internal')}/$1` },
       { find: /^@src-cli\/(.*)$/, replacement: `${resolve(rootDir, 'src-cli')}/$1` },
       { find: /^@src-node\/(.*)$/, replacement: `${resolve(rootDir, 'src-node')}/$1` },
-      { find: /^@src-test\/(.*)$/, replacement: `${resolve(rootDir, 'src-test')}/$1` },
       { find: /^#l10n$/, replacement: resolve(rootDir, 'src/l10n/index.ts') },
       { find: /^#resources$/, replacement: resolve(rootDir, 'resources/index.ts') },
 
+      // MARK: - Tests
+      { find: /^@src-testing\/(.*)$/, replacement: `${resolve(rootDir, 'src-testing')}/$1` },
       { find: /^#test\/(.*)$/, replacement: `${resolve(rootDir, 'test')}/$1` },
     ],
   },

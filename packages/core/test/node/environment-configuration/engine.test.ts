@@ -34,6 +34,7 @@ describe('Environment Configuration engine', () => {
   afterEach(() => {
     delete process.env.CONFIG_ENGINE_ORIGIN;
     delete process.env.CONFIG_ENGINE_PORT;
+    delete process.env.CONFIG_ENGINE_REQUIRED;
   });
 
   it('resolves a complete config tree with one required build context', async () => {
@@ -59,6 +60,32 @@ describe('Environment Configuration engine', () => {
     const resolved = await resolveConfig(config, context);
     expect(resolved.origin).toBe('https://api.example.com');
     expect(resolved.port).toBe(30_100);
+  });
+
+  it('resolves required optional sources and fails clearly when they are missing', async () => {
+    const config = defineCoreConfig(environments, {
+      path: from.env('CONFIG_ENGINE_REQUIRED').required(),
+    });
+
+    await expect(resolveConfig(config, context)).rejects.toThrow('Missing required configuration: config.path');
+
+    process.env.CONFIG_ENGINE_REQUIRED = ' /tmp/app.log ';
+
+    await expect(resolveConfig(config, context)).resolves.toEqual({
+      path: '/tmp/app.log',
+    });
+  });
+
+  it('supports custom required source messages and nullish values', async () => {
+    const missingConfig = defineCoreConfig(environments, {
+      path: from.env('CONFIG_ENGINE_REQUIRED').required('LOGGER_PATH must be provided.'),
+    });
+    const nullConfig = defineCoreConfig(environments, {
+      value: from.static(null).required(),
+    });
+
+    await expect(resolveConfig(missingConfig, context)).rejects.toThrow('LOGGER_PATH must be provided.');
+    await expect(resolveConfig(nullConfig, context)).rejects.toThrow('Missing required configuration: config.value');
   });
 
   it('preserves non-plain runtime values while resolving plain configuration objects', async () => {

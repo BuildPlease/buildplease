@@ -2,7 +2,7 @@ import {
   BUILDPLEASE_ENVIRONMENT_VARIABLE,
   readSelectedEnvironmentName,
 } from '@src-internal/environment-configuration/selection';
-import { withSelectedEnvironment } from '@src-test/selected-environment';
+import { withSelectedEnvironment } from '@src-testing/selected-environment';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 describe('withSelectedEnvironment', () => {

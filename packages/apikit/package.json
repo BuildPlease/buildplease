@@ -23,12 +23,12 @@
     },
     "./test": {
       "import": {
-        "types": "./dist/src-test/index.d.mts",
-        "default": "./dist/src-test/index.mjs"
+        "types": "./dist/src-testing/index.d.mts",
+        "default": "./dist/src-testing/index.mjs"
       },
       "require": {
-        "types": "./dist/src-test/index.d.cts",
-        "default": "./dist/src-test/index.cjs"
+        "types": "./dist/src-testing/index.d.cts",
+        "default": "./dist/src-testing/index.cjs"
       }
     }
   },

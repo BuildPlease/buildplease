@@ -303,6 +303,21 @@ async function resolveSource(
       break;
     }
 
+    case 'required': {
+      const { source: nested, message } = source.options as {
+        readonly source: ConfigurationSource;
+        readonly message?: string;
+      };
+      const resolved = await resolveSource(nested, context, path);
+
+      if (resolved === undefined || resolved === null) {
+        throw new Error(message ?? `Missing required configuration: ${path}`);
+      }
+
+      value = resolved;
+      break;
+    }
+
     case 'default': {
       const { source: nested, value: defaultValue } = source.options as {
         readonly source: ConfigurationSource;

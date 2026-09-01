@@ -1,4 +1,4 @@
-import { makeRequestMetadataFixture } from '@src-test/request/request-metadata';
+import { makeRequestMetadataFixture } from '@src-testing/request/request-metadata';
 
 import type { RequestMetadata } from '@/request/request-metadata';
 import { RequestScope } from '@/request/request-scope';

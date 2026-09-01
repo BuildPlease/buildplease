@@ -1,5 +1,5 @@
 import * as CoreNode from '@src-node/index';
-import * as CoreTest from '@src-test/index';
+import * as CoreTest from '@src-testing/index';
 import { describe, expect, it } from 'vitest';
 
 describe('Core Node public API', () => {
@@ -9,5 +9,6 @@ describe('Core Node public API', () => {
     expect('BUILDPLEASE_ENVIRONMENT_VARIABLE' in CoreTest).toBe(false);
     expect('readSelectedEnvironmentName' in CoreTest).toBe(false);
     expect(CoreTest.withSelectedEnvironment).toBeTypeOf('function');
+    expect(CoreTest.makeLoggerFixture).toBeTypeOf('function');
   });
 });

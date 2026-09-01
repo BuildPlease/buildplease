@@ -88,9 +88,9 @@ export default defineConfig([
     },
   },
 
-  // MARK: - Test support entry
+  // MARK: - Test entry
   {
-    entry: { 'src-test/index': './src-test/index.ts' },
+    entry: { 'src-testing/index': './src-testing/index.ts' },
     tsconfig: 'tsconfig.json',
     platform: 'node',
     target: 'esnext',

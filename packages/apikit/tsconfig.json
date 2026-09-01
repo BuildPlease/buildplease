@@ -13,10 +13,10 @@
       "#l10n": ["./src/l10n/index.ts"],
       "#resources": ["./resources/index.ts"],
 
-      "@src-test/*": ["./src-test/*"],
+      "@src-testing/*": ["./src-testing/*"],
       "#test/*": ["./test/*"]
     }
   },
-  "include": ["src", "src-internal", "src-test", "types", "test", "tsdown.config.ts"],
+  "include": ["src", "src-internal", "src-testing", "types", "test", "tsdown.config.ts"],
   "exclude": ["node_modules", "dist"]
 }
