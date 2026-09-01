@@ -6,6 +6,7 @@ import type { EnvironmentRegistry } from './environment';
 // MARK: - Symbols
 
 const CONFIGURATION_SOURCE = Symbol.for('buildplease.environment-configuration.source');
+declare const CONFIGURATION_SOURCE_OUTPUT: unique symbol;
 
 // MARK: - Public
 
@@ -18,11 +19,14 @@ export interface ConfigurationResolveContext<EnvironmentName extends string = st
 
 type Nullish = null | undefined;
 
-interface ConfigurationSourceBase<Output> {
+export interface ConfigurationSourceValue<out Output> {
   readonly kind: ConfigurationSourceKind;
   readonly options: unknown;
   readonly transforms: readonly ConfigurationSourceTransform[];
+  readonly [CONFIGURATION_SOURCE_OUTPUT]?: Output;
+}
 
+interface ConfigurationSourceBase<Output> extends ConfigurationSourceValue<Output> {
   map<NextOutput>(transform: (value: Output) => NextOutput | Promise<NextOutput>): ConfigurationSource<NextOutput>;
 }
 
@@ -75,7 +79,7 @@ export function isConfigurationSource(input: unknown): input is ConfigurationSou
 type ConfigurationSourceTransform = (value: unknown) => unknown | Promise<unknown>;
 
 type InferSourceOutput<T> =
-  T extends ConfigurationSource<infer Output>
+  T extends ConfigurationSourceValue<infer Output>
     ? Output
     : T extends (...args: any[]) => any
       ? T

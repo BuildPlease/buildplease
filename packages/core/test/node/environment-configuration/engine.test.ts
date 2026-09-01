@@ -35,6 +35,7 @@ describe('Environment Configuration engine', () => {
     delete process.env.CONFIG_ENGINE_ORIGIN;
     delete process.env.CONFIG_ENGINE_PORT;
     delete process.env.CONFIG_ENGINE_REQUIRED;
+    delete process.env.CONFIG_ENGINE_OPTIONAL;
   });
 
   it('resolves a complete config tree with one required build context', async () => {
@@ -86,6 +87,43 @@ describe('Environment Configuration engine', () => {
 
     await expect(resolveConfig(missingConfig, context)).rejects.toThrow('LOGGER_PATH must be provided.');
     await expect(resolveConfig(nullConfig, context)).rejects.toThrow('Missing required configuration: config.value');
+  });
+
+  it('resolves every source form through a typed configuration contract', async () => {
+    const SourceConfiguration = defineConfiguration('example.source-compatibility', {
+      required: field.string(),
+      optional: field.string(),
+      static: field.string(),
+      computed: field.string(),
+      environment: field.string(),
+    });
+    const input = {
+      required: from.env('CONFIG_ENGINE_REQUIRED').required(),
+      optional: from.env('CONFIG_ENGINE_OPTIONAL').default('fallback'),
+      static: from.static('static-value'),
+      computed: from.compute(() => 'computed-value'),
+      environment: from.byEnvironment({ test: 'test-value', production: 'production-value' }),
+    };
+
+    SourceConfiguration(input);
+
+    if (false) {
+      SourceConfiguration({
+        ...input,
+        // @ts-expect-error incompatible configuration source output
+        static: from.static(123),
+      });
+    }
+
+    process.env.CONFIG_ENGINE_REQUIRED = 'required-value';
+
+    await expect(resolveConfiguration(SourceConfiguration, input, context)).resolves.toEqual({
+      required: 'required-value',
+      optional: 'fallback',
+      static: 'static-value',
+      computed: 'computed-value',
+      environment: 'test-value',
+    });
   });
 
   it('preserves non-plain runtime values while resolving plain configuration objects', async () => {

@@ -1,5 +1,5 @@
 import { type EnvironmentRegistry, defineEnvironments } from './environment';
-import type { ConfigurationSource } from './source';
+import type { ConfigurationSourceValue } from './source';
 
 // MARK: - Symbols
 
@@ -108,10 +108,10 @@ export type InferSchemaInput<Schema> =
       : never;
 
 export type ConfigurationValueInput<T> =
-  ConfigurationSource<T | undefined> | (T extends unknown ? ConfigurationValueInputValue<T> : never);
+  ConfigurationSourceValue<T | undefined> | (T extends unknown ? ConfigurationValueInputValue<T> : never);
 
 export type ConfigurationInputFromSchema<Schema> =
-  | ConfigurationSource<InferSchemaInput<Schema> | undefined>
+  | ConfigurationSourceValue<InferSchemaInput<Schema> | undefined>
   | (Schema extends ConfigurationField<any, any, infer Input>
       ? ConfigurationValueInput<Input>
       : Schema extends object
@@ -175,7 +175,7 @@ export interface ConfigDefinition<Environments extends EnvironmentRegistry = Env
 export type InferConfig<Config> = Config extends ConfigDefinition<any, infer Input> ? InferConfigValue<Input> : never;
 
 export type InferConfigValue<Input> =
-  Input extends ConfigurationSource<infer Output>
+  Input extends ConfigurationSourceValue<infer Output>
     ? Output
     : Input extends ConfigurationBinding<infer Output>
       ? Output
