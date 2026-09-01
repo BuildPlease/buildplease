@@ -1,6 +1,6 @@
-import { type Assembly, type Awaitable, ScopeController } from '@buildplease/core';
+import { type Assembly, type Awaitable, coreAssembly, ScopeController } from '@buildplease/core';
 import { initializeApiKitConfiguration } from '@src-internal/configuration/initialize-configuration';
-import { makeAssemblies } from '@src-internal/di';
+import { apikitAssembly } from '@src-internal/di';
 import type { FastifyInstance } from 'fastify';
 
 import { ApiKitSymbols } from '@/di';
@@ -31,9 +31,9 @@ export async function runApiKit(options: RunApiKitOptions = {}): Promise<void> {
   await initializeApiKitConfiguration();
 
   const scope = new ScopeController();
-  const consumerAssemblies = options.hooks?.assemblies?.() ?? [];
+  const consumerAssembly = options.hooks?.assemblies?.() ?? [];
 
-  await scope.registerAssemblies([...makeAssemblies(), ...consumerAssemblies]);
+  await scope.registerAssemblies([...coreAssembly(), ...apikitAssembly(), ...consumerAssembly]);
 
   const i18n = scope.getInstance<I18nController>(ApiKitSymbols.DI.I18n.Controller);
   const server = scope.getInstance<ServerController>(ApiKitSymbols.DI.Server.Controller);

@@ -20,8 +20,8 @@ import type {
 
 export interface ApiKitController {
   get build(): Build;
-  get isDebug(): boolean;
   get environment(): Environment;
+  get isDebug(): boolean;
 
   get logger(): LoggerConfig;
   get server(): ServerConfig;
@@ -45,12 +45,12 @@ export class ApiKitControllerImpl implements ApiKitController {
     return global.apikit.build;
   }
 
-  public get isDebug(): boolean {
-    return global.apikit.serverConfig.debug;
-  }
-
   public get environment(): Environment {
     return global.apikit.environment;
+  }
+
+  public get isDebug(): boolean {
+    return global.apikit.serverConfig.debug;
   }
 
   public get logger(): LoggerConfig {

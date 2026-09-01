@@ -1,6 +1,6 @@
 import {
-  defineConfig,
   defineConfiguration,
+  defineCoreConfig,
   defineEnvironments,
   defineSource,
   field,
@@ -19,7 +19,7 @@ describe('Environment Configuration definitions', () => {
     const input = {
       origin: from.env('API_ORIGIN').default('http://localhost:30000'),
     };
-    const config = defineConfig(environments, input);
+    const config = defineCoreConfig(environments, input);
 
     expect(resolveEnvironment(environments, 'test')).toEqual({
       name: 'test',
@@ -68,14 +68,14 @@ describe('Environment Configuration definitions', () => {
   });
 
   it('validates malformed environment registries when defining config', () => {
-    expect(() => defineConfig({} as never, {})).toThrow('At least one environment must be defined.');
-    expect(() => defineConfig({ test: null } as never, {})).toThrow(
+    expect(() => defineCoreConfig({} as never, {})).toThrow('At least one environment must be defined.');
+    expect(() => defineCoreConfig({ test: null } as never, {})).toThrow(
       'Environment definition must be an object for "test".',
     );
-    expect(() => defineConfig({ test: { fileDir: ' ' } } as never, {})).toThrow(
+    expect(() => defineCoreConfig({ test: { fileDir: ' ' } } as never, {})).toThrow(
       'Environment file directory must not be empty for "test".',
     );
-    expect(() => defineConfig({ test: { alias: ' ' } } as never, {})).toThrow(
+    expect(() => defineCoreConfig({ test: { alias: ' ' } } as never, {})).toThrow(
       'Environment alias must not be empty for "test".',
     );
   });

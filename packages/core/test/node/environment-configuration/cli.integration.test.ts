@@ -85,7 +85,7 @@ describe('BuildPlease CLI', () => {
     await writeFile(join(rootDir, 'environment.config.ts'), 'export default {};', 'utf8');
     vi.spyOn(process, 'cwd').mockReturnValue(rootDir);
 
-    await expect(runMain(['build'])).rejects.toThrow('Environment config must be defined with defineConfig()');
+    await expect(runMain(['build'])).rejects.toThrow('Environment config is invalid');
     await expect(readFile(existingEnvironmentPath, 'utf8')).resolves.toBe('existing environment');
   });
 
@@ -216,9 +216,9 @@ async function makeProject(): Promise<string> {
   await writeFile(
     join(rootDir, 'environment.config.ts'),
     `
-import { defineConfig } from ${JSON.stringify(CONFIGURATION_MODULE)};
+import { defineCoreConfig } from ${JSON.stringify(CONFIGURATION_MODULE)};
 
-export default defineConfig({
+export default defineCoreConfig({
   test: { file: '.env.test', fileDir: './environment', alias: 'beta' },
   production: { file: '.env.production', alias: 'live' },
 }, {});

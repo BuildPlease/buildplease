@@ -1,13 +1,12 @@
 import 'reflect-metadata';
-
 import '../types';
 
 // MARK: - Exports
 
 export * from '@buildplease/core';
 export * from '@buildplease/core/node';
+
 export * from './configuration';
-export { defineConfig } from './configuration';
 export * from './database';
 export * from './di';
 export * from './email';

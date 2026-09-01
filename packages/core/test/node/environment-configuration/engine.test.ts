@@ -1,6 +1,6 @@
 import {
-  defineConfig,
   defineConfiguration,
+  defineCoreConfig,
   defineEnvironments,
   defineSource,
   field,
@@ -37,7 +37,7 @@ describe('Environment Configuration engine', () => {
   });
 
   it('resolves a complete config tree with one required build context', async () => {
-    const config = defineConfig(environments, {
+    const config = defineCoreConfig(environments, {
       origin: from.env('CONFIG_ENGINE_ORIGIN').default('http://localhost:30000'),
       port: from.env('CONFIG_ENGINE_PORT').default('30000').map(Number),
       mode: from.byEnvironment({ test: 'local', production: 'remote' }),
@@ -72,7 +72,7 @@ describe('Environment Configuration engine', () => {
     const set = new Set(['value']);
     const pattern = /example/u;
     const marker = new Marker('value');
-    const config = defineConfig(environments, {
+    const config = defineCoreConfig(environments, {
       nested: {
         mode: from.byEnvironment({ test: 'local', production: 'remote' }),
       },
@@ -96,7 +96,7 @@ describe('Environment Configuration engine', () => {
   });
 
   it('fails clearly for invalid runtime environment cases and missing root context', async () => {
-    const config = defineConfig(environments, {
+    const config = defineCoreConfig(environments, {
       mode: from.byEnvironment({ test: 'test', production: 'production' }),
     });
     const invalidEnvironment = {

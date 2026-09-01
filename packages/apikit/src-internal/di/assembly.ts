@@ -1,4 +1,4 @@
-import { type Assembly, coreAssembly } from '@buildplease/core';
+import type { Assembly } from '@buildplease/core';
 
 import { ConfigurationAssembly } from './assemblies/configuration';
 import { DatabaseAssembly } from './assemblies/database';
@@ -16,9 +16,8 @@ import { SecurityAssembly } from './assemblies/security';
 import { ServerAssembly } from './assemblies/server';
 import { ValidationAssembly } from './assemblies/validation';
 
-export function makeAssemblies(): Assembly[] {
+export function apikitAssembly(): Assembly[] {
   return [
-    ...coreAssembly(),
     new ConfigurationAssembly(),
     new DatabaseAssembly(),
     new EmailAssembly(),

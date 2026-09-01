@@ -133,7 +133,7 @@ async function loadEnvironmentConfigInternal<Config extends ConfigDefinition>(
     const config = await loadConfigExport(rootDir, configFilePath);
 
     if (!isConfigDefinition(config)) {
-      throw new Error(`Environment config must be defined with defineConfig() (${configFilePath}).`);
+      throw new Error(`Environment config is invalid (${configFilePath}).`);
     }
 
     return {

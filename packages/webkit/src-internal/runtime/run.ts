@@ -1,14 +1,14 @@
-import { ScopeController } from '@buildplease/core';
+import { coreAssembly, ScopeController } from '@buildplease/core';
+import { webkitAssembly } from '@src-internal/di/assembly';
 
-import type { RunWebKitOptions, WebKitRuntime, WebKitRuntimeHookContext } from '../../src/runtime/types';
-import { makeAssemblies } from '../di';
+import type { RunWebKitOptions, WebKitRuntime, WebKitRuntimeHookContext } from '@/runtime/types';
 
 export async function run(options: RunWebKitOptions): Promise<WebKitRuntime> {
   const scope = new ScopeController();
   const consumerAssemblies = options.hooks?.assemblies?.() ?? [];
   const hookContext: WebKitRuntimeHookContext = { scope: scope };
 
-  await scope.registerAssemblies([...makeAssemblies(), ...consumerAssemblies]);
+  await scope.registerAssemblies([...coreAssembly(), ...webkitAssembly(), ...consumerAssemblies]);
   await options.hooks?.prepare?.(hookContext);
 
   return {

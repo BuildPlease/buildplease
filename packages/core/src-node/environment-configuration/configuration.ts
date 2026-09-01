@@ -189,7 +189,7 @@ export type InferConfigValue<Input> =
               ? { readonly [Key in keyof Input]: InferConfigValue<Input[Key]> }
               : Input;
 
-export function defineConfig<const Environments extends EnvironmentRegistry, const Input>(
+export function defineCoreConfig<const Environments extends EnvironmentRegistry, const Input>(
   environments: Environments,
   input: Input,
 ): ConfigDefinition<Environments, Input> {

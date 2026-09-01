@@ -13,7 +13,7 @@ pnpm add @buildplease/core @buildplease/webkit
 Define `environment.config.ts`:
 
 ```ts
-import { defineConfig, defineEnvironments, defineSource } from '@buildplease/webkit/node';
+import { defineEnvironments, defineSource, defineWebKitConfig } from '@buildplease/webkit/node';
 
 const environments = defineEnvironments({
   test: { file: '.env.test' },
@@ -22,7 +22,7 @@ const environments = defineEnvironments({
 
 const from = defineSource(environments);
 
-export default defineConfig(environments, {
+export default defineWebKitConfig(environments, {
   origin: {
     api: from.env('API_ORIGIN'),
   },

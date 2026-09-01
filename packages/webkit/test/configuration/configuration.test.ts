@@ -1,5 +1,5 @@
 import { defineEnvironments, defineSource } from '@buildplease/core/node';
-import { defineWebKitConfiguration } from '@src-node/configuration';
+import { defineWebKitConfig } from '@src-node/configuration';
 import { describe, expect, it } from 'vitest';
 
 const environments = defineEnvironments({
@@ -7,9 +7,9 @@ const environments = defineEnvironments({
 });
 const from = defineSource(environments);
 
-describe('WebKit defineConfig', () => {
+describe('defineWebKitConfig', () => {
   it('keeps the app-owned configuration tree fully typed and free-form', () => {
-    const config = defineWebKitConfiguration(environments, {
+    const config = defineWebKitConfig(environments, {
       origin: {
         api: from.env('API_ORIGIN').default('http://localhost:30000'),
       },
@@ -23,6 +23,6 @@ describe('WebKit defineConfig', () => {
 
   it('requires an object root while leaving its shape app-owned', () => {
     // @ts-expect-error WebKit configuration root must be an object.
-    defineWebKitConfiguration(environments, 'invalid');
+    defineWebKitConfig(environments, 'invalid');
   });
 });

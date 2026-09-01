@@ -202,13 +202,13 @@ function makeConfigSource(environment: {
   readonly fileDir?: string;
 }): string {
   return `
-import { defineConfig } from ${JSON.stringify(CONFIGURATION_MODULE)};
+import { defineCoreConfig } from ${JSON.stringify(CONFIGURATION_MODULE)};
 
 const environments = {
   test: ${JSON.stringify(environment)},
 };
 
-export default defineConfig(environments, {
+export default defineCoreConfig(environments, {
   feature: 'example',
 });
 `;

@@ -1,10 +1,8 @@
-import { type EnvironmentRegistry, defineConfig as defineCoreConfig } from '@buildplease/core/node';
+import { type EnvironmentRegistry, defineCoreConfig } from '@buildplease/core/node';
 
 import type { ApiKitConfig, DefineApiKitConfigInput } from './config';
 
-// MARK: - Internal
-
-export function defineApiKitConfiguration<const Environments extends EnvironmentRegistry>(
+export function defineApiKitConfig<const Environments extends EnvironmentRegistry>(
   environments: Environments,
   input: DefineApiKitConfigInput,
 ): ApiKitConfig<Environments> {

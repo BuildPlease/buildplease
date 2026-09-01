@@ -1,7 +1,5 @@
 import 'reflect-metadata';
 
-// MARK: - Exports
-
 export * from '@buildplease/core';
 export * from './di';
 export * from './l10n';

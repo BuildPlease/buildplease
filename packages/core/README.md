@@ -13,7 +13,7 @@ pnpm add @buildplease/core
 Define `environment.config.ts`:
 
 ```ts
-import { defineConfig, defineEnvironments, defineSource } from '@buildplease/core/node';
+import { defineCoreConfig, defineEnvironments, defineSource } from '@buildplease/core/node';
 
 const environments = defineEnvironments({
   test: { file: '.env.test', alias: 'Beta' },
@@ -22,7 +22,7 @@ const environments = defineEnvironments({
 
 const from = defineSource(environments);
 
-export default defineConfig(environments, {
+export default defineCoreConfig(environments, {
   origin: from.env('APP_ORIGIN').default('http://localhost:3000'),
 });
 ```

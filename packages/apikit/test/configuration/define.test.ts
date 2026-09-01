@@ -1,7 +1,7 @@
 import { defineConfiguration, defineEnvironments, field } from '@buildplease/core/node';
 import { describe, expect, it } from 'vitest';
 
-import { defineConfig } from '@/configuration';
+import { defineApiKitConfig } from '@/configuration';
 
 const environments = defineEnvironments({
   test: { file: '.env.test' },
@@ -11,12 +11,12 @@ const DatabaseConfiguration = defineConfiguration('example.database', {
   url: field.string(),
 });
 
-describe('ApiKit defineConfig', () => {
+describe('defineApiKitConfig', () => {
   it('requires ApiKit configuration and keeps app-owned typed configurations', () => {
     const database = DatabaseConfiguration({
       url: 'postgres://localhost/example',
     });
-    const config = defineConfig(environments, {
+    const config = defineApiKitConfig(environments, {
       server: {
         identifier: '@test/example-api:test',
         host: '127.0.0.1',
@@ -29,7 +29,7 @@ describe('ApiKit defineConfig', () => {
   });
 
   it('normalizes optional custom configurations', () => {
-    const config = defineConfig(environments, {
+    const config = defineApiKitConfig(environments, {
       server: {
         identifier: '@test/example-api:test',
         host: '127.0.0.1',
@@ -42,6 +42,6 @@ describe('ApiKit defineConfig', () => {
 
   it('keeps the ApiKit base contract typed', () => {
     // @ts-expect-error server is required by ApiKit.
-    defineConfig(environments, {});
+    defineApiKitConfig(environments, {});
   });
 });

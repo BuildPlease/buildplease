@@ -22,8 +22,6 @@ import {
   StaticFilesConfiguration,
 } from '@/configuration/configs';
 
-// MARK: - Internal
-
 export async function initializeApiKitConfiguration(): Promise<void> {
   const build = await loadBuild();
   const loaded = await loadSelectedEnvironmentConfig<ApiKitConfig>();

@@ -37,7 +37,7 @@
     "resources"
   ],
   "scripts": {
-    "build": "tsdown --config tsdown.config.src.ts --config-loader unrun",
+    "build": "tsdown --config-loader unrun",
     "test": "vitest run",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },

@@ -11,7 +11,7 @@ const HELP = [
   '  buildplease run --env <environment> -- <command...>',
   '',
   'Commands:',
-  '  build   Generate the prepared application output.',
+  '  build   Generate the application output.',
   '  run     Run a command with the selected environment.',
 ].join('\n');
 
@@ -78,7 +78,6 @@ function parseRunOptions(argv: readonly string[]): RunOptions {
 
 function requireEnvironment(value: string | undefined): string {
   if (value === undefined) throw new Error('run: --env requires an environment name.');
-
   return validateEnvironmentName(value);
 }
 

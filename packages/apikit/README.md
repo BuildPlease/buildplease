@@ -13,7 +13,7 @@ pnpm add @buildplease/core @buildplease/apikit
 Define `environment.config.ts`:
 
 ```ts
-import { defineConfig, defineEnvironments, defineSource } from '@buildplease/apikit';
+import { defineApiKitConfig, defineEnvironments, defineSource } from '@buildplease/apikit';
 
 const environments = defineEnvironments({
   test: { file: '.env.test' },
@@ -22,7 +22,7 @@ const environments = defineEnvironments({
 
 const from = defineSource(environments);
 
-export default defineConfig(environments, {
+export default defineApiKitConfig(environments, {
   server: {
     identifier: from.compute(({ build, environment }) => {
       return `${build.name.original}:${environment.name}`;
