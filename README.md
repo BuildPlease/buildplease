@@ -1,6 +1,6 @@
 <div align="center">
   <h1>BuildPlease</h1>
-  <p><strong>A TypeScript application framework for backend, web, Nuxt, and development tooling.</strong></p>
+  <p><strong>A TypeScript application framework for Node.js and Browser runtimes, with development tooling.</strong></p>
   <p>
     <img alt="pnpm" src="https://img.shields.io/badge/pnpm-F69220?logo=pnpm&logoColor=white">
     <img alt="Turborepo" src="https://img.shields.io/badge/Turborepo-000000?logo=turborepo&logoColor=white">
