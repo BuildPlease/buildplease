@@ -1,34 +1,27 @@
 # Cryptography
 
-Choose secret storage from entropy, recoverability and threat model.
+## Map
 
-| Secret                               | Preferred persisted representation                         |
-| ------------------------------------ | ---------------------------------------------------------- |
-| User password                        | password KDF such as Argon2id                              |
-| Short verification/PIN/recovery code | keyed construction such as HMAC with an application secret |
-| High-entropy random bearer token     | SHA-256 digest when raw token recovery is unnecessary      |
+| Secret                               | Persisted representation                        |
+| ------------------------------------ | ----------------------------------------------- |
+| user password                        | Argon2id/password KDF                           |
+| short PIN/verification/recovery code | HMAC/keyed construction with application secret |
+| high-entropy bearer token            | SHA-256 digest when raw recovery is unnecessary |
+
+## Shape
+
+```text
+password      -> Argon2id
+6-digit code  -> HMAC(secret, code/context)
+256-bit token -> SHA-256 digest
+```
+
+## Rules
 
 - Generate secrets with a cryptographically secure RNG.
-- Use password-specific KDF parameters appropriate to the deployment environment.
-- Use keyed protection for enumerable low-entropy secrets so a database dump alone cannot validate guesses.
-- Store only the digest of sufficiently random bearer tokens when the raw token is needed only by the client.
-- Compare secret-derived values with constant-time primitives where applicable.
-- Keep cryptographic keys/secrets outside persisted application data and source control.
-- Keep raw credentials/tokens/codes out of logs, telemetry and error payloads.
-- Rotate keys through an explicit versioned operational strategy when long-lived encrypted/signed data requires it.
-
-GOOD:
-
-```text
-password -> Argon2id hash
-6-digit code -> HMAC(app secret, code/context)
-256-bit bearer token -> SHA-256 digest
-```
-
-BAD:
-
-```text
-password -> SHA-256
-6-digit code -> plain SHA-256
-raw bearer token -> database/log entry
-```
+- Password KDF parameters are deployment-owned.
+- Enumerable low-entropy values use keyed protection.
+- Use constant-time comparison where applicable.
+- Keys/secrets stay outside persisted application data and source control.
+- Logs, telemetry and errors exclude credentials, tokens and codes.
+- Long-lived key changes use an explicit versioned rotation strategy.

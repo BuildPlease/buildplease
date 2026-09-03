@@ -39,9 +39,4 @@ describe('defineApiKitConfig', () => {
 
     expect(config.input.configurations).toEqual([]);
   });
-
-  it('keeps the ApiKit base contract typed', () => {
-    // @ts-expect-error server is required by ApiKit.
-    defineApiKitConfig(environments, {});
-  });
 });

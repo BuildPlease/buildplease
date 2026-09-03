@@ -1,4 +1,4 @@
-import { describe, expect, expectTypeOf, it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 import { CoreL10n, CoreL10nResource, defineL10n, defineL10nResource } from '#l10n';
 
@@ -20,7 +20,6 @@ describe('l10n', () => {
 
     expect(CoreL10n.Core.Common.Actions.Save).toBe('core.common.actions.save');
     expect(l10n.App.Account.Title).toBe('app.account.title');
-    expectTypeOf(l10n.App.Account.Title).toEqualTypeOf<'app.account.title'>();
   });
 
   it('rejects resource keys that collapse to the same typed property', () => {

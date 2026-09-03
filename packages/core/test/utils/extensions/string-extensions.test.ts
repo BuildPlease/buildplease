@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import '@/utils/extensions/string-extensions';
+import '@neutral/utils/extensions/string-extensions';
 
 describe('String extensions', () => {
   it('capitalizes strings', () => {

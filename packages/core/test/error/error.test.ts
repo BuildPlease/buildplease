@@ -1,10 +1,9 @@
+import { CanceledError } from '@neutral/error/canceled-error';
+import { ConversionError } from '@neutral/error/conversion-error';
+import { NetworkError } from '@neutral/error/network-error';
+import { TimeoutError } from '@neutral/error/timeout-error';
+import { UnknownError } from '@neutral/error/unknown-error';
 import { describe, expect, it } from 'vitest';
-
-import { CanceledError } from '@/error/canceled-error';
-import { ConversionError } from '@/error/conversion-error';
-import { NetworkError } from '@/error/network-error';
-import { TimeoutError } from '@/error/timeout-error';
-import { UnknownError } from '@/error/unknown-error';
 
 describe('framework errors', () => {
   it.each([

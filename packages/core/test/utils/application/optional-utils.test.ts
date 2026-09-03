@@ -1,6 +1,5 @@
+import { isDefinedAndNotNull, optional } from '@neutral/utils/application/optional-utils';
 import { describe, expect, it, vi } from 'vitest';
-
-import { isDefinedAndNotNull, optional } from '@/utils/application/optional-utils';
 
 describe('Optional', () => {
   it('maps present values', () => {

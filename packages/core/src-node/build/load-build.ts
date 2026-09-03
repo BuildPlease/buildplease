@@ -1,11 +1,10 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-import { BUILDPLEASE_BUILD_MODULE, BUILDPLEASE_OUTPUT_DIRECTORY } from '@src-internal/buildplease-output';
+import { BUILDPLEASE_BUILD_MODULE, BUILDPLEASE_OUTPUT_DIRECTORY } from '@internal/node/buildplease-output';
+import type { Build } from '@neutral/build';
 import { createJiti } from 'jiti';
 import { validate as validateUUID } from 'uuid';
-
-import type { Build } from '@/build';
 
 import { ensureDirectory, resolvePath } from '../file/file-sync';
 

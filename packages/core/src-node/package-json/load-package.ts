@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 
-import { type PackageJSONModel, PackageJSONSchema } from '@src-node/package-json';
+import { type PackageJSONModel, PackageJSONSchema } from './package-json';
 
 /**
  * Loads and validates a `package.json` file from the given filesystem path.

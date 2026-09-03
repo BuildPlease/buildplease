@@ -1,7 +1,7 @@
 import {
   BUILDPLEASE_ENVIRONMENT_VARIABLE,
   readSelectedEnvironmentName,
-} from '@src-internal/environment-configuration/selection';
+} from '@internal/node/environment-configuration/selection';
 import { withSelectedEnvironment } from '@src-testing/selected-environment';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 

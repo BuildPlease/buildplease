@@ -15,7 +15,7 @@ const baseConfig: UserConfig = {
 
   hash: false,
   dts: true,
-  minify: true,
+  minify: false,
   shims: false,
   sourcemap: false,
   treeshake: true,

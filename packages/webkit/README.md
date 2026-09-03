@@ -32,10 +32,10 @@ export default defineWebKitConfig(environments, {
 ## Browser runtime
 
 ```ts
-import { runWebKit } from '@buildplease/webkit';
+import { WebKitApplication } from '@buildplease/webkit/browser';
 import { appAssembly } from './app';
 
-const runtime = await runWebKit({
+const runtime = await WebKitApplication.run({
   hooks: {
     assemblies: () => [...appAssembly()],
   },
@@ -45,10 +45,10 @@ const runtime = await runWebKit({
 ## Node runtime
 
 ```ts
-import { runWebKit } from '@buildplease/webkit/node';
+import { WebKitApplication } from '@buildplease/webkit/node';
 import { appAssembly } from './app';
 
-const runtime = await runWebKit({
+const runtime = await WebKitApplication.run({
   hooks: {
     assemblies: () => [...appAssembly()],
   },

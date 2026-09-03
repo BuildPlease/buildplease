@@ -1,6 +1,4 @@
 import { CanceledError, NetworkError, TimeoutError, UnknownError } from '@buildplease/core';
-import { describe, expect, it } from 'vitest';
-
 import {
   type HttpClientOptions,
   type HttpRequest,
@@ -10,7 +8,8 @@ import {
   HttpClient,
   HttpError,
   HttpRequestInterceptorPipeline,
-} from '@/networking';
+} from '@neutral/networking';
+import { describe, expect, it } from 'vitest';
 
 type Client = (value: string) => Promise<string>;
 

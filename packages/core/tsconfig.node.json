@@ -1,0 +1,27 @@
+{
+  "extends": ["./tsconfig.json", "../../tsconfig.node.json"],
+  "compilerOptions": {
+    "paths": {
+      "@neutral/*": ["./src-neutral/*"],
+      "@node/*": ["./src-node/*"],
+      "@internal/neutral/*": ["./src-internal/neutral/*"],
+      "@internal/node/*": ["./src-internal/node/*"],
+      "@src-cli/*": ["./src-cli/*"],
+      "@src-testing/*": ["./src-testing/*"],
+      "#l10n": ["./src-neutral/l10n/index.ts"],
+      "#resources": ["./resources/index.ts"],
+      "#test/*": ["./test/*"]
+    }
+  },
+  "include": [
+    "src-neutral",
+    "src-node",
+    "src-internal/neutral",
+    "src-internal/node",
+    "src-application/node.ts",
+    "src-cli",
+    "src-testing",
+    "test",
+    "tsdown.config.ts"
+  ]
+}

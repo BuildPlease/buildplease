@@ -13,11 +13,14 @@ export default defineConfig({
 
   resolve: {
     alias: [
-      { find: /^@\/(.*)$/, replacement: `${resolve(rootDir, 'src')}/$1` },
-      { find: /^@src-internal\/(.*)$/, replacement: `${resolve(rootDir, 'src-internal')}/$1` },
+      { find: /^@neutral\/(.*)$/, replacement: `${resolve(rootDir, 'src-neutral')}/$1` },
+      { find: /^@browser\/(.*)$/, replacement: `${resolve(rootDir, 'src-browser')}/$1` },
+      { find: /^@node\/(.*)$/, replacement: `${resolve(rootDir, 'src-node')}/$1` },
+      { find: /^@internal\/neutral\/(.*)$/, replacement: `${resolve(rootDir, 'src-internal/neutral')}/$1` },
+      { find: /^@internal\/browser\/(.*)$/, replacement: `${resolve(rootDir, 'src-internal/browser')}/$1` },
+      { find: /^@internal\/node\/(.*)$/, replacement: `${resolve(rootDir, 'src-internal/node')}/$1` },
       { find: /^@src-cli\/(.*)$/, replacement: `${resolve(rootDir, 'src-cli')}/$1` },
-      { find: /^@src-node\/(.*)$/, replacement: `${resolve(rootDir, 'src-node')}/$1` },
-      { find: /^#l10n$/, replacement: resolve(rootDir, 'src/l10n/index.ts') },
+      { find: /^#l10n$/, replacement: resolve(rootDir, 'src-neutral/l10n/index.ts') },
       { find: /^#resources$/, replacement: resolve(rootDir, 'resources/index.ts') },
 
       // MARK: - Tests

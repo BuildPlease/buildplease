@@ -1,11 +1,10 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-import { BUILDPLEASE_ENVIRONMENT_MODULE, BUILDPLEASE_OUTPUT_DIRECTORY } from '@src-internal/buildplease-output';
-import { validateEnvironmentName } from '@src-internal/environment-configuration/validate-environment-name';
+import { BUILDPLEASE_ENVIRONMENT_MODULE, BUILDPLEASE_OUTPUT_DIRECTORY } from '@internal/node/buildplease-output';
+import { validateEnvironmentName } from '@internal/node/environment-configuration/validate-environment-name';
+import type { Environment } from '@neutral/environment';
 import { createJiti } from 'jiti';
-
-import type { Environment } from '@/environment';
 
 export async function loadPreparedEnvironments(rootDir: string): Promise<Readonly<Record<string, Environment>>> {
   const filePath = path.resolve(rootDir, BUILDPLEASE_OUTPUT_DIRECTORY, `${BUILDPLEASE_ENVIRONMENT_MODULE}.ts`);

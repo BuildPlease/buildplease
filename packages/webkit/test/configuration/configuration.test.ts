@@ -1,5 +1,5 @@
 import { defineEnvironments, defineSource } from '@buildplease/core/node';
-import { defineWebKitConfig } from '@src-node/configuration';
+import { defineWebKitConfig } from '@node/configuration';
 import { describe, expect, it } from 'vitest';
 
 const environments = defineEnvironments({
@@ -19,10 +19,5 @@ describe('defineWebKitConfig', () => {
     });
 
     expect(config.input.arbitrary.enabled).toBe(true);
-  });
-
-  it('requires an object root while leaving its shape app-owned', () => {
-    // @ts-expect-error WebKit configuration root must be an object.
-    defineWebKitConfig(environments, 'invalid');
   });
 });

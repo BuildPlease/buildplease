@@ -1,22 +1,19 @@
 {
-  "extends": "../../tsconfig.node.json",
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     /* Project output */
     "rootDir": "./",
     "outDir": "./dist",
     "declarationDir": "./dist/types",
 
-    /* Project paths */
+    /* Neutral source ownership */
     "paths": {
-      "@/*": ["./src/*"],
-      "@src-internal/*": ["./src-internal/*"],
-      "@src-node/*": ["./src-node/*"],
-      "#l10n": ["./src/l10n/index.ts"],
-      "#resources": ["./resources/index.ts"],
-
-      "#test/*": ["./test/*"]
+      "@neutral/*": ["./src-neutral/*"],
+      "@internal/neutral/*": ["./src-internal/neutral/*"],
+      "#l10n": ["./src-neutral/l10n/index.ts"],
+      "#resources": ["./resources/index.ts"]
     }
   },
-  "include": ["src", "src-node", "src-internal", "test", "tsdown.config.ts"],
+  "include": ["src-neutral", "src-internal/neutral"],
   "exclude": ["node_modules", "dist"]
 }

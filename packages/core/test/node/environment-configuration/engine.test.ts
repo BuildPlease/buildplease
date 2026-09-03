@@ -1,3 +1,4 @@
+import type { Build } from '@neutral/build';
 import {
   defineConfiguration,
   defineCoreConfig,
@@ -7,10 +8,8 @@ import {
   resolveConfig,
   resolveConfiguration,
   resolveEnvironment,
-} from '@src-node/environment-configuration';
+} from '@node/environment-configuration';
 import { afterEach, describe, expect, it } from 'vitest';
-
-import type { Build } from '@/build';
 
 const build: Build = {
   name: { original: '@test/example', base: 'example' },
@@ -106,14 +105,6 @@ describe('Environment Configuration engine', () => {
     };
 
     SourceConfiguration(input);
-
-    if (false) {
-      SourceConfiguration({
-        ...input,
-        // @ts-expect-error incompatible configuration source output
-        static: from.static(123),
-      });
-    }
 
     process.env.CONFIG_ENGINE_REQUIRED = 'required-value';
 

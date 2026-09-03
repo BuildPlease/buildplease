@@ -1,6 +1,5 @@
+import { delay } from '@neutral/utils/application/promise-utils';
 import { describe, expect, it, vi } from 'vitest';
-
-import { delay } from '@/utils/application/promise-utils';
 
 describe('promise utils', () => {
   it('delays by the requested duration', async () => {

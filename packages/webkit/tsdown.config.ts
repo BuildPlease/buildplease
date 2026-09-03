@@ -4,7 +4,7 @@ import { type CopyEntry, defineConfig } from 'tsdown';
 const outDir = 'dist';
 const pkg = loadPackageJSON(resolvePath(import.meta.url, './package.json'));
 
-const browserPolicy = makeDependencyBundlingPolicy(pkg, {
+const portablePolicy = makeDependencyBundlingPolicy(pkg, {
   includeNodeBuiltins: false,
 });
 
@@ -13,11 +13,11 @@ const nodePolicy = makeDependencyBundlingPolicy(pkg, {
 });
 
 export default defineConfig([
-  // MARK: - Browser entry
+  // MARK: - Neutral entry
   {
-    entry: { 'src/index': './src/index.ts' },
+    entry: { 'src-neutral/index': './src-neutral/index.ts' },
     tsconfig: 'tsconfig.json',
-    platform: 'browser',
+    platform: 'neutral',
     target: 'esnext',
     format: ['esm', 'cjs'],
 
@@ -33,16 +33,16 @@ export default defineConfig([
     treeshake: true,
 
     deps: {
-      neverBundle: browserPolicy.external,
+      neverBundle: portablePolicy.external,
       onlyBundle: false,
     },
   },
 
-  // MARK: - Node entry
+  // MARK: - Browser entry
   {
-    entry: { 'src-node/index': './src-node/index.ts' },
-    tsconfig: 'tsconfig.json',
-    platform: 'node',
+    entry: { 'src-application/browser': './src-application/browser.ts' },
+    tsconfig: 'tsconfig.browser.json',
+    platform: 'browser',
     target: 'esnext',
     format: ['esm', 'cjs'],
 
@@ -52,6 +52,30 @@ export default defineConfig([
     hash: false,
     dts: true,
     minify: true,
+    shims: false,
+    sourcemap: false,
+    treeshake: true,
+
+    deps: {
+      neverBundle: portablePolicy.external,
+      onlyBundle: false,
+    },
+  },
+
+  // MARK: - Node entry
+  {
+    entry: { 'src-application/node': './src-application/node.ts' },
+    tsconfig: 'tsconfig.node.json',
+    platform: 'node',
+    target: 'esnext',
+    format: ['esm', 'cjs'],
+
+    outDir: outDir,
+    clean: false,
+
+    hash: false,
+    dts: true,
+    minify: false,
     shims: false,
     sourcemap: false,
     treeshake: true,

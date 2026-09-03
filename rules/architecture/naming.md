@@ -1,55 +1,46 @@
 # Naming
 
-- Name the concept first and its role second.
-- Keep one term for one concept across layers.
-- Use complete words and established technical abbreviations.
-- Match filenames and folders to their primary responsibility.
-- Use verbs for actions and nouns for values/concepts.
-- Include ownership when the same role exists at multiple boundaries.
+## Map
 
-## Roles
+| Suffix                    | Responsibility                   |
+| ------------------------- | -------------------------------- |
+| `Model`                   | reusable identity-less data      |
+| `Input` / `Options`       | caller parameters                |
+| `Row`                     | selected persistence record      |
+| `InsertRow` / `UpdateRow` | writable persistence record      |
+| `DTO` / `Schema`          | transport contract / validation  |
+| `Converter`               | runtime-validated conversion     |
+| `Controller`              | technical/application capability |
+| `Repository`              | persistence boundary             |
+| `UseCase`                 | one application operation        |
+| `Handler`                 | transport adapter                |
+| `Validator`               | reusable guard                   |
+| `Provider`                | capability selection/supply      |
+| `Factory`                 | value/implementation creation    |
 
-| Suffix                    | Responsibility                                 |
-| ------------------------- | ---------------------------------------------- |
-| `Model`                   | Reusable identity-less domain/application data |
-| `Input` / `Options`       | Caller-provided operation parameters           |
-| `Row`                     | Selected persistence record                    |
-| `InsertRow` / `UpdateRow` | Writable persistence record                    |
-| `DTO` / `Schema`          | Transport contract and validation              |
-| `Converter`               | Conversion with runtime contract validation    |
-| `Controller`              | Technical/application capability               |
-| `Repository`              | Persistence boundary                           |
-| `UseCase`                 | One application operation                      |
-| `Handler`                 | Transport-to-application adapter               |
-| `Validator`               | Reusable validation/business guard             |
-| `Provider`                | Selects or supplies a capability               |
-| `Factory`                 | Creates a value or implementation              |
+| Method                                  | Meaning                             |
+| --------------------------------------- | ----------------------------------- |
+| `init()`                                | synchronous constructor-owned setup |
+| `configure()`                           | apply configuration                 |
+| `start()` / `stop()` / `quit()`         | resource lifecycle                  |
+| `load*()`                               | read external source                |
+| `resolve*()`                            | derive validated runtime value      |
+| `find*()` / `list*()`                   | optional/collection lookup          |
+| `get*()`                                | required value/direct access        |
+| `create*()` / `update*()` / `delete*()` | mutation                            |
 
-## Methods
-
-| Method                                  | Meaning                                 |
-| --------------------------------------- | --------------------------------------- |
-| `init()`                                | Synchronous setup called by constructor |
-| `configure()`                           | Apply configuration                     |
-| `start()` / `stop()` / `quit()`         | Real resource lifecycle                 |
-| `load*()`                               | Read an external file/module/source     |
-| `resolve*()`                            | Derive a validated runtime value        |
-| `find*()` / `list*()`                   | Optional or collection lookup           |
-| `get*()`                                | Required value/direct property access   |
-| `create*()` / `update*()` / `delete*()` | Mutation                                |
-
-GOOD:
+## Shape
 
 ```text
+<concept><role>
+
 AccountRepository
 resolveConfiguration()
 loadPackageJSON()
 ```
 
-BAD:
+## Rules
 
-```text
-AccountManagerThing
-processStuff()
-helper2()
-```
+- Name the concept first and the role second.
+- One concept uses one term across layers.
+- Method names describe ownership and lifecycle semantics, not implementation detail.

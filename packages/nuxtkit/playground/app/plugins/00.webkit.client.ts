@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { runWebKit } from '@buildplease/webkit';
+import { WebKitApplication } from '@buildplease/webkit/browser';
 
 import { DashboardAssembly } from '~/feature/dashboard/assembly';
 import { LoginAssembly } from '~/feature/login/assembly';
@@ -9,7 +9,7 @@ export default defineNuxtPlugin({
   name: 'webkit',
   order: -1,
   async setup(nuxt) {
-    const runtime = await runWebKit({
+    const runtime = await WebKitApplication.run({
       hooks: {
         assemblies: () => [new NetworkingAssembly(nuxt), new LoginAssembly(), new DashboardAssembly()],
       },

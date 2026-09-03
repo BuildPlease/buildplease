@@ -1,5 +1,5 @@
-import { BUILDPLEASE_ENVIRONMENT_VARIABLE } from '@src-internal/environment-configuration/selection';
-import { validateEnvironmentName } from '@src-internal/environment-configuration/validate-environment-name';
+import { BUILDPLEASE_ENVIRONMENT_VARIABLE } from '@internal/node/environment-configuration/selection';
+import { validateEnvironmentName } from '@internal/node/environment-configuration/validate-environment-name';
 
 export function withSelectedEnvironment<T>(environment: string, run: () => Promise<T>): Promise<T>;
 export function withSelectedEnvironment<T>(environment: string, run: () => T): T;

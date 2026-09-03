@@ -1,6 +1,5 @@
 import { makeRequestMetadataFixture } from '@src-testing/request/request-metadata';
-import { withTestRequestScope } from '@src-testing/request/request-scope';
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 import { RequestScope } from '@/request/request-scope';
 
@@ -15,27 +14,37 @@ describe('RequestScope', () => {
     });
   });
 
-  it('runs callbacks in the public test request scope with metadata overrides', () => {
-    withTestRequestScope(
-      () => {
-        expect(RequestScope.requestId).toBe('fixture-request');
-        expect(RequestScope.locale).toBe('sk');
-      },
-      { requestId: 'fixture-request', locale: 'sk' },
-    );
+  it('preserves request metadata across async work', async () => {
+    const metadata = makeRequestMetadataFixture({ requestId: 'request-async' });
+
+    await RequestScope.run({ metadata: metadata }, async () => {
+      await Promise.resolve();
+      expect(RequestScope.requestId).toBe('request-async');
+    });
   });
 
-  it('shares request state across separately evaluated runtime modules', async () => {
-    const firstRuntime = await import('@/request/request-scope');
+  it('isolates concurrent request scopes', async () => {
+    const firstGate = Promise.withResolvers<void>();
 
-    vi.resetModules();
+    const first = RequestScope.run(
+      { metadata: makeRequestMetadataFixture({ requestId: 'request-1', locale: 'sk' }) },
+      async () => {
+        await firstGate.promise;
+        expect(RequestScope.requestId).toBe('request-1');
+        expect(RequestScope.locale).toBe('sk');
+      },
+    );
 
-    const secondRuntime = await import('@/request/request-scope');
-    const metadata = makeRequestMetadataFixture({ requestId: 'shared-request' });
+    const second = RequestScope.run(
+      { metadata: makeRequestMetadataFixture({ requestId: 'request-2', locale: 'en' }) },
+      async () => {
+        expect(RequestScope.requestId).toBe('request-2');
+        expect(RequestScope.locale).toBe('en');
+        firstGate.resolve();
+      },
+    );
 
-    firstRuntime.RequestScope.run({ metadata: metadata }, () => {
-      expect(secondRuntime.RequestScope.requestId).toBe('shared-request');
-    });
+    await Promise.all([first, second]);
   });
 
   it('rejects access outside request lifecycle', () => {

@@ -1,7 +1,6 @@
+import { UnitFormatterControllerImpl } from '@neutral/formatter/unit-formatter-controller';
+import { ByteUnit } from '@neutral/model/unit';
 import { describe, expect, it } from 'vitest';
-
-import { UnitFormatterControllerImpl } from '@/formatter/unit-formatter-controller';
-import { ByteUnit } from '@/model/unit';
 
 describe('UnitFormatterController', () => {
   const formatter = new UnitFormatterControllerImpl();

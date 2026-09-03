@@ -1,28 +1,18 @@
-import type { ScopeController } from '@buildplease/core';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { ScopeController } from '@buildplease/core';
+import { beforeEach, describe, expect, it } from 'vitest';
 
+import { resetNuxtApp, setNuxtApp } from '#test/mocks/nuxt-app';
 import { useInstance } from '@/src/runtime/composables/use-instance';
 import { useScopeController } from '@/src/runtime/composables/use-scope-controller';
 
-const mocks = vi.hoisted(() => ({
-  nuxtApp: {} as { $scopeController?: ScopeController },
-}));
-
-vi.mock('#app', () => ({
-  useNuxtApp: () => mocks.nuxtApp,
-}));
-
 describe('Scope composables', () => {
   beforeEach(() => {
-    mocks.nuxtApp = {};
+    resetNuxtApp();
   });
 
   it('consumes the scope controller supplied by the application', () => {
-    const scope = {
-      getInstance: vi.fn(),
-    } as unknown as ScopeController;
-
-    mocks.nuxtApp = { $scopeController: scope };
+    const scope = new ScopeController();
+    setNuxtApp({ $scopeController: scope });
 
     expect(useScopeController()).toBe(scope);
   });
@@ -30,17 +20,16 @@ describe('Scope composables', () => {
   it('resolves instances from the application-owned scope', () => {
     const symbol = Symbol('service');
     const instance = { value: 'resolved' };
-    const getInstance = vi.fn(() => instance);
-
-    mocks.nuxtApp = {
-      $scopeController: { getInstance: getInstance } as unknown as ScopeController,
-    };
+    const scope = new ScopeController();
+    scope.container.bind(symbol).toConstantValue(instance);
+    setNuxtApp({ $scopeController: scope });
 
     expect(useInstance<typeof instance>(symbol)).toBe(instance);
-    expect(getInstance).toHaveBeenCalledWith(symbol);
   });
 
   it('fails clearly when the application has not provided a scope', () => {
+    setNuxtApp({});
+
     expect(() => useScopeController()).toThrow(
       'Scope controller is not available. Provide it from an application plugin.',
     );

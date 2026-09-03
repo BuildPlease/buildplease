@@ -1,23 +1,28 @@
 # Infrastructure
 
-- Infrastructure owns deployment topology, runtime services, networking, storage and secrets delivery.
-- Application/package code owns product/runtime behavior.
-- Keep topology, non-secret configuration and secrets as separate concerns.
-- Render deployment/runtime configuration from explicit inputs that match the application's typed configuration contract.
-- Prefer deterministic, idempotent orchestration.
-- Resolve an explicit target before destructive operations.
-- Keep health checks read-only; migrations/repair tasks own mutations.
-- Let deployment own values that genuinely vary by environment; let application configuration own application defaults.
-- Prefer calling repository build/release scripts from CI over duplicating their logic.
+## Map
 
-GOOD:
+| Concern                          | Owner                     |
+| -------------------------------- | ------------------------- |
+| deployment topology              | infrastructure            |
+| runtime services/network/storage | infrastructure            |
+| secrets delivery                 | infrastructure            |
+| application defaults/behavior    | application configuration |
+| migrations/repair                | explicit mutation task    |
+| health checks                    | read-only health boundary |
 
-```text
-CI -> repository release script -> package/build tooling
-```
-
-BAD:
+## Shape
 
 ```text
-CI reimplements package build, versioning and publication logic independently
+CI -> repository script -> build/release tooling
+
+explicit deployment input
+  -> rendered runtime configuration
+  -> application
 ```
+
+## Rules
+
+- Infrastructure operations are deterministic and idempotent.
+- Destructive operations resolve an explicit target first.
+- Secrets, non-secret configuration and topology stay separate.

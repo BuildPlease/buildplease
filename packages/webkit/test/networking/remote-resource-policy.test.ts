@@ -1,6 +1,4 @@
 import { CanceledError } from '@buildplease/core';
-import { describe, expect, it, vi } from 'vitest';
-
 import {
   type HttpClientOptions,
   type HttpRequest,
@@ -10,7 +8,8 @@ import {
   HttpError,
   PublicRemoteResource,
   SecuredRemoteResource,
-} from '@/networking';
+} from '@neutral/networking';
+import { describe, expect, it, vi } from 'vitest';
 
 function deferred<T = void>(): { promise: Promise<T>; resolve: (value: T) => void } {
   let resolvePromise: ((value: T) => void) | undefined;

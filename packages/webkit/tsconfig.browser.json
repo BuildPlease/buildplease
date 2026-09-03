@@ -1,0 +1,20 @@
+{
+  "extends": ["./tsconfig.json", "../../tsconfig.browser.json"],
+  "compilerOptions": {
+    "paths": {
+      "@neutral/*": ["./src-neutral/*"],
+      "@browser/*": ["./src-browser/*"],
+      "@internal/neutral/*": ["./src-internal/neutral/*"],
+      "@internal/browser/*": ["./src-internal/browser/*"],
+      "#l10n": ["./src-neutral/l10n/index.ts"],
+      "#resources": ["./resources/index.ts"]
+    }
+  },
+  "include": [
+    "src-neutral",
+    "src-browser",
+    "src-internal/neutral",
+    "src-internal/browser",
+    "src-application/browser.ts"
+  ]
+}

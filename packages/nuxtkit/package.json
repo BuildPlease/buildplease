@@ -11,7 +11,8 @@
   "type": "module",
   "imports": {
     "#internal-runtime": "./dist/internal-runtime/index.mjs",
-    "#internal-shared": "./dist/internal-shared/index.mjs"
+    "#internal-shared": "./dist/internal-shared/index.mjs",
+    "#test/*": "./test/*.ts"
   },
   "exports": {
     ".": {

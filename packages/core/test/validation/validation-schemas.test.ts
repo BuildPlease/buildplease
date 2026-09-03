@@ -1,7 +1,6 @@
+import { DateTime, ObjectId } from '@neutral/model';
+import { ValidationSchemas } from '@neutral/validation';
 import { describe, expect, it } from 'vitest';
-
-import { DateTime, ObjectId } from '@/model';
-import { ValidationSchemas } from '@/validation';
 
 describe('ValidationSchemas', () => {
   describe('UUID', () => {

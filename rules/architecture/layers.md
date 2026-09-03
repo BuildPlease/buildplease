@@ -1,64 +1,72 @@
 # Layers and Ownership
 
-Organize code by ownership and dependency direction.
+## Map
+
+| Layer       | Owns                                                 |
+| ----------- | ---------------------------------------------------- |
+| Transport   | external input/output adaptation                     |
+| Application | one coordinated behavior/use case                    |
+| Domain      | stable business rules/contracts                      |
+| Adapter     | persistence/network/filesystem/framework integration |
+| Composition | concrete implementation wiring                       |
+
+| Runtime owner         | Dependencies                        |
+| --------------------- | ----------------------------------- |
+| `src-neutral`         | neutral + internal/neutral          |
+| `src-browser`         | neutral + browser + their internals |
+| `src-node`            | neutral + node + their internals    |
+| `internal/neutral`    | neutral                             |
+| `internal/browser`    | neutral + browser                   |
+| `internal/node`       | neutral + node                      |
+| `application/browser` | neutral + browser                   |
+| `application/node`    | neutral + node                      |
+| `src-cli`             | neutral + node                      |
+| `src-testing`         | neutral + node                      |
+
+## Shape
 
 ```text
 Transport -> Application operation -> Domain capability -> External adapter
 ```
 
-- Transport adapts external input/output.
-- Application operations coordinate one behavior and its dependencies.
-- Domain code owns stable business rules and contracts.
-- Adapters own persistence, network, filesystem and framework integration.
-- Composition roots may know concrete implementations.
-- Cross-module collaboration uses the owning module's public boundary.
-- Dependencies point toward stable contracts; concrete integration stays at the edge.
-
-## Applications
-
-Typical modular application:
+Applications:
 
 ```text
-src/app/                  composition and runtime startup
-src/library/              application-local reusable technical capabilities
-src/modules/<name>/api/   public module contracts
-src/modules/<name>/impl/  private module implementation
-src/l10n/                 owner-local localization source
+src/app/                  composition + startup
+src/library/              app-owned reusable technical code
+src/modules/<name>/api/   module public contract
+src/modules/<name>/impl/  module private implementation
+src/l10n/                 app-owned localization
 ```
 
-- `api/` contains contracts intentionally shared with other modules.
-- `impl/` contains module-owned implementation.
-- `library/` contains reusable code that still belongs to the application.
-- Application-specific workflows remain in the application.
-
-## Packages
-
-Typical package:
+Packages:
 
 ```text
-src/          public contracts and public implementations
-src-internal/ package-private implementation
-src-node/     Node-only public surface when required
-src-cli/      CLI entry points when required
-test/         behavioral tests
-types/        ambient/package declarations when required
-resources/    physical runtime assets + registry
+single runtime:
+  src/
+  src-internal/
+
+multi runtime:
+  src-neutral/
+  src-browser/
+  src-node/
+  src-internal/{neutral,browser,node}/
+  src-application/{browser.ts,node.ts}
 ```
 
-- Packages own reusable mechanisms and stable shared contracts.
-- Technology-specific packages are valid; consumer-specific workflows stay with the consumer.
-- Public exports are small, explicit and consumer-driven.
-- Implementation helpers stay package-private.
-- A caller provides values it owns; implementation-owned details stay inside the implementation.
-
-GOOD:
+Public runtime API:
 
 ```text
-application -> @scope/package public export -> package implementation
+root      -> neutral
+/browser  -> browser
+/node     -> node
+/test     -> testing tooling
 ```
 
-BAD:
+## Rules
 
-```text
-application -> @scope/package/src-internal/private-helper
-```
+- Dependencies point toward stable contracts.
+- Cross-module calls use the owning module API.
+- Runtime ownership follows feature ownership.
+- Across packages: neutral -> root, browser -> root + `/browser`, node -> root + `/node`.
+- Internal package exports: none.

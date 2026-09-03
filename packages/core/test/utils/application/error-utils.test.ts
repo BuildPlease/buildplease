@@ -1,6 +1,5 @@
+import { isError } from '@neutral/utils/application/error-utils';
 import { describe, expect, it } from 'vitest';
-
-import { isError } from '@/utils/application/error-utils';
 
 describe('error utils', () => {
   it('detects Error instances', () => {

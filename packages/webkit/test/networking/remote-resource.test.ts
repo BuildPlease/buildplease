@@ -1,6 +1,4 @@
 import { ConversionError } from '@buildplease/core';
-import { describe, expect, it } from 'vitest';
-
 import {
   type HttpRequest,
   type HttpRequestOptions,
@@ -8,7 +6,8 @@ import {
   defineHttpRequest,
   HttpClient,
   RemoteResource,
-} from '@/networking';
+} from '@neutral/networking';
+import { describe, expect, it } from 'vitest';
 
 interface Input {
   readonly id: string;

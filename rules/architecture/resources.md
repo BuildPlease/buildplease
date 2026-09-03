@@ -1,23 +1,23 @@
 # Resources
 
-`Resources` is the owner-local registry for physical assets that remain available at runtime.
+## Map
+
+| Item          | Rule                                            |
+| ------------- | ----------------------------------------------- |
+| registry      | `resources/index.ts`                            |
+| alias         | exact `#resources` when useful                  |
+| paths         | owner-relative / `import.meta.url` based        |
+| package files | include raw assets when published/runtime-owned |
+| tsdown output | copy assets to `dist/resources`                 |
+| empty owner   | `export const Resources = {} as const`          |
+
+## Shape
 
 ```text
 resources/index.ts  source registry
 resources/**        physical runtime assets
-src/l10n/**         compiled localization source
+<source-root>/l10n  compiled localization source
 ```
-
-- Keep physical runtime assets under the owner's root `resources/` directory.
-- Keep the registry at `resources/index.ts`, including when currently empty.
-- Expose the registry through one exact `#resources` alias when a project alias is useful.
-- Keep each registry limited to assets owned by that unit.
-- Resolve asset paths relative to the registry with `import.meta.url`/owner-relative path helpers.
-- Keep raw `resources/` in package files when the package reserves or publishes runtime assets.
-- For tsdown-built owners, copy physical assets into `dist/resources` while compiling `resources/index.ts` as source code.
-- Keep an empty resource root prepared when the owner intentionally reserves the convention.
-
-GOOD:
 
 ```ts
 export const Resources = {
@@ -28,27 +28,8 @@ export const Resources = {
 } as const;
 ```
 
-GOOD — prepared owner:
+## Rules
 
-```ts
-export const Resources = {} as const;
-```
-
-GOOD — asset copy shape:
-
-```ts
-{
-  from: ['resources/**/*', '!resources/index.ts'],
-  to: 'dist/resources',
-  flatten: false,
-}
-```
-
-BAD:
-
-```ts
-export const Resources = {
-  ...SharedResources,
-  L10n: resolvePath(root, 'l10n'),
-};
-```
+- `Resources` contains physical assets that must remain available at runtime.
+- Each registry contains only assets owned by that unit.
+- Localization stays compiled L10n source, not a runtime `Resources` subtree.

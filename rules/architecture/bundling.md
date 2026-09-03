@@ -1,26 +1,47 @@
 # Bundling
 
-- Treat `package.json` as the source of truth for dependency ownership.
-- Derive external/bundled dependency policy from the manifest through repository helpers when available.
-- Derive the current package name from its manifest when tooling needs it.
-- Preserve public package boundaries as package imports in emitted code.
-- Use source aliases for source, tests and tooling; consumers use public package exports.
-- Build, typecheck and test resolve current source without relying on stale output from the same project.
-- Generated output becomes build input only when the pipeline explicitly owns that generated contract.
-- Keep bundler configuration deterministic and independent of ambient process state.
-- Copy physical runtime resources as assets; compile source registries as source code.
+## Map
 
-GOOD:
+| Entry         | TypeScript | Platform |
+| ------------- | ---------- | -------- |
+| neutral       | neutral    | neutral  |
+| browser       | browser    | browser  |
+| node          | node       | node     |
+| CLI / testing | node       | node     |
+
+| Source              | Output role                    |
+| ------------------- | ------------------------------ |
+| `src-neutral`       | neutral public entry           |
+| `src-browser`       | browser public entry           |
+| `src-node`          | Node public entry              |
+| `src-application/*` | runtime composition entry      |
+| `src-internal/*`    | bundled private implementation |
+| `resources/**`      | copied runtime assets          |
+
+## Shape
 
 ```text
-package.json -> bundling policy helper -> tsdown externals
+browser program = neutral + browser
+node program    = neutral + node
+
+package.json exports
+  -> owned entrypoint
+  -> reachable public source
+  -> reachable private internal source
 ```
 
-BAD:
+Bootstrap runs before source aliases exist:
 
 ```text
-package.json dependency list
-+ manually duplicated hardcoded bundler dependency list
+tsdown.config.ts
+  -> direct relative leaf import
+  -> direct relative leaf import
 ```
 
-A hardcoded bundler exception is local, documented and tied to a verified technical constraint.
+## Rules
+
+- Neutral source passes both browser and Node programs.
+- `package.json` owns public exports and dependency policy.
+- Bootstrap import closure uses direct relative leaf imports only.
+- Build emits compiled entries/declarations, bundles reachable internals and copies owned runtime assets.
+- Generated source is an explicit build input owned by its generator.

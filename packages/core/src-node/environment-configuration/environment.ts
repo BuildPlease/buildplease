@@ -1,7 +1,6 @@
-import { validateEnvironmentName } from '@src-internal/environment-configuration/validate-environment-name';
-import { resolvePath } from '@src-node/file';
-
-import type { Environment } from '@/environment';
+import { validateEnvironmentName } from '@internal/node/environment-configuration/validate-environment-name';
+import type { Environment } from '@neutral/environment';
+import { resolvePath } from '@node/file';
 
 // MARK: - Public
 

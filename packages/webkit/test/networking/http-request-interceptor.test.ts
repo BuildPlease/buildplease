@@ -1,7 +1,10 @@
 import type { Identity } from '@buildplease/core';
+import {
+  type HttpRequestInterceptor,
+  type HttpRequestOptions,
+  HttpRequestInterceptorPipeline,
+} from '@neutral/networking';
 import { describe, expect, it, vi } from 'vitest';
-
-import { type HttpRequestInterceptor, type HttpRequestOptions, HttpRequestInterceptorPipeline } from '@/networking';
 
 class TestInterceptor implements HttpRequestInterceptor {
   public constructor(

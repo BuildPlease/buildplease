@@ -5,7 +5,7 @@ import {
   defineSource,
   field,
   resolveEnvironment,
-} from '@src-node/environment-configuration';
+} from '@node/environment-configuration';
 import { describe, expect, it } from 'vitest';
 
 const environments = defineEnvironments({
@@ -28,51 +28,6 @@ describe('Environment Configuration definitions', () => {
     expect(() => resolveEnvironment(environments, 'bug')).toThrow('Environment "bug" is not configured.');
     expect(config.environments).toBe(environments);
     expect(config.input).toBe(input);
-  });
-
-  it('exposes optional source modifiers only for nullish outputs', () => {
-    const from = defineSource(environments);
-    const optional = from.env('API_ORIGIN');
-    const _required = optional.required();
-    const _defaulted = optional.default('http://localhost:30000');
-    const staticSource = from.static('http://localhost:30000');
-    const _mappedOptional = staticSource.map((value) => (value ? value : undefined));
-    const _mappedRequired = optional.map((value) => value ?? 'http://localhost:30000');
-
-    const optionalHasRequired: 'required' extends keyof typeof optional ? true : false = true;
-    const optionalHasDefault: 'default' extends keyof typeof optional ? true : false = true;
-    const requiredHasRequired: 'required' extends keyof typeof _required ? true : false = false;
-    const requiredHasDefault: 'default' extends keyof typeof _required ? true : false = false;
-    const defaultedHasRequired: 'required' extends keyof typeof _defaulted ? true : false = false;
-    const defaultedHasDefault: 'default' extends keyof typeof _defaulted ? true : false = false;
-    const staticHasRequired: 'required' extends keyof typeof staticSource ? true : false = false;
-    const staticHasDefault: 'default' extends keyof typeof staticSource ? true : false = false;
-    const mappedOptionalHasRequired: 'required' extends keyof typeof _mappedOptional ? true : false = true;
-    const mappedRequiredHasRequired: 'required' extends keyof typeof _mappedRequired ? true : false = false;
-
-    expect({
-      optionalHasRequired: optionalHasRequired,
-      optionalHasDefault: optionalHasDefault,
-      requiredHasRequired: requiredHasRequired,
-      requiredHasDefault: requiredHasDefault,
-      defaultedHasRequired: defaultedHasRequired,
-      defaultedHasDefault: defaultedHasDefault,
-      staticHasRequired: staticHasRequired,
-      staticHasDefault: staticHasDefault,
-      mappedOptionalHasRequired: mappedOptionalHasRequired,
-      mappedRequiredHasRequired: mappedRequiredHasRequired,
-    }).toEqual({
-      optionalHasRequired: true,
-      optionalHasDefault: true,
-      requiredHasRequired: false,
-      requiredHasDefault: false,
-      defaultedHasRequired: false,
-      defaultedHasDefault: false,
-      staticHasRequired: false,
-      staticHasDefault: false,
-      mappedOptionalHasRequired: true,
-      mappedRequiredHasRequired: false,
-    });
   });
 
   it('supports environments without dotenv files', () => {

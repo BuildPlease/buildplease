@@ -5,7 +5,6 @@ import '../types';
 
 export * from '@buildplease/core';
 export * from '@buildplease/core/node';
-
 export * from './configuration';
 export * from './database';
 export * from './di';
@@ -22,7 +21,7 @@ export * from './normalization';
 export * from './notification';
 export * from './openapi';
 export * from './request';
-export * from './runtime';
+export * from './application/apikit-application';
 export * from './security';
 export * from './server';
 export * from './validation';

@@ -52,13 +52,11 @@ buildplease run --env production -- node dist/main.js
 Start from the application entrypoint:
 
 ```ts
-import { runApiKit } from '@buildplease/apikit';
+import { ApiKitApplication } from '@buildplease/apikit';
 import { appAssembly } from './app';
 
-await runApiKit({
-  hooks: {
-    assemblies: () => [...appAssembly()],
-  },
+await ApiKitApplication.run({
+  assemblies: () => [...appAssembly()],
 });
 ```
 

@@ -1,30 +1,24 @@
 # Identity
 
-Mutable global identity has one authoritative owner.
+## Map
 
-- Keep product, framework, organization and brand identity in the contract that owns it.
-- Use neutral long-lived names/domains in generic code, tests, fixtures, examples and reusable rules.
-- Use stable architectural names for generic types, reusable modules and private workspace packages.
-- Resolve user-visible identity from the owning identity contract or localization layer.
-- Let infrastructure own deployment topology and concrete environment addresses.
-- Keep externally required identifiers local to the integration that owns them.
+| Identity                       | Owner                           |
+| ------------------------------ | ------------------------------- |
+| framework/product/organization | authoritative identity contract |
+| user-visible text              | identity/localization owner     |
+| deployment address/topology    | infrastructure                  |
+| external identifier            | owning integration              |
+| generic test/example identity  | neutral test/example fixture    |
 
-GOOD:
-
-```text
-Test application
-Test Event
-https://cdn.example.com
-business-api
-```
-
-BAD:
+## Shape
 
 ```text
-MyProduct tests
-MyProduct Event
-https://cdn-test.myproduct.com
-@myproduct/business-api
+generic fixture         -> Test application / example.com / business-api
+authoritative identity  -> real framework/product name
 ```
 
-Concrete identity literals are appropriate in authoritative identity definitions, public package namespaces, external system contracts, persistent identifiers and user-visible branding where identity carries meaning.
+## Rules
+
+- One mutable global identity has one authoritative owner.
+- Generic code, fixtures and reusable rules use neutral long-lived names.
+- External identifiers stay with the integration that owns them.

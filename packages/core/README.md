@@ -29,6 +29,15 @@ export default defineCoreConfig(environments, {
 
 Environment names are non-empty technical identifiers without whitespace. Aliases are optional user-facing labels.
 
+## Application runtime
+
+Use the explicit runtime surface:
+
+```ts
+import { CoreApplication } from '@buildplease/core/browser';
+// or: @buildplease/core/node
+```
+
 ## CLI
 
 Prepare the application metadata:

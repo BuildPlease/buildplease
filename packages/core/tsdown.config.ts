@@ -1,8 +1,8 @@
 import { type CopyEntry, defineConfig } from 'tsdown';
 
-import { makeDependencyBundlingPolicy } from './src-node/bundling';
-import { resolvePath } from './src-node/file';
-import { loadPackageJSON } from './src-node/package-json';
+import { makeDependencyBundlingPolicy } from './src-node/bundling/make-dependency-bundling-policy';
+import { resolvePath } from './src-node/file/file-sync';
+import { loadPackageJSON } from './src-node/package-json/load-package';
 
 const outDir = 'dist';
 const pkg = loadPackageJSON(resolvePath(import.meta.url, './package.json'));
@@ -18,7 +18,7 @@ const nodePolicy = makeDependencyBundlingPolicy(pkg, {
 export default defineConfig([
   // MARK: - Neutral entry
   {
-    entry: { 'src/index': './src/index.ts' },
+    entry: { 'src-neutral/index': './src-neutral/index.ts' },
     tsconfig: 'tsconfig.json',
     platform: 'neutral',
     target: 'esnext',
@@ -40,11 +40,12 @@ export default defineConfig([
       onlyBundle: false,
     },
   },
-  // MARK: - Node entry
+
+  // MARK: - Browser entry
   {
-    entry: { 'src-node/index': './src-node/index.ts' },
-    tsconfig: 'tsconfig.json',
-    platform: 'node',
+    entry: { 'src-application/browser': './src-application/browser.ts' },
+    tsconfig: 'tsconfig.browser.json',
+    platform: 'browser',
     target: 'esnext',
     format: ['esm', 'cjs'],
 
@@ -54,6 +55,30 @@ export default defineConfig([
     hash: false,
     dts: true,
     minify: true,
+    shims: false,
+    sourcemap: false,
+    treeshake: true,
+
+    deps: {
+      neverBundle: neutralPolicy.external,
+      onlyBundle: false,
+    },
+  },
+
+  // MARK: - Node entry
+  {
+    entry: { 'src-application/node': './src-application/node.ts' },
+    tsconfig: 'tsconfig.node.json',
+    platform: 'node',
+    target: 'esnext',
+    format: ['esm', 'cjs'],
+
+    outDir: outDir,
+    clean: false,
+
+    hash: false,
+    dts: true,
+    minify: false,
     shims: false,
     sourcemap: false,
     treeshake: true,
@@ -67,7 +92,7 @@ export default defineConfig([
   // MARK: - CLI entry
   {
     entry: { 'cli/index': './src-cli/index.ts' },
-    tsconfig: 'tsconfig.json',
+    tsconfig: 'tsconfig.node.json',
     platform: 'node',
     target: 'esnext',
     format: ['esm'],
@@ -77,7 +102,7 @@ export default defineConfig([
 
     hash: false,
     dts: false,
-    minify: true,
+    minify: false,
     shims: false,
     sourcemap: false,
     treeshake: true,
@@ -91,7 +116,7 @@ export default defineConfig([
   // MARK: - Test entry
   {
     entry: { 'src-testing/index': './src-testing/index.ts' },
-    tsconfig: 'tsconfig.json',
+    tsconfig: 'tsconfig.node.json',
     platform: 'node',
     target: 'esnext',
     format: ['esm', 'cjs'],
@@ -101,7 +126,7 @@ export default defineConfig([
 
     hash: false,
     dts: true,
-    minify: true,
+    minify: false,
     shims: false,
     sourcemap: false,
     treeshake: true,

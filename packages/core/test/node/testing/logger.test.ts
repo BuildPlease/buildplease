@@ -1,4 +1,4 @@
-import { type Logger } from '@src-node/logger';
+import { type Logger } from '@node/logger';
 import { makeLoggerFixture } from '@src-testing/logger';
 import { describe, expect, it } from 'vitest';
 

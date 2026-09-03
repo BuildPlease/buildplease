@@ -13,22 +13,32 @@
   "exports": {
     ".": {
       "import": {
-        "types": "./dist/src/index.d.ts",
-        "default": "./dist/src/index.js"
+        "types": "./dist/src-neutral/index.d.ts",
+        "default": "./dist/src-neutral/index.js"
       },
       "require": {
-        "types": "./dist/src/index.d.cts",
-        "default": "./dist/src/index.cjs"
+        "types": "./dist/src-neutral/index.d.cts",
+        "default": "./dist/src-neutral/index.cjs"
+      }
+    },
+    "./browser": {
+      "import": {
+        "types": "./dist/src-application/browser.d.ts",
+        "default": "./dist/src-application/browser.js"
+      },
+      "require": {
+        "types": "./dist/src-application/browser.d.cts",
+        "default": "./dist/src-application/browser.cjs"
       }
     },
     "./node": {
       "import": {
-        "types": "./dist/src-node/index.d.mts",
-        "default": "./dist/src-node/index.mjs"
+        "types": "./dist/src-application/node.d.mts",
+        "default": "./dist/src-application/node.mjs"
       },
       "require": {
-        "types": "./dist/src-node/index.d.cts",
-        "default": "./dist/src-node/index.cjs"
+        "types": "./dist/src-application/node.d.cts",
+        "default": "./dist/src-application/node.cjs"
       }
     },
     "./test": {
@@ -53,7 +63,7 @@
   "scripts": {
     "build": "tsdown --config-loader unrun",
     "test": "vitest run",
-    "typecheck": "tsc -p tsconfig.json --noEmit"
+    "typecheck": "tsc -p tsconfig.browser.json --noEmit && tsc -p tsconfig.node.json --noEmit"
   },
   "dependencies": {
     "@dotenvx/dotenvx": "2.21.0",

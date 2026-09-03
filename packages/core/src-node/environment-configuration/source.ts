@@ -1,5 +1,5 @@
-import type { Build } from '@/build';
-import type { Environment } from '@/environment';
+import type { Build } from '@neutral/build';
+import type { Environment } from '@neutral/environment';
 
 import type { EnvironmentRegistry } from './environment';
 

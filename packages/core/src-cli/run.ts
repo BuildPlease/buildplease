@@ -1,9 +1,9 @@
 import { spawn } from 'node:child_process';
 import { constants } from 'node:os';
 
-import { BUILDPLEASE_ENVIRONMENT_VARIABLE } from '@src-internal/environment-configuration/selection';
-import { validateEnvironmentName } from '@src-internal/environment-configuration/validate-environment-name';
-import { generateBuildPlease } from '@src-internal/generator';
+import { BUILDPLEASE_ENVIRONMENT_VARIABLE } from '@internal/node/environment-configuration/selection';
+import { validateEnvironmentName } from '@internal/node/environment-configuration/validate-environment-name';
+import { generateBuildPlease } from '@internal/node/generator';
 
 const HELP = [
   'Usage:',

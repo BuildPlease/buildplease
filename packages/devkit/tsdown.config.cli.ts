@@ -24,7 +24,7 @@ export default defineConfig({
 
   hash: false,
   dts: false,
-  minify: true,
+  minify: false,
   shims: false,
   sourcemap: false,
   treeshake: true,

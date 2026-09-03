@@ -1,6 +1,5 @@
+import { filterObject, isEmptyObject, isNonEmptyObject, isPlainObject } from '@neutral/utils/application/object-utils';
 import { describe, expect, it } from 'vitest';
-
-import { filterObject, isEmptyObject, isNonEmptyObject, isPlainObject } from '@/utils/application/object-utils';
 
 describe('object utils', () => {
   it('filters nullish and empty nested values', () => {

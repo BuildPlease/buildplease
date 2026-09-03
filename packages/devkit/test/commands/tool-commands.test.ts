@@ -4,17 +4,14 @@ import path from 'node:path';
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { runNodeBin } from '@/commands/run-bin';
 import { depCheck, format, formatFix } from '@/commands/tool-commands';
 
-const mocks = vi.hoisted(() => ({
-  runNodeBin: vi.fn<(_packageName: string, _binName: string, _args: readonly string[]) => Promise<void>>(
-    async () => undefined,
-  ),
+vi.mock('@/commands/run-bin', () => ({
+  runNodeBin: vi.fn(async () => undefined),
 }));
 
-vi.mock('@/commands/run-bin', () => ({
-  runNodeBin: mocks.runNodeBin,
-}));
+const runNodeBinMock = vi.mocked(runNodeBin);
 
 describe('tool commands', () => {
   let originalCwd: string;
@@ -24,7 +21,7 @@ describe('tool commands', () => {
     originalCwd = process.cwd();
     rootDir = await mkdtemp(path.join(tmpdir(), 'devkit-'));
     process.chdir(rootDir);
-    mocks.runNodeBin.mockClear();
+    runNodeBinMock.mockClear();
   });
 
   afterEach(async () => {
@@ -35,8 +32,8 @@ describe('tool commands', () => {
   it('passes shared ignore entries to Prettier as explicit negated globs', async () => {
     await format(['--log-level', 'debug']);
 
-    expect(mocks.runNodeBin).toHaveBeenCalledTimes(1);
-    const [packageName, binName, args] = mocks.runNodeBin.mock.calls[0] ?? [];
+    expect(runNodeBinMock).toHaveBeenCalledTimes(1);
+    const [packageName, binName, args] = runNodeBinMock.mock.calls[0] ?? [];
 
     expect(packageName).toBe('prettier');
     expect(binName).toBe('prettier');
@@ -51,7 +48,7 @@ describe('tool commands', () => {
   it('uses the same Prettier ignore strategy for format fixes', async () => {
     await formatFix([]);
 
-    const [, , args] = mocks.runNodeBin.mock.calls[0] ?? [];
+    const [, , args] = runNodeBinMock.mock.calls[0] ?? [];
 
     expect(args).toContain('!**/pnpm-lock.yaml');
     expect(args).toContain('--write');
@@ -61,10 +58,6 @@ describe('tool commands', () => {
   it('checks all supported dependency sections', async () => {
     await depCheck([]);
 
-    expect(mocks.runNodeBin).toHaveBeenCalledWith('npm-check-updates', 'ncu', [
-      '-ws',
-      '--dep',
-      'prod,dev,optional,peer',
-    ]);
+    expect(runNodeBinMock).toHaveBeenCalledWith('npm-check-updates', 'ncu', ['-ws', '--dep', 'prod,dev,optional,peer']);
   });
 });

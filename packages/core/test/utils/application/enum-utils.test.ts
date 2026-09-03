@@ -1,6 +1,5 @@
+import { mapToEnum } from '@neutral/utils/application/enum-utils';
 import { describe, expect, it } from 'vitest';
-
-import { mapToEnum } from '@/utils/application/enum-utils';
 
 enum LogLevel {
   Info = 'info',

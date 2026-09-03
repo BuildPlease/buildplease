@@ -2,35 +2,37 @@ import { CanceledError } from '@buildplease/core';
 import { HttpError } from '@buildplease/webkit';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { resetNuxtKit, setNuxtKit } from '#test/mocks/internal-runtime';
+import { resetNuxtApp, setNuxtApp } from '#test/mocks/nuxt-app';
 import { useErrorHandler } from '@/src/runtime/composables/use-error-handler';
-
-const mocks = vi.hoisted(() => ({
-  loggerError: vi.fn(),
-  resolveI18nMessage: vi.fn(() => 'Generic error'),
-}));
-
-vi.mock('#internal-runtime', () => ({
-  useNuxtKit: () => ({
-    logger: {
-      error: mocks.loggerError,
-    },
-    config: {
-      errors: {
-        genericErrorKey: 'nuxtkit.error.generic',
-        genericMessageFallback: 'Something went wrong',
-      },
-    },
-  }),
-}));
-
-vi.mock('#nuxtkit/i18n', () => ({
-  resolveI18nMessage: mocks.resolveI18nMessage,
-}));
 
 describe('useErrorHandler', () => {
   beforeEach(() => {
-    mocks.loggerError.mockClear();
-    mocks.resolveI18nMessage.mockClear();
+    resetNuxtApp();
+    resetNuxtKit();
+
+    setNuxtApp({
+      $i18n: {
+        te: () => false,
+        t: (key) => key,
+      },
+    });
+
+    setNuxtKit({
+      logger: {
+        error: vi.fn(),
+      },
+      debug: false,
+      config: {
+        errors: {
+          genericErrorKey: 'nuxtkit.error.generic',
+          genericMessageFallback: 'Something went wrong',
+        },
+      },
+      isSSR: false,
+      isClient: true,
+      makeSymbol: (key) => Symbol.for(`test.nuxtkit.${key}`),
+    });
   });
 
   it('returns a remote HTTP message when one is available', () => {
@@ -41,35 +43,21 @@ describe('useErrorHandler', () => {
     });
 
     expect(useErrorHandler(error)).toBe('Account is blocked.');
-    expect(mocks.resolveI18nMessage).not.toHaveBeenCalled();
   });
 
-  it('uses the generic fallback for an HTTP error without a message', () => {
-    const error = new HttpError({
-      statusCode: 502,
-    });
-
-    expect(useErrorHandler(error)).toBe('Generic error');
-    expect(mocks.resolveI18nMessage).toHaveBeenCalledTimes(1);
+  it('uses the configured fallback for an HTTP error without a message', () => {
+    expect(useErrorHandler(new HttpError({ statusCode: 502 }))).toBe('Something went wrong');
   });
 
-  it('uses the generic fallback for an HTTP error with a blank message', () => {
-    const error = new HttpError({
-      statusCode: 500,
-      message: '   ',
-    });
-
-    expect(useErrorHandler(error)).toBe('Generic error');
-    expect(mocks.resolveI18nMessage).toHaveBeenCalledTimes(1);
+  it('uses the configured fallback for an HTTP error with a blank message', () => {
+    expect(useErrorHandler(new HttpError({ statusCode: 500, message: '   ' }))).toBe('Something went wrong');
   });
 
-  it('uses the generic fallback for non-HTTP errors', () => {
-    expect(useErrorHandler(new Error('Technical error'))).toBe('Generic error');
-    expect(mocks.resolveI18nMessage).toHaveBeenCalledTimes(1);
+  it('uses the configured fallback for non-HTTP errors', () => {
+    expect(useErrorHandler(new Error('Technical error'))).toBe('Something went wrong');
   });
 
   it('suppresses canceled errors', () => {
     expect(useErrorHandler(new CanceledError())).toBeNull();
-    expect(mocks.resolveI18nMessage).not.toHaveBeenCalled();
   });
 });

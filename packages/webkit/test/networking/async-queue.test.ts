@@ -1,7 +1,6 @@
 import { CanceledError } from '@buildplease/core';
+import { AsyncQueueImpl } from '@neutral/networking';
 import { describe, expect, it, vi } from 'vitest';
-
-import { AsyncQueueImpl } from '@/networking';
 
 function deferred<T = void>(): { promise: Promise<T>; resolve: (value: T) => void } {
   let resolvePromise: ((value: T) => void) | undefined;

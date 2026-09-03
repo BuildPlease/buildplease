@@ -2,11 +2,10 @@ import fs from 'node:fs';
 import { dirname } from 'node:path';
 
 import dotenvx from '@dotenvx/dotenvx';
-import { readSelectedEnvironmentName } from '@src-internal/environment-configuration/selection';
+import { readSelectedEnvironmentName } from '@internal/node/environment-configuration/selection';
+import type { Build } from '@neutral/build';
+import type { Environment } from '@neutral/environment';
 import { createJiti } from 'jiti';
-
-import type { Build } from '@/build';
-import type { Environment } from '@/environment';
 
 import {
   type ConfigDefinition,

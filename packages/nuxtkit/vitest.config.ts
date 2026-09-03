@@ -14,11 +14,12 @@ export default defineConfig({
   resolve: {
     alias: [
       { find: /^@\/src\/(.*)$/, replacement: `${resolve(rootDir, 'src')}/$1` },
-      { find: /^#internal-runtime$/, replacement: resolve(rootDir, 'src/internal-runtime/index.ts') },
+      { find: /^#internal-runtime$/, replacement: resolve(rootDir, 'test/mocks/internal-runtime.ts') },
       { find: /^#internal-runtime\/(.*)$/, replacement: `${resolve(rootDir, 'src/internal-runtime')}/$1` },
       { find: /^#internal-shared$/, replacement: resolve(rootDir, 'src/internal-shared/index.ts') },
       { find: /^#internal-shared\/(.*)$/, replacement: `${resolve(rootDir, 'src/internal-shared')}/$1` },
       { find: /^#nuxtkit\/(.*)$/, replacement: `${resolve(rootDir, 'src/runtime')}/$1` },
+      { find: /^#test\/(.*)$/, replacement: `${resolve(rootDir, 'test')}/$1` },
 
       // MARK: - Tests
       { find: /^#app$/, replacement: resolve(rootDir, 'test/mocks/nuxt-app.ts') },

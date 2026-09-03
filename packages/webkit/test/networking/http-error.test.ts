@@ -1,6 +1,5 @@
+import { HttpError } from '@neutral/networking/http-error';
 import { describe, expect, it } from 'vitest';
-
-import { HttpError } from '@/networking/http-error';
 
 describe('HttpError', () => {
   it('preserves HTTP error metadata', () => {
