@@ -1,7 +1,7 @@
 import type { Assembly, AssemblyContainer } from '@buildplease/core';
 
-import { ApiKitSymbols } from '@/di';
 import { type EmailController, EmailControllerImpl } from '@/email';
+import { ApiKitSymbols } from '@/symbols';
 
 export class EmailAssembly implements Assembly {
   public assemble(container: AssemblyContainer): void {

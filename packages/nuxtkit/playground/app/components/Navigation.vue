@@ -4,7 +4,7 @@
     <div class="flex items-center gap-1.5 lg:flex-1">
       <slot name="left">
         <NuxtLinkLocale
-          :to="localePath(Symbols.Routes.Root.path)"
+          :to="localePath(AppSymbols.Routes.Root.path)"
           class="flex flex-shrink-0 items-end gap-1.5 text-xl font-bold text-gray-900 dark:text-white"
         >
           NuxtKit
@@ -36,13 +36,13 @@
 
 <script setup lang="ts">
 import type { NavigationMenuItem } from '#ui/types';
-import { Symbols } from '~/di/symbols';
+import { AppSymbols } from '~/symbols';
 
 const { t } = useI18n();
 const localePath = useLocalePath();
 
 const items = computed<NavigationMenuItem[]>(() => [
-  { label: t('navigation.dashboard'), to: localePath(Symbols.Routes.Dashboard.path) },
-  { label: t('navigation.complexValidation'), to: localePath(Symbols.Routes.Zod.Complex.path) },
+  { label: t('navigation.dashboard'), to: localePath(AppSymbols.Routes.Dashboard.path) },
+  { label: t('navigation.complexValidation'), to: localePath(AppSymbols.Routes.Zod.Complex.path) },
 ]);
 </script>

@@ -1,6 +1,5 @@
+import type { Assembly } from '@neutral/di/assembly';
 import { Container } from 'inversify';
-
-import type { Assembly } from './assembly';
 
 export class ScopeController {
   private _container: Container;

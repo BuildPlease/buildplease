@@ -1,8 +1,8 @@
-import { CoreSymbols } from '@neutral/di/symbols';
 import {
   type UnitFormatterController,
   UnitFormatterControllerImpl,
 } from '@neutral/formatter/unit-formatter-controller';
+import { CoreSymbols } from '@neutral/symbols';
 import type { Container } from 'inversify';
 
 export class FormatterAssembly {

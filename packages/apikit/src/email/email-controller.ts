@@ -9,8 +9,8 @@ import { inject, injectable } from 'inversify';
 import nodemailer from 'nodemailer';
 
 import type { ApiKitController, EmailConfig } from '@/configuration';
-import { ApiKitSymbols } from '@/di';
 import type { EmailTemplate } from '@/email';
+import { ApiKitSymbols } from '@/symbols';
 
 const LOG_PREFIX = '[Email]';
 

@@ -4,10 +4,10 @@ import Fastify, { type FastifyBaseLogger, type FastifyInstance, LogController } 
 import { inject, injectable } from 'inversify';
 
 import type { ApiKitController } from '@/configuration';
-import { ApiKitSymbols } from '@/di';
 import { ApiError, ApiErrorFactory } from '@/error';
 import type { I18nController } from '@/i18n';
 import { RequestLogMetadata } from '@/request';
+import { ApiKitSymbols } from '@/symbols';
 
 import { FastifyPlugins } from './plugins';
 

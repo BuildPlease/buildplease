@@ -1,14 +1,14 @@
 import type { Assembly, AssemblyContainer } from '@buildplease/core';
-import { InternalApiKitSymbols } from '@src-internal/di/symbols';
 import { TelegramNotificationChannelController } from '@src-internal/notification/channels/telegram-notification-channel-controller';
 import type { NotificationChannelController } from '@src-internal/notification/notification-channel-controller';
 import { NotificationControllerImpl } from '@src-internal/notification/notification-controller';
 import { NOTIFICATION_LOG_PREFIX } from '@src-internal/notification/notification-log';
+import { InternalApiKitSymbols } from '@src-internal/symbols';
 import { inject, injectable } from 'inversify';
 
 import { type ApiKitController } from '@/configuration';
-import { ApiKitSymbols } from '@/di';
 import { type NotificationChannelRequest, type NotificationController, NotificationChannel } from '@/notification';
+import { ApiKitSymbols } from '@/symbols';
 
 @injectable()
 class ApiKitTelegramNotificationChannelController implements NotificationChannelController {

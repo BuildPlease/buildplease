@@ -1,6 +1,6 @@
 import { CoreSymbols } from '@buildplease/core';
 import type { Logger } from '@buildplease/core/node';
-import { InternalApiKitSymbols } from '@src-internal/di/symbols';
+import { InternalApiKitSymbols } from '@src-internal/symbols';
 import { inject, injectable, multiInject, optional } from 'inversify';
 
 import type {

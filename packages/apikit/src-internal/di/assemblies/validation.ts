@@ -1,6 +1,6 @@
 import type { Assembly, AssemblyContainer } from '@buildplease/core';
 
-import { ApiKitSymbols } from '@/di';
+import { ApiKitSymbols } from '@/symbols';
 import {
   type DtoValidationController,
   type ValidationController,

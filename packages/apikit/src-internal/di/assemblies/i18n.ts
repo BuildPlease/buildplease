@@ -1,7 +1,7 @@
 import type { Assembly, AssemblyContainer } from '@buildplease/core';
 
-import { ApiKitSymbols } from '@/di';
 import { type I18nController, I18nControllerImpl } from '@/i18n';
+import { ApiKitSymbols } from '@/symbols';
 
 export class I18nAssembly implements Assembly {
   public assemble(container: AssemblyContainer): void {

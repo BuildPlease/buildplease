@@ -1,8 +1,8 @@
 import { inject, injectable } from 'inversify';
 
-import { Symbols } from '~/di/symbols';
 import type { LoginController } from '~/feature/login/controller';
 import type { LoginDto } from '~/schema';
+import { AppSymbols } from '~/symbols';
 
 export interface LoginState {
   email?: string;
@@ -14,7 +14,7 @@ export interface LoginState {
 @injectable()
 export class LoginViewModel extends ViewModel<LoginState> {
   constructor(
-    @inject(Symbols.DI.Feature.Login.Controller)
+    @inject(AppSymbols.DI.Feature.Login.Controller)
     private loginController: LoginController,
   ) {
     super({

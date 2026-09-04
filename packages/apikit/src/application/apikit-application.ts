@@ -1,12 +1,12 @@
 import { type Assembly, type Awaitable, coreAssembly, ScopeController } from '@buildplease/core';
 import { CoreApplication } from '@buildplease/core/node';
 import { initializeApiKitConfiguration } from '@src-internal/configuration/initialize-configuration';
-import { apikitAssembly } from '@src-internal/di';
+import { apikitAssembly } from '@src-internal/di/assembly';
 import type { FastifyInstance } from 'fastify';
 
-import { ApiKitSymbols } from '@/di';
 import type { I18nController } from '@/i18n';
 import type { ServerController, ServerPluginOptions } from '@/server';
+import { ApiKitSymbols } from '@/symbols';
 
 /** Startup context. */
 export interface ApiKitApplicationContext {

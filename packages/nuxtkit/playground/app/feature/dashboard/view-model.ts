@@ -1,7 +1,6 @@
 import { CanceledError, delay } from '@buildplease/core';
 import { inject, injectable } from 'inversify';
 
-import { Symbols } from '~/di/symbols';
 import {
   type HttpRequestTestInput,
   type HttpRequestTestOperation,
@@ -9,6 +8,7 @@ import {
   HttpRequestTestMode,
 } from '~/networking/operation/http-request-test';
 import type { UnauthorizedOperation } from '~/networking/operation/unauthorized';
+import { AppSymbols } from '~/symbols';
 
 export enum HttpRequestPreset {
   AllSuccess,
@@ -105,11 +105,11 @@ function makeHttpRequestItems(preset: HttpRequestPreset): HttpRequestTestItem[] 
 @injectable()
 export class DashboardViewModel extends ViewModel<DashboardState> {
   constructor(
-    @inject(Symbols.DI.Operation.Unauthorized)
+    @inject(AppSymbols.DI.Operation.Unauthorized)
     private readonly unauthorizedOperation: UnauthorizedOperation,
-    @inject(Symbols.DI.Operation.HttpRequestTest)
+    @inject(AppSymbols.DI.Operation.HttpRequestTest)
     private readonly httpRequestTestOperation: HttpRequestTestOperation,
-    @inject(Symbols.DI.Operation.DelayedHttpRequestTest)
+    @inject(AppSymbols.DI.Operation.DelayedHttpRequestTest)
     private readonly delayedHttpRequestTestOperation: HttpRequestTestOperation,
   ) {
     super({

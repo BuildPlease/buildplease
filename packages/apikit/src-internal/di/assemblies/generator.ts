@@ -1,7 +1,7 @@
 import type { Assembly, AssemblyContainer } from '@buildplease/core';
 
-import { ApiKitSymbols } from '@/di';
 import { type RandomValueGenerator, RandomValueGeneratorImpl } from '@/generator';
+import { ApiKitSymbols } from '@/symbols';
 
 export class GeneratorAssembly implements Assembly {
   public assemble(container: AssemblyContainer): void {

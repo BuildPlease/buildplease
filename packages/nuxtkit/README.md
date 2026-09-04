@@ -1,6 +1,14 @@
 # @buildplease/nuxtkit
 
-NuxtKit provides BuildPlease utilities and integrations for Nuxt applications.
+NuxtKit provides fundamental & usefull utilities and integrations for Nuxt applications.
+
+## Features
+
+- i18n and L10n integration
+- localized Zod validation
+- error presentation helpers
+- networking layer and http basics
+- Nuxt composables and runtime helpers
 
 ## Installation
 
@@ -21,26 +29,6 @@ export default defineNuxtConfig({
   },
 });
 ```
-
-NuxtKit configures its Nuxt UI, i18n, and localized Zod integrations through the module.
-
-## Runtime helpers
-
-Runtime composables are auto-imported:
-
-```ts
-import { type MyService, Symbols } from '~/app';
-
-const service = useInstance<MyService>(Symbols.MyService);
-```
-
-## Features
-
-- Nuxt module and runtime helpers
-- i18n and L10n integration
-- localized Zod validation
-- error presentation helpers
-- Nuxt-specific request, cookie, and networking adapters
 
 ## License
 

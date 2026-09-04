@@ -1,13 +1,13 @@
 import type { Assembly, AssemblyContainer } from '@buildplease/core';
 
-import { Symbols } from '~/di/symbols';
 import { type LoginController, LoginControllerImpl } from '~/feature/login/controller';
 import { LoginViewModel } from '~/feature/login/view-model';
+import { AppSymbols } from '~/symbols';
 
 export class LoginAssembly implements Assembly {
   public assemble(container: AssemblyContainer): void {
-    container.bind<LoginViewModel>(Symbols.DI.Feature.Login.ViewModel).to(LoginViewModel);
+    container.bind<LoginViewModel>(AppSymbols.DI.Feature.Login.ViewModel).to(LoginViewModel);
 
-    container.bind<LoginController>(Symbols.DI.Feature.Login.Controller).to(LoginControllerImpl);
+    container.bind<LoginController>(AppSymbols.DI.Feature.Login.Controller).to(LoginControllerImpl);
   }
 }

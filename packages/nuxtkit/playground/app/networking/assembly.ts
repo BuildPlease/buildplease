@@ -1,7 +1,6 @@
 import type { Assembly, AssemblyContainer } from '@buildplease/core';
 
 import type { NuxtApp } from '#app';
-import { Symbols } from '~/di/symbols';
 import { PlaygroundHttpClient } from '~/networking/http-client';
 import {
   type HttpRequestTestOperation,
@@ -19,6 +18,7 @@ import {
   DelayedHttpRequestTestUnauthorizedHandler,
   HttpRequestTestUnauthorizedHandler,
 } from '~/networking/unauthorized-handler-test';
+import { AppSymbols } from '~/symbols';
 
 const UNAUTHORIZED_STATUS_CODES = [401] as const;
 const DELAYED_UNAUTHORIZED_HANDLER_MS = 1600;
@@ -27,7 +27,7 @@ export class NetworkingAssembly implements Assembly {
   public constructor(private readonly app: NuxtApp) {}
 
   public assemble(container: AssemblyContainer): void {
-    container.bind<PlaygroundHttpClient>(Symbols.DI.Networking.HttpClient).toConstantValue(
+    container.bind<PlaygroundHttpClient>(AppSymbols.DI.Networking.HttpClient).toConstantValue(
       new PlaygroundHttpClient({
         unauthorized: {
           statusCodes: UNAUTHORIZED_STATUS_CODES,
@@ -37,7 +37,7 @@ export class NetworkingAssembly implements Assembly {
       }),
     );
 
-    container.bind<PlaygroundHttpClient>(Symbols.DI.Networking.HttpRequestTestClient).toConstantValue(
+    container.bind<PlaygroundHttpClient>(AppSymbols.DI.Networking.HttpRequestTestClient).toConstantValue(
       new PlaygroundHttpClient({
         unauthorized: {
           statusCodes: UNAUTHORIZED_STATUS_CODES,
@@ -47,7 +47,7 @@ export class NetworkingAssembly implements Assembly {
       }),
     );
 
-    container.bind<PlaygroundHttpClient>(Symbols.DI.Networking.DelayedHttpRequestTestClient).toConstantValue(
+    container.bind<PlaygroundHttpClient>(AppSymbols.DI.Networking.DelayedHttpRequestTestClient).toConstantValue(
       new PlaygroundHttpClient({
         unauthorized: {
           statusCodes: UNAUTHORIZED_STATUS_CODES,
@@ -58,12 +58,12 @@ export class NetworkingAssembly implements Assembly {
     );
 
     container.bind(HttpRequestTestEndpoint).toSelf();
-    container.bind<HttpRequestTestOperation>(Symbols.DI.Operation.HttpRequestTest).to(HttpRequestTestResource);
+    container.bind<HttpRequestTestOperation>(AppSymbols.DI.Operation.HttpRequestTest).to(HttpRequestTestResource);
     container
-      .bind<HttpRequestTestOperation>(Symbols.DI.Operation.DelayedHttpRequestTest)
+      .bind<HttpRequestTestOperation>(AppSymbols.DI.Operation.DelayedHttpRequestTest)
       .to(DelayedHttpRequestTestResource);
 
     container.bind(UnauthorizedEndpoint).toSelf();
-    container.bind<UnauthorizedOperation>(Symbols.DI.Operation.Unauthorized).to(UnauthorizedResource);
+    container.bind<UnauthorizedOperation>(AppSymbols.DI.Operation.Unauthorized).to(UnauthorizedResource);
   }
 }

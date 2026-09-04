@@ -8,7 +8,7 @@ import {
 } from '@buildplease/webkit';
 import { inject, injectable } from 'inversify';
 
-import { Symbols } from '~/di/symbols';
+import { AppSymbols } from '~/symbols';
 
 export enum UnauthorizedErrorCode {
   Unauthorized = 'playground_unauthorized',
@@ -45,7 +45,7 @@ export class UnauthorizedEndpoint implements RemoteEndpoint<void, void, void, vo
 export class UnauthorizedResource extends SecuredRemoteResource<void, void> {
   public constructor(
     @inject(UnauthorizedEndpoint) endpoint: UnauthorizedEndpoint,
-    @inject(Symbols.DI.Networking.HttpClient) httpClient: HttpClient,
+    @inject(AppSymbols.DI.Networking.HttpClient) httpClient: HttpClient,
   ) {
     super(endpoint, httpClient);
   }

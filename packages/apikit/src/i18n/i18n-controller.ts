@@ -7,7 +7,7 @@ import merge from 'lodash.merge';
 
 import { ApiKitL10nResource } from '#l10n';
 import type { ApiKitController, I18nConfig, I18nFileEntry } from '@/configuration';
-import { ApiKitSymbols } from '@/di';
+import { ApiKitSymbols } from '@/symbols';
 
 import { normalizeLocale, splitBaseRegion } from './utils';
 

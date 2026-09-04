@@ -8,7 +8,7 @@ import {
 } from '@buildplease/webkit';
 import { inject, injectable } from 'inversify';
 
-import { Symbols } from '~/di/symbols';
+import { AppSymbols } from '~/symbols';
 
 export enum HttpRequestTestMode {
   Success,
@@ -86,7 +86,7 @@ export class HttpRequestTestEndpoint implements RemoteEndpoint<
 export class HttpRequestTestResource extends SecuredRemoteResource<HttpRequestTestInput, HttpRequestTestOutput> {
   public constructor(
     @inject(HttpRequestTestEndpoint) endpoint: HttpRequestTestEndpoint,
-    @inject(Symbols.DI.Networking.HttpRequestTestClient) httpClient: HttpClient,
+    @inject(AppSymbols.DI.Networking.HttpRequestTestClient) httpClient: HttpClient,
   ) {
     super(endpoint, httpClient);
   }
@@ -96,7 +96,7 @@ export class HttpRequestTestResource extends SecuredRemoteResource<HttpRequestTe
 export class DelayedHttpRequestTestResource extends SecuredRemoteResource<HttpRequestTestInput, HttpRequestTestOutput> {
   public constructor(
     @inject(HttpRequestTestEndpoint) endpoint: HttpRequestTestEndpoint,
-    @inject(Symbols.DI.Networking.DelayedHttpRequestTestClient) httpClient: HttpClient,
+    @inject(AppSymbols.DI.Networking.DelayedHttpRequestTestClient) httpClient: HttpClient,
   ) {
     super(endpoint, httpClient);
   }

@@ -29,7 +29,7 @@ import type { ViewModel } from '#nuxtkit/architecture';
  * - **SSR**: `onServerPrefetch` is *awaited on the server* by Vue/Nuxt; on the client it’s ignored.
  *
  * @example
- * const vm = useInstance<LoginViewModel>(Symbols.DI.Feature.Login.ViewModel);
+ * const vm = useInstance<LoginViewModel>(AppSymbols.DI.Feature.Login.ViewModel);
  * useBindViewModel(vm);
  * const state = vm.state;
  *

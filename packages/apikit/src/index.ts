@@ -7,7 +7,7 @@ export * from '@buildplease/core';
 export * from '@buildplease/core/node';
 export * from './configuration';
 export * from './database';
-export * from './di';
+export * from './symbols';
 export * from './email';
 export * from './error';
 export * from './file';

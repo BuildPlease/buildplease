@@ -1,7 +1,7 @@
 import type { Assembly, AssemblyContainer } from '@buildplease/core';
 
-import { ApiKitSymbols } from '@/di';
 import { type NormalizationController, NormalizationControllerImpl } from '@/normalization';
+import { ApiKitSymbols } from '@/symbols';
 
 export class NormalizationAssembly implements Assembly {
   public assemble(container: AssemblyContainer): void {

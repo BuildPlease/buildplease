@@ -3,7 +3,7 @@ import { type Logger, type LoggerOptions, LoggerImpl } from '@buildplease/core/n
 import { inject, injectable } from 'inversify';
 
 import { type ApiKitController } from '@/configuration';
-import { ApiKitSymbols } from '@/di';
+import { ApiKitSymbols } from '@/symbols';
 
 @injectable()
 class ApiKitLogger extends LoggerImpl {

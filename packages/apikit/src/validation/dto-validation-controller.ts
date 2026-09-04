@@ -4,9 +4,9 @@ import { inject, injectable } from 'inversify';
 import { type ZodType, z, ZodError } from 'zod';
 
 import type { ApiKitController } from '@/configuration';
-import { ApiKitSymbols } from '@/di';
 import { ApiErrorFactory } from '@/error';
 import { I18nProvider } from '@/i18n';
+import { ApiKitSymbols } from '@/symbols';
 
 const LOG_PREFIX = '[ApiKit:Validation]';
 

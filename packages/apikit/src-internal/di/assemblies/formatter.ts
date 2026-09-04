@@ -1,12 +1,12 @@
 import type { Assembly, AssemblyContainer } from '@buildplease/core';
 
-import { ApiKitSymbols } from '@/di';
 import {
   type FormatterController,
   type MultipartFormatterController,
   FormatterControllerImpl,
   MultipartFormatterControllerImpl,
 } from '@/formatter';
+import { ApiKitSymbols } from '@/symbols';
 
 export class FormatterAssembly implements Assembly {
   public assemble(container: AssemblyContainer): void {

@@ -1,7 +1,7 @@
 import type { Assembly, AssemblyContainer } from '@buildplease/core';
 
 import { type MongoDbQueryFormatter, MongoDbQueryFormatterImpl } from '@/database';
-import { ApiKitSymbols } from '@/di';
+import { ApiKitSymbols } from '@/symbols';
 
 export class DatabaseAssembly implements Assembly {
   public assemble(container: AssemblyContainer): void {

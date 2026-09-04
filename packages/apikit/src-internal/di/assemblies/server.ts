@@ -1,6 +1,5 @@
 import type { Assembly, AssemblyContainer } from '@buildplease/core';
 
-import { ApiKitSymbols } from '@/di';
 import {
   type RequestController,
   type ResponseController,
@@ -9,6 +8,7 @@ import {
   ResponseControllerImpl,
   ServerControllerImpl,
 } from '@/server';
+import { ApiKitSymbols } from '@/symbols';
 
 export class ServerAssembly implements Assembly {
   public assemble(container: AssemblyContainer): void {

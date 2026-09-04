@@ -1,7 +1,7 @@
 import type { Assembly, AssemblyContainer } from '@buildplease/core';
 
-import { ApiKitSymbols } from '@/di';
 import { type OpenAPISchemaController, OpenAPISchemaControllerImpl } from '@/openapi';
+import { ApiKitSymbols } from '@/symbols';
 
 export class OpenAPIAssembly implements Assembly {
   public assemble(container: AssemblyContainer): void {

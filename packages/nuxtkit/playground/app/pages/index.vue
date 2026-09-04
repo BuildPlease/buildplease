@@ -14,7 +14,7 @@
           block
           size="lg"
           color="primary"
-          :to="localePath(Symbols.Routes.Login.path)"
+          :to="localePath(AppSymbols.Routes.Login.path)"
           :label="t('common.login')"
         />
       </template>
@@ -23,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-import { Symbols } from '~/di/symbols';
+import { AppSymbols } from '~/symbols';
 
 const { t } = useI18n();
 const localePath = useLocalePath();
