@@ -56,7 +56,7 @@
   "peerDependencies": {
     "@nuxt/ui": "catalog:",
     "@nuxtjs/i18n": "catalog:",
-    "vue-i18n": "11.4.9",
+    "vue-i18n": "11.4.10",
     "zod": "catalog:"
   },
   "publishConfig": {

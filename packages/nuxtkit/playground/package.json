@@ -10,14 +10,14 @@
     "typecheck": "vue-tsc --noEmit"
   },
   "dependencies": {
-    "@internationalized/date": "3.12.3",
+    "@internationalized/date": "3.12.4",
     "zod": "catalog:"
   },
   "devDependencies": {
     "@buildplease/core": "workspace:*",
     "@buildplease/nuxtkit": "workspace:*",
     "@buildplease/webkit": "workspace:*",
-    "@iconify-json/lucide": "1.2.125",
+    "@iconify-json/lucide": "1.2.129",
     "@nuxt/ui": "catalog:",
     "@nuxtjs/i18n": "catalog:",
     "inversify": "catalog:",

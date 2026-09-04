@@ -53,13 +53,13 @@
     "argon2": "0.45.1",
     "ejs": "6.0.1",
     "fastify-ip": "2.0.0",
-    "fastify-metrics": "13.2.1",
+    "fastify-metrics": "14.1.0",
     "fastify-plugin": "6.0.0",
-    "i18next": "26.4.0",
-    "libphonenumber-js": "1.13.11",
+    "i18next": "26.4.2",
+    "libphonenumber-js": "1.13.12",
     "lodash.merge": "4.6.2",
     "mime-types": "3.0.2",
-    "nodemailer": "9.0.5",
+    "nodemailer": "10.0.0",
     "uuid": "catalog:",
     "validator": "13.15.35"
   },
@@ -68,14 +68,13 @@
     "@types/ejs": "3.1.5",
     "@types/lodash.merge": "4.6.9",
     "@types/mime-types": "3.0.1",
-    "@types/nodemailer": "8.0.1",
     "@types/validator": "13.15.10"
   },
   "peerDependencies": {
-    "fastify": "5.12.1",
+    "fastify": "5.12.3",
     "inversify": "catalog:",
     "reflect-metadata": "catalog:",
-    "sharp": "0.35.3",
+    "sharp": "0.35.4",
     "zod": "catalog:"
   },
   "publishConfig": {

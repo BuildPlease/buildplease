@@ -6,7 +6,7 @@ import { CoreSymbols } from '@buildplease/core';
 import type { Logger } from '@buildplease/core/node';
 import ejs from 'ejs';
 import { inject, injectable } from 'inversify';
-import nodemailer from 'nodemailer';
+import nodemailer, { type SendMailOptions, type Transporter } from 'nodemailer';
 
 import type { ApiKitController, EmailConfig } from '@/configuration';
 import type { EmailTemplate } from '@/email';
@@ -28,7 +28,7 @@ export interface EmailController {
 
 @injectable()
 export class EmailControllerImpl implements EmailController {
-  private transporter?: nodemailer.Transporter;
+  private transporter?: Transporter;
 
   private readonly templatesPath: string;
   private readonly isEnabled: boolean;
@@ -57,7 +57,7 @@ export class EmailControllerImpl implements EmailController {
       const transporter = this.getOrCreateTransporter();
       const htmlContent = await this.renderTemplate(template);
 
-      const mailOptions: nodemailer.SendMailOptions = {
+      const mailOptions: SendMailOptions = {
         to: template.recipient,
         from: template.sender,
         subject: template.subject,
@@ -74,7 +74,7 @@ export class EmailControllerImpl implements EmailController {
 
   // MARK: - Private
 
-  private getOrCreateTransporter(): nodemailer.Transporter {
+  private getOrCreateTransporter(): Transporter {
     if (!this.transporter) {
       this.transporter = nodemailer.createTransport({
         host: this.smtpConfig.host,
@@ -109,10 +109,12 @@ export class EmailControllerImpl implements EmailController {
 
   private makeFilePath(templatePath: string, fallbackPath?: string): string {
     const primary = path.join(this.templatesPath, this.sanitizeTemplatePath(templatePath));
+
     if (existsSync(primary)) return primary;
 
     if (fallbackPath) {
       const fallback = path.join(this.templatesPath, this.sanitizeTemplatePath(fallbackPath));
+
       if (existsSync(fallback)) return fallback;
     }
 
@@ -138,6 +140,7 @@ export class EmailControllerImpl implements EmailController {
     }
 
     const cleanedPath = templatePath.replace(/^\/+/, '');
+
     return cleanedPath.endsWith('.ejs') ? cleanedPath : `${cleanedPath}.ejs`;
   }
 }
@@ -159,9 +162,13 @@ function makeSmtpConfig(config: EmailConfig): SmtpConfig {
 
   if (!smtp.host) throw new Error(`${LOG_PREFIX} email.smtp.host is required when email is enabled`);
   if (!smtp.port) throw new Error(`${LOG_PREFIX} email.smtp.port is required when email is enabled`);
-  if (smtp.secure === undefined) throw new Error(`${LOG_PREFIX} email.smtp.secure is required when email is enabled`);
+  if (smtp.secure === undefined) {
+    throw new Error(`${LOG_PREFIX} email.smtp.secure is required when email is enabled`);
+  }
   if (!smtp.user) throw new Error(`${LOG_PREFIX} email.smtp.user is required when email is enabled`);
-  if (!smtp.password) throw new Error(`${LOG_PREFIX} email.smtp.password is required when email is enabled`);
+  if (!smtp.password) {
+    throw new Error(`${LOG_PREFIX} email.smtp.password is required when email is enabled`);
+  }
 
   if (!Number.isInteger(smtp.port) || smtp.port <= 0) {
     throw new Error(`${LOG_PREFIX} email.smtp.port must be a positive integer`);
