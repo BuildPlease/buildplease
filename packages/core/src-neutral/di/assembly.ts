@@ -8,6 +8,8 @@ export interface Assembly {
   assemble(container: AssemblyContainer): void;
 }
 
-export function coreAssembly(): Assembly[] {
-  return [new FormatterAssembly()];
+export class CoreAssembly implements Assembly {
+  public assemble(container: AssemblyContainer): void {
+    new FormatterAssembly().assemble(container);
+  }
 }
