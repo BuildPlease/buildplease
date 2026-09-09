@@ -1,8 +1,6 @@
 import {
   type Geometry,
   type OpeningHourInterval,
-  Address,
-  Contacts,
   Coordinates,
   DateTime,
   LineString,
@@ -132,106 +130,6 @@ const GeometrySchema = z.union([
 
 export type GeometryDto = z.input<typeof GeometrySchema>;
 
-/* MARK: - Opening Hours */
-const OpeningHourIntervalSchema = z
-  .object({
-    open: z.string(),
-    close: z.string(),
-  })
-  .superRefine((value, context) => {
-    const openValue = value.open.trim();
-    const closeValue = value.close.trim();
-
-    const hasOpen = openValue.length > 0;
-    const hasClose = closeValue.length > 0;
-
-    const addIssue = (key: string, path: (string | number)[], values?: Record<string, unknown>) => {
-      const params: ValidationSchemaI18nParams = {
-        i18n: {
-          key: key,
-          values: values,
-        },
-      };
-
-      context.addIssue({
-        code: 'custom',
-        path: path,
-        params: params,
-      });
-    };
-
-    if (!hasOpen && !hasClose) {
-      addIssue(CoreL10n.Core.Common.Validation.OpeningHours.TimeRequired, ['open']);
-      return;
-    }
-
-    if (hasOpen !== hasClose) {
-      const missingPath = hasOpen ? ['close'] : ['open'];
-      addIssue(CoreL10n.Core.Common.Validation.OpeningHours.TimeRangeIncomplete, missingPath);
-    }
-  }) satisfies z.ZodType<OpeningHourInterval>;
-
-const OpeningHourSchema = z
-  .object({
-    day: z.number().int().min(1).max(7),
-    intervals: z.array(OpeningHourIntervalSchema).default([]),
-  })
-  .transform((value) => new OpeningHour(value.day, value.intervals));
-
-const OpeningHoursSchema = z.array(OpeningHourSchema);
-
-export type OpeningHourIntervalDto = z.input<typeof OpeningHourIntervalSchema>;
-export type OpeningHourDto = z.input<typeof OpeningHourSchema>;
-export type OpeningHoursDto = z.input<typeof OpeningHoursSchema>;
-
-/* MARK: - Contacts */
-const ContactsSchema = z
-  .object({
-    email: z.email().optional().nullable(),
-    fb: z.string().optional().nullable(),
-    ig: z.string().optional().nullable(),
-    phone: z.string().optional().nullable(),
-    web: z.string().optional().nullable(),
-  })
-  .transform(
-    (value) =>
-      new Contacts({
-        email: value.email,
-        fb: value.fb,
-        ig: value.ig,
-        phone: value.phone,
-        web: value.web,
-      }),
-  );
-
-export type ContactsDto = z.input<typeof ContactsSchema>;
-
-/* MARK: - Address */
-const AddressSchema = z
-  .object({
-    streetLine1: z.string().min(1),
-    streetLine2: z.string().optional().nullable(),
-    postalCode: z.string().optional().nullable(),
-    city: z.string().optional().nullable(),
-    state: z.string().optional().nullable(),
-    country: z.string().min(1),
-    countryCode: z.string().optional().nullable(),
-  })
-  .transform(
-    (value) =>
-      new Address({
-        streetLine1: value.streetLine1,
-        streetLine2: value.streetLine2,
-        postalCode: value.postalCode,
-        state: value.state,
-        city: value.city,
-        country: value.country,
-        countryCode: value.countryCode,
-      }),
-  );
-
-export type AddressDto = z.input<typeof AddressSchema>;
-
 /* MARK: - Export */
 export const ValidationSchemas = {
   // Primitives
@@ -253,10 +151,4 @@ export const ValidationSchemas = {
   PolygonGeometry: PolygonGeometrySchema,
   MultiPolygonGeometry: MultiPolygonGeometrySchema,
   Geometry: GeometrySchema,
-
-  // Common
-  OpeningHour: OpeningHourSchema,
-  OpeningHours: OpeningHoursSchema,
-  Contacts: ContactsSchema,
-  Address: AddressSchema,
 };
