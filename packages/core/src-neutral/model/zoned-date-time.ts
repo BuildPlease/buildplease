@@ -1,25 +1,18 @@
-import { tz, TZDate, tzOffset } from '@date-fns/tz';
+import { tz, TZDate, tzOffset, tzScan } from '@date-fns/tz';
+import { utc } from '@date-fns/utc';
 import { DateTime } from '@neutral/model/date-time';
 import { type FormatOptions, format as formatDate, isValid, parseISO } from 'date-fns';
+
+const LOCAL_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSS";
+const MINUTE_MS = 60_000;
+const DAY_MS = 86_400_000;
 
 /**
  * Represents an immutable UTC instant paired with an explicit IANA time zone.
  *
- * @remarks
- * The instant is stored independently from its presentation time zone. Changing
- * the time zone preserves the instant and only changes its local wall-clock
- * representation. Numeric UTC offsets are not accepted as time-zone identity.
- *
- * @example
- * const eventTime = ZonedDateTime.fromUtc(
- *   new DateTime('2026-09-09T16:00:00Z'),
- *   'Europe/Bratislava',
- * );
- * eventTime.toLocalIsoMinutes();
- * // "2026-09-09T18:00"
- *
- * @throws {Error}
- * When the time zone is not a valid IANA time-zone identifier.
+ * The instant is stored independently from its presentation time zone.
+ * Changing the time zone preserves the instant and only changes its local
+ * wall-clock representation.
  */
 export class ZonedDateTime {
   private readonly dateTime: DateTime;
@@ -29,15 +22,9 @@ export class ZonedDateTime {
 
   /**
    * Creates a timezone-aware date-time from an instant and IANA time zone.
-   *
-   * @param timeZone
-   * IANA time-zone identifier, for example `Europe/Bratislava`.
-   *
-   * @param utc
-   * UTC instant. Omit to use the current instant.
    */
   public constructor(timeZone: string, utc?: Date | DateTime) {
-    assertIanaTimeZone(timeZone);
+    validateTimeZone(timeZone);
 
     this.timeZone = timeZone;
     this.dateTime = utc instanceof DateTime ? utc : new DateTime(utc);
@@ -56,40 +43,65 @@ export class ZonedDateTime {
   /**
    * Creates a timezone-aware value from a local wall-clock ISO date-time.
    *
-   * @remarks
-   * `localIso` is interpreted in `timeZone` and must not contain a `Z` suffix or
-   * numeric UTC offset. Daylight-saving rules are resolved by the IANA time zone.
-   *
-   * @example
-   * ZonedDateTime.fromLocalIso('2026-07-15T18:00', 'Europe/Bratislava')
-   *   .toISOString();
-   * // "2026-07-15T16:00:00.000Z"
-   *
-   * @throws {Error}
-   * When `localIso` is invalid or contains its own UTC offset.
+   * DST gaps and overlaps are rejected instead of being silently shifted
+   * or disambiguated.
    */
   public static fromLocalIso(localIso: string, timeZone: string): ZonedDateTime {
-    assertIanaTimeZone(timeZone);
+    validateTimeZone(timeZone);
 
     if (hasExplicitOffset(localIso)) {
       throw new Error('Local date-time must not contain a UTC offset');
     }
 
-    const parsed = parseISO(localIso, { in: tz(timeZone) });
-    if (!isValid(parsed)) throw new Error('Invalid local date-time string');
+    const local = parseISO(localIso, { in: utc });
 
-    return new ZonedDateTime(timeZone, new DateTime(parsed));
+    if (!isValid(local)) {
+      throw new Error('Invalid local date-time string');
+    }
+
+    const wallClockMs = local.getTime();
+    const startMs = wallClockMs - DAY_MS;
+    const endMs = wallClockMs + DAY_MS;
+
+    const offsets = new Set<number>([tzOffset(timeZone, local)]);
+
+    for (const transition of tzScan(timeZone, {
+      start: new Date(startMs),
+      end: new Date(endMs),
+    })) {
+      const transitionMs = transition.date.getTime();
+
+      if (transitionMs < startMs || transitionMs > endMs) continue;
+
+      offsets.add(transition.offset);
+      offsets.add(transition.offset - transition.change);
+    }
+
+    const expected = formatDate(local, LOCAL_PATTERN, { in: utc });
+
+    const matches = [...offsets]
+      .map((offset) => new Date(wallClockMs - offset * MINUTE_MS))
+      .filter((instant) => formatDate(instant, LOCAL_PATTERN, { in: tz(timeZone) }) === expected);
+
+    if (matches.length === 0) {
+      throw new Error(`Local date-time does not exist in time zone: ${localIso} (${timeZone})`);
+    }
+
+    if (matches.length > 1) {
+      throw new Error(`Local date-time is ambiguous in time zone: ${localIso} (${timeZone})`);
+    }
+
+    return ZonedDateTime.fromUtc(matches[0]!, timeZone);
   }
 
   /**
    * Formats this value in its configured time zone using a date-fns pattern.
-   *
-   * @remarks
-   * Prefer the `DateTimeFormatter` for human-readable application
-   * output. This method remains for pattern-based compatibility.
    */
   public format(pattern: string, options?: FormatOptions): string {
-    return formatDate(this.dateTime.toDate(), pattern, { ...options, in: tz(this.timeZone) });
+    return formatDate(this.dateTime.toDate(), pattern, {
+      ...options,
+      in: tz(this.timeZone),
+    });
   }
 
   /** Returns a local ISO string without offset at minute precision. */
@@ -118,12 +130,8 @@ export class ZonedDateTime {
   }
 
   /**
-   * Returns a defensive `Date` compatible value whose local getters operate in
-   * this value's configured time zone.
-   *
-   * @remarks
-   * The returned object is independent from this `ZonedDateTime`; mutating it
-   * cannot change the stored instant.
+   * Returns a defensive `Date` compatible value whose local getters operate
+   * in this value's configured time zone.
    */
   public toZonedDate(): Date {
     return new TZDate(this.dateTime.getTime(), this.timeZone);
@@ -135,7 +143,8 @@ export class ZonedDateTime {
    */
   public timezoneOffsetMs(atUtc?: Date | DateTime): number {
     const instant = atUtc instanceof DateTime ? atUtc.toDate() : (atUtc ?? this.dateTime.toDate());
-    return tzOffset(this.timeZone, instant) * 60_000;
+
+    return tzOffset(this.timeZone, instant) * MINUTE_MS;
   }
 
   /** Returns the same instant represented in another IANA time zone. */
@@ -144,21 +153,12 @@ export class ZonedDateTime {
   }
 }
 
-function assertIanaTimeZone(timeZone: string): void {
-  if (timeZone.length === 0 || /^[+-]/u.test(timeZone)) {
-    throw new Error(`Invalid IANA time zone: ${timeZone}`);
-  }
-
-  try {
-    new Intl.DateTimeFormat('en', { timeZone: timeZone }).format(0);
-  } catch {
+function validateTimeZone(timeZone: string): void {
+  if (/^[+-]/u.test(timeZone) || Number.isNaN(tzOffset(timeZone, new Date(0)))) {
     throw new Error(`Invalid IANA time zone: ${timeZone}`);
   }
 }
 
 function hasExplicitOffset(value: string): boolean {
-  const separatorIndex = value.search(/[T ]/u);
-  if (separatorIndex < 0) return false;
-
-  return /(?:Z|[+-]\d{2}(?::?\d{2})?)$/iu.test(value.slice(separatorIndex + 1));
+  return /[T ].*(?:Z|[+-]\d{2}(?::?\d{2})?)$/iu.test(value);
 }

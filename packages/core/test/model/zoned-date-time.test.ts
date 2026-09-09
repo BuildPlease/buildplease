@@ -24,22 +24,54 @@ describe('ZonedDateTime', () => {
     expect(value.timezoneOffsetMs()).toBe(60 * 60 * 1000);
   });
 
-  it('normalizes a nonexistent local time forward across the DST spring gap', () => {
-    const value = ZonedDateTime.fromLocalIso('2026-03-29T02:30', 'Europe/Bratislava');
-
-    expect(value.toISOString()).toBe('2026-03-29T01:30:00.000Z');
-    expect(value.toLocalIsoMinutes()).toBe('2026-03-29T03:30');
+  it('rejects a nonexistent local time during the DST spring gap', () => {
+    expect(() => ZonedDateTime.fromLocalIso('2026-03-29T02:30', 'Europe/Bratislava')).toThrow(
+      'Local date-time does not exist in time zone',
+    );
   });
 
-  it('resolves an ambiguous local time to the earlier DST instant', () => {
-    const value = ZonedDateTime.fromLocalIso('2026-10-25T02:30', 'Europe/Bratislava');
+  it('rejects an ambiguous local time during the DST autumn overlap', () => {
+    expect(() => ZonedDateTime.fromLocalIso('2026-10-25T02:30', 'Europe/Bratislava')).toThrow(
+      'Local date-time is ambiguous in time zone',
+    );
+  });
 
-    expect(value.toISOString()).toBe('2026-10-25T00:30:00.000Z');
-    expect(value.timezoneOffsetMs()).toBe(2 * 60 * 60 * 1000);
+  it('accepts valid local times immediately around a DST spring gap', () => {
+    expect(ZonedDateTime.fromLocalIso('2026-03-29T01:59', 'Europe/Bratislava').toISOString()).toBe(
+      '2026-03-29T00:59:00.000Z',
+    );
+
+    expect(ZonedDateTime.fromLocalIso('2026-03-29T03:00', 'Europe/Bratislava').toISOString()).toBe(
+      '2026-03-29T01:00:00.000Z',
+    );
+  });
+
+  it('accepts valid local times immediately around a DST autumn overlap', () => {
+    expect(ZonedDateTime.fromLocalIso('2026-10-25T01:59', 'Europe/Bratislava').toISOString()).toBe(
+      '2026-10-24T23:59:00.000Z',
+    );
+
+    expect(ZonedDateTime.fromLocalIso('2026-10-25T03:00', 'Europe/Bratislava').toISOString()).toBe(
+      '2026-10-25T02:00:00.000Z',
+    );
+  });
+
+  it('supports time zones with non-hour offsets', () => {
+    const value = ZonedDateTime.fromLocalIso('2026-07-15T18:00', 'Asia/Kathmandu');
+
+    expect(value.toISOString()).toBe('2026-07-15T12:15:00.000Z');
+    expect(value.timezoneOffsetMs()).toBe(5.75 * 60 * 60 * 1000);
+  });
+
+  it('rejects ambiguous local times with non-hour DST transitions', () => {
+    expect(() => ZonedDateTime.fromLocalIso('2026-04-05T01:45', 'Australia/Lord_Howe')).toThrow(
+      'Local date-time is ambiguous in time zone',
+    );
   });
 
   it('changes time zone without changing the instant', () => {
     const bratislava = ZonedDateTime.fromUtc(new DateTime('2026-07-15T16:00:00Z'), 'Europe/Bratislava');
+
     const newYork = bratislava.withTimeZone('America/New_York');
 
     expect(newYork.toISOString()).toBe(bratislava.toISOString());
@@ -59,16 +91,18 @@ describe('ZonedDateTime', () => {
   });
 
   it('rejects invalid time-zone identifiers', () => {
-    expect(() => ZonedDateTime.fromUtc(new Date(), 'Not/A_Time_Zone')).toThrow(
-      'Invalid IANA time zone: Not/A_Time_Zone',
-    );
-    expect(() => ZonedDateTime.fromUtc(new Date(), '+02:00')).toThrow('Invalid IANA time zone: +02:00');
+    const instant = new Date('2026-01-01T00:00:00.000Z');
+
+    expect(() => ZonedDateTime.fromUtc(instant, 'Not/A_Time_Zone')).toThrow('Invalid IANA time zone: Not/A_Time_Zone');
+
+    expect(() => ZonedDateTime.fromUtc(instant, '+02:00')).toThrow('Invalid IANA time zone: +02:00');
   });
 
   it('rejects local input that already contains an offset', () => {
     expect(() => ZonedDateTime.fromLocalIso('2026-07-15T18:00:00+02:00', 'Europe/Bratislava')).toThrow(
       'Local date-time must not contain a UTC offset',
     );
+
     expect(() => ZonedDateTime.fromLocalIso('2026-07-15T16:00:00Z', 'Europe/Bratislava')).toThrow(
       'Local date-time must not contain a UTC offset',
     );
