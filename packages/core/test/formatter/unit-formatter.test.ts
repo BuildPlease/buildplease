@@ -1,9 +1,9 @@
-import { UnitFormatterControllerImpl } from '@neutral/formatter/unit-formatter-controller';
+import { UnitFormatterImpl } from '@neutral/formatter/unit-formatter';
 import { ByteUnit } from '@neutral/model/unit';
 import { describe, expect, it } from 'vitest';
 
-describe('UnitFormatterController', () => {
-  const formatter = new UnitFormatterControllerImpl();
+describe('UnitFormatter', () => {
+  const formatter = new UnitFormatterImpl();
 
   it('formats bytes using automatic units', () => {
     expect(formatter.formatBytes(1_048_576)).toEqual({

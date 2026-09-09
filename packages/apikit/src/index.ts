@@ -8,7 +8,7 @@ export * from '@buildplease/core/node';
 export * from './configuration';
 export * from './database';
 export * from './di/assembly';
-export * from './symbols';
+export { Symbols } from './symbols';
 export * from './email';
 export * from './error';
 export * from './file';

@@ -3,12 +3,12 @@ import { TelegramNotificationChannelController } from '@src-internal/notificatio
 import type { NotificationChannelController } from '@src-internal/notification/notification-channel-controller';
 import { NotificationControllerImpl } from '@src-internal/notification/notification-controller';
 import { NOTIFICATION_LOG_PREFIX } from '@src-internal/notification/notification-log';
-import { InternalApiKitSymbols } from '@src-internal/symbols';
+import { InternalSymbols } from '@src-internal/symbols';
 import { inject, injectable } from 'inversify';
 
-import { type ApiKitController } from '@/configuration';
+import { type ConfigurationController } from '@/configuration';
 import { type NotificationChannelRequest, type NotificationController, NotificationChannel } from '@/notification';
-import { ApiKitSymbols } from '@/symbols';
+import { Symbols } from '@/symbols';
 
 @injectable()
 class ApiKitTelegramNotificationChannelController implements NotificationChannelController {
@@ -16,8 +16,8 @@ class ApiKitTelegramNotificationChannelController implements NotificationChannel
   private readonly controller?: TelegramNotificationChannelController;
 
   public constructor(
-    @inject(ApiKitSymbols.DI.Configuration.Controller)
-    configuration: ApiKitController,
+    @inject(Symbols.DI.Configuration.Controller)
+    configuration: ConfigurationController,
   ) {
     const notification = configuration.notification;
     const telegram = notification.enabled ? notification.channels.telegram : undefined;
@@ -37,12 +37,12 @@ class ApiKitTelegramNotificationChannelController implements NotificationChannel
 export class NotificationAssembly implements Assembly {
   public assemble(container: AssemblyContainer): void {
     container
-      .bind<NotificationChannelController>(InternalApiKitSymbols.DI.Notification.ChannelController)
+      .bind<NotificationChannelController>(InternalSymbols.DI.Notification.ChannelController)
       .to(ApiKitTelegramNotificationChannelController)
       .inSingletonScope();
 
     container
-      .bind<NotificationController>(ApiKitSymbols.DI.Notification.Controller)
+      .bind<NotificationController>(Symbols.DI.Notification.Controller)
       .to(NotificationControllerImpl)
       .inSingletonScope();
   }

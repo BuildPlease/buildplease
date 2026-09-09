@@ -8,7 +8,7 @@ const pluginName = 'apikit-static';
 const LOG_PREFIX = '[ApiKit:Static]';
 
 const staticFilesPlugin: FastifyPluginAsync<ServerPluginOptions> = async (fastify, options) => {
-  const config = options.apikitController.staticFiles;
+  const config = options.configurationController.staticFiles;
 
   if (!config.enabled) {
     fastify.log.info(`${LOG_PREFIX} Disabled — skipping`);

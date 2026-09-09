@@ -1,6 +1,6 @@
 import { injectable } from 'inversify';
 
-import { AppSymbols } from '~/symbols';
+import { Routes } from '~/symbols';
 
 export interface LoginController extends Controller {
   onLogin(input: string, password: string): Promise<void>;
@@ -23,7 +23,7 @@ export class LoginControllerImpl extends ControllerImpl implements LoginControll
       console.log(`Logged in with Input: ${input}, Password: ${password}`);
 
       const localePath = useLocalePath();
-      this.router.push(localePath(AppSymbols.Routes.Dashboard.path));
+      this.router.push(localePath(Routes.Dashboard.path));
     } catch (error) {
       this.setStatus('failed');
       throw error;

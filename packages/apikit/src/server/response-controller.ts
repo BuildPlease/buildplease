@@ -1,10 +1,10 @@
-import { CoreSymbols } from '@buildplease/core';
 import type { Logger } from '@buildplease/core/node';
 import type { FastifyReply, FastifyRequest } from 'fastify';
 import { inject, injectable } from 'inversify';
 
 import { type FileHttpResponse, type HttpResponse, type JSONHttpResponse, HttpHeaders, ResponseType } from '@/http';
 import { RequestLogMetadata } from '@/request';
+import { Symbols } from '@/symbols';
 
 const LOG_PREFIX = '[ApiKit:Response]';
 
@@ -15,7 +15,7 @@ export interface ResponseController {
 @injectable()
 export class ResponseControllerImpl implements ResponseController {
   constructor(
-    @inject(CoreSymbols.DI.Logger)
+    @inject(Symbols.DI.Logging.Logger)
     private logger: Logger,
   ) {}
 

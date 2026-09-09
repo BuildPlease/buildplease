@@ -1,56 +1,52 @@
+import { Symbols as ParentSymbols } from '@buildplease/core';
 import { FrameworkIdentity } from '@buildplease/identity';
 
 const prefix = `${FrameworkIdentity.name}.ApiKit.DI`;
 
-export const ApiKitSymbols = {
+export const Symbols = ParentSymbols.extend({
   DI: {
     Configuration: {
       Controller: Symbol.for(`${prefix}.Configuration.Controller`),
     },
-    Database: {
-      MongoDB: {
-        QueryFormatter: Symbol.for(`${prefix}.Database.MongoDB.QueryFormatter`),
-      },
+    Cryptography: {
+      Controller: Symbol.for(`${prefix}.Cryptography.Controller`),
     },
     Email: {
       Controller: Symbol.for(`${prefix}.Email.Controller`),
     },
-    File: {
-      TemporaryRepository: Symbol.for(`${prefix}.File.TemporaryRepository`),
+    Formatter: {
+      MongoDBQuery: Symbol.for(`${prefix}.Formatter.MongoDBQuery`),
+      Multipart: Symbol.for(`${prefix}.Formatter.Multipart`),
     },
-    Validation: {
-      Controller: Symbol.for(`${prefix}.Validation.Controller`),
-      DtoController: Symbol.for(`${prefix}.Validation.DtoController`),
-    },
-    OpenAPI: {
-      SchemaController: Symbol.for(`${prefix}.OpenAPI.SchemaController`),
+    Generator: {
+      RandomValue: Symbol.for(`${prefix}.Generator.RandomValue`),
     },
     I18n: {
       Controller: Symbol.for(`${prefix}.I18n.Controller`),
     },
-    Notification: {
-      Controller: Symbol.for(`${prefix}.Notification.Controller`),
+    Image: {
+      NormalizationController: Symbol.for(`${prefix}.Image.NormalizationController`),
     },
     Normalization: {
       Controller: Symbol.for(`${prefix}.Normalization.Controller`),
     },
-    Formatter: {
-      Controller: Symbol.for(`${prefix}.Formatter.Controller`),
-      MultipartController: Symbol.for(`${prefix}.Formatter.MultipartController`),
+    Notification: {
+      Controller: Symbol.for(`${prefix}.Notification.Controller`),
     },
-    Generator: {
-      RandomValueGenerator: Symbol.for(`${prefix}.Generator.RandomValueGenerator`),
+    OpenAPI: {
+      SchemaController: Symbol.for(`${prefix}.OpenAPI.SchemaController`),
     },
-    Image: {
-      NormalizationController: Symbol.for(`${prefix}.Image.NormalizationController`),
+    Repository: {
+      TemporaryFile: Symbol.for(`${prefix}.Repository.TemporaryFile`),
     },
     Server: {
       Controller: Symbol.for(`${prefix}.Server.Controller`),
       RequestController: Symbol.for(`${prefix}.Server.RequestController`),
       ResponseController: Symbol.for(`${prefix}.Server.ResponseController`),
     },
-    Security: {
-      CryptographyController: Symbol.for(`${prefix}.Security.CryptographyController`),
+    Validation: {
+      Controller: Symbol.for(`${prefix}.Validation.Controller`),
+      DTOController: Symbol.for(`${prefix}.Validation.DTOController`),
     },
   },
-};
+});

@@ -18,7 +18,7 @@ import type {
 
 // MARK: - Public
 
-export interface ApiKitController {
+export interface ConfigurationController {
   get build(): Build;
   get environment(): Environment;
   get isDebug(): boolean;
@@ -40,7 +40,7 @@ export interface ApiKitController {
 }
 
 @injectable()
-export class ApiKitControllerImpl implements ApiKitController {
+export class ConfigurationControllerImpl implements ConfigurationController {
   public get build(): Build {
     return global.apikit.build;
   }

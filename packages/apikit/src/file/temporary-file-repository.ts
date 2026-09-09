@@ -4,11 +4,11 @@ import path from 'node:path';
 import { Readable } from 'node:stream';
 import { pipeline as pipelineAsync } from 'node:stream/promises';
 
-import { CoreSymbols } from '@buildplease/core';
 import { type Logger, createDirectoryAsync, ensureDirectoryAsync, removePathAsync } from '@buildplease/core/node';
 import { inject, injectable } from 'inversify';
 
 import type { FormatType } from '@/formatter';
+import { Symbols } from '@/symbols';
 
 const LOG_PREFIX = '[ApiKit:TemporaryFile]';
 
@@ -70,7 +70,7 @@ export class TemporaryFileRepositoryImpl implements TemporaryFileRepository {
   private readonly rootDir: string;
 
   constructor(
-    @inject(CoreSymbols.DI.Logger)
+    @inject(Symbols.DI.Logging.Logger)
     private readonly logger: Logger,
   ) {
     this.rootDir = os.tmpdir();

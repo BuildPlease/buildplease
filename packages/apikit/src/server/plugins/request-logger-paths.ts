@@ -1,16 +1,16 @@
 import type { ServerPluginOptions } from '@/server';
 
 export function resolveRequestLoggerIgnoredPaths(options: ServerPluginOptions): readonly string[] {
-  const apikit = options.apikitController;
-  const loggerConfig = apikit.logger;
+  const configuration = options.configurationController;
+  const loggerConfig = configuration.logger;
 
   if (!loggerConfig.enabled) {
     return [];
   }
 
   return uniqueRequestLoggerPaths([
-    apikit.health.enabled ? apikit.health.url : undefined,
-    apikit.metrics.enabled ? resolveMetricsEndpointPath(apikit.metrics.endpoint) : undefined,
+    configuration.health.enabled ? configuration.health.url : undefined,
+    configuration.metrics.enabled ? resolveMetricsEndpointPath(configuration.metrics.endpoint) : undefined,
     ...(loggerConfig.request?.ignoredPaths ?? []),
   ]);
 }

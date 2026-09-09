@@ -1,43 +1,48 @@
-export const AppSymbols = {
-  Routes: {
-    Root: {
-      name: '/',
-      path: '/',
-    },
-    Login: {
-      name: 'login',
-      path: '/login',
-    },
-    Dashboard: {
-      name: 'dashboard',
-      path: '/dashboard',
-    },
-    Zod: {
-      Complex: {
-        name: 'zod/complex',
-        path: '/zod/complex',
-      },
+import { Symbols as ParentSymbols } from '@buildplease/webkit';
+
+export const Routes = {
+  Root: {
+    name: '/',
+    path: '/',
+  },
+  Login: {
+    name: 'login',
+    path: '/login',
+  },
+  Dashboard: {
+    name: 'dashboard',
+    path: '/dashboard',
+  },
+  Zod: {
+    Complex: {
+      name: 'zod/complex',
+      path: '/zod/complex',
     },
   },
+} as const;
+
+export const Symbols = ParentSymbols.extend({
   DI: {
-    Networking: {
-      HttpClient: Symbol.for('DI.Networking.HttpClient'),
-      HttpRequestTestClient: Symbol.for('DI.Networking.HttpRequestTestClient'),
-      DelayedHttpRequestTestClient: Symbol.for('DI.Networking.DelayedHttpRequestTestClient'),
-    },
-    Feature: {
-      Login: {
-        ViewModel: Symbol.for('DI.Feature.Login.ViewModel'),
-        Controller: Symbol.for('DI.Feature.Login.Controller'),
+    Playground: {
+      Feature: {
+        Dashboard: {
+          ViewModel: Symbol.for('Playground.DI.Feature.Dashboard.ViewModel'),
+        },
+        Login: {
+          Controller: Symbol.for('Playground.DI.Feature.Login.Controller'),
+          ViewModel: Symbol.for('Playground.DI.Feature.Login.ViewModel'),
+        },
       },
-      Dashboard: {
-        ViewModel: Symbol.for('DI.Feature.Dashboard.ViewModel'),
+      Networking: {
+        DelayedHttpRequestTestClient: Symbol.for('Playground.DI.Networking.DelayedHttpRequestTestClient'),
+        HttpClient: Symbol.for('Playground.DI.Networking.HttpClient'),
+        HttpRequestTestClient: Symbol.for('Playground.DI.Networking.HttpRequestTestClient'),
       },
-    },
-    Operation: {
-      HttpRequestTest: Symbol.for('DI.Operation.HttpRequestTest'),
-      DelayedHttpRequestTest: Symbol.for('DI.Operation.DelayedHttpRequestTest'),
-      Unauthorized: Symbol.for('DI.Operation.Unauthorized'),
+      Operation: {
+        DelayedHttpRequestTest: Symbol.for('Playground.DI.Operation.DelayedHttpRequestTest'),
+        HttpRequestTest: Symbol.for('Playground.DI.Operation.HttpRequestTest'),
+        Unauthorized: Symbol.for('Playground.DI.Operation.Unauthorized'),
+      },
     },
   },
-};
+});

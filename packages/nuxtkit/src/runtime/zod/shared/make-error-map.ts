@@ -1,4 +1,3 @@
-import type { ValidationSchemaI18nParams } from '@buildplease/core';
 import type { Composer } from 'vue-i18n';
 import { type $ZodErrorMap, type $ZodStringFormats, util } from 'zod/v4/core';
 
@@ -143,16 +142,8 @@ export function makeErrorMap(i18n: Composer): $ZodErrorMap {
       case 'invalid_element':
         return t(makeKey('invalid_element'), { origin: issue.origin });
 
-      case 'custom': {
-        const params = issue.params as ValidationSchemaI18nParams | undefined;
-
-        if (params?.i18n?.key) {
-          const { key, values } = params.i18n;
-          return values ? t(key, values) : t(key);
-        }
-
+      case 'custom':
         return t(makeKey('invalid'));
-      }
 
       default:
         return t(makeKey('invalid'));

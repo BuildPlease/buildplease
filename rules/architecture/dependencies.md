@@ -4,6 +4,7 @@
 
 | Ownership                          | Declaration                              |
 | ---------------------------------- | ---------------------------------------- |
+| package manager                    | exact root `packageManager` version      |
 | one installed manifest owner       | exact version in that manifest           |
 | multiple installed manifest owners | exact version in pnpm default catalog    |
 | consumer runtime contract          | explicit peer compatibility version      |
@@ -35,6 +36,7 @@ package source -> declared dependency -> public package export
 
 ## Rules
 
+- Root `packageManager` pins the repository pnpm version.
 - Each package declares the external dependencies it imports.
 - Repository-only CLI/toolchain dependencies stay at root when packages only use them through repository scripts.
 - Compatibility hoists/overrides are narrow, verified and removable.

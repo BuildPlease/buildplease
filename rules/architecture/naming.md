@@ -1,6 +1,6 @@
 # Naming
 
-## Map
+## Types
 
 | Suffix                    | Responsibility                   |
 | ------------------------- | -------------------------------- |
@@ -11,12 +11,27 @@
 | `DTO` / `Schema`          | transport contract / validation  |
 | `Converter`               | runtime-validated conversion     |
 | `Controller`              | technical/application capability |
+| `Formatter`               | value representation/formatting  |
+| `Generator`               | value/data generation            |
 | `Repository`              | persistence boundary             |
 | `UseCase`                 | one application operation        |
 | `Handler`                 | transport adapter                |
 | `Validator`               | reusable guard                   |
 | `Provider`                | capability selection/supply      |
 | `Factory`                 | value/implementation creation    |
+
+Type names use concept first, role second:
+
+```text
+DateTimeFormatter
+RandomValueGenerator
+TemporaryFileRepository
+ConfigurationController
+```
+
+DI paths group reusable role families for lookup; see `dependency-injection.md`.
+
+## Methods
 
 | Method                                  | Meaning                             |
 | --------------------------------------- | ----------------------------------- |
@@ -29,18 +44,9 @@
 | `get*()`                                | required value/direct access        |
 | `create*()` / `update*()` / `delete*()` | mutation                            |
 
-## Shape
-
-```text
-<concept><role>
-
-AccountRepository
-resolveConfiguration()
-loadPackageJSON()
-```
-
 ## Rules
 
-- Name the concept first and the role second.
 - One concept uses one term across layers.
-- Method names describe ownership and lifecycle semantics, not implementation detail.
+- Names describe responsibility, not implementation detail.
+- Acronyms keep their established contract form (`DTO`, `OpenAPI`, `I18n`, `L10n`).
+- Method names describe ownership and lifecycle semantics.

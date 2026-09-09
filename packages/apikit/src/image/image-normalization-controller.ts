@@ -1,13 +1,14 @@
 import { type Readable, PassThrough } from 'stream';
 import { pipeline as pipelineAsync } from 'stream/promises';
 
-import { type UnitFormatterController, ByteUnit, CoreSymbols } from '@buildplease/core';
+import { type UnitFormatter, ByteUnit } from '@buildplease/core';
 import { inject, injectable } from 'inversify';
 import type { Metadata } from 'sharp';
 import sharp from 'sharp';
 
 import { ApiErrorFactory } from '@/error';
 import { FormatType } from '@/formatter';
+import { Symbols } from '@/symbols';
 
 import type { ImageOptions, SharpFormat, SharpInstance } from './image-options';
 
@@ -21,8 +22,8 @@ export interface ImageNormalizationController {
 @injectable()
 export class ImageNormalizationControllerImpl implements ImageNormalizationController {
   constructor(
-    @inject(CoreSymbols.DI.Formatter.UnitController)
-    private readonly formatter: UnitFormatterController,
+    @inject(Symbols.DI.Formatter.Unit)
+    private readonly formatter: UnitFormatter,
   ) {}
 
   async processBufferToBuffer(input: Buffer, options?: ImageOptions) {

@@ -14,7 +14,7 @@ interface FormatOriginOptions {
 }
 
 const corsPlugin: FastifyPluginAsync<ServerPluginOptions> = async (fastify, options) => {
-  const config = options.apikitController.cors;
+  const config = options.configurationController.cors;
 
   if (!config.enabled) return;
 

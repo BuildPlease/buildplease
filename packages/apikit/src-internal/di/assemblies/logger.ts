@@ -1,15 +1,15 @@
-import { type Assembly, type AssemblyContainer, CoreSymbols } from '@buildplease/core';
+import type { Assembly, AssemblyContainer } from '@buildplease/core';
 import { type Logger, type LoggerOptions, LoggerImpl } from '@buildplease/core/node';
 import { inject, injectable } from 'inversify';
 
-import { type ApiKitController } from '@/configuration';
-import { ApiKitSymbols } from '@/symbols';
+import { type ConfigurationController } from '@/configuration';
+import { Symbols } from '@/symbols';
 
 @injectable()
 class ApiKitLogger extends LoggerImpl {
   public constructor(
-    @inject(ApiKitSymbols.DI.Configuration.Controller)
-    configuration: ApiKitController,
+    @inject(Symbols.DI.Configuration.Controller)
+    configuration: ConfigurationController,
   ) {
     const logger = configuration.logger;
     const debug = configuration.isDebug;
@@ -30,6 +30,6 @@ class ApiKitLogger extends LoggerImpl {
 
 export class LoggerAssembly implements Assembly {
   public assemble(container: AssemblyContainer): void {
-    container.bind<Logger>(CoreSymbols.DI.Logger).to(ApiKitLogger).inSingletonScope();
+    container.bind<Logger>(Symbols.DI.Logging.Logger).to(ApiKitLogger).inSingletonScope();
   }
 }

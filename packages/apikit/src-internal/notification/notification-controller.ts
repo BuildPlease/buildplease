@@ -1,6 +1,5 @@
-import { CoreSymbols } from '@buildplease/core';
 import type { Logger } from '@buildplease/core/node';
-import { InternalApiKitSymbols } from '@src-internal/symbols';
+import { InternalSymbols } from '@src-internal/symbols';
 import { inject, injectable, multiInject, optional } from 'inversify';
 
 import type {
@@ -12,6 +11,7 @@ import type {
   NotificationResult,
   NotificationSendOptions,
 } from '@/notification';
+import { Symbols } from '@/symbols';
 
 import type { NotificationChannelController } from './notification-channel-controller';
 import { NOTIFICATION_LOG_PREFIX } from './notification-log';
@@ -21,10 +21,10 @@ export class NotificationControllerImpl implements NotificationController {
   private readonly channelControllers: ReadonlyMap<NotificationChannel, NotificationChannelController>;
 
   public constructor(
-    @multiInject(InternalApiKitSymbols.DI.Notification.ChannelController)
+    @multiInject(InternalSymbols.DI.Notification.ChannelController)
     @optional()
     channelControllers: readonly NotificationChannelController[] | undefined,
-    @inject(CoreSymbols.DI.Logger)
+    @inject(Symbols.DI.Logging.Logger)
     private readonly logger: Logger,
   ) {
     this.channelControllers = makeChannelControllerMap(channelControllers ?? []);

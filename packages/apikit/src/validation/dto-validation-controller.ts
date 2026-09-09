@@ -1,12 +1,10 @@
-import { type ValidationSchemaI18nParams, CoreSymbols } from '@buildplease/core';
 import type { Logger } from '@buildplease/core/node';
 import { inject, injectable } from 'inversify';
 import { type ZodType, z, ZodError } from 'zod';
 
-import type { ApiKitController } from '@/configuration';
+import type { ConfigurationController } from '@/configuration';
 import { ApiErrorFactory } from '@/error';
-import { I18nProvider } from '@/i18n';
-import { ApiKitSymbols } from '@/symbols';
+import { Symbols } from '@/symbols';
 
 const LOG_PREFIX = '[ApiKit:Validation]';
 
@@ -18,7 +16,7 @@ type ValidationIssueDetails = {
   }>;
 };
 
-export interface DtoValidationController {
+export interface DTOValidationController {
   /**
    * Synchronously parse & validate `data` with a Zod schema.
    *
@@ -70,11 +68,11 @@ export interface DtoValidationController {
 }
 
 @injectable()
-export class DtoValidationControllerImpl implements DtoValidationController {
+export class DTOValidationControllerImpl implements DTOValidationController {
   constructor(
-    @inject(ApiKitSymbols.DI.Configuration.Controller)
-    private configuration: ApiKitController,
-    @inject(CoreSymbols.DI.Logger)
+    @inject(Symbols.DI.Configuration.Controller)
+    private configuration: ConfigurationController,
+    @inject(Symbols.DI.Logging.Logger)
     private logger: Logger,
   ) {}
 
@@ -97,17 +95,15 @@ export class DtoValidationControllerImpl implements DtoValidationController {
   private handleError(error: unknown): never {
     if (error instanceof ZodError) {
       if (this.configuration.isDebug) {
-        this.logger.debug(`${LOG_PREFIX} Dto validation failed`, {
+        this.logger.debug(`${LOG_PREFIX} DTO validation failed`, {
           details: { tree: z.treeifyError(error) },
         });
       }
 
       const details = this.buildValidationDetails(error);
-      const overrideMessage = this.buildValidationMessage(error);
 
       throw ApiErrorFactory.make('Validation.INVALID_PROPERTIES', {
         details: details,
-        overrideMessage: overrideMessage,
       });
     }
 
@@ -122,19 +118,5 @@ export class DtoValidationControllerImpl implements DtoValidationController {
         message: issue.message,
       })),
     };
-  }
-
-  private buildValidationMessage(error: ZodError): string | null {
-    for (const issue of error.issues) {
-      if (issue.code !== 'custom' || !issue.params) continue;
-
-      const params = issue.params as ValidationSchemaI18nParams | undefined;
-      if (!params?.i18n?.key) continue;
-
-      const { key, values } = params.i18n;
-      return values ? I18nProvider.t(key, values) : I18nProvider.t(key);
-    }
-
-    return null;
   }
 }

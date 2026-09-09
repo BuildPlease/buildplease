@@ -8,7 +8,7 @@ const pluginName = 'apikit-health';
 const LOG_PREFIX = '[ApiKit:Health]';
 
 const healthPlugin: FastifyPluginAsync<ServerPluginOptions> = async (fastify, options) => {
-  const config = options.apikitController.health;
+  const config = options.configurationController.health;
 
   if (!config.enabled) {
     fastify.log.info(`${LOG_PREFIX} Disabled — skipping`);

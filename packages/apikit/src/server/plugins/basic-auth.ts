@@ -10,7 +10,7 @@ const pluginName = 'apikit-basic-auth';
 const LOG_PREFIX = '[ApiKit:BasicAuth]';
 
 const basicAuthPlugin: FastifyPluginAsync<ServerPluginOptions> = async (fastify, options) => {
-  const config = options.apikitController.basicAuth;
+  const config = options.configurationController.basicAuth;
 
   if (!config.enabled) return;
 

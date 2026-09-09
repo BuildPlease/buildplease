@@ -6,8 +6,8 @@ import { inject, injectable } from 'inversify';
 import merge from 'lodash.merge';
 
 import { ApiKitL10nResource } from '#l10n';
-import type { ApiKitController, I18nConfig, I18nFileEntry } from '@/configuration';
-import { ApiKitSymbols } from '@/symbols';
+import type { ConfigurationController, I18nConfig, I18nFileEntry } from '@/configuration';
+import { Symbols } from '@/symbols';
 
 import { normalizeLocale, splitBaseRegion } from './utils';
 
@@ -45,8 +45,8 @@ export interface I18nController {
 @injectable()
 export class I18nControllerImpl implements I18nController {
   constructor(
-    @inject(ApiKitSymbols.DI.Configuration.Controller)
-    private readonly configurationController: ApiKitController,
+    @inject(Symbols.DI.Configuration.Controller)
+    private readonly configurationController: ConfigurationController,
   ) {}
 
   public async prepare(): Promise<void> {

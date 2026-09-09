@@ -16,8 +16,8 @@ const RESPONSE_LOG_PREFIX = '[ApiKit:Response]';
 
 const requestLoggerPlugin: FastifyPluginAsync<ServerPluginOptions> = async (fastify, options) => {
   const logger = options.logger;
-  const loggerConfig = options.apikitController.logger;
-  const debug = options.apikitController.isDebug;
+  const loggerConfig = options.configurationController.logger;
+  const debug = options.configurationController.isDebug;
   const ignoredPaths = resolveRequestLoggerIgnoredPaths(options);
 
   /* Fastify lifecycle (simplified for logging):

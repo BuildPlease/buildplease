@@ -1,4 +1,4 @@
-import { CoreSymbols, ignoreErrorAsync } from '@buildplease/core';
+import { ignoreErrorAsync } from '@buildplease/core';
 import { type Logger, LogFlag } from '@buildplease/core/node';
 import type { FastifyReply, FastifyRequest } from 'fastify';
 import { inject, injectable } from 'inversify';
@@ -7,7 +7,7 @@ import { ApiError } from '@/error';
 import { type HttpResponse } from '@/http';
 import { RequestLogMetadata } from '@/request';
 import type { ResponseController } from '@/server';
-import { ApiKitSymbols } from '@/symbols';
+import { Symbols } from '@/symbols';
 
 const LOG_PREFIX = '[ApiKit:Request]';
 
@@ -28,9 +28,9 @@ export interface RequestController {
 @injectable()
 export class RequestControllerImpl implements RequestController {
   constructor(
-    @inject(CoreSymbols.DI.Logger)
+    @inject(Symbols.DI.Logging.Logger)
     private logger: Logger,
-    @inject(ApiKitSymbols.DI.Server.ResponseController)
+    @inject(Symbols.DI.Server.ResponseController)
     private responseController: ResponseController,
   ) {}
 

@@ -1,13 +1,12 @@
-import { CoreSymbols } from '@buildplease/core';
 import { type Logger, LogFlag } from '@buildplease/core/node';
 import Fastify, { type FastifyBaseLogger, type FastifyInstance, LogController } from 'fastify';
 import { inject, injectable } from 'inversify';
 
-import type { ApiKitController } from '@/configuration';
+import type { ConfigurationController } from '@/configuration';
 import { ApiError, ApiErrorFactory } from '@/error';
 import type { I18nController } from '@/i18n';
 import { RequestLogMetadata } from '@/request';
-import { ApiKitSymbols } from '@/symbols';
+import { Symbols } from '@/symbols';
 
 import { FastifyPlugins } from './plugins';
 
@@ -18,7 +17,7 @@ const LOG_PREFIX = '[Server]';
 export interface ServerPluginBaseOptions {
   i18nController: I18nController;
   logger: Logger;
-  apikitController: ApiKitController;
+  configurationController: ConfigurationController;
 }
 
 export type ServerPluginOptions<TExtras extends object = {}> = ServerPluginBaseOptions & TExtras;
@@ -39,12 +38,12 @@ export class ServerControllerImpl implements ServerController {
   private server: FastifyInstance;
 
   constructor(
-    @inject(ApiKitSymbols.DI.I18n.Controller)
+    @inject(Symbols.DI.I18n.Controller)
     private i18n: I18nController,
-    @inject(CoreSymbols.DI.Logger)
+    @inject(Symbols.DI.Logging.Logger)
     private logger: Logger,
-    @inject(ApiKitSymbols.DI.Configuration.Controller)
-    private configuration: ApiKitController,
+    @inject(Symbols.DI.Configuration.Controller)
+    private configuration: ConfigurationController,
   ) {
     this.server = Fastify({
       loggerInstance: this.logger.instance as FastifyBaseLogger,
@@ -72,7 +71,7 @@ export class ServerControllerImpl implements ServerController {
     const options: ServerPluginOptions = {
       i18nController: this.i18n,
       logger: this.logger,
-      apikitController: this.configuration,
+      configurationController: this.configuration,
     };
 
     const earlyPlugins = [

@@ -8,7 +8,7 @@ const pluginName = 'apikit-metrics';
 const LOG_PREFIX = '[ApiKit:Metrics]';
 
 const metricsPlugin: FastifyPluginAsync<ServerPluginOptions> = async (fastify, options) => {
-  const config = options.apikitController.metrics;
+  const config = options.configurationController.metrics;
 
   if (!config.enabled) {
     fastify.log.info(`${LOG_PREFIX} Disabled — skipping`);

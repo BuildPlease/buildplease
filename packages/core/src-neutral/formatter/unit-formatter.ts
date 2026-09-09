@@ -1,8 +1,19 @@
-import type { FormatBytesOptions, FormattedBytes } from '@neutral/formatter';
 import { ByteUnit } from '@neutral/model';
 import { injectable } from 'inversify';
 
-export interface UnitFormatterController {
+export interface FormatBytesOptions {
+  inputUnit?: ByteUnit;
+  outputUnit?: ByteUnit | 'auto';
+  decimals?: number;
+}
+
+export interface FormattedBytes {
+  value: number;
+  unit: ByteUnit;
+  bytes: number;
+}
+
+export interface UnitFormatter {
   /**
    * Formats a byte size into a human-readable value and unit.
    *
@@ -43,7 +54,7 @@ export interface UnitFormatterController {
 }
 
 @injectable()
-export class UnitFormatterControllerImpl implements UnitFormatterController {
+export class UnitFormatterImpl implements UnitFormatter {
   formatBytes(size: number, options?: FormatBytesOptions): FormattedBytes {
     const { inputUnit = ByteUnit.Byte, outputUnit = 'auto', decimals = 1 } = options ?? {};
 

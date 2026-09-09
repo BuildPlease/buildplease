@@ -18,7 +18,7 @@
 ## Shape
 
 ```text
-rule -> ownership/map -> concrete shape -> short rules
+rule -> map/table -> source shape/code -> short rules -> explicit exceptions
 ```
 
 ## Rules

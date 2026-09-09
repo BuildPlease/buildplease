@@ -195,7 +195,7 @@
 import type { ButtonProps } from '#ui/types';
 import { type DashboardViewModel, HttpRequestPreset, HttpRequestTestStatus } from '~/feature/dashboard/view-model';
 import { HttpRequestTestMode } from '~/networking/operation/http-request-test';
-import { AppSymbols } from '~/symbols';
+import { Routes, Symbols } from '~/symbols';
 
 type ButtonColor = NonNullable<ButtonProps['color']>;
 
@@ -259,14 +259,14 @@ const modeItems = computed(() =>
 const router = useRouter();
 const localePath = useLocalePath();
 
-const viewModel = useInstance<DashboardViewModel>(AppSymbols.DI.Feature.Dashboard.ViewModel);
+const viewModel = useInstance<DashboardViewModel>(Symbols.DI.Playground.Feature.Dashboard.ViewModel);
 const notifyError = useErrorNotifier();
 const state = viewModel.state;
 
 useBindViewModel(viewModel);
 
 function onGoHome() {
-  router.push(localePath(AppSymbols.Routes.Root.path));
+  router.push(localePath(Routes.Root.path));
 }
 
 async function onTestUnauthorized() {

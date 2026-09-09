@@ -70,10 +70,10 @@
 import type { FormSubmitEvent } from '#ui/types';
 import type { LoginViewModel } from '~/feature/login/view-model';
 import { type LoginDto, loginSchema } from '~/schema';
-import { AppSymbols } from '~/symbols';
+import { Symbols } from '~/symbols';
 
 const { t } = useI18n();
-const viewModel = useInstance<LoginViewModel>(AppSymbols.DI.Feature.Login.ViewModel);
+const viewModel = useInstance<LoginViewModel>(Symbols.DI.Playground.Feature.Login.ViewModel);
 const notifyError = useErrorNotifier();
 const state = viewModel.state;
 

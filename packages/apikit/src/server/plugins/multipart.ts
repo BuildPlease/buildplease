@@ -7,7 +7,7 @@ import type { ServerPluginOptions } from '@/server';
 const pluginName = 'apikit-multipart';
 
 const multipartPlugin: FastifyPluginAsync<ServerPluginOptions> = async (fastify, options) => {
-  const config = options.apikitController.multipart;
+  const config = options.configurationController.multipart;
 
   if (!config.enabled) return;
 

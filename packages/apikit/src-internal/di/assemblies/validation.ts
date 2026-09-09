@@ -1,17 +1,17 @@
 import type { Assembly, AssemblyContainer } from '@buildplease/core';
 
-import { ApiKitSymbols } from '@/symbols';
+import { Symbols } from '@/symbols';
 import {
-  type DtoValidationController,
+  type DTOValidationController,
   type ValidationController,
-  DtoValidationControllerImpl,
+  DTOValidationControllerImpl,
   ValidationControllerImpl,
 } from '@/validation';
 
 export class ValidationAssembly implements Assembly {
   public assemble(container: AssemblyContainer): void {
-    container.bind<ValidationController>(ApiKitSymbols.DI.Validation.Controller).to(ValidationControllerImpl);
+    container.bind<ValidationController>(Symbols.DI.Validation.Controller).to(ValidationControllerImpl);
 
-    container.bind<DtoValidationController>(ApiKitSymbols.DI.Validation.DtoController).to(DtoValidationControllerImpl);
+    container.bind<DTOValidationController>(Symbols.DI.Validation.DTOController).to(DTOValidationControllerImpl);
   }
 }

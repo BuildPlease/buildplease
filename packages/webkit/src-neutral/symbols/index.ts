@@ -1,3 +1,1 @@
-export const WebKitSymbols = {
-  DI: {},
-};
+export { Symbols } from '@buildplease/core';

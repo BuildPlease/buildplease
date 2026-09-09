@@ -8,19 +8,16 @@ import {
   ResponseControllerImpl,
   ServerControllerImpl,
 } from '@/server';
-import { ApiKitSymbols } from '@/symbols';
+import { Symbols } from '@/symbols';
 
 export class ServerAssembly implements Assembly {
   public assemble(container: AssemblyContainer): void {
-    container.bind<ServerController>(ApiKitSymbols.DI.Server.Controller).to(ServerControllerImpl).inSingletonScope();
+    container.bind<ServerController>(Symbols.DI.Server.Controller).to(ServerControllerImpl).inSingletonScope();
+
+    container.bind<RequestController>(Symbols.DI.Server.RequestController).to(RequestControllerImpl).inSingletonScope();
 
     container
-      .bind<RequestController>(ApiKitSymbols.DI.Server.RequestController)
-      .to(RequestControllerImpl)
-      .inSingletonScope();
-
-    container
-      .bind<ResponseController>(ApiKitSymbols.DI.Server.ResponseController)
+      .bind<ResponseController>(Symbols.DI.Server.ResponseController)
       .to(ResponseControllerImpl)
       .inSingletonScope();
   }

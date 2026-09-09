@@ -1,7 +1,7 @@
 import { isNonEmptyString } from '@buildplease/core';
 import { injectable } from 'inversify';
 
-export interface MultipartFormatterController {
+export interface MultipartFormatter {
   /**
    * Normalize multipart fields into JSON-compatible values.
    *
@@ -18,7 +18,7 @@ export interface MultipartFormatterController {
 }
 
 @injectable()
-export class MultipartFormatterControllerImpl implements MultipartFormatterController {
+export class MultipartFormatterImpl implements MultipartFormatter {
   public normalizeFields(input: Record<string, unknown>): Record<string, unknown> {
     const result: Record<string, unknown> = {};
     for (const [key, raw] of Object.entries(input)) {

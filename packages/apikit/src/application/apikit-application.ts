@@ -6,7 +6,7 @@ import type { FastifyInstance } from 'fastify';
 import { ApiKitAssembly } from '@/di/assembly';
 import type { I18nController } from '@/i18n';
 import type { ServerController, ServerPluginOptions } from '@/server';
-import { ApiKitSymbols } from '@/symbols';
+import { Symbols } from '@/symbols';
 
 /** Startup context. */
 export interface ApiKitApplicationContext {
@@ -44,8 +44,8 @@ export class ApiKitApplication {
 
       await scope.registerAssemblies([new CoreAssembly(), new ApiKitAssembly(), ...consumerAssemblies]);
 
-      const i18n = scope.getInstance<I18nController>(ApiKitSymbols.DI.I18n.Controller);
-      const server = scope.getInstance<ServerController>(ApiKitSymbols.DI.Server.Controller);
+      const i18n = scope.getInstance<I18nController>(Symbols.DI.I18n.Controller);
+      const server = scope.getInstance<ServerController>(Symbols.DI.Server.Controller);
       const context: ApiKitApplicationContext = { scope: scope };
 
       await i18n.prepare();

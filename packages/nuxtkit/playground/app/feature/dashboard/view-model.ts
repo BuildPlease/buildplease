@@ -8,7 +8,7 @@ import {
   HttpRequestTestMode,
 } from '~/networking/operation/http-request-test';
 import type { UnauthorizedOperation } from '~/networking/operation/unauthorized';
-import { AppSymbols } from '~/symbols';
+import { Symbols } from '~/symbols';
 
 export enum HttpRequestPreset {
   AllSuccess,
@@ -105,11 +105,11 @@ function makeHttpRequestItems(preset: HttpRequestPreset): HttpRequestTestItem[] 
 @injectable()
 export class DashboardViewModel extends ViewModel<DashboardState> {
   constructor(
-    @inject(AppSymbols.DI.Operation.Unauthorized)
+    @inject(Symbols.DI.Playground.Operation.Unauthorized)
     private readonly unauthorizedOperation: UnauthorizedOperation,
-    @inject(AppSymbols.DI.Operation.HttpRequestTest)
+    @inject(Symbols.DI.Playground.Operation.HttpRequestTest)
     private readonly httpRequestTestOperation: HttpRequestTestOperation,
-    @inject(AppSymbols.DI.Operation.DelayedHttpRequestTest)
+    @inject(Symbols.DI.Playground.Operation.DelayedHttpRequestTest)
     private readonly delayedHttpRequestTestOperation: HttpRequestTestOperation,
   ) {
     super({

@@ -13,7 +13,7 @@ interface ScopeControllerHost {
  *
  * @example
  * const scopeController = useScopeController();
- * const myService = scopeController.getInstance<MyService>(AppSymbols.DI.MyService);
+ * const myService = scopeController.getInstance<MyService>(Symbols.DI.MyApp.Service);
  */
 export function useScopeController(): ScopeController {
   const app = useNuxtApp() as ReturnType<typeof useNuxtApp> & ScopeControllerHost;

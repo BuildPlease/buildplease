@@ -1,4 +1,5 @@
-import { type Assembly, type AssemblyContainer, CoreSymbols } from '@buildplease/core';
+import type { Assembly, AssemblyContainer } from '@buildplease/core';
+import { Symbols } from '@buildplease/webkit';
 import { createWebKitRuntime } from '@internal/neutral/runtime';
 import { describe, expect, it } from 'vitest';
 
@@ -7,7 +8,7 @@ describe('WebKit application runtime', () => {
     const events: string[] = [];
     const consumerAssembly: Assembly = {
       assemble: (container: AssemblyContainer) => {
-        expect(container.isBound(CoreSymbols.DI.Formatter.UnitController)).toBe(true);
+        expect(container.isBound(Symbols.DI.Formatter.Unit)).toBe(true);
         events.push('assemblies.consumer');
       },
     };
@@ -19,7 +20,7 @@ describe('WebKit application runtime', () => {
           return [consumerAssembly];
         },
         prepare: ({ scope }) => {
-          expect(scope.container.isBound(CoreSymbols.DI.Formatter.UnitController)).toBe(true);
+          expect(scope.container.isBound(Symbols.DI.Formatter.Unit)).toBe(true);
           events.push('prepare');
         },
         close: ({ scope }) => {

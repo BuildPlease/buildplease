@@ -24,6 +24,20 @@ describe('ZonedDateTime', () => {
     expect(value.timezoneOffsetMs()).toBe(60 * 60 * 1000);
   });
 
+  it('normalizes a nonexistent local time forward across the DST spring gap', () => {
+    const value = ZonedDateTime.fromLocalIso('2026-03-29T02:30', 'Europe/Bratislava');
+
+    expect(value.toISOString()).toBe('2026-03-29T01:30:00.000Z');
+    expect(value.toLocalIsoMinutes()).toBe('2026-03-29T03:30');
+  });
+
+  it('resolves an ambiguous local time to the earlier DST instant', () => {
+    const value = ZonedDateTime.fromLocalIso('2026-10-25T02:30', 'Europe/Bratislava');
+
+    expect(value.toISOString()).toBe('2026-10-25T00:30:00.000Z');
+    expect(value.timezoneOffsetMs()).toBe(2 * 60 * 60 * 1000);
+  });
+
   it('changes time zone without changing the instant', () => {
     const bratislava = ZonedDateTime.fromUtc(new DateTime('2026-07-15T16:00:00Z'), 'Europe/Bratislava');
     const newYork = bratislava.withTimeZone('America/New_York');

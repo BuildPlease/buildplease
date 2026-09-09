@@ -64,8 +64,6 @@ import {
   subYears,
 } from 'date-fns';
 
-export * from 'date-fns';
-
 /**
  * Represents an immutable UTC date-time instant.
  *

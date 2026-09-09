@@ -1,13 +1,13 @@
 import type { Assembly, AssemblyContainer } from '@buildplease/core';
 
-import { type ApiKitController, ApiKitControllerImpl } from '@/configuration';
-import { ApiKitSymbols } from '@/symbols';
+import { type ConfigurationController, ConfigurationControllerImpl } from '@/configuration';
+import { Symbols } from '@/symbols';
 
 export class ConfigurationAssembly implements Assembly {
   public assemble(container: AssemblyContainer): void {
     container
-      .bind<ApiKitController>(ApiKitSymbols.DI.Configuration.Controller)
-      .to(ApiKitControllerImpl)
+      .bind<ConfigurationController>(Symbols.DI.Configuration.Controller)
+      .to(ConfigurationControllerImpl)
       .inSingletonScope();
   }
 }
