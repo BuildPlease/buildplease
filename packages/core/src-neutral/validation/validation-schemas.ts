@@ -1,6 +1,5 @@
 import {
   type Geometry,
-  type OpeningHourInterval,
   Coordinates,
   DateTime,
   LineString,
@@ -8,14 +7,10 @@ import {
   MultiPoint,
   MultiPolygon,
   ObjectId,
-  OpeningHour,
   Point,
   Polygon,
 } from '@neutral/model';
-import type { ValidationSchemaI18nParams } from '@neutral/validation';
 import { z } from 'zod';
-
-import { CoreL10n } from '#l10n';
 
 /* MARK: - Primitives */
 const UUIDSchema = z.uuid();

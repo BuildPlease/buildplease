@@ -1,3 +1,4 @@
+import { utc, UTCDate } from '@date-fns/utc';
 import type { JSONSerializable } from '@neutral/utils';
 import {
   type Duration,
@@ -26,7 +27,6 @@ import {
   endOfWeek,
   endOfYear,
   format as formatDate,
-  formatISO,
   fromUnixTime,
   getDate,
   getDay,
@@ -67,115 +67,126 @@ import {
 export * from 'date-fns';
 
 /**
- * A date-and-time utility class offering parsing, formatting, and arithmetic.
+ * Represents an immutable UTC date-time instant.
  *
- * - Instantiate with no arguments for current date/time.
- * - Instantiate with a `Date` or ISO-format string.
+ * @remarks
+ * Date-only and date-time strings without an explicit offset are interpreted as
+ * UTC. Inputs with an explicit offset are normalized to UTC. All calendar
+ * operations use UTC semantics and do not depend on the runtime machine time
+ * zone.
  *
- * @throws {Error} If the provided date input is invalid.
+ * Native `Date` values are copied on input and output so external mutation
+ * cannot change this value.
  *
  * @example
  * const now = new DateTime();
- * const fromDate = new DateTime(new Date('2022-12-12'));
- * const fromIso  = new DateTime('2022-12-12T00:00:00Z');
+ * // Current instant, represented in UTC.
+ *
+ * @example
+ * const sameNow = DateTime.now();
+ * // Equivalent convenience factory for the current UTC instant.
+ *
+ * @example
+ * const date = new DateTime('2026-09-09');
+ * date.toISOString();
+ * // "2026-09-09T00:00:00.000Z"
+ *
+ * @example
+ * const date = new DateTime('2026-09-09T18:00:00');
+ * date.toISOString();
+ * // "2026-09-09T18:00:00.000Z"
+ *
+ * @example
+ * const date = new DateTime('2026-09-09T20:00:00+02:00');
+ * date.toISOString();
+ * // "2026-09-09T18:00:00.000Z"
+ *
+ * @throws {Error}
+ * When the provided input cannot be parsed as a valid date-time.
  */
 export class DateTime implements JSONSerializable {
-  private readonly date: Date;
+  private readonly date: UTCDate;
 
   /**
-   * @param {Date | string} [input]
-   *   A Date object or ISO-format date string. Omit to use current date/time.
+   * Creates a UTC date-time value.
+   *
+   * @param input
+   * A native `Date` or ISO-format string. Omit to use the current instant.
+   * Date-only and date-time strings without an offset are interpreted as UTC.
+   *
    * @throws {Error}
-   *   If `input` is neither a valid Date nor a parseable string.
+   * When `input` is an invalid `Date` or cannot be parsed as an ISO date-time.
    */
   public constructor(input?: Date | string) {
-    if (!input) {
-      this.date = new Date();
+    if (input === undefined) {
+      this.date = new UTCDate();
       return;
     }
 
     if (input instanceof Date) {
       if (!isValid(input)) throw new Error('Invalid date object');
-      this.date = input;
+      this.date = new UTCDate(input.getTime());
       return;
     }
 
-    const parsed = parseISO(input);
+    const parsed = parseISO(input, { in: utc });
     if (!isValid(parsed)) throw new Error('Invalid date string');
 
-    this.date = parsed;
+    this.date = new UTCDate(parsed.getTime());
   }
 
-  /**
-   * Static method to create a DateTime from a Unix timestamp (seconds).
-   * @param {number} unixTimestamp - The Unix timestamp in seconds.
-   * @param {FromUnixTimeOptions} options
-   * @returns {DateTime}
-   */
+  /** Creates a `DateTime` from a Unix timestamp expressed in seconds. */
   public static fromUnixTimestamp(unixTimestamp: number, options?: FromUnixTimeOptions): DateTime {
-    return new DateTime(fromUnixTime(unixTimestamp, options));
+    return new DateTime(fromUnixTime(unixTimestamp, { ...options, in: utc }));
   }
 
-  /** @returns The current moment as a DateTime. */
+  /** Returns the current instant as a UTC `DateTime`. */
   public static now(): DateTime {
-    return new DateTime(new Date());
+    return new DateTime();
   }
 
-  /**
-   * JSON.stringify will look for `toJSON()` first, so
-   * we emit an ISO string by default.
-   */
+  /** Serializes this instant as a canonical UTC ISO-8601 string. */
   public toJSON(): string {
     return this.toISOString();
   }
 
   // MARK: - Converters
 
-  /** @returns The wrapped JavaScript Date. */
+  /** Returns a defensive native `Date` copy representing the same instant. */
   public toDate(): Date {
-    return this.date;
+    return new Date(this.date.getTime());
   }
 
-  /** @returns The Unix timestamp in seconds. */
+  /** Returns the Unix timestamp in seconds. */
   public toUnixTimestamp(): number {
     return getUnixTime(this.date);
   }
 
-  /**
-   * Returns the time value in milliseconds (similar to getTime() method of Date).
-   * @returns {number} The time in milliseconds.
-   */
+  /** Returns the time value in milliseconds since the Unix epoch. */
   public getTime(): number {
     return this.date.getTime();
   }
 
-  /** @returns An ISO‐8601 string. */
+  /** Returns a canonical ISO-8601 representation in UTC using the `Z` suffix. */
   public toISOString(): string {
-    return formatISO(this.date);
+    return this.date.toISOString();
   }
 
   /**
-   * Formats this DateTime using the given pattern.
+   * Formats this value in UTC using a date-fns pattern.
+   *
+   * @remarks
+   * This legacy pattern-based API always formats in UTC. Prefer the
+   * `DateTimeFormatter` for human-readable application output.
    *
    * @param pattern
-   *   A format string (for example, one of the `DateFormat` values or
-   *   any custom string).
-   * @param options
-   *   Optional `{ locale?: Locale }` for localized month/day names.
-   * @returns
-   *   The formatted date string.
+   * A date-fns format string or `DateFormat` value.
    *
-   * @example
-   * ```ts
-   * const dt = new DateTime('2025-06-05T14:30:00Z');
-   * console.log(dt.format(DateFormat.ISO_DATETIME));  // "2025-06-05T14:30:00+00:00"
-   * console.log(dt.format(DateFormat.MM_DD_YYYY));    // "06/05/2025"
-   * console.log(dt.format(DateFormat.RSS));           // "Fri, 05 Jun 2025 14:30:00 +0000"
-   * console.log(dt.format('yyyy/MM/dd HH:mm:ss'));    // "2025/06/05 14:30:00"
-   * ```
+   * @param options
+   * Optional date-fns formatting options.
    */
   public format(pattern: DateFormat | string, options?: FormatOptions): string {
-    return formatDate(this.date, pattern, options);
+    return formatDate(this.date, pattern, { ...options, in: utc });
   }
 
   // MARK: - Adding Durations
@@ -280,7 +291,7 @@ export class DateTime implements JSONSerializable {
     return compareAsc(this.date, other.date);
   }
   public isSameDayAs(other: DateTime): boolean {
-    return isSameDay(this.date, other.date);
+    return isSameDay(this.date, other.date, { in: utc });
   }
 
   // MARK: - Interval Boundaries
@@ -312,139 +323,104 @@ export class DateTime implements JSONSerializable {
 
   // MARK: - Getters
 
-  /** Day of month (1–31). */
+  /** UTC day of month in the range 1–31. */
   public get dayOfMonth(): number {
     return getDate(this.date);
   }
-  /** Day of week (0–6, 0 = Sunday). */
+  /** UTC day of week in the range 0–6, where 0 is Sunday. */
   public get dayOfWeek(): number {
     return getDay(this.date);
   }
-  /** Month (0–11). */
+  /** UTC month in the range 0–11. */
   public get month(): number {
     return getMonth(this.date);
   }
-  /** Year. */
+  /** UTC year. */
   public get year(): number {
     return getYear(this.date);
   }
-  /** Hours (0–23). */
+  /** UTC hour in the range 0–23. */
   public get hours(): number {
     return getHours(this.date);
   }
-  /** Minutes (0–59). */
+  /** UTC minutes in the range 0–59. */
   public get minutes(): number {
     return getMinutes(this.date);
   }
-  /** Seconds (0–59). */
+  /** UTC seconds in the range 0–59. */
   public get seconds(): number {
     return getSeconds(this.date);
   }
 
   // MARK: - Setters (Immutable)
 
-  /**
-   * Sets the day of the month.
-   *
-   * @param day  Day of the month (1–31).
-   * @returns {DateTime}
-   */
+  /** Returns a new value with the UTC day of month set to `day`. */
   public settingDayOfMonth(day: number): DateTime {
     return new DateTime(setDate(this.date, day));
   }
 
-  /**
-   * Sets the day of the week.
-   *
-   * @param day  Day of the week (0–6, 0 = Sunday).
-   * @returns {DateTime}
-   */
+  /** Returns a new value with the UTC day of week set to `day`. */
   public settingDayOfWeek(day: number): DateTime {
     return new DateTime(setDay(this.date, day));
   }
 
-  /**
-   * Sets the month.
-   *
-   * @param month  Month (0–11).
-   * @returns {DateTime}
-   */
+  /** Returns a new value with the UTC month set to `month` (0–11). */
   public settingMonth(month: number): DateTime {
     return new DateTime(setMonth(this.date, month));
   }
 
-  /**
-   * Sets the year.
-   *
-   * @param year  Year.
-   * @returns {DateTime}
-   */
+  /** Returns a new value with the UTC year set to `year`. */
   public settingYear(year: number): DateTime {
     return new DateTime(setYear(this.date, year));
   }
 
-  /**
-   * Sets the hours.
-   *
-   * @param hours  Hours (0–23).
-   * @returns {DateTime}
-   */
+  /** Returns a new value with the UTC hour set to `hours` (0–23). */
   public settingHours(hours: number): DateTime {
     return new DateTime(setHours(this.date, hours));
   }
 
-  /**
-   * Sets the minutes.
-   *
-   * @param minutes  Minutes (0–59).
-   * @returns {DateTime}
-   */
+  /** Returns a new value with the UTC minutes set to `minutes` (0–59). */
   public settingMinutes(minutes: number): DateTime {
     return new DateTime(setMinutes(this.date, minutes));
   }
 
-  /**
-   * Sets the seconds.
-   *
-   * @param seconds  Seconds (0–59).
-   * @returns {DateTime}
-   */
+  /** Returns a new value with the UTC seconds set to `seconds` (0–59). */
   public settingSeconds(seconds: number): DateTime {
     return new DateTime(setSeconds(this.date, seconds));
   }
 }
 
 export enum DateFormat {
-  /** ISO date only (yyyy-MM-dd), e.g. "2025-06-05" */
+  /** ISO date only (yyyy-MM-dd), e.g. "2025-06-05". */
   ISO_DATE = 'yyyy-MM-dd',
 
-  /** ISO date + time with offset, e.g. "2025-06-05T13:24:00+00:00" */
+  /** ISO date + time with UTC offset, e.g. "2025-06-05T13:24:00Z". */
   ISO_DATETIME = "yyyy-MM-dd'T'HH:mm:ssXXX",
 
-  /** Month/day/year, e.g. "06/05/2025" */
+  /** Month/day/year, e.g. "06/05/2025". */
   MM_DD_YYYY = 'MM/dd/yyyy',
 
-  /** Full month name + day + year, e.g. "June 5, 2025" */
+  /** Full month name + day + year, e.g. "June 5, 2025". */
   FULL_MONTH_DAY_YEAR = 'MMMM d, yyyy',
 
-  /** Abbreviated month + day + year, e.g. "Jun 5, 2025" */
+  /** Abbreviated month + day + year, e.g. "Jun 5, 2025". */
   ABBR_MONTH_DAY_YEAR = 'MMM d, yyyy',
 
-  /** RFC-3339 with milliseconds, e.g. "2025-06-05T13:24:00.000Z" */
+  /** RFC-3339 with milliseconds, e.g. "2025-06-05T13:24:00.000Z". */
   RFC_3339 = "yyyy-MM-dd'T'HH:mm:ss.SSSxxx",
 
-  /** Alternative RSS date, e.g. "09 Sep 2011 15:26:08 +0200" */
+  /** Alternative RSS date. */
   ALT_RSS = 'd MMM yyyy HH:mm:ss ZZZ',
 
-  /** Standard RSS date, e.g. "Fri, 09 Sep 2011 15:26:08 +0200" */
+  /** Standard RSS date. */
   RSS = 'EEE, d MMM yyyy HH:mm:ss ZZZ',
 
-  /** HTTP header date, e.g. "Tue, 15 Nov 1994 12:45:26 GMT" */
+  /** HTTP header date. */
   HTTP_HEADER = 'EEE, dd MMM yyyy HH:mm:ss zzz',
 
-  /** Generic standard format, e.g. "Fri Sep 09 15:26:08 +0000 2011" */
+  /** Generic standard date-time format. */
   STANDARD = 'EEE MMM dd HH:mm:ss Z yyyy',
 
-  /** Extended format, e.g. "Fri 09-Sep-2011 AD 15:26:08.000 UTC" */
+  /** Extended date-time format. */
   EXTENDED = 'eee dd-MMM-yyyy GG HH:mm:ss.SSS zzz',
 }

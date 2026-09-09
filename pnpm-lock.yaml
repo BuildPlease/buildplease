@@ -156,6 +156,12 @@ importers:
 
   packages/core:
     dependencies:
+      '@date-fns/tz':
+        specifier: 1.5.0
+        version: 1.5.0
+      '@date-fns/utc':
+        specifier: 2.1.1
+        version: 2.1.1
       '@dotenvx/dotenvx':
         specifier: 2.23.0
         version: 2.23.0
@@ -174,9 +180,6 @@ importers:
       date-fns:
         specifier: 4.4.0
         version: 4.4.0
-      date-fns-tz:
-        specifier: 3.2.0
-        version: 3.2.0(date-fns@4.4.0)
       inversify:
         specifier: 'catalog:'
         version: 8.2.3(reflect-metadata@0.2.2)
@@ -552,6 +555,12 @@ packages:
 
   '@colordx/core@5.8.0':
     resolution: {integrity: sha512-cG0QJAO6VkaRUlIb0zOzX9gfJgs1pjoOL9gZ/PK1kfvBs0GCkADu5oQh6gPxXgQnZ3gV575h+lQRC0NlMDTclA==}
+
+  '@date-fns/tz@1.5.0':
+    resolution: {integrity: sha512-lwYN/vDPeNRULcepoE/LO2Pgx+7/RV+S9ARfbc9lr2DtGkOD7pAiruHvbR1RX3Qyf6ja47EWJDMsNK5vK08DJg==}
+
+  '@date-fns/utc@2.1.1':
+    resolution: {integrity: sha512-SlJDfG6RPeEX8wEVv6ZB3kak4MmbtyiI2qX/5zuKdordbrhB/iaJ58GVMZgJ6P1sJaM1gMgENFYYeg1JWrCFrA==}
 
   '@dotenvx/dotenvx@2.23.0':
     resolution: {integrity: sha512-LkiCs5ZpGIy+jn85YJKEYKPZkq8QwZegYviwr8w4eFTq+Fb2+j+hFldWpdhppPmFP8ut0cplxL4EEoW06Rzfhw==}
@@ -3756,11 +3765,6 @@ packages:
   data-view-byte-offset@1.0.1:
     resolution: {integrity: sha512-BS8PfmtDGnrgYdOonGZQdLZslWIeCGFP9tpan0hi1Co2Zr2NKADsvGYA8XxuG/4UWgJ6Cjtv+YJnB6MM69QGlQ==}
     engines: {node: '>= 0.4'}
-
-  date-fns-tz@3.2.0:
-    resolution: {integrity: sha512-sg8HqoTEulcbbbVXeg84u5UnlsQa8GS5QXMqjjYIhS4abEVVKIUwe0/l/UhrZdKaL/W5eWZNlbTeEIiOXTcsBQ==}
-    peerDependencies:
-      date-fns: ^3.0.0 || ^4.0.0
 
   date-fns@4.4.0:
     resolution: {integrity: sha512-+1UMbeh68lH1SegH83CGWwpb6OHHbpSgr3+s5Eww5M4CAgswBpoWS0AjTOfEJ33HiYKz1hdj/KTFprzXHmq/6w==}
@@ -7701,6 +7705,10 @@ snapshots:
 
   '@colordx/core@5.8.0': {}
 
+  '@date-fns/tz@1.5.0': {}
+
+  '@date-fns/utc@2.1.1': {}
+
   '@dotenvx/dotenvx@2.23.0':
     dependencies:
       '@dotenvx/primitives': 2.2.0
@@ -11136,10 +11144,6 @@ snapshots:
       call-bound: 1.0.4
       es-errors: 1.3.0
       is-data-view: 1.0.2
-
-  date-fns-tz@3.2.0(date-fns@4.4.0):
-    dependencies:
-      date-fns: 4.4.0
 
   date-fns@4.4.0: {}
 
