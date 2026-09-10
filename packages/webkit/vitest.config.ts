@@ -8,6 +8,8 @@ export default defineConfig({
   test: {
     environment: 'node',
     globals: false,
+    fileParallelism: false,
+    pool: 'forks',
     include: ['test/**/*.test.ts'],
   },
 

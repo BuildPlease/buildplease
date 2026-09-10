@@ -6,8 +6,11 @@ const rootDir = import.meta.dirname;
 
 export default defineConfig({
   test: {
-    globals: false,
     environment: 'node',
+    globals: false,
+    fileParallelism: false,
+    pool: 'forks',
+    include: ['test/**/*.test.ts'],
   },
 
   resolve: {
