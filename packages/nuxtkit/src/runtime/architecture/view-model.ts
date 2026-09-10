@@ -1,5 +1,5 @@
 import type { Awaitable } from '@buildplease/core';
-import { type Reactive, reactive } from 'vue';
+import { reactive } from 'vue';
 import type { RouteLocationNormalizedLoaded, Router } from 'vue-router';
 
 import { useNuxtApp, useRoute, useRouter } from '#app';
@@ -8,14 +8,14 @@ import { type Lifecycle, isCSR, isHydrating, isSSR } from '#nuxtkit/infrastructu
 /**
  * Base class for managing reactive state and lifecycle logic in UI view models.
  *
- * @template T Reactive state shape
+ * @template T State shape
  */
 export abstract class ViewModel<T extends Record<string, any> = Record<string, any>> implements Lifecycle {
   /**
    * Reactive state for the ViewModel.
    * @readonly
    */
-  public readonly state: Reactive<T>;
+  public readonly state: T;
 
   constructor(initialState: T) {
     this.state = this.defineState<T>(initialState);
@@ -42,10 +42,10 @@ export abstract class ViewModel<T extends Record<string, any> = Record<string, a
    *
    * @template S State shape
    * @param {S} initialState - Initial state values
-   * @returns {Reactive<S>} Reactive state object
+   * @returns {S} Reactive state object preserving the declared state shape
    */
-  protected defineState<S extends Record<string, any>>(initialState: S): Reactive<S> {
-    return reactive(initialState);
+  protected defineState<S extends Record<string, any>>(initialState: S): S {
+    return reactive(initialState) as S;
   }
 
   /**
