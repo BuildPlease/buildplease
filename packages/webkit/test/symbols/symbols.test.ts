@@ -3,7 +3,9 @@ import { Symbols } from '@buildplease/webkit';
 import { describe, expect, it } from 'vitest';
 
 describe('Symbols', () => {
-  it('re-exports the parent symbol tree when WebKit adds no symbols', () => {
-    expect(Symbols).toBe(ParentSymbols);
+  it('inherits the Core symbol tree when WebKit adds no symbols', () => {
+    expect(Symbols.DI.Formatter.DateTime).toBe(ParentSymbols.DI.Formatter.DateTime);
+    expect(Symbols.DI.Formatter.Unit).toBe(ParentSymbols.DI.Formatter.Unit);
+    expect(Symbols.DI.Logging.Logger).toBe(ParentSymbols.DI.Logging.Logger);
   });
 });

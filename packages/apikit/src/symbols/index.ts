@@ -1,9 +1,9 @@
-import { Symbols as ParentSymbols } from '@buildplease/core';
+import { defineSymbols, Symbols as ParentSymbols } from '@buildplease/core';
 import { FrameworkIdentity } from '@buildplease/identity';
 
 const prefix = `${FrameworkIdentity.name}.ApiKit.DI`;
 
-export const Symbols = ParentSymbols.extend({
+export const Symbols = defineSymbols({
   DI: {
     Configuration: {
       Controller: Symbol.for(`${prefix}.Configuration.Controller`),
@@ -49,4 +49,4 @@ export const Symbols = ParentSymbols.extend({
       DTOController: Symbol.for(`${prefix}.Validation.DTOController`),
     },
   },
-});
+}).extend(ParentSymbols);
