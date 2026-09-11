@@ -1,10 +1,14 @@
-import type { HttpError, UnauthorizedHandler } from '@buildplease/webkit';
+import type { HttpError, HttpErrorInterceptor, HttpErrorResolution } from '@buildplease/webkit';
 
 import type { NuxtApp } from '#app';
 import { Routes } from '~/symbols';
 
-export class PlaygroundUnauthorizedHandler implements UnauthorizedHandler {
+export class PlaygroundUnauthorizedInterceptor implements HttpErrorInterceptor {
   public constructor(private readonly app: NuxtApp) {}
+
+  public resolve(error: HttpError): HttpErrorResolution | undefined {
+    return error.statusCode === 401 ? 'interrupt' : undefined;
+  }
 
   public async handle(error: HttpError): Promise<void> {
     await this.app.runWithContext(async () => {

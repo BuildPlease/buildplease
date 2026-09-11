@@ -1,4 +1,3 @@
-import { CanceledError } from '@buildplease/core';
 import { injectable } from 'inversify';
 
 import type { HttpClient } from './http-client';
@@ -18,17 +17,7 @@ export class SecuredRemoteResource<Input, Output> extends RemoteResource<Input, 
       return await super.execute(input, options);
     } catch (error) {
       if (!(error instanceof HttpError)) throw error;
-
-      const unauthorized = this.httpClient.unauthorized;
-      if (!unauthorized || !unauthorized.statusCodes.includes(error.statusCode)) throw error;
-
-      if (!unauthorized.cancelAll) {
-        await unauthorized.handler.handle(error);
-        throw error;
-      }
-
-      await this.httpClient.asyncQueue.interrupt(() => unauthorized.handler.handle(error));
-      throw new CanceledError({ cause: error });
+      return this.httpClient.handleError(error);
     }
   }
 }

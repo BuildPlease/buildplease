@@ -7,7 +7,6 @@ import {
   defineHttpRequest,
   HttpClient,
   HttpError,
-  HttpRequestInterceptorPipeline,
 } from '@neutral/networking';
 import { describe, expect, it } from 'vitest';
 
@@ -31,9 +30,9 @@ class TestHttpClient extends HttpClient {
     };
   }
 
-  protected override handleError(error: unknown): Error {
+  protected override normalizeError(error: unknown): Error {
     if (this.mappedError) return this.mappedError;
-    return super.handleError(error);
+    return super.normalizeError(error);
   }
 }
 
@@ -49,7 +48,7 @@ describe('HttpClient', () => {
           override: 'global',
         },
       },
-      interceptorPipeline: new HttpRequestInterceptorPipeline([
+      requestInterceptors: [
         {
           identity: Symbol.for('test.interceptor'),
           intercept: (options) => ({
@@ -61,7 +60,7 @@ describe('HttpClient', () => {
             },
           }),
         },
-      ]),
+      ],
     });
     const configuredRequest: HttpRequest<string> = {
       ...request,

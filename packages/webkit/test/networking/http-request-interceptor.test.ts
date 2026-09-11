@@ -1,10 +1,7 @@
 import type { Identity } from '@buildplease/core';
-import {
-  type HttpRequestInterceptor,
-  type HttpRequestOptions,
-  HttpRequestInterceptorPipeline,
-} from '@neutral/networking';
-import { describe, expect, it, vi } from 'vitest';
+import type { HttpRequestInterceptor, HttpRequestOptions } from '@neutral/networking';
+import { HttpRequestInterceptorPipeline } from '@neutral/networking/http-request-interceptor-pipeline';
+import { describe, expect, it } from 'vitest';
 
 class TestInterceptor implements HttpRequestInterceptor {
   public constructor(
@@ -39,17 +36,15 @@ describe('HttpRequestInterceptorPipeline', () => {
     });
   });
 
-  it('ignores duplicate identities and reports a warning', async () => {
-    const warning = vi.fn();
+  it('ignores duplicate identities', async () => {
     const identity = Symbol.for('test.duplicate');
-    const pipeline = new HttpRequestInterceptorPipeline(
-      [new TestInterceptor(identity, 'first'), new TestInterceptor(identity, 'duplicate')],
-      warning,
-    );
+    const pipeline = new HttpRequestInterceptorPipeline([
+      new TestInterceptor(identity, 'first'),
+      new TestInterceptor(identity, 'duplicate'),
+    ]);
 
     const result = await pipeline.intercept({ credentials: true, headers: {} });
 
     expect(result.headers).toEqual({ first: 'first' });
-    expect(warning).toHaveBeenCalledOnce();
   });
 });

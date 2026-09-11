@@ -1,6 +1,8 @@
 import { CanceledError } from '@buildplease/core';
 import {
   type HttpClientOptions,
+  type HttpErrorInterceptor,
+  type HttpErrorResolution,
   type HttpRequest,
   type HttpRequestOptions,
   type RemoteEndpoint,
@@ -54,75 +56,82 @@ class TestEndpoint implements RemoteEndpoint<() => Promise<string>, () => Promis
 class TestPublicResource extends PublicRemoteResource<() => Promise<string>, string> {}
 class TestSecuredResource extends SecuredRemoteResource<() => Promise<string>, string> {}
 
+class TestErrorInterceptor implements HttpErrorInterceptor {
+  public constructor(
+    private readonly resolver: (error: HttpError) => HttpErrorResolution | undefined,
+    private readonly handler: (error: HttpError) => void | Promise<void>,
+  ) {}
+
+  public resolve(error: HttpError): HttpErrorResolution | undefined {
+    return this.resolver(error);
+  }
+
+  public handle(error: HttpError): void | Promise<void> {
+    return this.handler(error);
+  }
+}
+
 function httpError(statusCode: number, code = 'error'): HttpError {
   return new HttpError({ statusCode: statusCode, code: code, message: 'HTTP error' });
 }
 
 describe('PublicRemoteResource and SecuredRemoteResource', () => {
-  it('does not invoke unauthorized handling for public requests', async () => {
-    const handler = vi.fn(async () => undefined);
+  it('does not invoke the error interceptor for public requests', async () => {
+    const handle = vi.fn(async () => undefined);
     const client = new TestHttpClient({
-      unauthorized: {
-        statusCodes: [401],
-        cancelAll: true,
-        handler: { handle: handler },
-      },
+      errorInterceptor: new TestErrorInterceptor(() => 'interrupt', handle),
     });
     const resource = new TestPublicResource(new TestEndpoint(), client);
     const error = httpError(401, 'unauthorized');
 
     await expect(resource.execute(async () => Promise.reject(error))).rejects.toBe(error);
-    expect(handler).not.toHaveBeenCalled();
+    expect(handle).not.toHaveBeenCalled();
   });
 
-  it('leaves secured errors unchanged when unauthorized handling is not configured', async () => {
-    const client = new TestHttpClient();
+  it('leaves unresolved secured errors unchanged', async () => {
+    const handle = vi.fn(async () => undefined);
+    const client = new TestHttpClient({
+      errorInterceptor: new TestErrorInterceptor(() => undefined, handle),
+    });
     const resource = new TestSecuredResource(new TestEndpoint(), client);
     const error = httpError(401, 'unauthorized');
 
     await expect(resource.execute(async () => Promise.reject(error))).rejects.toBe(error);
+    expect(handle).not.toHaveBeenCalled();
   });
 
-  it('handles unauthorized errors without canceling the queue when cancelAll is false', async () => {
-    const handler = vi.fn(async () => undefined);
+  it('handles the current secured error without interrupting the client queue', async () => {
+    const handle = vi.fn(async () => undefined);
     const client = new TestHttpClient({
-      unauthorized: {
-        statusCodes: [401],
-        cancelAll: false,
-        handler: { handle: handler },
-      },
+      errorInterceptor: new TestErrorInterceptor(() => 'handle', handle),
     });
     const endpoint = new TestEndpoint();
     const securedResource = new TestSecuredResource(endpoint, client);
     const publicResource = new TestPublicResource(endpoint, client);
     const publicGate = deferred<void>();
-    const error = httpError(401, 'unauthorized');
+    const error = httpError(403, 'forbidden');
 
     const publicPromise = publicResource.execute(async () => {
       await publicGate.promise;
       return 'public';
     });
 
-    await expect(securedResource.execute(async () => Promise.reject(error))).rejects.toBe(error);
-    expect(handler).toHaveBeenCalledOnce();
+    await expect(securedResource.execute(async () => Promise.reject(error))).rejects.toMatchObject({ cause: error });
+    expect(handle).toHaveBeenCalledOnce();
 
     publicGate.resolve(undefined);
     await expect(publicPromise).resolves.toBe('public');
   });
 
-  it('interrupts the client queue and invokes the handler once for concurrent unauthorized requests', async () => {
+  it('interrupts the client queue and handles a concurrent error once', async () => {
     const handlerGate = deferred<void>();
     const handlerStarted = deferred<void>();
-    const handler = vi.fn(async () => {
+    const handle = vi.fn(async () => {
       handlerStarted.resolve(undefined);
       await handlerGate.promise;
     });
     const client = new TestHttpClient({
-      unauthorized: {
-        statusCodes: [401],
-        cancelAll: true,
-        handler: { handle: handler },
-      },
+      errorInterceptor: new TestErrorInterceptor(() => 'interrupt', handle),
     });
     const endpoint = new TestEndpoint();
     const first = new TestSecuredResource(endpoint, client);
@@ -136,24 +145,20 @@ describe('PublicRemoteResource and SecuredRemoteResource', () => {
     const secondResult = secondPromise.catch((error: unknown) => error);
 
     await handlerStarted.promise;
-    expect(handler).toHaveBeenCalledOnce();
+    expect(handle).toHaveBeenCalledOnce();
 
     handlerGate.resolve(undefined);
 
     await expect(firstResult).resolves.toMatchObject({ cause: firstError });
     await expect(secondResult).resolves.toBeInstanceOf(CanceledError);
-    expect(handler).toHaveBeenCalledOnce();
+    expect(handle).toHaveBeenCalledOnce();
   });
 
-  it('cancels unresolved public requests sharing the same client when unauthorized handling interrupts the queue', async () => {
+  it('cancels unresolved public requests sharing the same client when interrupted', async () => {
     const publicGate = deferred<void>();
-    const handler = vi.fn(async () => undefined);
+    const handle = vi.fn(async () => undefined);
     const client = new TestHttpClient({
-      unauthorized: {
-        statusCodes: [401],
-        cancelAll: true,
-        handler: { handle: handler },
-      },
+      errorInterceptor: new TestErrorInterceptor(() => 'interrupt', handle),
     });
     const endpoint = new TestEndpoint();
     const publicResource = new TestPublicResource(endpoint, client);
@@ -171,30 +176,8 @@ describe('PublicRemoteResource and SecuredRemoteResource', () => {
 
     await expect(securedPromise).rejects.toMatchObject({ cause: error });
     await expect(publicResult).resolves.toBeInstanceOf(CanceledError);
-    expect(handler).toHaveBeenCalledOnce();
+    expect(handle).toHaveBeenCalledOnce();
 
     publicGate.resolve(undefined);
-  });
-
-  it('uses the explicitly configured unauthorized status codes', async () => {
-    const handler = vi.fn(async () => undefined);
-    const client = new TestHttpClient({
-      unauthorized: {
-        statusCodes: [427],
-        cancelAll: true,
-        handler: { handle: handler },
-      },
-    });
-    const resource = new TestSecuredResource(new TestEndpoint(), client);
-    const regularError = httpError(401, 'regular');
-    const unauthorizedError = httpError(427, 'unauthorized');
-
-    await expect(resource.execute(async () => Promise.reject(regularError))).rejects.toBe(regularError);
-    expect(handler).not.toHaveBeenCalled();
-
-    await expect(resource.execute(async () => Promise.reject(unauthorizedError))).rejects.toMatchObject({
-      cause: unauthorizedError,
-    });
-    expect(handler).toHaveBeenCalledOnce();
   });
 });

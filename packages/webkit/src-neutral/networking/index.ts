@@ -1,6 +1,7 @@
 export * from './async-queue';
 export * from './http-client';
 export * from './http-error';
+export * from './http-error-interceptor';
 export * from './http-request';
 export * from './http-request-interceptor';
 export * from './http-request-options';
@@ -8,4 +9,3 @@ export * from './remote-endpoint';
 export * from './remote-resource';
 export * from './remote-resource-public';
 export * from './remote-resource-secured';
-export * from './unauthorized';

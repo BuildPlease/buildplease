@@ -13,15 +13,14 @@ import {
   UnauthorizedEndpoint,
   UnauthorizedResource,
 } from '~/networking/operation/unauthorized';
-import { PlaygroundUnauthorizedHandler } from '~/networking/unauthorized-handler';
+import { PlaygroundUnauthorizedInterceptor } from '~/networking/unauthorized-interceptor';
 import {
-  DelayedHttpRequestTestUnauthorizedHandler,
-  HttpRequestTestUnauthorizedHandler,
-} from '~/networking/unauthorized-handler-test';
+  DelayedHttpRequestTestUnauthorizedInterceptor,
+  HttpRequestTestUnauthorizedInterceptor,
+} from '~/networking/unauthorized-interceptor-test';
 import { Symbols } from '~/symbols';
 
-const UNAUTHORIZED_STATUS_CODES = [401] as const;
-const DELAYED_UNAUTHORIZED_HANDLER_MS = 1600;
+const DELAYED_UNAUTHORIZED_INTERCEPTOR_MS = 1600;
 
 export class NetworkingAssembly implements Assembly {
   public constructor(private readonly app: NuxtApp) {}
@@ -29,31 +28,19 @@ export class NetworkingAssembly implements Assembly {
   public assemble(container: AssemblyContainer): void {
     container.bind<PlaygroundHttpClient>(Symbols.DI.Playground.Networking.HttpClient).toConstantValue(
       new PlaygroundHttpClient({
-        unauthorized: {
-          statusCodes: UNAUTHORIZED_STATUS_CODES,
-          cancelAll: true,
-          handler: new PlaygroundUnauthorizedHandler(this.app),
-        },
+        errorInterceptor: new PlaygroundUnauthorizedInterceptor(this.app),
       }),
     );
 
     container.bind<PlaygroundHttpClient>(Symbols.DI.Playground.Networking.HttpRequestTestClient).toConstantValue(
       new PlaygroundHttpClient({
-        unauthorized: {
-          statusCodes: UNAUTHORIZED_STATUS_CODES,
-          cancelAll: true,
-          handler: new HttpRequestTestUnauthorizedHandler(),
-        },
+        errorInterceptor: new HttpRequestTestUnauthorizedInterceptor(),
       }),
     );
 
     container.bind<PlaygroundHttpClient>(Symbols.DI.Playground.Networking.DelayedHttpRequestTestClient).toConstantValue(
       new PlaygroundHttpClient({
-        unauthorized: {
-          statusCodes: UNAUTHORIZED_STATUS_CODES,
-          cancelAll: true,
-          handler: new DelayedHttpRequestTestUnauthorizedHandler(DELAYED_UNAUTHORIZED_HANDLER_MS),
-        },
+        errorInterceptor: new DelayedHttpRequestTestUnauthorizedInterceptor(DELAYED_UNAUTHORIZED_INTERCEPTOR_MS),
       }),
     );
 
