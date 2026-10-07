@@ -3,7 +3,7 @@ import { type $ZodErrorMap, type $ZodStringFormats, util } from 'zod/v4/core';
 
 import { useNuxtKit } from '#internal-runtime';
 
-import { type Sizable, type SizableUnit, getSizing } from '#nuxtkit/zod/shared';
+import { type Sizable, type SizableUnit, getSizing } from './sizable';
 
 export function makeErrorMap(i18n: Composer): $ZodErrorMap {
   const { config } = useNuxtKit();

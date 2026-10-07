@@ -4,6 +4,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { resetNuxtKit, setNuxtKit } from '#test/mocks/internal-runtime';
 import { resetNuxtApp, setNuxtApp } from '#test/mocks/nuxt-app';
+
 import { useErrorHandler } from '@/src/runtime/composables/use-error-handler';
 
 describe('useErrorHandler', () => {

@@ -21,6 +21,8 @@ export default defineConfig({
       { find: /^#internal-shared$/, replacement: resolve(rootDir, 'src/internal-shared/index.ts') },
       { find: /^#internal-shared\/(.*)$/, replacement: `${resolve(rootDir, 'src/internal-shared')}/$1` },
       { find: /^#nuxtkit\/(.*)$/, replacement: `${resolve(rootDir, 'src/runtime')}/$1` },
+      { find: /^#nuxtkit-public$/, replacement: resolve(rootDir, 'src/public/index.ts') },
+      { find: /^#nuxtkit-public\/(.*)$/, replacement: `${resolve(rootDir, 'src/public')}/$1` },
       { find: /^#test\/(.*)$/, replacement: `${resolve(rootDir, 'test')}/$1` },
 
       // MARK: - Tests

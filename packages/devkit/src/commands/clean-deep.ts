@@ -88,8 +88,8 @@ async function clearPnpmCacheIfNeeded(clearCache: boolean): Promise<void> {
   }
 
   cli.start('Clearing PNPM store and cache');
-  await runExecutable(pnpmCommand(), ['store', 'prune', '--force']);
-  await runExecutable(pnpmCommand(), ['cache', 'delete']);
+  await runExecutable(pnpmCommand(), ['store', 'prune']);
+  await runExecutable(pnpmCommand(), ['cache', 'prune']);
 }
 
 export async function cleanDeep(options: CleanDeepOptions): Promise<void> {

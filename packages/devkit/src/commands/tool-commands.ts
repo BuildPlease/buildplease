@@ -18,7 +18,8 @@ export async function depUpdate(args: readonly string[]): Promise<void> {
     '-i',
     '--dep',
     DEFAULT_DEPENDENCY_TYPES.join(','),
-    '--peer',
+    '--target',
+    'latest',
     ...args,
   ]);
 }

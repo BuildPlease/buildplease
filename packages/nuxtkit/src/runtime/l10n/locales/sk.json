@@ -60,10 +60,8 @@
         "jwt": "JWT",
         "template_literal": "vstup"
       },
-      "common": {
-        "invalid": "Neplatná hodnota.",
-        "empty": "Nesmie byť prázdne."
-      },
+      "invalid": "Neplatná hodnota.",
+      "empty": "Nesmie byť prázdne.",
       "invalid_value": {
         "single": "Použite hodnotu {value}.",
         "one_of": "Vyberte jednu z možností: {values}."
@@ -112,8 +110,7 @@
       "unrecognized_keys": "Neznáme položky: {keys}.",
       "invalid_key": "Neplatná položka v {origin}.",
       "invalid_union": "Neplatná hodnota.",
-      "invalid_element": "Neplatná hodnota v {origin}.",
-      "custom": "Neplatná hodnota."
+      "invalid_element": "Neplatná hodnota v {origin}."
     }
   }
 }

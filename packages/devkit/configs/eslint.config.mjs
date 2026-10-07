@@ -2,7 +2,7 @@ import tsPlugin from '@typescript-eslint/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
 import eslintConfigPrettier from 'eslint-config-prettier/flat';
 import checkFile from 'eslint-plugin-check-file';
-import importPlugin from 'eslint-plugin-import';
+import importPlugin from 'eslint-plugin-import-x';
 import jsonc from 'eslint-plugin-jsonc';
 import unicorn from 'eslint-plugin-unicorn';
 import vuePlugin from 'eslint-plugin-vue';

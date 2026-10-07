@@ -4,6 +4,10 @@ interface TestNuxtKitContext {
   };
   readonly debug: boolean;
   readonly config: {
+    readonly zodI18n?: {
+      readonly keyPrefix: string;
+      readonly dateFormat?: Intl.DateTimeFormatOptions;
+    };
     readonly errors: {
       readonly genericErrorKey: string;
       readonly genericMessageFallback: string;
