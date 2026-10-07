@@ -1,7 +1,8 @@
 import { z } from 'zod';
 
-import { defineNuxtPlugin } from '#app';
 import { useNuxtKit } from '#internal-runtime';
+
+import { defineNuxtPlugin } from '#app';
 import { makeErrorMap } from '#nuxtkit/zod/shared';
 
 export default defineNuxtPlugin({

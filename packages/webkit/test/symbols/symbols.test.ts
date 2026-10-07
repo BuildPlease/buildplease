@@ -1,6 +1,7 @@
 import { Symbols as ParentSymbols } from '@buildplease/core';
-import { Symbols } from '@buildplease/webkit';
 import { describe, expect, it } from 'vitest';
+
+import { Symbols } from '@buildplease/webkit';
 
 describe('Symbols', () => {
   it('inherits the Core symbol tree when WebKit adds no symbols', () => {

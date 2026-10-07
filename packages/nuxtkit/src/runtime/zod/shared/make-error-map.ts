@@ -2,7 +2,8 @@ import type { Composer } from 'vue-i18n';
 import { type $ZodErrorMap, type $ZodStringFormats, util } from 'zod/v4/core';
 
 import { useNuxtKit } from '#internal-runtime';
-import { type Sizable, type SizableUnit, getSizing } from '#nuxtkit/zod/shared';
+
+import { type Sizable, type SizableUnit, getSizing } from './sizable';
 
 export function makeErrorMap(i18n: Composer): $ZodErrorMap {
   const { config } = useNuxtKit();
@@ -16,9 +17,9 @@ export function makeErrorMap(i18n: Composer): $ZodErrorMap {
     switch (issue.code) {
       case 'invalid_type': {
         if (issue.received === undefined || issue.received === null) {
-          return t(makeKey('common.empty'));
+          return t(makeKey('empty'));
         }
-        return t(makeKey('common.invalid'));
+        return t(makeKey('invalid'));
       }
 
       case 'invalid_value': {
@@ -61,7 +62,7 @@ export function makeErrorMap(i18n: Composer): $ZodErrorMap {
         // MARK: - Required string: z.string().min(1) / .nonempty()
         const isRequiredNonemptyString = issue.origin === 'string' && issue.minimum === 1;
         if (isRequiredNonemptyString) {
-          return t(makeKey('common.empty'));
+          return t(makeKey('empty'));
         }
 
         // MARK: - Date: min / exact

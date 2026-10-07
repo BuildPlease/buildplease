@@ -26,6 +26,7 @@ allowBuilds:
   argon2: true
   esbuild: true
   sharp: true
+  unrs-resolver: true
   vue-demi: true
 
 peerDependencyRules:
@@ -39,12 +40,13 @@ catalog:
   # Shared
   inversify: 8.2.3
   reflect-metadata: 0.2.2
-  zod: 4.5.4
+  zod: 4.6.5
   jiti: 2.7.0
   uuid: 14.0.2
 
   # Frontend
-  '@nuxt/ui': 4.11.0
+  '@nuxt/ui': 4.11.3
   '@nuxtjs/i18n': 10.6.0
-  nuxt: 4.5.2
-  vue-tsc: 3.3.11
+  nuxt: 4.6.0
+  vue: 3.5.43
+  vue-tsc: 3.3.12

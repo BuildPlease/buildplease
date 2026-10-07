@@ -4,7 +4,7 @@ export default defineNuxtConfig({
   ssr: false,
 
   typescript: {
-    tsConfig: {
+    appTsConfig: {
       compilerOptions: {
         experimentalDecorators: true,
         emitDecoratorMetadata: true,

@@ -1,8 +1,9 @@
 import { CanceledError, isNonEmptyString } from '@buildplease/core';
 import { HttpError } from '@buildplease/webkit';
 
-import { useNuxtApp } from '#app';
 import { useNuxtKit } from '#internal-runtime';
+
+import { useNuxtApp } from '#app';
 import { resolveI18nMessage } from '#nuxtkit/i18n';
 
 export interface ErrorHandlerOptions {

@@ -1,8 +1,9 @@
 import type { Identity } from '@buildplease/core';
 import type { HttpRequestInterceptor, HttpRequestOptions } from '@buildplease/webkit';
 
-import type { NuxtApp } from '#app';
 import { MODULE_SYMBOL_NAME } from '#internal-shared';
+
+import type { NuxtApp } from '#app';
 import { useCurrentLocale } from '#nuxtkit/composables';
 
 export class LanguageInterceptor implements HttpRequestInterceptor {

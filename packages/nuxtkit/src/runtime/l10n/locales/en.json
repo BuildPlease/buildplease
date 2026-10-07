@@ -60,10 +60,8 @@
         "jwt": "JWT",
         "template_literal": "input"
       },
-      "common": {
-        "invalid": "Invalid value.",
-        "empty": "Cannot be empty."
-      },
+      "invalid": "Invalid value.",
+      "empty": "Cannot be empty.",
       "invalid_value": {
         "single": "Use the value {value}.",
         "one_of": "Select one of the options: {values}."
@@ -112,8 +110,7 @@
       "unrecognized_keys": "Unknown items: {keys}.",
       "invalid_key": "Invalid item in {origin}.",
       "invalid_union": "Invalid value.",
-      "invalid_element": "Invalid value in {origin}.",
-      "custom": "Invalid value."
+      "invalid_element": "Invalid value in {origin}."
     }
   }
 }

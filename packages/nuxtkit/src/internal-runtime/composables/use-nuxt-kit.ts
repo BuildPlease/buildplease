@@ -1,7 +1,8 @@
 import { isObject } from '@buildplease/core';
 
-import { isCSR, isSSR, useRuntimeConfig } from '#imports';
 import { MODULE_CONFIG_KEY_NAME, MODULE_NAME, MODULE_SYMBOL_NAME } from '#internal-shared';
+
+import { isCSR, isSSR, useRuntimeConfig } from '#imports';
 
 export function useNuxtKit() {
   const runtimeConfig = useRuntimeConfig().public[MODULE_CONFIG_KEY_NAME];

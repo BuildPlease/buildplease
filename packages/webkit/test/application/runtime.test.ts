@@ -1,7 +1,8 @@
 import type { Assembly, AssemblyContainer } from '@buildplease/core';
-import { Symbols } from '@buildplease/webkit';
 import { createWebKitRuntime } from '@internal/neutral/runtime';
 import { describe, expect, it } from 'vitest';
+
+import { Symbols } from '@buildplease/webkit';
 
 describe('WebKit application runtime', () => {
   it('registers framework assemblies before consumer assemblies and runs lifecycle hooks', async () => {
