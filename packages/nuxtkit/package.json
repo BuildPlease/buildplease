@@ -41,14 +41,14 @@
   "dependencies": {
     "@buildplease/core": "workspace:*",
     "@buildplease/webkit": "workspace:*",
-    "@nuxt/kit": "4.6.0",
+    "@nuxt/kit": "4.6.1",
     "defu": "6.1.7"
   },
   "devDependencies": {
     "@buildplease/identity": "workspace:*",
     "@nuxt/devtools": "3.4.2",
     "@nuxt/module-builder": "1.0.3",
-    "@nuxt/schema": "4.6.0",
+    "@nuxt/schema": "4.6.1",
     "nuxt": "catalog:",
     "unbuild": "3.6.1",
     "vue-tsc": "catalog:"
@@ -57,7 +57,7 @@
     "@nuxt/ui": "catalog:",
     "@nuxtjs/i18n": "catalog:",
     "vue": "catalog:",
-    "vue-i18n": "11.4.13",
+    "vue-i18n": "11.4.14",
     "zod": "catalog:"
   },
   "publishConfig": {
