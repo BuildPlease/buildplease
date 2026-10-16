@@ -1,85 +1,82 @@
 <template>
-  <UDropdownMenu :items="items">
-    <UButton
-      variant="outline"
-      color="neutral"
-    >
-      <span v-if="currentFlag">{{ currentFlag }}</span>
-      {{ currentLabel }}
-    </UButton>
-  </UDropdownMenu>
+  <USelect
+    :model-value="currentCode"
+    :items="items"
+    :disabled="items.length < 2"
+    value-key="value"
+    color="neutral"
+    variant="outline"
+    size="sm"
+    :ui="{
+      base: 'h-10 w-16 shrink-0',
+      content: 'min-w-fit',
+      item: 'items-center',
+      itemWrapper: 'justify-center',
+      itemLabel: 'whitespace-nowrap leading-5',
+    }"
+    :aria-label="`${t('nuxtkit.ui.language')}: ${currentLocale?.label ?? currentCode}`"
+    :content="{ side: 'top', align: 'end' }"
+    @update:model-value="onSelect"
+  >
+    <template #default>
+      <span
+        class="text-base leading-none"
+        aria-hidden="true"
+        >{{ currentLocale?.flag ?? '🌐' }}</span
+      >
+    </template>
+    <template #item-leading="{ item }">
+      <span
+        class="inline-flex h-5 shrink-0 items-center text-base leading-none"
+        aria-hidden="true"
+        >{{ item.flag }}</span
+      >
+    </template>
+  </USelect>
 </template>
 
 <script setup lang="ts">
-import type { DropdownMenuItem } from '@nuxt/ui';
 import type { LocaleObject } from '@nuxtjs/i18n';
 import { computed } from 'vue';
 
 import { useI18n } from '#imports';
 
-const props = withDefaults(
-  defineProps<{
-    displayFlag?: boolean;
-    labelField?: 'code' | 'name';
-  }>(),
-  {
-    displayFlag: true,
-    labelField: 'name',
-  },
-);
+interface LanguageItem {
+  value: string;
+  label: string;
+  flag: string;
+}
 
-const { locale: currentCode, locales, setLocale } = useI18n();
+const { locale: currentCode, locales, setLocale, t } = useI18n();
 
-const availableLocales = computed<LocaleObject[]>(() => {
-  const configuredLocales: readonly (string | LocaleObject)[] = locales.value;
+const items = computed<LanguageItem[]>(() => {
+  const configured: readonly (string | LocaleObject)[] = locales.value;
 
-  return configuredLocales.map((locale) =>
-    typeof locale === 'string'
-      ? {
-          code: locale,
-          language: locale,
-          name: locale.toUpperCase(),
-        }
-      : locale,
-  );
+  return configured.map((entry) => {
+    const locale = typeof entry === 'string' ? { code: entry, language: entry, name: entry } : entry;
+    return {
+      value: locale.code,
+      label: locale.name ?? locale.code,
+      flag: flagForLanguage(locale.language ?? locale.code),
+    };
+  });
 });
 
-const currentLocale = computed(() => availableLocales.value.find((locale) => locale.code === currentCode.value));
+const currentLocale = computed(() => items.value.find((item) => item.value === currentCode.value));
 
-const currentLabel = computed(() => {
-  const locale = currentLocale.value;
-  if (!locale) return currentCode.value;
+async function onSelect(code: string): Promise<void> {
+  if (code === currentCode.value) return;
+  await setLocale(code);
+}
 
-  return props.labelField === 'name' ? (locale.name ?? locale.code) : locale.code;
-});
+function flagForLanguage(language: string): string {
+  try {
+    const region = new Intl.Locale(language).region;
+    if (!region || !/^[A-Z]{2}$/.test(region)) return '🌐';
 
-const currentFlag = computed(() => {
-  if (!props.displayFlag || !currentLocale.value) return undefined;
-  return getFlag(currentLocale.value);
-});
-
-const items = computed<DropdownMenuItem[]>(() =>
-  availableLocales.value
-    .filter((locale) => locale.code !== currentCode.value)
-    .map((locale) => {
-      const label = props.labelField === 'name' ? (locale.name ?? locale.code) : locale.code;
-      const flag = props.displayFlag ? getFlag(locale) : undefined;
-
-      return {
-        label: flag ? `${flag} ${label}` : label,
-        onSelect: async () => {
-          await setLocale(locale.code);
-        },
-      };
-    }),
-);
-
-function getFlag(locale: LocaleObject): string | undefined {
-  if (!locale.language) return undefined;
-
-  const region = new Intl.Locale(locale.language).region;
-  if (!region || region.length !== 2) return undefined;
-
-  return String.fromCodePoint(...Array.from(region.toUpperCase()).map((character) => 127397 + character.charCodeAt(0)));
+    return String.fromCodePoint(127397 + region.charCodeAt(0), 127397 + region.charCodeAt(1));
+  } catch {
+    return '🌐';
+  }
 }
 </script>

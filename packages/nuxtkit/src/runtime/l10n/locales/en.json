@@ -111,6 +111,13 @@
       "invalid_key": "Invalid item in {origin}.",
       "invalid_union": "Invalid value.",
       "invalid_element": "Invalid value in {origin}."
+    },
+    "ui": {
+      "language": "Language",
+      "appearance": "Appearance",
+      "light": "Light",
+      "system": "System",
+      "dark": "Dark"
     }
   }
 }
