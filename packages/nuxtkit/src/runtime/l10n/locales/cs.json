@@ -111,6 +111,13 @@
       "invalid_key": "Neplatná položka v {origin}.",
       "invalid_union": "Neplatná hodnota.",
       "invalid_element": "Neplatná hodnota v {origin}."
+    },
+    "ui": {
+      "language": "Jazyk",
+      "appearance": "Vzhled",
+      "light": "Světlý",
+      "system": "Systém",
+      "dark": "Tmavý"
     }
   }
 }

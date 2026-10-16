@@ -1,6 +1,6 @@
 {
   "name": "@buildplease/core",
-  "version": "1.4.4",
+  "version": "1.4.5",
   "keywords": [],
   "repository": {
     "type": "git",
@@ -68,7 +68,7 @@
   "dependencies": {
     "@date-fns/tz": "1.5.0",
     "@date-fns/utc": "2.1.1",
-    "@dotenvx/dotenvx": "2.34.2",
+    "@dotenvx/dotenvx": "2.37.0",
     "async-mutex": "0.5.0",
     "bcryptjs": "3.0.3",
     "code-block-writer": "13.0.3",

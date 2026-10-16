@@ -1,6 +1,6 @@
 {
   "name": "@buildplease/nuxtkit",
-  "version": "1.4.6",
+  "version": "1.4.7",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/BuildPlease/buildplease.git",
@@ -46,7 +46,7 @@
   },
   "devDependencies": {
     "@buildplease/identity": "workspace:*",
-    "@nuxt/devtools": "3.4.2",
+    "@nuxt/devtools": "3.4.3",
     "@nuxt/module-builder": "1.0.3",
     "@nuxt/schema": "4.6.1",
     "nuxt": "catalog:",

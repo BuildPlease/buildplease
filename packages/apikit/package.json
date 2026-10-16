@@ -1,6 +1,6 @@
 {
   "name": "@buildplease/apikit",
-  "version": "1.4.4",
+  "version": "1.4.5",
   "keywords": [],
   "repository": {
     "type": "git",
@@ -46,7 +46,7 @@
     "@fastify/basic-auth": "6.3.1",
     "@fastify/cookie": "11.1.3",
     "@fastify/cors": "11.3.1",
-    "@fastify/multipart": "10.1.3",
+    "@fastify/multipart": "10.1.4",
     "@fastify/static": "10.1.6",
     "@fastify/under-pressure": "9.2.1",
     "@fastify/view": "12.0.1",
@@ -55,11 +55,11 @@
     "fastify-ip": "2.0.0",
     "fastify-metrics": "14.1.0",
     "fastify-plugin": "6.0.1",
-    "i18next": "26.4.3",
+    "i18next": "26.4.7",
     "libphonenumber-js": "1.13.15",
     "lodash.merge": "4.6.2",
     "mime-types": "3.0.2",
-    "nodemailer": "10.1.0",
+    "nodemailer": "10.1.1",
     "uuid": "catalog:",
     "validator": "13.15.35"
   },
@@ -71,7 +71,7 @@
     "@types/validator": "13.15.10"
   },
   "peerDependencies": {
-    "fastify": "5.12.5",
+    "fastify": "5.12.7",
     "inversify": "catalog:",
     "reflect-metadata": "catalog:",
     "sharp": "0.35.5",
