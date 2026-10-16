@@ -17,7 +17,7 @@
     "@buildplease/core": "workspace:*",
     "@buildplease/nuxtkit": "workspace:*",
     "@buildplease/webkit": "workspace:*",
-    "@iconify-json/lucide": "1.2.142",
+    "@iconify-json/lucide": "1.2.145",
     "@nuxt/ui": "catalog:",
     "@nuxtjs/i18n": "catalog:",
     "inversify": "catalog:",
