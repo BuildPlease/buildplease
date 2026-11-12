@@ -13,7 +13,7 @@
     "clean:deep": "devkit run clean-deep",
     "dep:check": "devkit run dep-check",
     "dep:update": "devkit run dep-update",
-    "format": "devkit run format-fix && devkit run lint-fix",
+    "format": "devkit run lint-fix && devkit run format-fix",
     "preinstall": "npx only-allow pnpm",
     "test": "turbo run test --log-order=grouped",
     "typecheck": "turbo run typecheck --log-order=grouped"

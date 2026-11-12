@@ -18,7 +18,7 @@ const codeRules = {
   'import/order': [
     'error',
     {
-      groups: ['builtin', 'external', 'internal', 'unknown', ['parent', 'sibling', 'index']],
+      groups: ['builtin', ['external', 'internal', 'unknown'], ['parent', 'sibling', 'index']],
       'newlines-between': 'always',
       alphabetize: {
         order: 'asc',
@@ -36,8 +36,6 @@ const codeRules = {
   'import/first': 'error',
   'import/no-default-export': 'off',
 
-  'no-multiple-empty-lines': ['error', { max: 1 }],
-  'no-multi-spaces': ['error', { ignoreEOLComments: true }],
   'no-restricted-syntax': [
     'error',
     {
@@ -70,20 +68,18 @@ const codeRules = {
 };
 
 const vueRules = {
-  ...vuePlugin.configs['flat/recommended'].rules,
   ...codeRules,
 
   'import/no-unresolved': 'off',
 
   'vue/block-order': ['error', { order: ['template', 'script', 'style'] }],
-  'vue/max-attributes-per-line': ['error', { singleline: 5, multiline: 1 }],
+  'vue/multi-word-component-names': 'off',
   'vue/no-v-html': 'error',
 
   'check-file/filename-naming-convention': [
     'error',
     {
-      '**/*.md': 'KEBAB_CASE',
-      'components/**/*.vue': 'PASCAL_CASE',
+      '**/components/**/!(index).vue': 'PASCAL_CASE',
     },
   ],
   'check-file/folder-naming-convention': [
@@ -168,4 +164,23 @@ const yamlConfig = [
   },
 ];
 
-export default [globalIgnores, vueConfig, codeConfig, ...jsonConfig, ...yamlConfig, eslintConfigPrettier];
+const markdownConfig = {
+  files: ['**/*.md'],
+  ignores: ['**/+([A-Z0-9_]).md'],
+  plugins: { 'check-file': checkFile },
+  processor: 'check-file/eslint-processor-check-file',
+  rules: {
+    'check-file/filename-naming-convention': ['error', { '**/*.md': 'KEBAB_CASE' }],
+  },
+};
+
+export default [
+  globalIgnores,
+  ...vuePlugin.configs['flat/recommended'],
+  vueConfig,
+  codeConfig,
+  ...jsonConfig,
+  ...yamlConfig,
+  markdownConfig,
+  eslintConfigPrettier,
+];

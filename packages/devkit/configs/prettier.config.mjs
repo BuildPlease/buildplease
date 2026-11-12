@@ -2,7 +2,7 @@ import ejsPlugin from 'prettier-plugin-ejs';
 import packageJsonPlugin from 'prettier-plugin-packagejson';
 import * as tailwindPlugin from 'prettier-plugin-tailwindcss';
 
-const jsoncFiles = ['**/*.jsonc', '**/tsconfig*.json'];
+const jsoncFiles = ['*.jsonc', 'tsconfig*.json'];
 
 export default {
   semi: true,
