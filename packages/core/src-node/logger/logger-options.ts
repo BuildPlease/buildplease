@@ -5,10 +5,15 @@ export interface BaseLoggerTransportOptions {
   readonly level?: Level;
 }
 
-export interface LoggerConsoleTransportOptions extends BaseLoggerTransportOptions {
-  readonly type: 'console';
-  readonly target: 'pino-pretty';
+export interface LoggerPrettyStdoutTransportOptions extends BaseLoggerTransportOptions {
+  readonly type: 'stdout';
+  readonly format: 'pretty';
   readonly pretty?: PrettyOptions;
+}
+
+export interface LoggerJsonStdoutTransportOptions extends BaseLoggerTransportOptions {
+  readonly type: 'stdout';
+  readonly format: 'json';
 }
 
 export interface LoggerFileTransportOptions extends BaseLoggerTransportOptions {
@@ -16,7 +21,9 @@ export interface LoggerFileTransportOptions extends BaseLoggerTransportOptions {
   readonly path: string;
 }
 
-export type LoggerTransportOptions = LoggerConsoleTransportOptions | LoggerFileTransportOptions;
+export type LoggerStdoutTransportOptions = LoggerPrettyStdoutTransportOptions | LoggerJsonStdoutTransportOptions;
+
+export type LoggerTransportOptions = LoggerStdoutTransportOptions | LoggerFileTransportOptions;
 
 export type LoggerOptions =
   | {

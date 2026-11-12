@@ -1,7 +1,5 @@
-import path from 'node:path';
-
 import { filterObject, isEmptyObject, isError, isObject, isPrimitive } from '@neutral/utils';
-import { ensureDirectory, resolvePath } from '@node/file';
+import { resolvePath } from '@node/file';
 import pino, {
   type Bindings,
   type Level,
@@ -11,9 +9,9 @@ import pino, {
 
 import type { LogOptions } from './log-options';
 import type {
-  LoggerConsoleTransportOptions,
   LoggerFileTransportOptions,
   LoggerOptions,
+  LoggerStdoutTransportOptions,
   LoggerTransportOptions,
 } from './logger-options';
 
@@ -169,43 +167,55 @@ export class LoggerImpl implements Logger {
   }
 
   private makeTransportTargets(input: readonly LoggerTransportOptions[]): pino.TransportTargetOptions[] {
-    if (input.filter((transport) => transport.type === 'console').length > 1) {
-      throw new Error('[Logger] Multiple console transports are not supported.');
+    if (input.filter((transport) => transport.type === 'stdout').length > 1) {
+      throw new Error('[Logger] Multiple stdout transports are not supported.');
     }
 
     return input.map((transportConfig) => {
       switch (transportConfig.type) {
-        case 'console':
-          return this.makeConsoleTransportTarget(transportConfig);
+        case 'stdout':
+          return this.makeStdoutTransportTarget(transportConfig);
 
         case 'file':
           return this.makeFileTransportTarget(transportConfig);
+
+        default:
+          throw new Error('[Logger] Unsupported transport type.');
       }
     });
   }
 
-  private makeConsoleTransportTarget(config: LoggerConsoleTransportOptions): pino.TransportTargetOptions {
+  private makeStdoutTransportTarget(config: LoggerStdoutTransportOptions): pino.TransportTargetOptions {
     const level = this.makeTransportLevel(config.level);
 
-    return {
-      target: 'pino-pretty',
-      level: level,
-      options: config.pretty,
-    };
+    switch (config.format) {
+      case 'pretty':
+        return {
+          target: 'pino-pretty',
+          level: level,
+          options: config.pretty,
+        };
+
+      case 'json':
+        return {
+          target: 'pino/file',
+          level: level,
+          options: { destination: 1 },
+        };
+
+      default:
+        throw new Error('[Logger] Unsupported stdout format.');
+    }
   }
 
   private makeFileTransportTarget(config: LoggerFileTransportOptions): pino.TransportTargetOptions {
     const level = this.makeTransportLevel(config.level);
-    const destination = path.isAbsolute(config.path)
-      ? path.normalize(config.path)
-      : resolvePath(process.cwd(), config.path);
-
-    ensureDirectory(path.dirname(destination));
+    const destination = resolvePath(process.cwd(), config.path);
 
     return {
       target: 'pino/file',
       level: level,
-      options: { destination: destination },
+      options: { destination: destination, mkdir: true },
     };
   }
 
