@@ -1,8 +1,8 @@
 import { Console } from '@buildplease/core/node';
 import { runCommand } from 'citty';
 
-import { main, showHelpForUnknownCommand } from './main';
 import { CommandFailedError } from '../src/commands/run-bin';
+import { main, showHelpForUnknownCommand } from './main';
 
 const cli = new Console();
 

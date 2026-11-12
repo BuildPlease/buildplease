@@ -7,6 +7,7 @@ import type { Build } from '@neutral/build';
 import type { Environment } from '@neutral/environment';
 import { createJiti } from 'jiti';
 
+import { ensureDirectory, resolvePath } from '../file/file-sync';
 import {
   type ConfigDefinition,
   type ConfigurationBinding,
@@ -28,7 +29,6 @@ import {
 import { readEnvironmentVariable } from './environment-variable';
 import { loadPreparedEnvironments } from './prepared-environment';
 import { type ConfigurationResolveContext, type ConfigurationSource, isConfigurationSource } from './source';
-import { ensureDirectory, resolvePath } from '../file/file-sync';
 
 const ENVIRONMENT_CONFIG_FILE = 'environment.config.ts';
 

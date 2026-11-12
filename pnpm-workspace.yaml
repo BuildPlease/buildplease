@@ -31,14 +31,18 @@ allowBuilds:
 
 peerDependencyRules:
   allowedVersions:
+    # Temporary: Upstream packages have not declared TypeScript 6 compatibility.
     unbuild@3.6.1>typescript: 6.0.3
     tsconfck@3.1.6>typescript: 6.0.3
-    '@nuxt/module-builder@1.0.3>typescript': 6.0.3
-    mkdist@2.4.1>vue-sfc-transformer: 0.2.5
+    '@nuxt/module-builder@1.0.4>typescript': 6.0.3
+
+    # Temporary: Upstream peer ranges lag behind the resolved dependency versions.
+    vite-plugin-vue-devtools@9.0.0-rc.3>@vitejs/devtools: 0.8.2
+    mkdist@2.4.1>vue-sfc-transformer: 0.3.3
 
 catalog:
   # Shared
-  inversify: 8.2.3
+  inversify: 8.3.0
   reflect-metadata: 0.2.2
   zod: 4.6.7
   jiti: 2.7.0
@@ -47,6 +51,6 @@ catalog:
   # Frontend
   '@nuxt/ui': 4.12.0
   '@nuxtjs/i18n': 10.6.0
-  nuxt: 4.6.1
-  vue: 3.5.44
-  vue-tsc: 3.3.13
+  nuxt: 4.6.4
+  vue: 3.5.45
+  vue-tsc: 3.3.14

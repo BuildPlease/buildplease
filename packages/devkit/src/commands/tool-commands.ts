@@ -1,7 +1,7 @@
 import { fileURLToPath } from 'node:url';
 
-import { runNodeBin } from './run-bin';
 import { loadDevKitConfig, resolveDevKitConfig } from '../../src-internal/configuration';
+import { runNodeBin } from './run-bin';
 
 const DEFAULT_DEPENDENCY_TYPES = ['prod', 'dev', 'optional', 'peer'] as const;
 

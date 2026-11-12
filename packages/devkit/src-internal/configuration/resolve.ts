@@ -1,5 +1,5 @@
-import { DevKitDefaults } from './defaults';
 import type { DevKitConfig, DevKitConfigMode } from '../../src/configuration';
+import { DevKitDefaults } from './defaults';
 
 export interface ResolvedDevKitConfig {
   readonly ignore: readonly string[];

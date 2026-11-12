@@ -1,9 +1,9 @@
 import { defineCommand, showUsage } from 'citty';
 
-import { assertKnownOptions, isEnabled, normalizePassthroughArgs } from './commands/shared';
 import { clean } from '../src/commands/clean';
 import { type CleanDeepOptions, cleanDeep } from '../src/commands/clean-deep';
 import { depCheck, depUpdate, format, formatFix, lint, lintFix } from '../src/commands/tool-commands';
+import { assertKnownOptions, isEnabled, normalizePassthroughArgs } from './commands/shared';
 
 function createPassthroughCommand(name: string, description: string, run: (args: readonly string[]) => Promise<void>) {
   return defineCommand({
