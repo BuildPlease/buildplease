@@ -1,6 +1,5 @@
-import type { HttpError, HttpErrorInterceptor, HttpErrorResolution } from '@buildplease/webkit';
-
 import type { NuxtApp } from '#app';
+import type { HttpError, HttpErrorInterceptor, HttpErrorResolution } from '@buildplease/webkit';
 import { Routes } from '~/symbols';
 
 export class PlaygroundUnauthorizedInterceptor implements HttpErrorInterceptor {

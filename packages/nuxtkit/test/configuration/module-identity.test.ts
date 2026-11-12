@@ -1,11 +1,10 @@
-import { describe, expect, it } from 'vitest';
-
 import {
   MODULE_CONFIG_KEY_NAME,
   MODULE_NAME,
   MODULE_PACKAGE_NAME,
   MODULE_SYMBOL_NAME,
 } from '@/src/internal-shared/constants';
+import { describe, expect, it } from 'vitest';
 
 describe('NuxtKit module identity', () => {
   it('derives framework-facing identities consistently', () => {

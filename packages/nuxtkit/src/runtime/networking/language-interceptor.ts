@@ -1,10 +1,8 @@
+import type { NuxtApp } from '#app';
+import { MODULE_SYMBOL_NAME } from '#internal-shared';
+import { useCurrentLocale } from '#nuxtkit/composables';
 import type { Identity } from '@buildplease/core';
 import type { HttpRequestInterceptor, HttpRequestOptions } from '@buildplease/webkit';
-
-import { MODULE_SYMBOL_NAME } from '#internal-shared';
-
-import type { NuxtApp } from '#app';
-import { useCurrentLocale } from '#nuxtkit/composables';
 
 export class LanguageInterceptor implements HttpRequestInterceptor {
   public readonly identity: Identity = Symbol.for(`${MODULE_SYMBOL_NAME}.networking.interceptor.language`);

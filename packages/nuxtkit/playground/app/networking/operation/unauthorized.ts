@@ -7,7 +7,6 @@ import {
   SecuredRemoteResource,
 } from '@buildplease/webkit';
 import { inject, injectable } from 'inversify';
-
 import { Symbols } from '~/symbols';
 
 export enum UnauthorizedErrorCode {

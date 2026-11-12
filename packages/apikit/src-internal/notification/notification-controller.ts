@@ -1,7 +1,3 @@
-import type { Logger } from '@buildplease/core/node';
-import { InternalSymbols } from '@src-internal/symbols';
-import { inject, injectable, multiInject, optional } from 'inversify';
-
 import type {
   NotificationChannel,
   NotificationChannelRequest,
@@ -12,6 +8,9 @@ import type {
   NotificationSendOptions,
 } from '@/notification';
 import { Symbols } from '@/symbols';
+import type { Logger } from '@buildplease/core/node';
+import { InternalSymbols } from '@src-internal/symbols';
+import { inject, injectable, multiInject, optional } from 'inversify';
 
 import type { NotificationChannelController } from './notification-channel-controller';
 import { NOTIFICATION_LOG_PREFIX } from './notification-log';

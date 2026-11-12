@@ -1,7 +1,6 @@
-import type { Assembly, AssemblyContainer } from '@buildplease/core';
-
 import { type ImageNormalizationController, ImageNormalizationControllerImpl } from '@/image';
 import { Symbols } from '@/symbols';
+import type { Assembly, AssemblyContainer } from '@buildplease/core';
 
 export class ImageAssembly implements Assembly {
   public assemble(container: AssemblyContainer): void {

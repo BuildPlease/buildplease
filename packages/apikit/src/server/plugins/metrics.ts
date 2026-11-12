@@ -1,8 +1,7 @@
+import type { ServerPluginOptions } from '@/server';
 import type { FastifyPluginAsync } from 'fastify';
 import fastifyMetrics from 'fastify-metrics';
 import fp from 'fastify-plugin';
-
-import type { ServerPluginOptions } from '@/server';
 
 const pluginName = 'apikit-metrics';
 const LOG_PREFIX = '[ApiKit:Metrics]';

@@ -2,10 +2,9 @@ import { mkdtemp, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-
 import { runNodeBin } from '@/commands/run-bin';
 import { depCheck, format, formatFix } from '@/commands/tool-commands';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/commands/run-bin', () => ({
   runNodeBin: vi.fn(async () => undefined),

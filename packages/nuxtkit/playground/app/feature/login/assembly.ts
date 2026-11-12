@@ -1,5 +1,4 @@
 import type { Assembly, AssemblyContainer } from '@buildplease/core';
-
 import { type LoginController, LoginControllerImpl } from '~/feature/login/controller';
 import { LoginViewModel } from '~/feature/login/view-model';
 import { Symbols } from '~/symbols';

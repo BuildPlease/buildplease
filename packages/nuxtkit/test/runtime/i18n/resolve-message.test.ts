@@ -1,8 +1,7 @@
-import { describe, expect, it } from 'vitest';
-import { createI18n } from 'vue-i18n';
-
 import { DEFAULT_OPTIONS } from '@/src/defaults';
 import { resolveI18nMessage } from '@/src/runtime/i18n/resolve-message';
+import { describe, expect, it } from 'vitest';
+import { createI18n } from 'vue-i18n';
 
 const DEFAULT_LOCALE = 'en';
 const enMessages = {

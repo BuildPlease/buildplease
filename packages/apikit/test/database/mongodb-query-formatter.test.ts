@@ -1,6 +1,5 @@
-import { describe, expect, it } from 'vitest';
-
 import { MongoDbQueryFormatterImpl } from '@/database/mongodb-query-formatter';
+import { describe, expect, it } from 'vitest';
 
 interface UserQuery {
   profile: {

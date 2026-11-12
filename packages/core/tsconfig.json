@@ -18,8 +18,8 @@
       "@src-testing/*": ["./src-testing/*"],
       "#l10n": ["./src-neutral/l10n/index.ts"],
       "#resources": ["./resources/index.ts"],
-      "#test/*": ["./test/*"]
-    }
+      "#test/*": ["./test/*"],
+    },
   },
   "include": [
     "resources",
@@ -31,7 +31,7 @@
     "src-cli",
     "src-testing",
     "test",
-    "tsdown.config.ts"
+    "tsdown.config.ts",
   ],
-  "exclude": ["node_modules", "dist"]
+  "exclude": ["node_modules", "dist"],
 }

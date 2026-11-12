@@ -1,8 +1,7 @@
+import { CorsConfiguration } from '@/configuration';
 import { resolveConfiguration } from '@buildplease/core/node';
 import { ApiKitDefaults } from '@src-internal/configuration';
 import { describe, expect, it } from 'vitest';
-
-import { CorsConfiguration } from '@/configuration';
 
 describe('CorsConfiguration', () => {
   it('resolves ApiKit defaults', async () => {

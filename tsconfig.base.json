@@ -34,6 +34,6 @@
     "declaration": true,
     "emitDeclarationOnly": true,
     "skipLibCheck": true,
-    "sourceMap": false
-  }
+    "sourceMap": false,
+  },
 }

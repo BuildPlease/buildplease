@@ -1,6 +1,5 @@
-import type { Assembly, AssemblyContainer } from '@buildplease/core';
-
 import type { NuxtApp } from '#app';
+import type { Assembly, AssemblyContainer } from '@buildplease/core';
 import { PlaygroundHttpClient } from '~/networking/http-client';
 import {
   type HttpRequestTestOperation,

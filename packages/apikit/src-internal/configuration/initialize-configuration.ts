@@ -1,12 +1,3 @@
-import {
-  type ConfigurationBinding,
-  type ResolveConfigurationOptions,
-  loadBuild,
-  loadSelectedEnvironmentConfig,
-  resolveConfiguration,
-  resolveConfigurationBinding,
-} from '@buildplease/core/node';
-
 import type { ApiKitConfig } from '@/configuration/config';
 import {
   BasicAuthConfiguration,
@@ -21,6 +12,14 @@ import {
   ServerConfiguration,
   StaticFilesConfiguration,
 } from '@/configuration/configs';
+import {
+  type ConfigurationBinding,
+  type ResolveConfigurationOptions,
+  loadBuild,
+  loadSelectedEnvironmentConfig,
+  resolveConfiguration,
+  resolveConfigurationBinding,
+} from '@buildplease/core/node';
 
 export async function initializeApiKitConfiguration(): Promise<void> {
   const build = await loadBuild();

@@ -1,6 +1,5 @@
-import mime from 'mime-types';
-
 import { ApiErrorFactory } from '@/error';
+import mime from 'mime-types';
 
 /**
  * Wraps both raw MIME strings (e.g. "image/png") and file extensions (e.g. "png", "foo.png")

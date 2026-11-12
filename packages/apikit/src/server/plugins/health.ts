@@ -1,8 +1,7 @@
+import type { ServerPluginOptions } from '@/server';
 import underPressure from '@fastify/under-pressure';
 import type { FastifyPluginAsync } from 'fastify';
 import fp from 'fastify-plugin';
-
-import type { ServerPluginOptions } from '@/server';
 
 const pluginName = 'apikit-health';
 const LOG_PREFIX = '[ApiKit:Health]';

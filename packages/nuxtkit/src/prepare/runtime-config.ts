@@ -1,7 +1,6 @@
+import { MODULE_CONFIG_KEY_NAME } from '#internal-shared';
 import type { Nuxt } from '@nuxt/schema';
 import { defu } from 'defu';
-
-import { MODULE_CONFIG_KEY_NAME } from '#internal-shared';
 
 import type { NuxtKitContext } from '../context';
 import type { NuxtKitPublicRuntimeConfig } from '../types';

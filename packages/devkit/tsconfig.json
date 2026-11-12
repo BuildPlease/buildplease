@@ -11,9 +11,9 @@
       "@/*": ["./src/*"],
       "@src-cli/*": ["./src-cli/*"],
       "@src-internal/*": ["./src-internal/*"],
-      "#test/*": ["./test/*"]
-    }
+      "#test/*": ["./test/*"],
+    },
   },
   "include": ["src", "src-cli", "src-internal", "test", "tsdown.config.cli.ts", "tsdown.config.src.ts"],
-  "exclude": ["node_modules", "dist"]
+  "exclude": ["node_modules", "dist"],
 }

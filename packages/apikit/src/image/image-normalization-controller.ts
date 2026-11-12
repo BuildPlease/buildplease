@@ -1,14 +1,13 @@
 import { type Readable, PassThrough } from 'stream';
 import { pipeline as pipelineAsync } from 'stream/promises';
 
+import { ApiErrorFactory } from '@/error';
+import { FormatType } from '@/formatter';
+import { Symbols } from '@/symbols';
 import { type UnitFormatter, ByteUnit } from '@buildplease/core';
 import { inject, injectable } from 'inversify';
 import type { Metadata } from 'sharp';
 import sharp from 'sharp';
-
-import { ApiErrorFactory } from '@/error';
-import { FormatType } from '@/formatter';
-import { Symbols } from '@/symbols';
 
 import type { ImageOptions, SharpFormat, SharpInstance } from './image-options';
 

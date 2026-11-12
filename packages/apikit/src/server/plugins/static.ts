@@ -1,8 +1,7 @@
+import type { ServerPluginOptions } from '@/server';
 import fastifyStatic from '@fastify/static';
 import type { FastifyPluginAsync } from 'fastify';
 import fp from 'fastify-plugin';
-
-import type { ServerPluginOptions } from '@/server';
 
 const pluginName = 'apikit-static';
 const LOG_PREFIX = '[ApiKit:Static]';

@@ -1,11 +1,9 @@
+import { resetNuxtKit, setNuxtKit } from '#test/mocks/internal-runtime';
+import enMessages from '@/src/runtime/l10n/locales/en.json';
+import { makeErrorMap } from '@/src/runtime/zod/shared/make-error-map';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { createI18n } from 'vue-i18n';
 import { z } from 'zod';
-
-import { resetNuxtKit, setNuxtKit } from '#test/mocks/internal-runtime';
-
-import enMessages from '@/src/runtime/l10n/locales/en.json';
-import { makeErrorMap } from '@/src/runtime/zod/shared/make-error-map';
 
 const DEFAULT_LOCALE = 'en';
 

@@ -2,10 +2,9 @@ import { mkdir, mkdtemp, rm, stat } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 
+import { clean } from '@/commands/clean';
 import { Console } from '@buildplease/core/node';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-
-import { clean } from '@/commands/clean';
 
 async function exists(pathName: string): Promise<boolean> {
   try {

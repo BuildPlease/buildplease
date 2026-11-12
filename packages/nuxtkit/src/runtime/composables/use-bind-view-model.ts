@@ -1,3 +1,4 @@
+import type { ViewModel } from '#nuxtkit/architecture';
 import {
   getCurrentInstance,
   hasInjectionContext,
@@ -15,8 +16,6 @@ import {
   onUpdated,
 } from 'vue';
 import { onBeforeRouteLeave, onBeforeRouteUpdate, useRoute } from 'vue-router';
-
-import type { ViewModel } from '#nuxtkit/architecture';
 
 /**
  * Attach a ViewModel's lifecycle to Vue/Nuxt hooks.

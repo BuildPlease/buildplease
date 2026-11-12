@@ -1,5 +1,3 @@
-import type { Assembly, AssemblyContainer } from '@buildplease/core';
-
 import {
   type RequestController,
   type ResponseController,
@@ -9,6 +7,7 @@ import {
   ServerControllerImpl,
 } from '@/server';
 import { Symbols } from '@/symbols';
+import type { Assembly, AssemblyContainer } from '@buildplease/core';
 
 export class ServerAssembly implements Assembly {
   public assemble(container: AssemblyContainer): void {

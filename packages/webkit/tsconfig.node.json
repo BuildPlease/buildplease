@@ -8,8 +8,8 @@
       "@internal/node/*": ["./src-internal/node/*"],
       "#l10n": ["./src-neutral/l10n/index.ts"],
       "#resources": ["./resources/index.ts"],
-      "#test/*": ["./test/*"]
-    }
+      "#test/*": ["./test/*"],
+    },
   },
   "include": [
     "src-neutral",
@@ -18,6 +18,6 @@
     "src-internal/node",
     "src-application/node.ts",
     "test",
-    "tsdown.config.ts"
-  ]
+    "tsdown.config.ts",
+  ],
 }

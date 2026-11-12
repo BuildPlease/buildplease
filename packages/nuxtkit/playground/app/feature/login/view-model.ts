@@ -1,5 +1,4 @@
 import { inject, injectable } from 'inversify';
-
 import type { LoginController } from '~/feature/login/controller';
 import type { LoginDto } from '~/schema';
 import { Symbols } from '~/symbols';

@@ -1,6 +1,5 @@
-import { defineNuxtModule } from '@nuxt/kit';
-
 import { MODULE_CONFIG_KEY_NAME, MODULE_PACKAGE_NAME } from '#internal-shared';
+import { defineNuxtModule } from '@nuxt/kit';
 
 import { prepareContext } from './context';
 import { DEFAULT_OPTIONS } from './defaults';

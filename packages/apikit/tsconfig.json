@@ -14,9 +14,9 @@
       "#resources": ["./resources/index.ts"],
 
       "@src-testing/*": ["./src-testing/*"],
-      "#test/*": ["./test/*"]
-    }
+      "#test/*": ["./test/*"],
+    },
   },
   "include": ["resources", "src", "src-internal", "src-testing", "types", "test", "tsdown.config.ts"],
-  "exclude": ["node_modules", "dist"]
+  "exclude": ["node_modules", "dist"],
 }

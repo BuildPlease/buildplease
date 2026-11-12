@@ -1,7 +1,6 @@
+import { RequestScope } from '@/request/request-scope';
 import { makeRequestMetadataFixture } from '@src-testing/request/request-metadata';
 import { describe, expect, it } from 'vitest';
-
-import { RequestScope } from '@/request/request-scope';
 
 describe('RequestScope', () => {
   it('exposes request metadata inside lifecycle', () => {

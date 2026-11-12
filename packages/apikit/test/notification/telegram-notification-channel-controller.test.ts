@@ -1,7 +1,6 @@
+import { NotificationChannel } from '@/notification';
 import { TelegramNotificationChannelController } from '@src-internal/notification/channels/telegram-notification-channel-controller';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-
-import { NotificationChannel } from '@/notification';
 
 describe('TelegramNotificationChannelController', () => {
   afterEach(() => {

@@ -1,6 +1,5 @@
-import { injectable } from 'inversify';
-
 import type { MongoDbQuery } from '@/database';
+import { injectable } from 'inversify';
 
 /**
  * Flattens a potentially nested MongoDbQuery<T> into a single-level filter object.

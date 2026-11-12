@@ -1,12 +1,11 @@
-import { type Logger, LogFlag } from '@buildplease/core/node';
-import Fastify, { type FastifyBaseLogger, type FastifyInstance, LogController } from 'fastify';
-import { inject, injectable } from 'inversify';
-
 import type { ConfigurationController } from '@/configuration';
 import { ApiError, ApiErrorFactory } from '@/error';
 import type { I18nController } from '@/i18n';
 import { RequestLogMetadata } from '@/request';
 import { Symbols } from '@/symbols';
+import { type Logger, LogFlag } from '@buildplease/core/node';
+import Fastify, { type FastifyBaseLogger, type FastifyInstance, LogController } from 'fastify';
+import { inject, injectable } from 'inversify';
 
 import { FastifyPlugins } from './plugins';
 

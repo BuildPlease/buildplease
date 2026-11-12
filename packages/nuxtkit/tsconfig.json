@@ -1,5 +1,5 @@
 {
   "extends": "./.nuxt/tsconfig.json",
   "include": ["types", ".nuxt/**/*.d.ts", "src", "test", "build.config.ts"],
-  "exclude": ["dist", "node_modules", "playground"]
+  "exclude": ["dist", "node_modules", "playground"],
 }

@@ -1,5 +1,4 @@
 import { injectable } from 'inversify';
-
 import { Routes } from '~/symbols';
 
 export interface LoginController extends Controller {

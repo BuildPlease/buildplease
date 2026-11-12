@@ -1,6 +1,5 @@
-import { describe, expect, it } from 'vitest';
-
 import { CoreL10n, CoreL10nResource, defineL10n, defineL10nResource } from '#l10n';
+import { describe, expect, it } from 'vitest';
 
 describe('l10n', () => {
   it('composes resources into typed localization keys', () => {

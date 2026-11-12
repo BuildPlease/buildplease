@@ -5,6 +5,6 @@
     "lib": ["ES2024", "DOM", "DOM.Iterable"],
 
     /* No forced Node globals in browser packages */
-    "types": []
-  }
+    "types": [],
+  },
 }

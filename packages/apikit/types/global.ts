@@ -1,5 +1,3 @@
-import type { Build, Environment } from '@buildplease/core';
-
 import type {
   BasicAuthConfig,
   CorsConfig,
@@ -13,6 +11,7 @@ import type {
   ServerConfig,
   StaticFilesConfig,
 } from '@/configuration';
+import type { Build, Environment } from '@buildplease/core';
 
 declare global {
   var apikit: {

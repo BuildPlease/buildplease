@@ -1,6 +1,5 @@
-import i18next, { type TOptions } from 'i18next';
-
 import { RequestScope } from '@/request';
+import i18next, { type TOptions } from 'i18next';
 
 import { normalizeLocale, splitBaseRegion } from './utils';
 

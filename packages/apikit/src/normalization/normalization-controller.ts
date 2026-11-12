@@ -1,8 +1,7 @@
+import { ApiErrorFactory } from '@/error';
 import { injectable } from 'inversify';
 import { parsePhoneNumberWithError } from 'libphonenumber-js';
 import validator from 'validator';
-
-import { ApiErrorFactory } from '@/error';
 
 export interface NormalizationController {
   normalizeEmail(email: string): string;

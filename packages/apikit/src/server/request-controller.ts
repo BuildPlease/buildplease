@@ -1,13 +1,12 @@
-import { ignoreErrorAsync } from '@buildplease/core';
-import { type Logger, LogFlag } from '@buildplease/core/node';
-import type { FastifyReply, FastifyRequest } from 'fastify';
-import { inject, injectable } from 'inversify';
-
 import { ApiError } from '@/error';
 import { type HttpResponse } from '@/http';
 import { RequestLogMetadata } from '@/request';
 import type { ResponseController } from '@/server';
 import { Symbols } from '@/symbols';
+import { ignoreErrorAsync } from '@buildplease/core';
+import { type Logger, LogFlag } from '@buildplease/core/node';
+import type { FastifyReply, FastifyRequest } from 'fastify';
+import { inject, injectable } from 'inversify';
 
 const LOG_PREFIX = '[ApiKit:Request]';
 

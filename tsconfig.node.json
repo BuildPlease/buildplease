@@ -3,6 +3,6 @@
   "compilerOptions": {
     /* Node runtime libs */
     "lib": ["ES2024"],
-    "types": ["node"]
-  }
+    "types": ["node"],
+  },
 }
