@@ -1,5 +1,6 @@
-import 'reflect-metadata';
 import { WebKitApplication } from '@buildplease/webkit/node';
+import 'reflect-metadata';
+
 import { DashboardAssembly } from '~/feature/dashboard/assembly';
 import { LoginAssembly } from '~/feature/login/assembly';
 import { NetworkingAssembly } from '~/networking/assembly';

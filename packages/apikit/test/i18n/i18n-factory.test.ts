@@ -1,5 +1,6 @@
-import { I18nFactory } from '@/i18n/i18n-factory';
 import { describe, expect, it } from 'vitest';
+
+import { I18nFactory } from '@/i18n/i18n-factory';
 
 describe('I18nFactory', () => {
   it('returns override message without provider lookup', () => {

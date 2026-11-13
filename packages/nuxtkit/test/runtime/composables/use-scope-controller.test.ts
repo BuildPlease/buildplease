@@ -1,8 +1,9 @@
-import { resetNuxtApp, setNuxtApp } from '#test/mocks/nuxt-app';
-import { useInstance } from '@/src/runtime/composables/use-instance';
-import { useScopeController } from '@/src/runtime/composables/use-scope-controller';
 import { ScopeController } from '@buildplease/core';
 import { beforeEach, describe, expect, it } from 'vitest';
+
+import { useInstance } from '@/src/runtime/composables/use-instance';
+import { useScopeController } from '@/src/runtime/composables/use-scope-controller';
+import { resetNuxtApp, setNuxtApp } from '#test/mocks/nuxt-app';
 
 describe('Scope composables', () => {
   beforeEach(() => {

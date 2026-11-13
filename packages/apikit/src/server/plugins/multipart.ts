@@ -1,7 +1,8 @@
-import type { ServerPluginOptions } from '@/server';
 import multipart from '@fastify/multipart';
 import type { FastifyPluginAsync } from 'fastify';
 import fp from 'fastify-plugin';
+
+import type { ServerPluginOptions } from '@/server';
 
 const pluginName = 'apikit-multipart';
 

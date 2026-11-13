@@ -1,8 +1,9 @@
-import { TestErrorFactory } from '#test/fixtures/error/api-error-factory';
+import { describe, expect, it } from 'vitest';
+
 import { ApiError } from '@/error/api-error';
 import { ApiErrorCodes, defineErrors } from '@/error/api-error-codes';
 import { ApiErrorFactory } from '@/error/api-error-factory';
-import { describe, expect, it } from 'vitest';
+import { TestErrorFactory } from '#test/fixtures/error/api-error-factory';
 
 describe('ApiErrorFactory', () => {
   it('creates built-in API errors from typed paths', () => {

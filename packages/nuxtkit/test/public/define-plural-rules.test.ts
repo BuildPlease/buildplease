@@ -1,5 +1,6 @@
-import { definePluralRules, getPluralState, PluralState } from '@/src/public/define-plural-rules';
 import { describe, expect, it } from 'vitest';
+
+import { definePluralRules, getPluralState, PluralState } from '@/src/public/define-plural-rules';
 
 describe('definePluralRules', () => {
   it('includes region rules by default', () => {

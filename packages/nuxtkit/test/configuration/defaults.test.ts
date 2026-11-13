@@ -1,5 +1,6 @@
-import { DEFAULT_OPTIONS } from '@/src/defaults';
 import { describe, expect, it } from 'vitest';
+
+import { DEFAULT_OPTIONS } from '@/src/defaults';
 
 describe('NuxtKit defaults', () => {
   it('uses NuxtKit-owned L10n keys and deterministic fallbacks', () => {

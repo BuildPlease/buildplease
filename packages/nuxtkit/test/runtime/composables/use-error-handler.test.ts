@@ -1,9 +1,10 @@
-import { resetNuxtKit, setNuxtKit } from '#test/mocks/internal-runtime';
-import { resetNuxtApp, setNuxtApp } from '#test/mocks/nuxt-app';
-import { useErrorHandler } from '@/src/runtime/composables/use-error-handler';
 import { CanceledError } from '@buildplease/core';
 import { HttpError } from '@buildplease/webkit';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+import { useErrorHandler } from '@/src/runtime/composables/use-error-handler';
+import { resetNuxtKit, setNuxtKit } from '#test/mocks/internal-runtime';
+import { resetNuxtApp, setNuxtApp } from '#test/mocks/nuxt-app';
 
 describe('useErrorHandler', () => {
   beforeEach(() => {

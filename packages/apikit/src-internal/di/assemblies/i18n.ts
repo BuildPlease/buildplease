@@ -1,6 +1,7 @@
+import type { Assembly, AssemblyContainer } from '@buildplease/core';
+
 import { type I18nController, I18nControllerImpl } from '@/i18n';
 import { Symbols } from '@/symbols';
-import type { Assembly, AssemblyContainer } from '@buildplease/core';
 
 export class I18nAssembly implements Assembly {
   public assemble(container: AssemblyContainer): void {

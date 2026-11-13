@@ -1,8 +1,9 @@
+import { makeRequestScopeDataFixture } from '@src-testing/request/request-scope-data';
+import { describe, expect, it } from 'vitest';
+
 import { ApiError } from '@/error/api-error';
 import { NormalizationControllerImpl } from '@/normalization/normalization-controller';
 import { RequestScope } from '@/request/request-scope';
-import { makeRequestScopeDataFixture } from '@src-testing/request/request-scope-data';
-import { describe, expect, it } from 'vitest';
 
 describe('NormalizationController', () => {
   const controller = new NormalizationControllerImpl();

@@ -2,13 +2,14 @@ import { existsSync } from 'node:fs';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 
-import type { ConfigurationController, EmailConfig } from '@/configuration';
-import type { EmailTemplate } from '@/email';
-import { Symbols } from '@/symbols';
 import type { Logger } from '@buildplease/core/node';
 import ejs from 'ejs';
 import { inject, injectable } from 'inversify';
 import nodemailer, { type SendMailOptions, type Transporter } from 'nodemailer';
+
+import type { ConfigurationController, EmailConfig } from '@/configuration';
+import type { EmailTemplate } from '@/email';
+import { Symbols } from '@/symbols';
 
 const LOG_PREFIX = '[Email]';
 

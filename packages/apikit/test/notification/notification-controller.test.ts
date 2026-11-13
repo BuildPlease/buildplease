@@ -1,8 +1,9 @@
-import { type NotificationChannelRequest, NotificationChannel } from '@/notification';
 import { LoggerImpl } from '@buildplease/core/node';
 import type { NotificationChannelController } from '@src-internal/notification/notification-channel-controller';
 import { NotificationControllerImpl } from '@src-internal/notification/notification-controller';
 import { describe, expect, it, vi } from 'vitest';
+
+import { type NotificationChannelRequest, NotificationChannel } from '@/notification';
 
 describe('NotificationController', () => {
   it('delivers every requested channel and returns per-delivery results', async () => {

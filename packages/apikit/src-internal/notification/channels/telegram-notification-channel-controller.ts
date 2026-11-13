@@ -1,7 +1,8 @@
-import type { TelegramNotificationConfig } from '@/configuration';
-import { type NotificationChannelRequest, type NotificationMessage, NotificationChannel } from '@/notification';
 import type { NotificationChannelController } from '@src-internal/notification/notification-channel-controller';
 import { NOTIFICATION_LOG_PREFIX } from '@src-internal/notification/notification-log';
+
+import type { TelegramNotificationConfig } from '@/configuration';
+import { type NotificationChannelRequest, type NotificationMessage, NotificationChannel } from '@/notification';
 
 const LOG_PREFIX = `${NOTIFICATION_LOG_PREFIX}:Telegram`;
 

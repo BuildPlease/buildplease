@@ -1,5 +1,6 @@
-import { normalizeLocale, splitBaseRegion } from '@/i18n/utils';
 import { describe, expect, it } from 'vitest';
+
+import { normalizeLocale, splitBaseRegion } from '@/i18n/utils';
 
 describe('i18n utils', () => {
   it('normalizes locale tags', () => {

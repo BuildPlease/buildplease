@@ -1,6 +1,7 @@
-import { MODULE_NAME } from '#internal-shared';
 import type { DeepRequired } from '@buildplease/core';
 import { type Resolver, createResolver, useLogger } from '@nuxt/kit';
+
+import { MODULE_NAME } from '#internal-shared';
 
 import type { NuxtKitOptions } from './types';
 

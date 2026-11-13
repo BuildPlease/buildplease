@@ -1,8 +1,9 @@
+import type { Identity } from '@buildplease/core';
+import type { HttpRequestInterceptor, HttpRequestOptions } from '@buildplease/webkit';
+
 import type { NuxtApp } from '#app';
 import { useRequestHeader } from '#imports';
 import { MODULE_SYMBOL_NAME } from '#internal-shared';
-import type { Identity } from '@buildplease/core';
-import type { HttpRequestInterceptor, HttpRequestOptions } from '@buildplease/webkit';
 
 export class SSRRequestCookiesInterceptor implements HttpRequestInterceptor {
   public readonly identity: Identity = Symbol.for(`${MODULE_SYMBOL_NAME}.networking.interceptor.ssr-cookies`);

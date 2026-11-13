@@ -1,8 +1,9 @@
-import { type ConfigurationController } from '@/configuration';
-import { Symbols } from '@/symbols';
 import type { Assembly, AssemblyContainer } from '@buildplease/core';
 import { type Logger, type LoggerOptions, LoggerImpl } from '@buildplease/core/node';
 import { inject, injectable } from 'inversify';
+
+import { type ConfigurationController } from '@/configuration';
+import { Symbols } from '@/symbols';
 
 @injectable()
 class ApiKitLogger extends LoggerImpl {

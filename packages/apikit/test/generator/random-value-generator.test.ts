@@ -1,5 +1,6 @@
-import { RANDOM_VALUE_GENERATOR_LIMITS, RandomValueGeneratorImpl } from '@/generator/random-value-generator';
 import { describe, expect, it } from 'vitest';
+
+import { RANDOM_VALUE_GENERATOR_LIMITS, RandomValueGeneratorImpl } from '@/generator/random-value-generator';
 
 describe('RandomValueGenerator', () => {
   const generator = new RandomValueGeneratorImpl();

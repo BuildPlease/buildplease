@@ -1,6 +1,7 @@
+import { filterObject, isEmptyObject } from '@buildplease/core';
+
 import { HttpHeaders } from '@/http';
 import type { RequestMetadata } from '@/request';
-import { filterObject, isEmptyObject } from '@buildplease/core';
 
 export class RequestLogMetadata {
   public constructor(private readonly metadata: Partial<RequestMetadata>) {}

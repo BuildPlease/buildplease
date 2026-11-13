@@ -1,3 +1,5 @@
+import type { Assembly, AssemblyContainer } from '@buildplease/core';
+
 import { Symbols } from '@/symbols';
 import {
   type DTOValidationController,
@@ -5,7 +7,6 @@ import {
   DTOValidationControllerImpl,
   ValidationControllerImpl,
 } from '@/validation';
-import type { Assembly, AssemblyContainer } from '@buildplease/core';
 
 export class ValidationAssembly implements Assembly {
   public assemble(container: AssemblyContainer): void {

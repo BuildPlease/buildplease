@@ -1,7 +1,8 @@
-import { ApiErrorFactory } from '@/error';
 import { injectable } from 'inversify';
 import { type CountryCode, parsePhoneNumberFromString } from 'libphonenumber-js';
 import validator from 'validator';
+
+import { ApiErrorFactory } from '@/error';
 
 export interface ValidationController {
   isValidEmail(email?: string | null): boolean;

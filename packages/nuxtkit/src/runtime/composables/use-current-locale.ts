@@ -1,5 +1,6 @@
-import { useNuxtApp } from '#imports';
 import { computed } from 'vue';
+
+import { useNuxtApp } from '#imports';
 
 export interface UseCurrentLocaleOptions {
   /** Whether to preserve the region segment (e.g. `"en-GB"`). */

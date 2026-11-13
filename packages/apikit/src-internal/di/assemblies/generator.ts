@@ -1,6 +1,7 @@
+import type { Assembly, AssemblyContainer } from '@buildplease/core';
+
 import { type RandomValueGenerator, RandomValueGeneratorImpl } from '@/generator';
 import { Symbols } from '@/symbols';
-import type { Assembly, AssemblyContainer } from '@buildplease/core';
 
 export class GeneratorAssembly implements Assembly {
   public assemble(container: AssemblyContainer): void {

@@ -1,9 +1,10 @@
-import { HttpHeaders } from '@/http';
-import type { RequestMetadata } from '@/request';
-import type { ServerPluginOptions } from '@/server';
 import { isNullOrEmpty } from '@buildplease/core';
 import type { FastifyPluginAsync } from 'fastify';
 import fp from 'fastify-plugin';
+
+import { HttpHeaders } from '@/http';
+import type { RequestMetadata } from '@/request';
+import type { ServerPluginOptions } from '@/server';
 
 const pluginName = 'apikit-request-metadata';
 

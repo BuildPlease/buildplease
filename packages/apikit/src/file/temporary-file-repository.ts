@@ -4,10 +4,11 @@ import path from 'node:path';
 import { Readable } from 'node:stream';
 import { pipeline as pipelineAsync } from 'node:stream/promises';
 
-import type { FormatType } from '@/formatter';
-import { Symbols } from '@/symbols';
 import { type Logger, createDirectoryAsync, ensureDirectoryAsync, removePathAsync } from '@buildplease/core/node';
 import { inject, injectable } from 'inversify';
+
+import type { FormatType } from '@/formatter';
+import { Symbols } from '@/symbols';
 
 const LOG_PREFIX = '[ApiKit:TemporaryFile]';
 

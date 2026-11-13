@@ -1,8 +1,9 @@
-import { useNuxtApp, useRoute, useRouter } from '#app';
-import { type Lifecycle, isCSR, isHydrating, isSSR } from '#nuxtkit/infrastructure';
 import type { Awaitable } from '@buildplease/core';
 import { reactive } from 'vue';
 import type { RouteLocationNormalizedLoaded, Router } from 'vue-router';
+
+import { useNuxtApp, useRoute, useRouter } from '#app';
+import { type Lifecycle, isCSR, isHydrating, isSSR } from '#nuxtkit/infrastructure';
 
 /**
  * Base class for managing reactive state and lifecycle logic in UI view models.

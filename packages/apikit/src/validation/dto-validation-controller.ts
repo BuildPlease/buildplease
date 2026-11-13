@@ -1,9 +1,10 @@
-import type { ConfigurationController } from '@/configuration';
-import { ApiErrorFactory } from '@/error';
-import { Symbols } from '@/symbols';
 import type { Logger } from '@buildplease/core/node';
 import { inject, injectable } from 'inversify';
 import { type ZodType, z, ZodError } from 'zod';
+
+import type { ConfigurationController } from '@/configuration';
+import { ApiErrorFactory } from '@/error';
+import { Symbols } from '@/symbols';
 
 const LOG_PREFIX = '[ApiKit:Validation]';
 

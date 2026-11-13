@@ -1,6 +1,5 @@
-import { describe, expect, it } from 'vitest';
-
 import '@neutral/utils/extensions/array-extensions';
+import { describe, expect, it } from 'vitest';
 
 describe('Array extensions', () => {
   it('detects empty arrays', () => {

@@ -1,9 +1,10 @@
 import crypto from 'node:crypto';
 
-import type { ServerPluginOptions } from '@/server';
 import basicAuth, { type FastifyBasicAuthOptions } from '@fastify/basic-auth';
 import type { FastifyPluginAsync } from 'fastify';
 import fp from 'fastify-plugin';
+
+import type { ServerPluginOptions } from '@/server';
 
 const pluginName = 'apikit-basic-auth';
 const LOG_PREFIX = '[ApiKit:BasicAuth]';

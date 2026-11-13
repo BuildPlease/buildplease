@@ -1,5 +1,6 @@
-import { type I18nOptions, I18nFactory } from '@/i18n';
 import merge from 'lodash.merge';
+
+import { type I18nOptions, I18nFactory } from '@/i18n';
 
 import { type ApiErrorDetails, ApiError } from './api-error';
 import { ApiErrorCodes, defineErrors } from './api-error-codes';

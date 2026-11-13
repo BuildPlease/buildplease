@@ -1,12 +1,13 @@
 import fs from 'node:fs';
 
-import { ApiKitL10nResource } from '#l10n';
-import type { ConfigurationController, I18nConfig, I18nFileEntry } from '@/configuration';
-import { Symbols } from '@/symbols';
 import { ensureDirectory, resolvePath } from '@buildplease/core/node';
 import i18next, { type InitOptions } from 'i18next';
 import { inject, injectable } from 'inversify';
 import merge from 'lodash.merge';
+
+import type { ConfigurationController, I18nConfig, I18nFileEntry } from '@/configuration';
+import { Symbols } from '@/symbols';
+import { ApiKitL10nResource } from '#l10n';
 
 import { normalizeLocale, splitBaseRegion } from './utils';
 

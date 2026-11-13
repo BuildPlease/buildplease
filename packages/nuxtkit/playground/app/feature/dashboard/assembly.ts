@@ -1,4 +1,5 @@
 import type { Assembly, AssemblyContainer } from '@buildplease/core';
+
 import { DashboardViewModel } from '~/feature/dashboard/view-model';
 import { Symbols } from '~/symbols';
 

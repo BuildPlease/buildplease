@@ -1,8 +1,9 @@
-import type { CorsConfig } from '@/configuration';
-import type { ServerPluginOptions } from '@/server';
 import fastifyCors, { type FastifyCorsOptions } from '@fastify/cors';
 import type { FastifyPluginAsync } from 'fastify';
 import fp from 'fastify-plugin';
+
+import type { CorsConfig } from '@/configuration';
+import type { ServerPluginOptions } from '@/server';
 
 const pluginName = 'apikit-cors';
 

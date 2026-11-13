@@ -1,6 +1,7 @@
-import { Symbols } from '@/symbols';
 import { Symbols as ParentSymbols } from '@buildplease/core';
 import { describe, expect, it } from 'vitest';
+
+import { Symbols } from '@/symbols';
 
 describe('Symbols', () => {
   it('preserves inherited Core symbol identity', () => {

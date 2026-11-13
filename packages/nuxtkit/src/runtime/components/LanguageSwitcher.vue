@@ -36,9 +36,10 @@
 </template>
 
 <script setup lang="ts">
-import { useI18n } from '#imports';
 import type { LocaleObject } from '@nuxtjs/i18n';
 import { computed } from 'vue';
+
+import { useI18n } from '#imports';
 
 interface LanguageItem {
   value: string;

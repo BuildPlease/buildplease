@@ -1,7 +1,8 @@
-import { RequestScope } from '@/request';
-import type { ServerPluginOptions } from '@/server';
 import type { FastifyPluginAsync } from 'fastify';
 import fp from 'fastify-plugin';
+
+import { RequestScope } from '@/request';
+import type { ServerPluginOptions } from '@/server';
 
 const pluginName = 'apikit-request-scope';
 

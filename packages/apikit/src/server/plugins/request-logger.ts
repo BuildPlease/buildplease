@@ -1,11 +1,12 @@
 import { Readable } from 'stream';
 
-import { HttpHeaders } from '@/http';
-import { RequestLogMetadata } from '@/request';
-import type { ServerPluginOptions } from '@/server';
 import { ignoreError, isDefinedAndNotNull } from '@buildplease/core';
 import type { FastifyPluginAsync } from 'fastify';
 import fp from 'fastify-plugin';
+
+import { HttpHeaders } from '@/http';
+import { RequestLogMetadata } from '@/request';
+import type { ServerPluginOptions } from '@/server';
 
 import { resolveRequestLoggerIgnoredPaths, shouldSkipRequestLog } from './request-logger-paths';
 

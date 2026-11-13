@@ -1,5 +1,6 @@
-import { useNuxtApp } from '#app';
 import type { ScopeController } from '@buildplease/core';
+
+import { useNuxtApp } from '#app';
 
 interface ScopeControllerHost {
   readonly $scopeController?: ScopeController;
