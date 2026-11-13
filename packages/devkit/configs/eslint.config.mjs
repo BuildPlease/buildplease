@@ -93,6 +93,8 @@ const vueRules = {
   'vue/block-order': ['error', { order: ['template', 'script', 'style'] }],
   'vue/multi-word-component-names': 'off',
   'vue/no-v-html': 'error',
+  'vue/require-default-prop': 'off',
+  'vue/require-valid-default-prop': 'error',
 
   'check-file/filename-naming-convention': [
     'error',
