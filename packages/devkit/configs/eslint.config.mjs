@@ -4,6 +4,7 @@ import eslintConfigPrettier from 'eslint-config-prettier/flat';
 import checkFile from 'eslint-plugin-check-file';
 import importPlugin from 'eslint-plugin-import-x';
 import jsonc from 'eslint-plugin-jsonc';
+import perfectionist from 'eslint-plugin-perfectionist';
 import unicorn from 'eslint-plugin-unicorn';
 import vuePlugin from 'eslint-plugin-vue';
 import yml from 'eslint-plugin-yml';
@@ -15,20 +16,37 @@ import { loadDevKitConfig, resolveDevKitConfig } from '../dist/src-internal/conf
 const codeRules = {
   ...tsPlugin.configs.recommended.rules,
 
-  'import/order': [
+  'perfectionist/sort-imports': [
     'error',
     {
-      groups: ['builtin', ['external', 'internal', 'unknown'], ['parent', 'sibling', 'index']],
-      'newlines-between': 'always',
-      alphabetize: {
-        order: 'asc',
-        orderImportKind: 'asc',
-        caseInsensitive: true,
-      },
-      named: {
-        enabled: true,
-        types: 'types-first',
-      },
+      type: 'alphabetical',
+      order: 'asc',
+      sortSideEffects: true,
+      newlinesBetween: 1,
+      groups: [
+        ['type-builtin', 'value-builtin'],
+        ['type-external', 'value-external', 'ts-equals-import'],
+        ['type-internal', 'value-internal', 'type-subpath', 'value-subpath', 'unknown'],
+        [
+          'type-parent',
+          'value-parent',
+          'type-sibling',
+          'value-sibling',
+          'type-index',
+          'value-index',
+          'type-style',
+          'value-style',
+        ],
+      ],
+    },
+  ],
+  'perfectionist/sort-named-imports': [
+    'error',
+    {
+      type: 'alphabetical',
+      order: 'asc',
+      groups: ['type-import', 'value-import'],
+      newlinesBetween: 0,
     },
   ],
   'import/no-duplicates': ['error', { 'prefer-inline': false }],
@@ -113,6 +131,7 @@ const vueConfig = {
     vue: vuePlugin,
     '@typescript-eslint': tsPlugin,
     import: importPlugin,
+    perfectionist: perfectionist,
     'check-file': checkFile,
     unicorn: unicorn,
   },
@@ -130,6 +149,7 @@ const codeConfig = {
   plugins: {
     '@typescript-eslint': tsPlugin,
     import: importPlugin,
+    perfectionist: perfectionist,
     unicorn: unicorn,
   },
   rules: codeRules,
