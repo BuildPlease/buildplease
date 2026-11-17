@@ -89,30 +89,6 @@ export default defineConfig([
     },
   },
 
-  // MARK: - CLI entry
-  {
-    entry: { 'cli/index': './src-cli/index.ts' },
-    tsconfig: 'tsconfig.node.json',
-    platform: 'node',
-    target: 'esnext',
-    format: ['esm'],
-
-    outDir: outDir,
-    clean: false,
-
-    hash: false,
-    dts: false,
-    minify: false,
-    shims: false,
-    sourcemap: false,
-    treeshake: true,
-
-    deps: {
-      neverBundle: nodePolicy.external,
-      onlyBundle: nodePolicy.bundle,
-    },
-  },
-
   // MARK: - Test entry
   {
     entry: { 'src-testing/index': './src-testing/index.ts' },

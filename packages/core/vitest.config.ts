@@ -20,8 +20,6 @@ export default defineConfig({
       { find: /^@node\/(.*)$/, replacement: `${resolve(rootDir, 'src-node')}/$1` },
       { find: /^@internal\/neutral\/(.*)$/, replacement: `${resolve(rootDir, 'src-internal/neutral')}/$1` },
       { find: /^@internal\/browser\/(.*)$/, replacement: `${resolve(rootDir, 'src-internal/browser')}/$1` },
-      { find: /^@internal\/node\/(.*)$/, replacement: `${resolve(rootDir, 'src-internal/node')}/$1` },
-      { find: /^@src-cli\/(.*)$/, replacement: `${resolve(rootDir, 'src-cli')}/$1` },
       { find: /^#l10n$/, replacement: resolve(rootDir, 'src-neutral/l10n/index.ts') },
       { find: /^#resources$/, replacement: resolve(rootDir, 'resources/index.ts') },
 

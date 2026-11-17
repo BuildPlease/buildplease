@@ -5,6 +5,4 @@ export interface Build {
   };
 
   readonly version: string;
-  readonly id: string;
-  readonly createdAt: string;
 }

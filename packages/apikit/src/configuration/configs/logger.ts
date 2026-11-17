@@ -1,10 +1,7 @@
-import {
-  type InferConfiguration,
-  type LoggerTransportOptions,
-  defineConfiguration,
-  field,
-} from '@buildplease/core/node';
+import { type LoggerTransportOptions } from '@buildplease/core/node';
 import { ApiKitDefaults } from '@src-internal/configuration';
+
+import { type InferConfiguration, defineConfiguration, field } from '../configuration';
 
 export interface LoggerRequestOptions {
   /**

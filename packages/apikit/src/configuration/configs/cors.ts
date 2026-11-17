@@ -1,6 +1,7 @@
-import { type InferConfiguration, defineConfiguration, field } from '@buildplease/core/node';
 import type { FastifyCorsOptions } from '@fastify/cors';
 import { ApiKitDefaults } from '@src-internal/configuration';
+
+import { type InferConfiguration, defineConfiguration, field } from '../configuration';
 
 export type CorsOptions = FastifyCorsOptions;
 

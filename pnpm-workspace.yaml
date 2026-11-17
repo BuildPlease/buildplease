@@ -37,7 +37,7 @@ peerDependencyRules:
     '@nuxt/module-builder@1.0.4>typescript': 6.0.3
 
     # Temporary: Upstream peer ranges lag behind the resolved dependency versions.
-    vite-plugin-vue-devtools@9.0.0-rc.3>@vitejs/devtools: 0.8.2
+    vite-plugin-vue-devtools@9.0.0-rc.3>@vitejs/devtools: 0.8.3
     mkdist@2.4.1>vue-sfc-transformer: 0.3.3
 
 catalog:

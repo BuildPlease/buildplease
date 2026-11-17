@@ -1,4 +1,4 @@
-import { resolveConfiguration } from '@buildplease/core/node';
+import { resolveConfiguration } from '@src-internal/configuration/engine';
 import { describe, expect, it } from 'vitest';
 
 import { NotificationConfiguration } from '@/configuration';

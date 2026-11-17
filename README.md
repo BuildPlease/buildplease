@@ -19,13 +19,13 @@ BuildPlease does not try to hide that difference — it gives both the same foun
 
 ## Packages
 
-| Package                         | Purpose                                            |
-| ------------------------------- | -------------------------------------------------- |
-| [`Core`](./packages/core)       | Application foundation, configuration, and CLI     |
-| [`ApiKit`](./packages/apikit)   | Backend/API runtime and infrastructure             |
-| [`WebKit`](./packages/webkit)   | Framework-agnostic web runtime and networking      |
-| [`NuxtKit`](./packages/nuxtkit) | Nuxt module, localization, validation, and helpers |
-| [`DevKit`](./packages/devkit)   | Shared development tooling                         |
+| Package                         | Purpose                                             |
+| ------------------------------- | --------------------------------------------------- |
+| [`Core`](./packages/core)       | Shared application foundation and runtime utilities |
+| [`ApiKit`](./packages/apikit)   | Backend/API runtime, configuration, and CLI         |
+| [`WebKit`](./packages/webkit)   | Framework-agnostic web runtime and networking       |
+| [`NuxtKit`](./packages/nuxtkit) | Nuxt module, localization, validation, and helpers  |
+| [`DevKit`](./packages/devkit)   | Shared development tooling                          |
 
 See each package README for its public API and setup.
 

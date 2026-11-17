@@ -1,4 +1,4 @@
-import type { Build, Environment } from '@buildplease/core';
+import type { Environment } from '@buildplease/core';
 
 import type {
   BasicAuthConfig,
@@ -13,10 +13,11 @@ import type {
   ServerConfig,
   StaticFilesConfig,
 } from '@/configuration';
+import type { ApiKitBuild } from '@/configuration/build';
 
 declare global {
   var apikit: {
-    build: Build;
+    build: ApiKitBuild;
     environment: Environment;
     loggerConfig: LoggerConfig;
     serverConfig: ServerConfig;

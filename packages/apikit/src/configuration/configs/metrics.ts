@@ -1,6 +1,7 @@
-import { type InferConfiguration, defineConfiguration, field } from '@buildplease/core/node';
 import { ApiKitDefaults } from '@src-internal/configuration';
 import type { RouteOptions } from 'fastify';
+
+import { type InferConfiguration, defineConfiguration, field } from '../configuration';
 
 export type MetricsEndpoint = string | null | RouteOptions;
 
