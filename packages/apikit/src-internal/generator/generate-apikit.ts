@@ -1,10 +1,10 @@
 import path from 'node:path';
 
-import { createDirectory, loadPackageJSON, makeBuild, removePath } from '@buildplease/core/node';
-import { loadEnvironmentConfig } from '@src-internal/configuration/engine';
+import { createDirectory, loadPackageJSON, removePath } from '@buildplease/core/node';
 
-import { APIKIT_OUTPUT_DIRECTORY } from './apikit-output';
-import { generateBarrel, generateBuild, generateEnvironment } from './steps';
+import { APIKIT_OUTPUT_DIRECTORY } from '../configuration/apikit-output';
+import { loadEnvironmentConfig } from '../configuration/load-environment-config';
+import { generateBarrel, generateBuild, generateEnvironment, makeBuild } from './steps';
 
 export async function generateApiKit(rootDir: string): Promise<string> {
   const pkg = loadPackageJSON(path.resolve(rootDir, 'package.json'));

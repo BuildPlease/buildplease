@@ -85,6 +85,29 @@ export default defineConfig([
       onlyBundle: nodePolicy.bundle,
     },
   },
+  // MARK: - WebKit CLI entry
+  {
+    entry: { 'cli/index': './src-cli/index.ts' },
+    tsconfig: 'tsconfig.node.json',
+    platform: 'node',
+    target: 'esnext',
+    format: ['esm'],
+
+    outDir: outDir,
+    clean: false,
+
+    hash: false,
+    dts: false,
+    minify: false,
+    shims: false,
+    sourcemap: false,
+    treeshake: true,
+
+    deps: {
+      neverBundle: nodePolicy.external,
+      onlyBundle: nodePolicy.bundle,
+    },
+  },
 ]);
 
 function copyResources(): CopyEntry[] {

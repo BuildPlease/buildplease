@@ -3,8 +3,10 @@ import path from 'node:path';
 
 import type { Build } from '@buildplease/core';
 import { ensureDirectory, resolvePath } from '@buildplease/core/node';
-import { APIKIT_BUILD_MODULE, APIKIT_OUTPUT_DIRECTORY } from '@src-internal/generator/apikit-output';
 import { createJiti } from 'jiti';
+import { validate as validateUUID } from 'uuid';
+
+import { APIKIT_BUILD_MODULE, APIKIT_OUTPUT_DIRECTORY } from './apikit-output';
 
 export interface LoadBuildOptions {
   readonly dir?: string;
@@ -51,7 +53,10 @@ function readBuild(input: unknown): Build {
     !isRecord(name) ||
     !isNonEmptyString(name.original) ||
     !isNonEmptyString(name.base) ||
-    !isNonEmptyString(build.version)
+    !isNonEmptyString(build.version) ||
+    !isNonEmptyString(build.id) ||
+    !validateUUID(build.id) ||
+    !isISODate(build.createdAt)
   ) {
     throw new Error('Prepared build is invalid.');
   }
@@ -62,11 +67,21 @@ function readBuild(input: unknown): Build {
       base: name.base,
     },
     version: build.version,
+    id: build.id,
+    createdAt: build.createdAt,
   };
 }
 
 function isNonEmptyString(input: unknown): input is string {
   return typeof input === 'string' && Boolean(input.trim());
+}
+
+function isISODate(input: unknown): input is string {
+  if (!isNonEmptyString(input)) return false;
+
+  const date = new Date(input);
+
+  return !Number.isNaN(date.getTime()) && date.toISOString() === input;
 }
 
 function isRecord(input: unknown): input is Record<string, unknown> {

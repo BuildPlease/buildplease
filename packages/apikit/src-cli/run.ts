@@ -1,8 +1,8 @@
 import { spawn } from 'node:child_process';
 import { constants } from 'node:os';
 
+import { validateEnvironmentName } from '@buildplease/core/node';
 import { APIKIT_ENVIRONMENT_VARIABLE } from '@src-internal/configuration/selection';
-import { validateEnvironmentName } from '@src-internal/configuration/validate-environment-name';
 import { generateApiKit } from '@src-internal/generator';
 
 const HELP = [

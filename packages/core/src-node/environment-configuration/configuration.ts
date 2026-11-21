@@ -3,10 +3,10 @@ import type { ConfigurationSourceValue } from './source';
 
 // MARK: - Symbols
 
-const CONFIGURATION_FIELD = Symbol.for('apikit.configuration.field');
-const CONFIGURATION_CONTRACT = Symbol.for('apikit.configuration.contract');
-const CONFIGURATION_BINDING = Symbol.for('apikit.configuration.binding');
-const CONFIG_DEFINITION = Symbol.for('apikit.configuration.config');
+const CONFIGURATION_FIELD = Symbol.for('buildplease.environment-configuration.field');
+const CONFIGURATION_CONTRACT = Symbol.for('buildplease.environment-configuration.contract');
+const CONFIGURATION_BINDING = Symbol.for('buildplease.environment-configuration.binding');
+const CONFIG_DEFINITION = Symbol.for('buildplease.environment-configuration.config');
 
 // MARK: - Fields
 
@@ -189,7 +189,7 @@ export type InferConfigValue<Input> =
               ? { readonly [Key in keyof Input]: InferConfigValue<Input[Key]> }
               : Input;
 
-export function createConfigDefinition<const Environments extends EnvironmentRegistry, const Input>(
+export function defineCoreConfig<const Environments extends EnvironmentRegistry, const Input>(
   environments: Environments,
   input: Input,
 ): ConfigDefinition<Environments, Input> {

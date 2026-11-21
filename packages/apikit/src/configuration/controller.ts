@@ -1,7 +1,7 @@
-import type { Environment } from '@buildplease/core';
+import type { Build, Environment } from '@buildplease/core';
+import type { ConfigurationContract } from '@buildplease/core/node';
 import { injectable } from 'inversify';
 
-import type { ApiKitBuild } from './build';
 import type {
   BasicAuthConfig,
   CorsConfig,
@@ -15,12 +15,11 @@ import type {
   ServerConfig,
   StaticFilesConfig,
 } from './configs';
-import type { ConfigurationContract } from './configuration';
 
 // MARK: - Public
 
 export interface ConfigurationController {
-  get build(): ApiKitBuild;
+  get build(): Build;
   get environment(): Environment;
   get isDebug(): boolean;
 
@@ -42,7 +41,7 @@ export interface ConfigurationController {
 
 @injectable()
 export class ConfigurationControllerImpl implements ConfigurationController {
-  public get build(): ApiKitBuild {
+  public get build(): Build {
     return global.apikit.build;
   }
 

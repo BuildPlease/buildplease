@@ -1,11 +1,9 @@
 import path from 'node:path';
 
-import { createFile } from '@buildplease/core/node';
+import { type EnvironmentRegistry, createFile } from '@buildplease/core/node';
 import CodeBlockWriter from 'code-block-writer';
 
-import type { EnvironmentRegistry } from '@/configuration/environment';
-
-import { APIKIT_ENVIRONMENT_MODULE } from '../apikit-output';
+import { APIKIT_ENVIRONMENT_MODULE } from '../../configuration/apikit-output';
 
 export function generateEnvironment(environments: EnvironmentRegistry, outputPath: string): void {
   const entries = Object.entries(environments);

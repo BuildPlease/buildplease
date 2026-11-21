@@ -1,7 +1,12 @@
+import {
+  defineConfiguration,
+  defineCoreConfig,
+  defineEnvironments,
+  defineSource,
+  field,
+  resolveEnvironment,
+} from '@node/environment-configuration';
 import { describe, expect, it } from 'vitest';
-
-import { defineConfiguration, defineEnvironments, defineSource, field, resolveEnvironment } from '@/configuration';
-import { createConfigDefinition } from '@/configuration/configuration';
 
 const environments = defineEnvironments({
   test: { file: ' .env.test ', alias: ' beta ' },
@@ -14,7 +19,7 @@ describe('Environment Configuration definitions', () => {
     const input = {
       origin: from.env('API_ORIGIN').default('http://localhost:30000'),
     };
-    const config = createConfigDefinition(environments, input);
+    const config = defineCoreConfig(environments, input);
 
     expect(resolveEnvironment(environments, 'test')).toEqual({
       name: 'test',
@@ -63,14 +68,14 @@ describe('Environment Configuration definitions', () => {
   });
 
   it('validates malformed environment registries when defining config', () => {
-    expect(() => createConfigDefinition({} as never, {})).toThrow('At least one environment must be defined.');
-    expect(() => createConfigDefinition({ test: null } as never, {})).toThrow(
+    expect(() => defineCoreConfig({} as never, {})).toThrow('At least one environment must be defined.');
+    expect(() => defineCoreConfig({ test: null } as never, {})).toThrow(
       'Environment definition must be an object for "test".',
     );
-    expect(() => createConfigDefinition({ test: { fileDir: ' ' } } as never, {})).toThrow(
+    expect(() => defineCoreConfig({ test: { fileDir: ' ' } } as never, {})).toThrow(
       'Environment file directory must not be empty for "test".',
     );
-    expect(() => createConfigDefinition({ test: { alias: ' ' } } as never, {})).toThrow(
+    expect(() => defineCoreConfig({ test: { alias: ' ' } } as never, {})).toThrow(
       'Environment alias must not be empty for "test".',
     );
   });

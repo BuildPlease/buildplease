@@ -2,6 +2,10 @@ import { APIKIT_ENVIRONMENT_VARIABLE, readSelectedEnvironmentName } from '@src-i
 import { afterEach, describe, expect, it } from 'vitest';
 
 describe('ApiKit environment selection', () => {
+  it('uses the ApiKit runtime environment variable', () => {
+    expect(APIKIT_ENVIRONMENT_VARIABLE).toBe('APIKIT_ENVIRONMENT');
+  });
+
   afterEach(() => {
     delete process.env[APIKIT_ENVIRONMENT_VARIABLE];
   });

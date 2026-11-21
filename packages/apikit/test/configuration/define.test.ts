@@ -1,6 +1,7 @@
+import { defineConfiguration, defineEnvironments, field } from '@buildplease/core/node';
 import { describe, expect, it } from 'vitest';
 
-import { defineApiKitConfig, defineConfiguration, defineEnvironments, field } from '@/configuration';
+import { defineApiKitConfig } from '@/configuration';
 
 const environments = defineEnvironments({
   test: { file: '.env.test' },

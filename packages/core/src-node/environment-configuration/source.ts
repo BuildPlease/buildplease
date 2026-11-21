@@ -1,10 +1,11 @@
-import type { Build, Environment } from '@buildplease/core';
+import type { Build } from '@neutral/build';
+import type { Environment } from '@neutral/environment';
 
 import type { EnvironmentRegistry } from './environment';
 
 // MARK: - Symbols
 
-const CONFIGURATION_SOURCE = Symbol.for('apikit.configuration.source');
+const CONFIGURATION_SOURCE = Symbol.for('buildplease.environment-configuration.source');
 declare const CONFIGURATION_SOURCE_OUTPUT: unique symbol;
 
 // MARK: - Public

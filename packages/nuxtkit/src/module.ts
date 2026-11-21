@@ -12,7 +12,7 @@ export default defineNuxtModule<ModuleOptions>({
     name: MODULE_PACKAGE_NAME,
     configKey: MODULE_CONFIG_KEY_NAME,
     compatibility: {
-      nuxt: '>=4.1.0',
+      nuxt: '>=4.6.0',
     },
   },
   defaults: DEFAULT_OPTIONS,

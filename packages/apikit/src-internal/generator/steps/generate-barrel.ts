@@ -3,7 +3,7 @@ import path from 'node:path';
 import { createFile } from '@buildplease/core/node';
 import CodeBlockWriter from 'code-block-writer';
 
-import { APIKIT_BUILD_MODULE, APIKIT_ENVIRONMENT_MODULE, APIKIT_INDEX_MODULE } from '../apikit-output';
+import { APIKIT_BUILD_MODULE, APIKIT_ENVIRONMENT_MODULE, APIKIT_INDEX_MODULE } from '../../configuration/apikit-output';
 
 export function generateBarrel(outputPath: string): void {
   const writer = new CodeBlockWriter({

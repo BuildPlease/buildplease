@@ -1,4 +1,4 @@
-import { validateEnvironmentName } from './validate-environment-name';
+import { validateEnvironmentName } from '@buildplease/core/node';
 
 export const APIKIT_ENVIRONMENT_VARIABLE = 'APIKIT_ENVIRONMENT';
 

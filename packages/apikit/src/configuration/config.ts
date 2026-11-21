@@ -1,3 +1,12 @@
+import type {
+  ConfigDefinition,
+  ConfigurationBinding,
+  ConfigurationContract,
+  ConfigurationInputFromSchema,
+  ConfigurationSchema,
+  EnvironmentRegistry,
+} from '@buildplease/core/node';
+
 import {
   type BasicAuthConfiguration,
   type CorsConfiguration,
@@ -11,20 +20,10 @@ import {
   type ServerConfiguration,
   type StaticFilesConfiguration,
 } from './configs';
-import { type BuildConfiguration } from './configs/build';
-import type {
-  ConfigDefinition,
-  ConfigurationBinding,
-  ConfigurationContract,
-  ConfigurationInputFromSchema,
-  ConfigurationSchema,
-} from './configuration';
-import type { EnvironmentRegistry } from './environment';
 
 // MARK: - Public
 
 export interface DefineApiKitConfigInput {
-  readonly build?: InputOf<typeof BuildConfiguration>;
   readonly server: InputOf<typeof ServerConfiguration>;
   readonly logger?: InputOf<typeof LoggerConfiguration>;
   readonly metrics?: InputOf<typeof MetricsConfiguration>;

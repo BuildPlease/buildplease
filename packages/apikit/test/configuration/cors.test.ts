@@ -1,5 +1,5 @@
+import { resolveConfiguration } from '@buildplease/core/node';
 import { ApiKitDefaults } from '@src-internal/configuration';
-import { resolveConfiguration } from '@src-internal/configuration/engine';
 import { describe, expect, it } from 'vitest';
 
 import { CorsConfiguration } from '@/configuration';

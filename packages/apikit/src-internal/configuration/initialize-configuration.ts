@@ -1,10 +1,9 @@
-import { loadBuild } from '@src-internal/build/load-build';
 import {
+  type ConfigurationBinding,
   type ResolveConfigurationOptions,
-  loadSelectedEnvironmentConfig,
   resolveConfiguration,
   resolveConfigurationBinding,
-} from '@src-internal/configuration/engine';
+} from '@buildplease/core/node';
 
 import type { ApiKitConfig } from '@/configuration/config';
 import {
@@ -20,8 +19,9 @@ import {
   ServerConfiguration,
   StaticFilesConfiguration,
 } from '@/configuration/configs';
-import { BuildConfiguration } from '@/configuration/configs/build';
-import type { ConfigurationBinding } from '@/configuration/configuration';
+
+import { loadBuild } from './load-build';
+import { loadSelectedEnvironmentConfig } from './load-selected-environment-config';
 
 export async function initializeApiKitConfiguration(): Promise<void> {
   const build = await loadBuild();
@@ -34,10 +34,9 @@ export async function initializeApiKitConfiguration(): Promise<void> {
     environment: environment,
   };
   const configuration = await resolveApiKitConfigurations(input, resolveOptions);
-  const buildConfiguration = await resolveConfiguration(BuildConfiguration, input.build, resolveOptions);
 
   global.apikit = {
-    build: { ...build, id: buildConfiguration.id },
+    build: build,
     environment: environment,
     ...configuration,
   };

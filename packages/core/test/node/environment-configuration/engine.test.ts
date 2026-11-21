@@ -1,13 +1,21 @@
-import type { Build } from '@buildplease/core';
-import { resolveConfig, resolveConfiguration } from '@src-internal/configuration/engine';
+import type { Build } from '@neutral/build';
+import {
+  defineConfiguration,
+  defineCoreConfig,
+  defineEnvironments,
+  defineSource,
+  field,
+  resolveConfig,
+  resolveConfiguration,
+  resolveEnvironment,
+} from '@node/environment-configuration';
 import { afterEach, describe, expect, it } from 'vitest';
-
-import { defineConfiguration, defineEnvironments, defineSource, field, resolveEnvironment } from '@/configuration';
-import { createConfigDefinition } from '@/configuration/configuration';
 
 const build: Build = {
   name: { original: '@test/example', base: 'example' },
   version: '1.0.0',
+  id: '019c0000-0000-7000-8000-000000000000',
+  createdAt: '2026-08-27T12:00:00.000Z',
 };
 
 const environments = defineEnvironments({
@@ -30,7 +38,7 @@ describe('Environment Configuration engine', () => {
   });
 
   it('resolves a complete config tree with one required build context', async () => {
-    const config = createConfigDefinition(environments, {
+    const config = defineCoreConfig(environments, {
       origin: from.env('CONFIG_ENGINE_ORIGIN').default('http://localhost:30000'),
       port: from.env('CONFIG_ENGINE_PORT').default('30000').map(Number),
       mode: from.byEnvironment({ test: 'local', production: 'remote' }),
@@ -55,7 +63,7 @@ describe('Environment Configuration engine', () => {
   });
 
   it('resolves required optional sources and fails clearly when they are missing', async () => {
-    const config = createConfigDefinition(environments, {
+    const config = defineCoreConfig(environments, {
       path: from.env('CONFIG_ENGINE_REQUIRED').required(),
     });
 
@@ -69,10 +77,10 @@ describe('Environment Configuration engine', () => {
   });
 
   it('supports custom required source messages and nullish values', async () => {
-    const missingConfig = createConfigDefinition(environments, {
+    const missingConfig = defineCoreConfig(environments, {
       path: from.env('CONFIG_ENGINE_REQUIRED').required('LOGGER_PATH must be provided.'),
     });
-    const nullConfig = createConfigDefinition(environments, {
+    const nullConfig = defineCoreConfig(environments, {
       value: from.static(null).required(),
     });
 
@@ -120,7 +128,7 @@ describe('Environment Configuration engine', () => {
     const set = new Set(['value']);
     const pattern = /example/u;
     const marker = new Marker('value');
-    const config = createConfigDefinition(environments, {
+    const config = defineCoreConfig(environments, {
       nested: {
         mode: from.byEnvironment({ test: 'local', production: 'remote' }),
       },
@@ -144,7 +152,7 @@ describe('Environment Configuration engine', () => {
   });
 
   it('fails clearly for invalid runtime environment cases and missing root context', async () => {
-    const config = createConfigDefinition(environments, {
+    const config = defineCoreConfig(environments, {
       mode: from.byEnvironment({ test: 'test', production: 'production' }),
     });
     const invalidEnvironment = {

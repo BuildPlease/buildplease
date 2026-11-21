@@ -40,9 +40,8 @@ export default defineConfig([
     ...baseConfig,
     entry: { 'cli/index': './src-cli/index.ts' },
     outDir: 'dist',
-    format: ['esm'],
-    dts: false,
     clean: false,
+    dts: false,
   },
   // MARK: - Test entry
   {

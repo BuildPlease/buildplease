@@ -2,10 +2,10 @@ import { mkdtemp, readFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
-import { makeBuild } from '@buildplease/core/node';
 import type { PackageJSONModel } from '@buildplease/core/node';
+import { APIKIT_OUTPUT_DIRECTORY } from '@src-internal/configuration/apikit-output';
 import { generateBarrel } from '@src-internal/generator/steps/generate-barrel';
-import { generateBuild } from '@src-internal/generator/steps/generate-build';
+import { generateBuild, makeBuild } from '@src-internal/generator/steps/generate-build';
 import { generateEnvironment } from '@src-internal/generator/steps/generate-environment';
 import { afterEach, describe, expect, it } from 'vitest';
 
@@ -15,6 +15,10 @@ describe('ApiKit generator', () => {
   afterEach(async () => {
     if (outputDir) await rm(outputDir, { recursive: true, force: true });
     outputDir = undefined;
+  });
+
+  it('generates into the ApiKit output directory', () => {
+    expect(APIKIT_OUTPUT_DIRECTORY).toBe('.apikit');
   });
 
   it('creates build identity from package metadata', () => {
@@ -35,6 +39,8 @@ describe('ApiKit generator', () => {
 
     expect(build.name).toEqual({ original: '@test/example', base: 'example' });
     expect(build.version).toBe('1.2.3');
+    expect(build.id).toMatch(/^[0-9a-f-]{36}$/u);
+    expect(new Date(build.createdAt).toISOString()).toBe(build.createdAt);
   });
 
   it('writes the generated ApiKit contract', async () => {
@@ -45,6 +51,8 @@ describe('ApiKit generator', () => {
         base: 'example',
       },
       version: '1.2.3',
+      id: '019c0000-0000-7000-8000-000000000000',
+      createdAt: '2026-07-29T14:00:00.000Z',
     } as const;
     const environments = {
       test: { file: '.env.test', alias: ' beta ' },
@@ -60,11 +68,10 @@ describe('ApiKit generator', () => {
     const environmentSource = await readFile(join(outputDir, 'environment.ts'), 'utf8');
     const indexSource = await readFile(join(outputDir, 'index.ts'), 'utf8');
 
-    expect(buildSource).toContain("import type { Build as BuildContract } from '@buildplease/apikit';");
+    expect(buildSource).toContain("import type { Build as BuildContract } from '@buildplease/core';");
     expect(buildSource).toContain("original: '@test/example'");
     expect(buildSource).toContain("version: '1.2.3'");
-    expect(buildSource).not.toContain('createdAt:');
-    expect(buildSource).not.toContain('id:');
+    expect(buildSource).toContain("id: '019c0000-0000-7000-8000-000000000000'");
     expect(buildSource).toContain('as const satisfies BuildContract;');
 
     expect(environmentSource).toContain("test = 'test'");

@@ -187,3 +187,4 @@ out/
 
 generated/
 .apikit/
+.webkit/

@@ -2,9 +2,10 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 import type { Environment } from '@buildplease/core';
-import { validateEnvironmentName } from '@src-internal/configuration/validate-environment-name';
-import { APIKIT_ENVIRONMENT_MODULE, APIKIT_OUTPUT_DIRECTORY } from '@src-internal/generator/apikit-output';
+import { validateEnvironmentName } from '@buildplease/core/node';
 import { createJiti } from 'jiti';
+
+import { APIKIT_ENVIRONMENT_MODULE, APIKIT_OUTPUT_DIRECTORY } from './apikit-output';
 
 export async function loadPreparedEnvironments(rootDir: string): Promise<Readonly<Record<string, Environment>>> {
   const filePath = path.resolve(rootDir, APIKIT_OUTPUT_DIRECTORY, `${APIKIT_ENVIRONMENT_MODULE}.ts`);

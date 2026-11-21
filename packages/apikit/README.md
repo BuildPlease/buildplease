@@ -5,7 +5,7 @@ ApiKit is the BuildPlease runtime and infrastructure kit for backend application
 ## Installation
 
 ```bash
-pnpm add @buildplease/apikit
+pnpm add @buildplease/core @buildplease/apikit
 ```
 
 ## Configuration
@@ -63,19 +63,3 @@ await ApiKitApplication.run({
 ## License
 
 MIT
-
-## Optional deployment/build identifier
-
-The generated `.apikit/build.ts` includes the application name and version,
-not a synthetic ID or timestamp. An optional runtime ID can be explicitly
-declared in `environment.config.ts`:
-
-```ts
-build: {
-  id: from.env('MY_DEPLOY_IMAGE_TAG'),
-},
-```
-
-When omitted or unset, `ConfigurationController.build.id` is `undefined`.
-Use `.required()` if the application requires an identifier. The deployment
-pipeline is free to choose the variable name with the application team.

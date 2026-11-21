@@ -1,10 +1,11 @@
 import path from 'node:path';
 
 import type { Build } from '@buildplease/core';
-import { createFile } from '@buildplease/core/node';
+import { type PackageJSONModel, createFile } from '@buildplease/core/node';
 import CodeBlockWriter from 'code-block-writer';
+import { v7 as uuidV7 } from 'uuid';
 
-import { APIKIT_BUILD_MODULE } from '../apikit-output';
+import { APIKIT_BUILD_MODULE } from '../../configuration/apikit-output';
 
 export function generateBuild(build: Build, outputPath: string): void {
   const writer = new CodeBlockWriter({
@@ -14,7 +15,7 @@ export function generateBuild(build: Build, outputPath: string): void {
     useSingleQuote: true,
   });
 
-  writer.writeLine(`import type { Build as BuildContract } from '@buildplease/apikit';`);
+  writer.writeLine(`import type { Build as BuildContract } from '@buildplease/core';`);
   writer.blankLine();
   writer.writeLine('export const Build = {');
   writer.indent(() => {
@@ -25,8 +26,22 @@ export function generateBuild(build: Build, outputPath: string): void {
     });
     writer.writeLine('},');
     writer.write('version: ').quote(build.version).write(',').newLine();
+    writer.write('id: ').quote(build.id).write(',').newLine();
+    writer.write('createdAt: ').quote(build.createdAt).write(',').newLine();
   });
   writer.writeLine('} as const satisfies BuildContract;');
 
   createFile(path.join(outputPath, `${APIKIT_BUILD_MODULE}.ts`), writer.toString());
+}
+
+export function makeBuild(pkg: Pick<PackageJSONModel, 'name' | 'version'>): Build {
+  return {
+    name: {
+      original: pkg.name.original,
+      base: pkg.name.base,
+    },
+    version: pkg.version,
+    id: uuidV7(),
+    createdAt: new Date().toISOString(),
+  };
 }

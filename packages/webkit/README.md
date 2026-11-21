@@ -13,20 +13,40 @@ pnpm add @buildplease/core @buildplease/webkit
 Define `environment.config.ts`:
 
 ```ts
-import { defineEnvironments, defineSource, defineWebKitConfig } from '@buildplease/webkit/node';
+import { defineSource, defineWebKitConfig } from '@buildplease/webkit/node';
 
-const environments = defineEnvironments({
-  test: { file: '.env.test' },
-  production: { file: '.env.production' },
-});
+const from = defineSource();
 
-const from = defineSource(environments);
-
-export default defineWebKitConfig(environments, {
-  origin: {
-    api: from.env('API_ORIGIN'),
+export default defineWebKitConfig({
+  public: {
+    apiUrl: from.env('APP_API_URL'),
+  },
+  private: {
+    apiToken: from.env('APP_API_TOKEN'),
   },
 });
+```
+
+## ENV configuration
+
+Run before the application's framework build:
+
+```bash
+webkit build
+webkit build --env-file .env.production
+```
+
+WebKit generates `.webkit/public.mjs`, `.webkit/private.mjs` and their `.d.mts` declarations. Public ENV values are resolved at build time. Private values are not embedded; the hosting framework supplies them at runtime.
+
+Register imports in the application's `package.json`:
+
+```json
+{
+  "imports": {
+    "#webkit/public": "./.webkit/public.mjs",
+    "#webkit/private": "./.webkit/private.mjs"
+  }
+}
 ```
 
 ## Browser runtime

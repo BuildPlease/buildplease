@@ -13,6 +13,7 @@ describe('resolveDevKitConfig', () => {
     expect(config.ignore).toContain('**/dist/**');
     expect(config.ignore).not.toContain('**/build/**');
     expect(config.ignore).not.toContain('**/.apikit/**');
+    expect(config.ignore).not.toContain('**/.webkit/**');
   });
 
   it('extends ignore entries from consumer config', () => {
@@ -39,6 +40,7 @@ describe('resolveDevKitConfig', () => {
     expect(config.clean.directories).toContain('.nuxt');
     expect(config.clean.directories).toContain('coverage');
     expect(config.clean.directories).not.toContain('.apikit');
+    expect(config.clean.directories).not.toContain('.webkit');
   });
 
   it('extends clean targets and directories from consumer config by default', () => {
