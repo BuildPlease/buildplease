@@ -26,14 +26,10 @@ export {
   type EnvironmentRegistry,
   defineEnvironments,
   resolveEnvironment,
+  validateEnvironmentName,
 } from './environment';
 export {
-  type LoadedConfig,
-  type LoadedEnvironmentConfig,
-  type LoadEnvironmentConfigOptions,
   type ResolveConfigurationOptions,
-  loadEnvironmentConfig,
-  loadSelectedEnvironmentConfig,
   resolveConfig,
   resolveConfiguration,
   resolveConfigurationBinding,

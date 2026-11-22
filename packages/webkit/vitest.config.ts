@@ -18,6 +18,7 @@ export default defineConfig({
       { find: /^@neutral\/(.*)$/, replacement: `${resolve(rootDir, 'src-neutral')}/$1` },
       { find: /^@browser\/(.*)$/, replacement: `${resolve(rootDir, 'src-browser')}/$1` },
       { find: /^@node\/(.*)$/, replacement: `${resolve(rootDir, 'src-node')}/$1` },
+      { find: /^@src-cli\/(.*)$/, replacement: `${resolve(rootDir, 'src-cli')}/$1` },
       { find: /^@internal\/neutral\/(.*)$/, replacement: `${resolve(rootDir, 'src-internal/neutral')}/$1` },
       { find: /^@internal\/browser\/(.*)$/, replacement: `${resolve(rootDir, 'src-internal/browser')}/$1` },
       { find: /^@internal\/node\/(.*)$/, replacement: `${resolve(rootDir, 'src-internal/node')}/$1` },

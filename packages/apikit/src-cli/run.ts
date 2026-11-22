@@ -1,14 +1,14 @@
 import { spawn } from 'node:child_process';
 import { constants } from 'node:os';
 
-import { BUILDPLEASE_ENVIRONMENT_VARIABLE } from '@internal/node/environment-configuration/selection';
-import { validateEnvironmentName } from '@internal/node/environment-configuration/validate-environment-name';
-import { generateBuildPlease } from '@internal/node/generator';
+import { validateEnvironmentName } from '@buildplease/core/node';
+import { APIKIT_ENVIRONMENT_VARIABLE } from '@src-internal/configuration/selection';
+import { generateApiKit } from '@src-internal/generator';
 
 const HELP = [
   'Usage:',
-  '  buildplease build',
-  '  buildplease run --env <environment> -- <command...>',
+  '  apikit build',
+  '  apikit run --env <environment> -- <command...>',
   '',
   'Commands:',
   '  build   Generate the application output.',
@@ -41,7 +41,7 @@ export async function runMain(argv: readonly string[]): Promise<number> {
 async function runBuild(argv: readonly string[]): Promise<number> {
   if (argv.length) throw new Error('build: does not accept arguments.');
 
-  const outputPath = await generateBuildPlease(process.cwd());
+  const outputPath = await generateApiKit(process.cwd());
   process.stdout.write(`Generated ${outputPath}\n`);
 
   return 0;
@@ -88,7 +88,7 @@ function runCommand(options: RunOptions): Promise<number> {
   const child = spawn(command, options.command.slice(1), {
     env: {
       ...process.env,
-      [BUILDPLEASE_ENVIRONMENT_VARIABLE]: options.environment,
+      [APIKIT_ENVIRONMENT_VARIABLE]: options.environment,
     },
     shell: process.platform === 'win32',
     stdio: 'inherit',

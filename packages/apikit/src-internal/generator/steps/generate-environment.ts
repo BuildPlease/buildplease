@@ -1,9 +1,9 @@
 import path from 'node:path';
 
-import { BUILDPLEASE_ENVIRONMENT_MODULE } from '@internal/node/buildplease-output';
-import type { EnvironmentRegistry } from '@node/environment-configuration';
-import { createFile } from '@node/file';
+import { type EnvironmentRegistry, createFile } from '@buildplease/core/node';
 import CodeBlockWriter from 'code-block-writer';
+
+import { APIKIT_ENVIRONMENT_MODULE } from '../../configuration/apikit-output';
 
 export function generateEnvironment(environments: EnvironmentRegistry, outputPath: string): void {
   const entries = Object.entries(environments);
@@ -36,7 +36,7 @@ export function generateEnvironment(environments: EnvironmentRegistry, outputPat
   });
   writer.writeLine('} as const;');
 
-  createFile(path.join(outputPath, `${BUILDPLEASE_ENVIRONMENT_MODULE}.ts`), writer.toString());
+  createFile(path.join(outputPath, `${APIKIT_ENVIRONMENT_MODULE}.ts`), writer.toString());
 }
 
 function formatPropertyName(name: string): string {

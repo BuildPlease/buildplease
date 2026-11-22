@@ -1,8 +1,8 @@
-import { BUILDPLEASE_ENVIRONMENT_VARIABLE } from '@internal/node/environment-configuration/selection';
 import { runMain } from '@src-cli/run';
+import { APIKIT_ENVIRONMENT_VARIABLE } from '@src-internal/configuration/selection';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-describe('BuildPlease CLI', () => {
+describe('ApiKit CLI', () => {
   afterEach(() => {
     vi.restoreAllMocks();
   });
@@ -11,7 +11,7 @@ describe('BuildPlease CLI', () => {
     const write = vi.spyOn(process.stdout, 'write').mockImplementation(() => true);
 
     await expect(runMain([])).resolves.toBe(0);
-    expect(write).toHaveBeenCalledWith(expect.stringContaining('buildplease run --env <environment> -- <command...>'));
+    expect(write).toHaveBeenCalledWith(expect.stringContaining('apikit run --env <environment> -- <command...>'));
   });
 
   it('passes the selected environment and parent NODE_ENV to the child and returns its exit code', async () => {
@@ -20,7 +20,7 @@ describe('BuildPlease CLI', () => {
 
     try {
       const script = [
-        `const environment = process.env.${BUILDPLEASE_ENVIRONMENT_VARIABLE};`,
+        `const environment = process.env.${APIKIT_ENVIRONMENT_VARIABLE};`,
         'const nodeEnvironment = process.env.NODE_ENV;',
         'const args = process.argv.slice(1);',
         "process.exit(environment === 'test' && nodeEnvironment === 'production' && args.join(',') === 'first,second' ? 7 : 91);",
@@ -43,7 +43,7 @@ describe('BuildPlease CLI', () => {
         '--',
         process.execPath,
         '-e',
-        `process.exit(process.env.${BUILDPLEASE_ENVIRONMENT_VARIABLE} === '-test' ? 0 : 1)`,
+        `process.exit(process.env.${APIKIT_ENVIRONMENT_VARIABLE} === '-test' ? 0 : 1)`,
       ]),
     ).resolves.toBe(0);
   });

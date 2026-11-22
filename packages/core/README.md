@@ -1,6 +1,6 @@
 # @buildplease/core
 
-Core provides the shared application foundation, configuration primitives, and CLI.
+Core provides the shared application foundation and configuration primitives.
 
 ## Installation
 
@@ -10,24 +10,21 @@ pnpm add @buildplease/core
 
 ## Configuration
 
-Define `environment.config.ts`:
+Core provides typed configuration contracts and resolvers:
 
 ```ts
-import { defineCoreConfig, defineEnvironments, defineSource } from '@buildplease/core/node';
+import { defineConfiguration, field, resolveConfiguration } from '@buildplease/core/node';
 
-const environments = defineEnvironments({
-  test: { file: '.env.test', alias: 'Beta' },
-  production: { file: '.env.production', alias: 'Live' },
+const ServerConfiguration = defineConfiguration('server', {
+  host: field.string(),
+  port: field.number(),
 });
 
-const from = defineSource(environments);
-
-export default defineCoreConfig(environments, {
-  origin: from.env('APP_ORIGIN').default('http://localhost:3000'),
+const server = await resolveConfiguration(ServerConfiguration, {
+  host: '127.0.0.1',
+  port: 3000,
 });
 ```
-
-Environment names are non-empty technical identifiers without whitespace. Aliases are optional user-facing labels.
 
 ## Application runtime
 
@@ -36,46 +33,6 @@ Use the explicit runtime surface:
 ```ts
 import { CoreApplication } from '@buildplease/core/browser';
 // or: @buildplease/core/node
-```
-
-## CLI
-
-Prepare the application metadata:
-
-```bash
-buildplease build
-```
-
-This generates:
-
-```text
-.buildplease/
-├── build.ts
-├── environment.ts
-└── index.ts
-```
-
-Run a command with a selected environment:
-
-```bash
-buildplease run --env production -- node dist/main.js
-```
-
-`run` transports the selected environment to the child process. It does not modify `NODE_ENV`.
-
-## Runtime
-
-Load the prepared build and selected configuration from Node.js:
-
-```ts
-import { loadBuild, loadSelectedEnvironmentConfig, resolveConfig } from '@buildplease/core/node';
-
-const build = await loadBuild();
-const loaded = await loadSelectedEnvironmentConfig();
-const config = await resolveConfig(loaded.config, {
-  build,
-  environment: loaded.environment,
-});
 ```
 
 ## License

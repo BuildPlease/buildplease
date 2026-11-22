@@ -1,9 +1,9 @@
 import { defineDevKitConfig } from '@buildplease/devkit';
 
 export default defineDevKitConfig({
-  ignore: ['**/.buildplease/**'],
+  ignore: ['**/.apikit/**', '**/.webkit/**'],
 
   clean: {
-    directories: ['.buildplease'],
+    directories: ['.apikit', '.webkit'],
   },
 });

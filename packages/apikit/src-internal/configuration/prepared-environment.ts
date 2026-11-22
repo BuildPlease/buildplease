@@ -1,13 +1,14 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-import { BUILDPLEASE_ENVIRONMENT_MODULE, BUILDPLEASE_OUTPUT_DIRECTORY } from '@internal/node/buildplease-output';
-import { validateEnvironmentName } from '@internal/node/environment-configuration/validate-environment-name';
-import type { Environment } from '@neutral/environment';
+import type { Environment } from '@buildplease/core';
+import { validateEnvironmentName } from '@buildplease/core/node';
 import { createJiti } from 'jiti';
 
+import { APIKIT_ENVIRONMENT_MODULE, APIKIT_OUTPUT_DIRECTORY } from './apikit-output';
+
 export async function loadPreparedEnvironments(rootDir: string): Promise<Readonly<Record<string, Environment>>> {
-  const filePath = path.resolve(rootDir, BUILDPLEASE_OUTPUT_DIRECTORY, `${BUILDPLEASE_ENVIRONMENT_MODULE}.ts`);
+  const filePath = path.resolve(rootDir, APIKIT_OUTPUT_DIRECTORY, `${APIKIT_ENVIRONMENT_MODULE}.ts`);
 
   if (!fs.existsSync(filePath)) {
     throw new Error(`Prepared environment "${filePath}" does not exist.`);

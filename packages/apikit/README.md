@@ -38,7 +38,7 @@ export default defineApiKitConfig(environments, {
 Prepare the application metadata:
 
 ```bash
-buildplease build
+apikit build
 ```
 
 ## Runtime
@@ -46,7 +46,7 @@ buildplease build
 Run the application with a selected environment:
 
 ```bash
-buildplease run --env production -- node dist/main.js
+apikit run --env production -- node dist/main.js
 ```
 
 Start from the application entrypoint:

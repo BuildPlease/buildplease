@@ -1,16 +1,17 @@
-import {
-  BUILDPLEASE_ENVIRONMENT_VARIABLE,
-  readSelectedEnvironmentName,
-} from '@internal/node/environment-configuration/selection';
+import { APIKIT_ENVIRONMENT_VARIABLE, readSelectedEnvironmentName } from '@src-internal/configuration/selection';
 import { afterEach, describe, expect, it } from 'vitest';
 
-describe('BuildPlease environment selection', () => {
+describe('ApiKit environment selection', () => {
+  it('uses the ApiKit runtime environment variable', () => {
+    expect(APIKIT_ENVIRONMENT_VARIABLE).toBe('APIKIT_ENVIRONMENT');
+  });
+
   afterEach(() => {
-    delete process.env[BUILDPLEASE_ENVIRONMENT_VARIABLE];
+    delete process.env[APIKIT_ENVIRONMENT_VARIABLE];
   });
 
   it('reads the selected environment name unchanged', () => {
-    process.env[BUILDPLEASE_ENVIRONMENT_VARIABLE] = '-test';
+    process.env[APIKIT_ENVIRONMENT_VARIABLE] = '-test';
 
     expect(readSelectedEnvironmentName()).toBe('-test');
   });
@@ -20,7 +21,7 @@ describe('BuildPlease environment selection', () => {
   });
 
   it('rejects a multi-word selected environment name', () => {
-    process.env[BUILDPLEASE_ENVIRONMENT_VARIABLE] = 'my test';
+    process.env[APIKIT_ENVIRONMENT_VARIABLE] = 'my test';
 
     expect(() => readSelectedEnvironmentName()).toThrow(
       'Environment name must be a non-empty string without whitespace.',

@@ -1,12 +1,9 @@
 import path from 'node:path';
 
-import {
-  BUILDPLEASE_BUILD_MODULE,
-  BUILDPLEASE_ENVIRONMENT_MODULE,
-  BUILDPLEASE_INDEX_MODULE,
-} from '@internal/node/buildplease-output';
-import { createFile } from '@node/file';
+import { createFile } from '@buildplease/core/node';
 import CodeBlockWriter from 'code-block-writer';
+
+import { APIKIT_BUILD_MODULE, APIKIT_ENVIRONMENT_MODULE, APIKIT_INDEX_MODULE } from '../../configuration/apikit-output';
 
 export function generateBarrel(outputPath: string): void {
   const writer = new CodeBlockWriter({
@@ -16,9 +13,9 @@ export function generateBarrel(outputPath: string): void {
     useSingleQuote: true,
   });
 
-  for (const moduleName of [BUILDPLEASE_BUILD_MODULE, BUILDPLEASE_ENVIRONMENT_MODULE]) {
+  for (const moduleName of [APIKIT_BUILD_MODULE, APIKIT_ENVIRONMENT_MODULE]) {
     writer.write('export * from ').quote(`./${moduleName}.js`).write(';').newLine();
   }
 
-  createFile(path.join(outputPath, `${BUILDPLEASE_INDEX_MODULE}.ts`), writer.toString());
+  createFile(path.join(outputPath, `${APIKIT_INDEX_MODULE}.ts`), writer.toString());
 }

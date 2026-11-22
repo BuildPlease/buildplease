@@ -1,8 +1,6 @@
 import {
   type ConfigurationBinding,
   type ResolveConfigurationOptions,
-  loadBuild,
-  loadSelectedEnvironmentConfig,
   resolveConfiguration,
   resolveConfigurationBinding,
 } from '@buildplease/core/node';
@@ -21,6 +19,9 @@ import {
   ServerConfiguration,
   StaticFilesConfiguration,
 } from '@/configuration/configs';
+
+import { loadBuild } from './load-build';
+import { loadSelectedEnvironmentConfig } from './load-selected-environment-config';
 
 export async function initializeApiKitConfiguration(): Promise<void> {
   const build = await loadBuild();

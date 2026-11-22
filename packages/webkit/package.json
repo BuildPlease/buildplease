@@ -1,6 +1,6 @@
 {
   "name": "@buildplease/webkit",
-  "version": "1.4.9",
+  "version": "1.5.0",
   "keywords": [],
   "repository": {
     "type": "git",
@@ -42,9 +42,13 @@
       }
     }
   },
+  "bin": {
+    "webkit": "./bin/webkit.mjs"
+  },
   "files": [
     "dist",
-    "resources"
+    "resources",
+    "bin"
   ],
   "scripts": {
     "build": "tsdown --config-loader unrun",
@@ -52,7 +56,8 @@
     "typecheck": "tsc -p tsconfig.browser.json --noEmit && tsc -p tsconfig.node.json --noEmit"
   },
   "dependencies": {
-    "@buildplease/core": "workspace:*"
+    "@buildplease/core": "workspace:*",
+    "jiti": "catalog:"
   },
   "devDependencies": {
     "@buildplease/identity": "workspace:*"

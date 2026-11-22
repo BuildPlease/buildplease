@@ -1,11 +1,11 @@
 import path from 'node:path';
 
-import { BUILDPLEASE_BUILD_MODULE } from '@internal/node/buildplease-output';
-import type { Build } from '@neutral/build';
-import { createFile } from '@node/file';
-import type { PackageJSONModel } from '@node/package-json';
+import type { Build } from '@buildplease/core';
+import { type PackageJSONModel, createFile } from '@buildplease/core/node';
 import CodeBlockWriter from 'code-block-writer';
 import { v7 as uuidV7 } from 'uuid';
+
+import { APIKIT_BUILD_MODULE } from '../../configuration/apikit-output';
 
 export function generateBuild(build: Build, outputPath: string): void {
   const writer = new CodeBlockWriter({
@@ -31,7 +31,7 @@ export function generateBuild(build: Build, outputPath: string): void {
   });
   writer.writeLine('} as const satisfies BuildContract;');
 
-  createFile(path.join(outputPath, `${BUILDPLEASE_BUILD_MODULE}.ts`), writer.toString());
+  createFile(path.join(outputPath, `${APIKIT_BUILD_MODULE}.ts`), writer.toString());
 }
 
 export function makeBuild(pkg: Pick<PackageJSONModel, 'name' | 'version'>): Build {

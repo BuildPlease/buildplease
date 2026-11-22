@@ -2,18 +2,23 @@ import { mkdtemp, readFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
-import { generateBarrel } from '@internal/node/generator/steps/generate-barrel';
-import { generateBuild, makeBuild } from '@internal/node/generator/steps/generate-build';
-import { generateEnvironment } from '@internal/node/generator/steps/generate-environment';
-import type { PackageJSONModel } from '@node/package-json';
+import type { PackageJSONModel } from '@buildplease/core/node';
+import { APIKIT_OUTPUT_DIRECTORY } from '@src-internal/configuration/apikit-output';
+import { generateBarrel } from '@src-internal/generator/steps/generate-barrel';
+import { generateBuild, makeBuild } from '@src-internal/generator/steps/generate-build';
+import { generateEnvironment } from '@src-internal/generator/steps/generate-environment';
 import { afterEach, describe, expect, it } from 'vitest';
 
-describe('BuildPlease generator', () => {
+describe('ApiKit generator', () => {
   let outputDir: string | undefined;
 
   afterEach(async () => {
     if (outputDir) await rm(outputDir, { recursive: true, force: true });
     outputDir = undefined;
+  });
+
+  it('generates into the ApiKit output directory', () => {
+    expect(APIKIT_OUTPUT_DIRECTORY).toBe('.apikit');
   });
 
   it('creates build identity from package metadata', () => {
@@ -38,8 +43,8 @@ describe('BuildPlease generator', () => {
     expect(new Date(build.createdAt).toISOString()).toBe(build.createdAt);
   });
 
-  it('writes the generated BuildPlease contract', async () => {
-    outputDir = await mkdtemp(join(tmpdir(), 'buildplease-generator-'));
+  it('writes the generated ApiKit contract', async () => {
+    outputDir = await mkdtemp(join(tmpdir(), 'apikit-generator-'));
     const build = {
       name: {
         original: '@test/example',

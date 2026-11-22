@@ -35,6 +35,14 @@ export default defineConfig([
     clean: true,
     copy: copyResources(),
   },
+  // MARK: - CLI entry
+  {
+    ...baseConfig,
+    entry: { 'cli/index': './src-cli/index.ts' },
+    outDir: 'dist',
+    clean: false,
+    dts: false,
+  },
   // MARK: - Test entry
   {
     ...baseConfig,

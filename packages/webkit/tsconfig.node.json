@@ -4,6 +4,7 @@
     "paths": {
       "@neutral/*": ["./src-neutral/*"],
       "@node/*": ["./src-node/*"],
+      "@src-cli/*": ["./src-cli/*"],
       "@internal/neutral/*": ["./src-internal/neutral/*"],
       "@internal/node/*": ["./src-internal/node/*"],
       "#l10n": ["./src-neutral/l10n/index.ts"],
@@ -14,6 +15,7 @@
   "include": [
     "src-neutral",
     "src-node",
+    "src-cli",
     "src-internal/neutral",
     "src-internal/node",
     "src-application/node.ts",

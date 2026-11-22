@@ -1,6 +1,4 @@
-import { validateEnvironmentName } from '@internal/node/environment-configuration/validate-environment-name';
 import type { Environment } from '@neutral/environment';
-import { resolvePath } from '@node/file';
 
 // MARK: - Public
 
@@ -8,22 +6,11 @@ export interface EnvironmentDefinition {
   /** Optional public/static alias for this environment. */
   readonly alias?: string;
 
-  /**
-   * Optional dotenv file associated with this environment.
-   *
-   * When the environment is selected, the runtime loads this file if it exists.
-   * Missing files are ignored, values already present in `process.env` keep
-   * priority. Configuration resolution and defaults decide how missing values are handled.
-   */
+  /** Optional dotenv file metadata for the consuming application. */
   readonly file?: string;
 
-  /** Directory containing `file`, resolved relative to `environment.config.ts`. */
+  /** Directory containing `file`. */
   readonly fileDir?: string;
-}
-
-interface EnvironmentSource<Name extends string = string> extends Environment<Name> {
-  readonly file?: string;
-  readonly fileDir: string;
 }
 
 export type EnvironmentRegistry = Record<string, EnvironmentDefinition>;
@@ -34,8 +21,12 @@ export type EnvironmentFromRegistry<Environments extends EnvironmentRegistry> = 
   EnvironmentName<Environments>
 >;
 
-export interface ResolveEnvironmentOptions {
-  readonly baseDir?: string;
+export function validateEnvironmentName(value: string): string {
+  if (!value || /\s/u.test(value)) {
+    throw new Error('Environment name must be a non-empty string without whitespace.');
+  }
+
+  return value;
 }
 
 export function defineEnvironments<const Environments extends EnvironmentRegistry>(
@@ -65,24 +56,6 @@ export function resolveEnvironment<Environments extends EnvironmentRegistry>(
   return {
     name: name as EnvironmentName<Environments>,
     alias: environment.alias?.trim() || undefined,
-  };
-}
-
-export function resolveEnvironmentSource<Environments extends EnvironmentRegistry>(
-  environments: Environments,
-  name: string,
-  options: ResolveEnvironmentOptions = {},
-): EnvironmentSource<EnvironmentName<Environments>> {
-  validateEnvironmentName(name);
-  const environment = requireEnvironmentDefinition(environments, name);
-  const baseDir = options.baseDir?.trim() || process.cwd();
-  const fileDir = resolvePath(baseDir, environment.fileDir?.trim() || '.');
-
-  return {
-    name: name as EnvironmentName<Environments>,
-    alias: environment.alias?.trim() || undefined,
-    file: environment.file?.trim() || undefined,
-    fileDir: fileDir,
   };
 }
 

@@ -1,12 +1,12 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-import { BUILDPLEASE_BUILD_MODULE, BUILDPLEASE_OUTPUT_DIRECTORY } from '@internal/node/buildplease-output';
-import type { Build } from '@neutral/build';
+import type { Build } from '@buildplease/core';
+import { ensureDirectory, resolvePath } from '@buildplease/core/node';
 import { createJiti } from 'jiti';
 import { validate as validateUUID } from 'uuid';
 
-import { ensureDirectory, resolvePath } from '../file/file-sync';
+import { APIKIT_BUILD_MODULE, APIKIT_OUTPUT_DIRECTORY } from './apikit-output';
 
 export interface LoadBuildOptions {
   readonly dir?: string;
@@ -14,7 +14,7 @@ export interface LoadBuildOptions {
 
 export async function loadBuild(options: LoadBuildOptions = {}): Promise<Build> {
   const rootDir = resolveRootDir(options.dir);
-  const filePath = path.resolve(rootDir, BUILDPLEASE_OUTPUT_DIRECTORY, `${BUILDPLEASE_BUILD_MODULE}.ts`);
+  const filePath = path.resolve(rootDir, APIKIT_OUTPUT_DIRECTORY, `${APIKIT_BUILD_MODULE}.ts`);
 
   if (!fs.existsSync(filePath)) {
     throw new Error(`Prepared build "${filePath}" does not exist.`);
